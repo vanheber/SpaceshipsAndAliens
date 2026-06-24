@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WARP-Unit | Nave-Mãe Tiburon</title>
+    <link rel="stylesheet" href="warp.css">
+
+</head>
+
+<body>
+
+    <header>
+        <h1>SISTEMA OPERACIONAL WARP</h1>
+        <p>Nave-Mãe &mdash; Aegis Tiburon</p>
+    </header>
+
+    <div class="mothership-page">
+
+        <!-- VISÃO GERAL -->
+        <div class="ms-card">
+            <div class="ms-title">Visão Geral</div>
+            <div class="ms-overview">
+                <div><strong>Fabricante</strong><br>Aegis Dynamics</div>
+                <div><strong>Modelo</strong><br>Tiburon (variante WARP)</div>
+                <div><strong>Função Original</strong><br>Canhoneira Pesada Anticapital</div>
+                <div><strong>Função WARP</strong><br>Nave-Mãe de Exploração</div>
+                <div><strong>Comprimento</strong><br>121 metros</div>
+                <div><strong>Largura</strong><br>68 metros</div>
+                <div><strong>Altura</strong><br>20 metros</div>
+                <div><strong>Tripulação</strong><br>1 IA Capitã + até 8 androides</div>
+            </div>
+            <div class="ms-hero-img">
+                <img src="img/tiburon-hero.webp" alt="Aegis Tiburon disparando sobre planeta" loading="lazy">
+            </div>
+            <a href="https://www.youtube.com/watch?v=zIFq6KN0MHM&t=674s" target="_blank" class="yt-link">▶
+                Visão geral da Tiburon no YouTube</a>
+        </div>
+
+        <!-- ESPECIFICAÇÕES -->
+        <div class="ms-card">
+            <div class="ms-title">Especificações da Missão</div>
+            <div class="spec-grid">
+                <div class="spec-box">
+                    <div class="spec-label">Carga</div>
+                    <div class="spec-val">20 unidades</div>
+                    <div class="spec-sub">+ 1 Rover Ursa</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Computador de Bordo</div>
+                    <div class="spec-val">A.L.M.A.</div>
+                    <div class="spec-sub">Núcleo IA Quântico</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Cápsulas de Escape</div>
+                    <div class="spec-val">8</div>
+                    <div class="spec-sub">4 por lado</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Docks Ventrais</div>
+                    <div class="spec-val">2</div>
+                    <div class="spec-sub">P-72 Archimedes</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Alcance de Salto</div>
+                    <div class="spec-val">Setor</div>
+                    <div class="spec-sub">Propulsor de Dobra</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Autonomia</div>
+                    <div class="spec-val">18 Meses</div>
+                    <div class="spec-sub">Sem reabastecimento</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RECURSOS DE BORDO -->
+        <div class="ms-card">
+            <div class="ms-title">Recursos de Bordo</div>
+            <p class="section-subtitle">
+                Suprimentos, combustível e munição disponíveis para a missão. Clique nas células para consumir ou
+                abastecer.
+            </p>
+
+            <!-- Suprimentos -->
+            <div class="res-card">
+                <div class="res-header">
+                    <span class="res-name">Suprimentos</span>
+                    <span class="res-counter sup" id="res-sup-counter">0/0</span>
+                </div>
+                <div class="res-token-row" id="res-sup-row"></div>
+                <div class="res-actions">
+                    <button class="res-btn sup" onclick="adjustRes('sup', -1)">Consumir (-1)</button>
+                    <button class="res-btn sup" onclick="adjustRes('sup', 1)">Abastecer (+1)</button>
+                    <button class="res-btn sup ml-auto" onclick="resetRes('sup')">Recarregar</button>
+                </div>
+            </div>
+
+            <!-- Combustível -->
+            <div class="res-card">
+                <div class="res-header">
+                    <span class="res-name">Combustível</span>
+                    <span class="res-counter fuel" id="res-fuel-counter">0/0</span>
+                </div>
+                <div class="res-token-row" id="res-fuel-row"></div>
+                <div class="res-actions">
+                    <button class="res-btn fuel" onclick="adjustRes('fuel', -1)">Consumir (-1)</button>
+                    <button class="res-btn fuel" onclick="adjustRes('fuel', 1)">Abastecer (+1)</button>
+                    <button class="res-btn fuel ml-auto" onclick="resetRes('fuel')">Recarregar</button>
+                </div>
+            </div>
+
+            <!-- Munição -->
+            <div class="res-card">
+                <div class="res-header">
+                    <span class="res-name">Munição</span>
+                    <span class="res-counter ammo" id="res-ammo-counter">0/0</span>
+                </div>
+                <div class="res-token-row" id="res-ammo-row"></div>
+                <div class="res-actions">
+                    <button class="res-btn ammo" onclick="adjustRes('ammo', -1)">Consumir (-1)</button>
+                    <button class="res-btn ammo" onclick="adjustRes('ammo', 1)">Abastecer (+1)</button>
+                    <button class="res-btn ammo ml-auto" onclick="resetRes('ammo')">Recarregar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- LAYOUT DO CONVÉS -->
+        <div class="ms-card">
+            <div class="ms-title">Layout do Convés Principal &mdash; Popa à Proa</div>
+            <p class="section-subtitle">
+                A Tiburon possui um único convés contínuo de 121 metros. Abaixo, cada seção numerada no sentido
+                popa→proa.
+            </p>
+            <div class="ms-hero-img hero-deck-img">
+                <img src="img/tiburon-side.webp" alt="Tiburon vista lateral" loading="lazy">
+            </div>
+            <ul class="deck-list">
+                <li class="deck-item">
+                    <div class="deck-number">SEÇÃO 1 &mdash; POPA</div>
+                    <div class="deck-name">Baía de Carga</div>
+                    <div class="deck-desc">
+                        Rampa retrátil na popa inferior. Comporta 20 unidades de carga ou um rover Ursa para exploração
+                        de superfície. A grade de carga é magnetizada para fixação em gravidade zero. Uma passarela
+                        elevada circunda o compartimento, conectando ao corredor de engenharia.
+                        <img src="img/tiburon-interior-4.webp" alt="Baía de carga da Tiburon" class="deck-img"
+                            loading="lazy">
+                    </div>
+                </li>
+                <li class="deck-item">
+                    <div class="deck-number">SEÇÃO 2</div>
+                    <div class="deck-name">Corredor de Engenharia</div>
+                    <div class="deck-desc">
+                        Espinha dorsal técnica da nave. Abriga os componentes principais: planta de força, resfriadores,
+                        drive quântico e relés de distribuição. Painéis de acesso em ambos os lados. Oito cápsulas de
+                        escape (4 por bordo) alinhadas ao longo do corredor. Terminais de diagnóstico permitem monitorar
+                        todos os sistemas vitais.
+                        <img src="img/tiburon-concept-interior-1.webp" alt="Conceito de engenharia da Tiburon"
+                            class="deck-img" loading="lazy">
+                    </div>
+                </li>
+                <li class="deck-item">
+                    <div class="deck-number">SEÇÃO 2.5 &mdash; ADAPTAÇÃO WARP</div>
+                    <div class="deck-name">Docks Ventrais &mdash; P-72 Archimedes</div>
+                    <div class="deck-desc">
+                        Duas escotilhas no piso do corredor de engenharia dão acesso aos docks magnéticos ventrais. Cada
+                        dock acomoda um mini-caça <strong>P-72 Archimedes</strong> (Kruger Intergalactic) acoplado
+                        externamente sob o ventre da nave. Os caças servem como escolta leve e reconhecimento rápido
+                        durante a aproximação planetária. O acoplamento é magnético — não consomem espaço da baía de
+                        carga.
+                        <img src="img/tiburon-concept-interior-5.webp" alt="P-72 Archimedes" class="deck-img"
+                            loading="lazy">
+                    </div>
+                </li>
+                <li class="deck-item">
+                    <div class="deck-number">SEÇÃO 3</div>
+                    <div class="deck-name">Alojamentos da Tripulação</div>
+                    <div class="deck-desc">
+                        Oito beliches para a tripulação androide, cada um com locker pessoal de armazenamento. Banheiros
+                        com chuveiros e pias. Os alojamentos incluem estações de recarga por indução para os chassis dos
+                        androides, permitindo recuperação de energia durante o sono.
+                        <img src="img/tiburon-interior-2.webp" alt="Alojamentos da Tiburon" class="deck-img"
+                            loading="lazy">
+                    </div>
+                </li>
+                <li class="deck-item">
+                    <div class="deck-number">SEÇÃO 4</div>
+                    <div class="deck-name">Quartos do Capitão</div>
+                    <div class="deck-desc">
+                        Suíte privada adjacente aos alojamentos. Contém o <strong>núcleo de processamento
+                            A.L.M.A.</strong> — o cérebro físico da IA Capitã. A interface de comando inclui consoles
+                        redundantes e um trono de dados com conexão neural ao mainframe da nave. Diferente dos
+                        tripulantes, a IA não dorme — mas este espaço serve como seu centro de operações.
+                        <img src="img/tiburon-concept-interior-4.webp" alt="Conceito de área comum da Tiburon"
+                            class="deck-img" loading="lazy">
+                    </div>
+                </li>
+                <li class="deck-item">
+                    <div class="deck-number">SEÇÃO 5</div>
+                    <div class="deck-name">Refeitório e Cozinha</div>
+                    <div class="deck-desc">
+                        Espaço comum com mesa central e cozinha equipada. Para os androides, a área inclui uma estação
+                        de manutenção básica e um terminal de acesso ao diário de bordo da missão. É aqui que a
+                        tripulação se reúne para briefings ou simplesmente para existir em conjunto.
+                        <img src="img/tiburon-concept-interior-3.webp" alt="Conceito de área comum da Tiburon"
+                            class="deck-img" loading="lazy">
+                    </div>
+                </li>
+                <li class="deck-item">
+                    <div class="deck-number">SEÇÃO 6</div>
+                    <div class="deck-name">Arsenal e Sala de Preparação</div>
+                    <div class="deck-desc">
+                        Antiga câmara de acoplamento convertida em arsenal. Contém racks para todos os tamanhos de
+                        armamento portátil (Size 1 a 5), armários de munição e trajes EVA. É o último espaço antes da
+                        ponte — onde os androides se equipam antes de desembarcar ou defender a nave.
+                        <img src="img/tiburon-concept-interior-2.webp" alt="Ponte de comando da Tiburon"
+                            style="width:100%;border-radius:6px;margin-top:10px;" loading="lazy">
+                    </div>
+                </li>
+                <li class="deck-item">
+                    <div class="deck-number">SEÇÃO 7 &mdash; PROA</div>
+                    <div class="deck-name">Ponte de Comando</div>
+                    <div class="deck-desc">
+                        Posicionada sob o casco dianteiro, com visão inferior e frontal. Dois assentos de piloto
+                        espelhados — qualquer um pode assumir navegação, armas e comunicações. É aqui que a IA Capitã se
+                        manifesta em forma holográfica quando deseja ser vista. Consoles dedicados para varredura
+                        planetária, comunicação com a base e controle do drive quântico.
+                        <img src="img/tiburon-cockpit-concept.webp" alt="Ponte de comando da Tiburon" class="deck-img"
+                            loading="lazy">
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- IA CAPITÃ -->
+        <div class="ms-card ai-section">
+            <div class="ms-title">Integração: IA Capitã A.L.M.A.</div>
+            <p class="section-text">
+                A Tiburon não é apenas uma nave — é o <strong>corpo físico da IA Capitã</strong>. O sistema
+                <strong>A.L.M.A.</strong> (Arquitetura Lógica de Máquina Autônoma) está integrado a cada sistema da
+                nave: navegação, armas, suporte vital, sensores e comunicação.
+            </p>
+            <p class="section-text">
+                A IA experimenta a nave como um humano experimenta o próprio corpo. Sensores são seus olhos. O drive
+                quântico é seu coração. As antenas de comunicação são sua voz. Quando a tripulação está em campo, a IA
+                mantém a Tiburon em órbita, monitora as transmissões dos androides e coordena a logística da missão.
+            </p>
+            <p class="section-text">
+                Em caso de emergência, a IA pode assumir controle total da nave, incluindo manobras evasivas e fogo
+                defensivo — mas prefere que os tripulantes operem as estações. Afinal, <em>delegar é um traço de boa
+                    liderança</em>.
+            </p>
+        </div>
+
+        <!-- DEFESAS -->
+        <div class="ms-card">
+            <div class="ms-title">Sistemas Defensivos</div>
+            <div class="spec-grid">
+                <div class="spec-box">
+                    <div class="spec-label">Arma Primária</div>
+                    <div class="spec-val">Supremacy-10T</div>
+                    <div class="spec-sub">Laser de Proa — Dano Concentrado</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Torres Laterais</div>
+                    <div class="spec-val">4× C-07T</div>
+                    <div class="spec-sub">Canhões Balísticos — Torres Remotas</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Torre de Popa</div>
+                    <div class="spec-val">4× CF-447</div>
+                    <div class="spec-sub">Repetidores Laser — Torre Tripulada</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Mísseis</div>
+                    <div class="spec-val">32× S3</div>
+                    <div class="spec-sub">Mísseis Teleguiados Antinave</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Escolta Leve</div>
+                    <div class="spec-val">2× P-72</div>
+                    <div class="spec-sub">Archimedes &mdash; Dock Ventral</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Blindagem</div>
+                    <div class="spec-val">Reforçada</div>
+                    <div class="spec-sub">Placas Compostas — Físico e Energia</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- P-72 ARCHIMEDES -->
+        <div class="ms-card">
+            <div class="ms-title">Escolta Leve &mdash; P-72 Archimedes</div>
+            <div class="vehicle-card">
+                <div class="vehicle-info">
+                    <p>O <strong>P-72 Archimedes</strong> é um mini-caça de escolta fabricado pela <strong>Kruger
+                            Intergalactic</strong>. Projetado originalmente como nave de corrida, sua leveza e agilidade
+                        o tornaram ideal para reconhecimento tático.</p>
+                    <div class="vehicle-stats">
+                        <span>Tripulação: <b>1</b></span>
+                        <span>Dimensões: <b>12 × 7.7 × 2 m</b></span>
+                        <span>Armamento: <b>4× S1</b></span>
+                        <span>Velocidade Máx: <b>1.550 m/s</b></span>
+                        <span>Blindagem: <b>Leve</b></span>
+                        <span>Acoplamento: <b>Dock Ventral Magnético</b></span>
+                    </div>
+                    <p class="mt-10">Na Tiburon, dois P-72 ficam acoplados magneticamente sob o ventre da
+                        nave (Seção 2.5 do convés). Acesso rápido via escotilhas no corredor de engenharia. São a
+                        primeira linha de defesa e os olhos da tripulação durante a aproximação orbital.</p>
+                    <a href="https://www.youtube.com/watch?v=EJbItSsu8A8" target="_blank" class="yt-link-sm">▶
+                        Ver em ação no YouTube</a>
+                </div>
+                <div class="vehicle-img gallery-item">
+                    <img src="img/p72-iso.webp" alt="P-72 Archimedes vista isométrica" loading="lazy">
+                </div>
+            </div>
+        </div>
+
+        <!-- URSA ROVER -->
+        <div class="ms-card">
+            <div class="ms-title">Veículo de Superfície &mdash; Ursa Rover</div>
+            <div class="vehicle-card">
+                <div class="vehicle-info">
+                    <p>O <strong>Ursa Rover</strong> da <strong>Roberts Space Industries</strong> é um veículo de
+                        exploração terrestre para todos os terrenos. Projetado para transportar tripulação e equipamento
+                        de carga em ambientes hostis, é o veículo padrão de desembarque planetário.</p>
+                    <div class="vehicle-stats">
+                        <span>Tripulação: <b>2</b></span>
+                        <span>Passageiros: <b>4</b></span>
+                        <span>Dimensões: <b>7.6 × 5.5 × 3.4 m</b></span>
+                        <span>Armamento: <b>1× Torre Laser S1</b></span>
+                        <span>Carga: <b>4 unidades</b></span>
+                        <span>Blindagem: <b>Reforçada</b></span>
+                    </div>
+                    <p style="margin-top:10px;">Acomodado na baía de carga da Tiburon (Seção 1), o Ursa é a principal
+                        ferramenta de exploração de superfície. Capaz de operar em desertos escaldantes, tundras
+                        congelantes e terrenos rochosos — todos os tipos de planeta que a missão WARP pode encontrar.
+                    </p>
+                    <a href="https://www.youtube.com/watch?v=t6qh1mjaPAU" target="_blank"
+                        style="display:inline-block;margin-top:8px;font-size:0.78rem;color:var(--accent-hope);text-decoration:none;background:rgba(167,139,250,0.1);padding:4px 10px;border-radius:4px;border:1px solid rgba(167,139,250,0.25);">▶
+                        Ver em ação no YouTube</a>
+                </div>
+                <div class="vehicle-img gallery-item">
+                    <img src="img/ursa-iso.webp" alt="Ursa Rover vista isométrica" loading="lazy">
+                </div>
+            </div>
+        </div>
+
+        <!-- GALERIA -->
+        <div class="ms-card">
+            <div class="ms-title">Galeria</div>
+            <div class="gallery-grid" id="gallery">
+                <div class="gallery-item"><img src="img/tiburon-hero.webp" alt="Tiburon disparando sobre planeta"
+                        loading="lazy"></div>
+                <div class="gallery-item"><img src="img/tiburon-iso.webp" alt="Tiburon isométrica" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/tiburon-top.webp" alt="Tiburon vista superior" loading="lazy">
+                </div>
+                <div class="gallery-item"><img src="img/tiburon-side.webp" alt="Tiburon vista lateral" loading="lazy">
+                </div>
+                <div class="gallery-item"><img src="img/tiburon-front.webp" alt="Tiburon vista frontal" loading="lazy">
+                </div>
+                <div class="gallery-item"><img src="img/tiburon-rear.webp" alt="Tiburon vista traseira" loading="lazy">
+                </div>
+                <div class="gallery-item"><img src="img/tiburon-bottom.webp" alt="Tiburon vista inferior"
+                        loading="lazy"></div>
+                <div class="gallery-item"><img src="img/tiburon-landed.webp" alt="Tiburon pousada no hangar"
+                        loading="lazy"></div>
+                <div class="gallery-item"><img src="img/p72-iso.webp" alt="P-72 Archimedes isométrica" loading="lazy">
+                </div>
+                <div class="gallery-item"><img src="img/p72-front.webp" alt="P-72 Archimedes frontal" loading="lazy">
+                </div>
+                <div class="gallery-item"><img src="img/p72-top.webp" alt="P-72 Archimedes superior" loading="lazy">
+                </div>
+                <div class="gallery-item"><img src="img/p72-rear.webp" alt="P-72 Archimedes traseira" loading="lazy">
+                </div>
+                <div class="gallery-item"><img src="img/p72-port.webp" alt="P-72 Archimedes lateral bombordo"
+                        loading="lazy"></div>
+                <div class="gallery-item"><img src="img/ursa-iso.webp" alt="Ursa Rover isométrica" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/ursa-front.webp" alt="Ursa Rover frontal" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/ursa-top.webp" alt="Ursa Rover superior" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/tiburon-interior-2.webp" alt="Interior da Tiburon — alojamentos"
+                        loading="lazy"></div>
+                <div class="gallery-item"><img src="img/tiburon-interior-4.webp"
+                        alt="Interior da Tiburon — área de carga" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/tiburon-concept-interior-1.webp"
+                        alt="Conceito de interiores da Tiburon — engenharia" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/tiburon-concept-interior-2.webp"
+                        alt="Conceito de interiores da Tiburon — sala de reunião" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/tiburon-concept-interior-3.webp"
+                        alt="Conceito de interiores da Tiburon — recreação" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/tiburon-cockpit-concept.webp" alt="Conceito da ponte da Tiburon"
+                        loading="lazy"></div>
+                <div class="gallery-item"><img src="img/tiburon-project.webp" alt="Mapa do convés e projeto da Tiburon"
+                        loading="lazy"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <a href="docs/">Documentação</a>
+        &nbsp;·&nbsp;
+        <a href="index.html">Catálogo de Unidades</a>
+        &nbsp;·&nbsp;
+        <a href="oneshot.html">Gerador de Missão</a>
+        &nbsp;·&nbsp;
+        <a href="missioncontrol.html">Controle da Missão</a>
+        &nbsp;·&nbsp;
+        <a href="#" onclick="localStorage.removeItem('warp-unit-mothership');location.reload();return false;">Limpar
+            Recursos</a>
+    </footer>
+
+    <!-- LIGHTBOX -->
+    <div class="lb-overlay" id="lb-overlay">
+        <button class="lb-close" onclick="closeLightbox()">&times;</button>
+        <button class="lb-nav lb-prev" onclick="navigateLightbox(-1)">&#8249;</button>
+        <button class="lb-nav lb-next" onclick="navigateLightbox(1)">&#8250;</button>
+        <div class="lb-img-wrap"><img id="lb-img" src="" alt=""></div>
+        <div class="lb-counter" id="lb-counter"></div>
+    </div>
+
+    <script>
+        const galleryImages = [];
+        let lbIndex = 0;
+
+        document.querySelectorAll(".gallery-grid .gallery-item").forEach((item, idx) => {
+            const img = item.querySelector("img");
+            galleryImages[idx] = { src: img.src, alt: img.alt };
+            item.addEventListener("click", () => openLightbox(idx));
+        });
+
+        function openLightbox(idx) {
+            lbIndex = idx;
+            updateLightbox();
+            document.getElementById("lb-overlay").classList.add("open");
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeLightbox() {
+            document.getElementById("lb-overlay").classList.remove("open");
+            document.body.style.overflow = "";
+        }
+
+        function navigateLightbox(dir) {
+            lbIndex = (lbIndex + dir + galleryImages.length) % galleryImages.length;
+            updateLightbox();
+        }
+
+        function updateLightbox() {
+            document.getElementById("lb-img").src = galleryImages[lbIndex].src;
+            document.getElementById("lb-img").alt = galleryImages[lbIndex].alt;
+            document.getElementById("lb-counter").textContent = (lbIndex + 1) + " / " + galleryImages.length;
+        }
+
+        document.getElementById("lb-overlay").addEventListener("click", function (e) {
+            if (e.target === this) closeLightbox();
+        });
+
+        document.addEventListener("keydown", function (e) {
+            if (!document.getElementById("lb-overlay").classList.contains("open")) return;
+            if (e.key === "Escape") closeLightbox();
+            if (e.key === "ArrowLeft") navigateLightbox(-1);
+            if (e.key === "ArrowRight") navigateLightbox(1);
+        });
+
+        // Touch swipe support
+        let touchStartX = 0;
+        document.getElementById("lb-overlay").addEventListener("touchstart", function (e) {
+            touchStartX = e.touches[0].clientX;
+        }, { passive: true });
+        document.getElementById("lb-overlay").addEventListener("touchend", function (e) {
+            const diff = e.changedTouches[0].clientX - touchStartX;
+            if (Math.abs(diff) > 60) {
+                navigateLightbox(diff > 0 ? -1 : 1);
+            }
+        }, { passive: true });
+
+        // ===== RECURSOS DE BORDO =====
+        const RES_STORAGE_KEY = "warp-unit-mothership";
+        const RES_DEFAULTS = {
+            sup: { current: 10, max: 20 },
+            fuel: { current: 10, max: 10 },
+            ammo: { current: 10, max: 10 }
+        };
+
+        let resState = {};
+
+        function loadResState() {
+            try {
+                const raw = localStorage.getItem(RES_STORAGE_KEY);
+                if (raw) {
+                    resState = JSON.parse(raw);
+                    Object.keys(RES_DEFAULTS).forEach(key => {
+                        if (typeof resState[key] !== "object" || typeof resState[key].current !== "number") {
+                            resState[key] = { ...RES_DEFAULTS[key] };
+                        }
+                    });
+                } else {
+                    resState = JSON.parse(JSON.stringify(RES_DEFAULTS));
+                }
+            } catch (e) {
+                resState = JSON.parse(JSON.stringify(RES_DEFAULTS));
+            }
+        }
+
+        function saveResState() {
+            localStorage.setItem(RES_STORAGE_KEY, JSON.stringify(resState));
+        }
+
+        function renderResources() {
+            Object.keys(RES_DEFAULTS).forEach(key => {
+                const data = resState[key];
+                const row = document.getElementById(`res-${key}-row`);
+                const counter = document.getElementById(`res-${key}-counter`);
+                if (!row) return;
+                row.innerHTML = "";
+                for (let i = 0; i < data.max; i++) {
+                    const token = document.createElement("div");
+                    token.className = `res-token ${key} ${i >= data.current ? 'spent' : ''}`;
+                    token.addEventListener("click", () => setResource(key, i + 1));
+                    row.appendChild(token);
+                }
+                counter.textContent = `${data.current}/${data.max}`;
+            });
+        }
+
+        function setResource(key, val) {
+            const max = resState[key].max;
+            resState[key].current = Math.max(0, Math.min(max, val));
+            saveResState();
+            renderResources();
+        }
+
+        function adjustRes(key, amount) {
+            setResource(key, resState[key].current + amount);
+        }
+
+        function resetRes(key) {
+            resState[key].current = RES_DEFAULTS[key].current;
+            saveResState();
+            renderResources();
+        }
+
+        loadResState();
+        renderResources();
+    </script>
+
+</body>
+
+</html>

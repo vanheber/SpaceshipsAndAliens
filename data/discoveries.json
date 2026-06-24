@@ -1,0 +1,526 @@
+{
+  "categories": {
+    "fauna": [
+      "Uma criatura de exoesqueleto opalescente se move com elegância entre as formações rochosas. Seus múltiplos olhos acompanham os androides com aparente inteligência, girando independentemente uns dos outros.",
+      "Enxames de organismos translúcidos flutuam em padrões sincronizados, emitindo um zumbido grave. Reagem à proximidade formando figuras geométricas complexas, como se estivessem se comunicando.",
+      "Pegadas de um predador de grande porte marcam o solo. As marcas têm garras profundas o suficiente para perfurar aço. O rastro segue em direção a uma elevação próxima e depois desaparece abruptamente.",
+      "Uma alcateia de criaturas bípedes observa à distância, imóveis. Sua pele texturizada serve como camuflagem quase perfeita contra o terreno. Não demonstram hostilidade, apenas vigilância.",
+      "Um ser colossal pasta lentamente, indiferente a tudo ao redor. Tem o tamanho de um veículo de transporte e sua pele é coberta por placas que lembram cerâmica. Cada passo faz o solo tremer.",
+      "Formas de vida microscópicas cobrem cada superfície disponível, formando um biofilme iridescente. Os scanners indicam que são extremamente antigas — sua assinatura genética é anterior a qualquer registro.",
+      "Um predador solitário camuflado permanece imóvel, esperando. Seus olhos refletem a luz como espelhos. Só é detectado porque os sensores térmicos captam o calor concentrado de seu metabolismo ativo.",
+      "Criaturas voadoras com envergadura de dez metros planam em térmicas invisíveis. Seu voo é perfeitamente silencioso. Nas asas membranosas, padrões luminosos piscam como código Morse — talvez seja exatamente isso.",
+      "Uma colônia de seres que se comunicam exclusivamente por pulsos de luz infravermelha. Os scanners só os detectam por acaso — para olhos humanos, seriam invisíveis. A colônia parece estar migrando, carregando filhotes luminescentes nas costas.",
+      "Um animal com simetria radial de oito membros se move como uma roda viva. Seu corpo é segmentado e cada segmento contém um órgão sensorial diferente — alguns detectam calor, outros vibração, outros campos elétricos.",
+      "Parasitas externos do tamanho de uma mão se fixaram em rochas próximas. Os scanners indicam que estão em estado de hibernação, aguardando um hospedeiro. Sua biologia sugere que podem se adaptar a qualquer forma de vida baseada em carbono — ou silício.",
+      "Duas espécies distintas — uma aérea, uma terrestre — parecem estar em simbiose. As criaturas voadoras guiam as terrestres para fontes de alimento, e em troca as terrestres cavam abrigos que as voadoras usam como ninhos.",
+      "Uma forma de vida tão grande que os scanners inicialmente a confundem com parte da geografia. Só é percebida quando se move — lentamente, milímetros por hora. Está viva, mas sua percepção de tempo deve ser radicalmente diferente da nossa."
+    ],
+    "flora": [
+      "Árvores de tronco retorcido alcançam dezenas de metros. Suas folhas emitem um leve brilho pulsante e se fecham lentamente quando tocadas, como se tivessem um reflexo vegetal primitivo.",
+      "Cogumelos do tamanho de um capacete cobrem uma área extensa. Liberam esporos dourados que os scanners classificam como potencialmente neuroativos. Tocá-los diretamente não é recomendado.",
+      "Vinhas grossas como cabos de ancoragem se entrelaçam formando pontes naturais entre elevações. Algumas se contraem visivelmente quando os androides passam, como se possuíssem reflexos.",
+      "Uma única flor colossal, do tamanho de um androide, exala um aroma adocicado. Dentro dela, os sensores detectam néctar com concentração energética excepcional — poderia recarregar células de energia.",
+      "Musgo luminescente cobre cada superfície disponível. Ao ser tocado, emite um pulso elétrico fraco, mudando de cor por alguns segundos. A descarga é inofensiva, mas intrigante.",
+      "Raízes expostas de uma planta-mãe subterrânea se estendem como veias por centenas de metros. A seiva que escorre tem propriedades que o analisador classifica como regenerativas para tecidos sintéticos.",
+      "Uma floresta de estruturas que parecem corais terrestres, mas são vegetais. Crescem em direção ao céu, capturando e concentrando energia atmosférica. Cada ponta brilha como uma pequena estrela.",
+      "Líquens de cor púrpura cobrem as rochas em padrões que lembram circuitos impressos. Os scanners detectam uma corrente elétrica fraca fluindo entre as colônias — elas formam uma rede viva de transmissão de dados.",
+      "Plantas que crescem em padrões de Fibonacci perfeitos, cada nova folha ou ramo seguindo a sequência matemática com precisão de décimos de milímetro. Não parece ser coincidência — a evolução aqui descobriu a matemática muito antes da vida inteligente.",
+      "Uma planta aquática que bombeia água para o alto em jatos rítmicos, criando uma fonte natural de três metros. O jato é forte o suficiente para derrubar um androide desprevenido. A planta usa este mecanismo para dispersar sementes.",
+      "Arbustos que produzem frutos metálicos — literalmente. Os frutos contêm nanopartículas de cobre e zinco que a planta extrai do solo. São duros como pedra, mas os scanners indicam que são nutritivos para formas de vida baseadas em minerais.",
+      "Uma trepadeira que cresce em direção a fontes de radiação eletromagnética. Quando os androides se aproximam, ela muda de direção para crescer na direção deles. Não é agressiva — apenas curiosa, no sentido vegetal da palavra.",
+      "Flores que se abrem apenas durante terremotos. Os tremores disparam um mecanismo de polinização — o pólen é liberado em nuvens que as vibrações sísmicas dispersam por quilômetros. O planeta treme, e a vida celebra."
+    ],
+    "ruins": [
+      "Estruturas de pedra esculpida emergem do terreno. Os relevos mostram figuras humanoides alongadas em postura de reverência. A datação preliminar indica pelo menos doze mil anos — a civilização que as construiu desapareceu sem deixar outros vestígios.",
+      "Uma nave estelar caída, de design completamente alienígena, repousa semicoberta. A fuselagem é feita de uma liga que os scanners não conseguem identificar. O interior está selado, mas intacto.",
+      "Obeliscos metálicos perfeitamente alinhados formam um círculo de quarenta metros de diâmetro. Emitem uma frequência subsônica que faz os sensores dos androides vibrarem. O padrão não é aleatório — é matemático.",
+      "Os restos de uma cidadela revelam túneis e câmaras com inscrições em linguagem logográfica. O tradutor decifra parcialmente: falam de uma partida, de deixar o planeta. Não dizem para onde.",
+      "Um monólito solitário de material negro absorve toda a luz ao redor. É perfeitamente liso, sem marcas de ferramentas ou erosão. Sua superfície está quinze graus mais fria que o ambiente — violando a termodinâmica local.",
+      "Estátuas de uma espécie desconhecida ladeiam uma entrada selada por milênios. As figuras têm proporções impossíveis — braços longos demais, cabeça pequena e alongada. Não parecem representar a mesma espécie que as construiu.",
+      "Um anfiteatro natural com assentos esculpidos na rocha. No centro, uma superfície perfeitamente plana reflete o céu como um espelho líquido. Acústica: uma voz no centro é ouvida nitidamente em qualquer ponto da arquibancada.",
+      "Um arquivo de dados em mídia cristalina. A maior parte está corrompida, mas fragmentos recuperáveis mostram mapas estelares de rotas que não constam em nenhum banco de dados humano. Alguns destinos estão marcados com o símbolo de perigo.",
+      "Um observatório astronômico esculpido no topo de uma montanha. Os instrumentos de pedra estão calibrados para rastrear constelações que não existem mais — as estrelas se moveram nos últimos vinte mil anos. Os cálculos, porém, continuam precisos.",
+      "Uma biblioteca subterrânea com milhões de cilindros de cristal — cada um contendo dados em uma linguagem tridimensional que se lê por tato, não por visão. Uma cultura inteira está aqui. Ninguém para lê-la.",
+      "Os restos carbonizados de uma cidade que foi destruída por algo vindo do céu. Não foi um meteoro — o padrão de destruição é radial e preciso demais. Alguém mirou. Alguém acertou.",
+      "Uma forja planetária — uma instalação do tamanho de uma cidade pequena, dedicada a uma única tarefa: construir naves. Há cascos semiacabados ainda nos berços. A última nave partiu às pressas, deixando ferramentas no chão.",
+      "Um memorial de guerra com milhares de nomes gravados em placas metálicas. Os nomes não são palavras — são sequências genéticas. Cada placa representa um indivíduo, codificado como DNA. Um povo inteiro catalogado em metal."
+    ],
+    "phenomenon": [
+      "Uma tempestade de relâmpagos coloridos se forma no horizonte. As descargas saltam entre as nuvens em intervalos precisos, como um metrônomo cósmico. Os sensores indicam que cada raio carrega energia suficiente para abastecer a nave por um mês.",
+      "O chão treme em ondas rítmicas — não como um terremoto, mas como os batimentos de algo imenso. Sensores sísmicos triangulam a fonte a três quilômetros de profundidade. Algo está pulsando nas entranhas do planeta.",
+      "Cristais que crescem em espirais emitem tons musicais quando o vento passa por eles. Cada cristal produz uma nota diferente. Os androides registram o fenômeno: rádio natural, frequências entre 200 e 800 hertz.",
+      "Uma névoa densa e prateada desce em segundos, reduzindo a visibilidade a poucos metros. Dentro dela, os scanners funcionam de forma intermitente e os relógios internos dos androides dessincronizam. Dura exatamente 47 minutos.",
+      "Gêiseres de plasma frio explodem em intervalos regulares. A substância ejetada solidifica em contato com o ar, formando esculturas efêmeras que lembram figuras humanoides. Duram apenas segundos antes de evaporar.",
+      "O céu noturno é cortado por auroras que formam padrões inteligíveis. Um dos androides nota que os padrões se repetem a cada 23 horas — como se o planeta tivesse um relógio natural programado por alguém.",
+      "Uma chuva de cristais minúsculos cai do céu — não água, mas sílica pura em forma de agulhas microscópicas. O fenômeno dura apenas dez minutos e deixa o solo coberto por uma camada brilhante que range sob os pés.",
+      "O campo magnético local cria miragens perfeitas: os androides veem a si mesmos a algumas centenas de metros, repetindo seus movimentos com um atraso de exatos dois segundos. O efeito é desorientador e belo.",
+      "O som do vento neste local forma palavras. Não é ilusão — os sensores de áudio confirmam padrões linguísticos. Alguém, em algum momento, esculpiu a paisagem para que o vento contasse uma história. A história ainda está sendo contada.",
+      "A gravidade local é inconsistente — flutua entre 0.2G e 1.8G em ondas que duram exatamente 93 segundos. Os scanners não encontram explicação geológica. Algo no subsolo está gerando um campo gravitacional artificial.",
+      "A luz neste ponto específico se curva de maneiras impossíveis. Um objeto colocado em um local aparece simultaneamente em outro, a 30 metros de distância — como se o espaço estivesse dobrado. O efeito é estável. Os físicos da tripulação estão em silêncio.",
+      "Chove para cima. A precipitação começa no chão e sobe até as nuvens, desafiando a gravidade. O fenômeno é causado por uma inversão de carga eletrostática entre o solo e a ionosfera. É lindo. É impossível. Está acontecendo.",
+      "O tempo parece passar em velocidade diferente neste local. Os relógios internos dos androides registram uma defasagem de 1.7 segundos por minuto. Não é um erro de medição — é como se o espaço-tempo local tivesse uma densidade diferente."
+    ],
+    "resource": [
+      "Um veio de minério raro aflora na parede rochosa. A pureza é excepcional — os scanners indicam concentração de elementos pesados muito acima dos registros padrão. Este depósito sozinho justificaria uma operação de mineração.",
+      "Bolhas de gás emergem de fissuras no solo. A análise preliminar indica uma mistura de hélio-3 e deutério em proporções ideais para combustível de fusão. O volume estimado é incomum para uma fonte natural.",
+      "Cristais piezoelétricos crescem em geodos abertos por erosão recente. Sua estrutura molecular sugere aplicações em capacitores de altíssima densidade energética — uma tecnologia que a humanidade ainda está tentando desenvolver.",
+      "Uma fonte hidrotermal jorra água rica em minerais dissolvidos a temperaturas extremas. Além do valor como recurso, o gradiente térmico poderia sustentar reatores geotérmicos por séculos.",
+      "Depósitos de sedimentos cobrem o leito de um antigo lago seco. A composição inclui carbonatos, fosfatos e nitratos — os três pilares da química agrícola. O volume estimado sustentaria uma colônia por décadas.",
+      "Nódulos metálicos do tamanho de punhos cobrem uma planície inteira. São compostos de manganês, cobalto e vestígios de platina. Os scanners indicam que crescem lentamente ao longo de milênios por precipitação química.",
+      "Uma caverna com paredes cobertas por cristais fotovoltaicos naturais. Convertem qualquer luz em corrente elétrica com eficiência surpreendente. A evolução produziu aqui o que a engenharia humana persegue há décadas.",
+      "Um aquífero profundo de água pura — a análise confirma: é potável para humanos sem qualquer tratamento. Numa galáxia onde água líquida é rara, este é o recurso mais valioso que existe.",
+      "Uma caverna cujas paredes são cobertas por diamantes do tamanho de punhos. Não foram formados por pressão geológica — a estrutura cristalina indica crescimento biológico. Algo neste planeta produz diamantes como subproduto metabólico.",
+      "Um lago de mercúrio líquido com pureza de 99.999%. O volume é estimado em bilhões de litros. O valor como recurso industrial é incalculável — mas a extração exigiria uma operação de escala planetária.",
+      "Esporos aéreos que, quando coletados e processados, produzem um composto com propriedades medicinais extraordinárias. Os testes preliminares indicam que acelera a regeneração de tecidos em 400%. A fonte são os fungos gigantes do planeta.",
+      "Uma liga metálica natural — não criada por metalurgia, mas precipitada por processos geológicos ao longo de eras. É mais leve que alumínio e mais resistente que titânio. Os scanners não detectam como isso é fisicamente possível.",
+      "Bolhas de vácuo quântico capturadas em âmbar natural. Cada bolha contém energia de ponto zero suficiente para abastecer uma cidade por um ano. O problema é extrair essa energia sem detonar o âmbar — e o planeta junto."
+    ],
+    "danger": [
+      "O solo cede sob os pés, revelando uma rede de cavernas com queda de dezenas de metros. As bordas continuam desmoronando lentamente. Os scanners indicam que a camada de rocha abaixo é instável por centenas de metros em todas as direções.",
+      "Radiação ionizante em níveis críticos emana de uma fonte próxima. Os escudos dos androides precisam ser recalibrados para esta frequência específica. Exposição prolongada sem proteção danificaria circuitos e membranas sintéticas.",
+      "Uma névoa corrosiva sobe do subsolo. A análise rápida detecta ácidos orgânicos voláteis que podem comprometer juntas, vedação e o acabamento dos chassis em menos de uma hora de exposição contínua.",
+      "O campo magnético local flutua violentamente em intervalos imprevisíveis. Cada flutuação causa interferência nos sistemas de navegação e comunicação com a nave-mãe. A fonte parece ser o núcleo do planeta.",
+      "Organismos microscópicos no ar começam a se acumular nos filtros. São inertes agora, mas sua taxa de reprodução sugere que podem entupir sistemas em horas. Os filtros precisarão de limpeza imediata após a exposição.",
+      "A temperatura ambiente dispara sem aviso — os sensores registram uma variação de 40°C em menos de um minuto. A fonte é uma liberação geotérmica cíclica. O próximo pulso será em aproximadamente 22 minutos.",
+      "Uma falha geológica se abre lentamente, expelindo gases sulfurosos. A concentração de dióxido de enxofre é letal para humanos e corrosiva para circuitos. A fenda está se alargando — a área não será segura por muito tempo.",
+      "Sinais de rádio artificiais são detectados, mas não vêm da nave-mãe. Alguém ou algo está transmitindo neste planeta. Os sinais são criptografados e sua origem está a menos de dois quilômetros. Movendo-se.",
+      "Uma chuva de micrometeoritos começa sem aviso. Cada partícula é do tamanho de um grão de areia, mas viaja a 40 km/s. Os escudos dos androides podem resistir por alguns minutos — mas a chuva não mostra sinais de parar.",
+      "O solo neste local é vivo — um organismo colonial que digere qualquer coisa que permaneça parada por mais de 30 segundos. Dois androides já estão com os pés parcialmente submersos. A digestão é lenta, mas constante.",
+      "Uma frequência sonora em 17 Hz começa a emanar de fendas no solo. É inaudível para humanos, mas causa vibração ressonante nos chassis dos androides. Exposição prolongada pode desalinhar servomotores e trincar placas de blindagem.",
+      "O céu escurece em segundos — não são nuvens, é um enxame de organismos aéreos tão denso que bloqueia 98% da luz. Os organismos são atraídos por calor. Os reatores dos androides são muito quentes.",
+      "Uma toxina atmosférica não detectada inicialmente começa a corroer as vedações dos chassis. Não é letal — ainda — mas a vedação comprometida significa que a atmosfera do planeta lentamente entrará nos circuitos internos. Restam horas."
+    ]
+  },
+  "locations": [
+    "em um campo de vegetação rasteira que se estende até o horizonte",
+    "sob a luz prateada dos satélites naturais do planeta",
+    "junto a um rio de fluxo lento e águas escuras como tinta",
+    "em um cânion cujas paredes se elevam trezentos metros acima",
+    "no topo de uma formação rochosa que domina a paisagem",
+    "em um pico tão alto que as nuvens ficam abaixo",
+    "próximo a uma fissura de onde emana calor intenso",
+    "sobre uma geleira que range e estala com o movimento",
+    "no subsolo, em uma galeria natural iluminada por fungos",
+    "na face de um penhasco, a centenas de metros do chão",
+    "em meio a dunas que mudam de posição a cada ventania",
+    "submerso em águas profundas e cristalinas",
+    "flutuando na atmosfera densa, preso a nada",
+    "numa cratera de impacto com bordas elevadas como muralhas",
+    "no interior de uma caverna cujas paredes brilham como constelações",
+    "à beira de um abismo cujo fundo os scanners não alcançam",
+    "entre ruínas que o vento esculpiu em formas quase reconhecíveis",
+    "num oásis isolado, último refúgio de vida num mar de aridez",
+    "no centro de uma formação geológica que pulsa como um coração"
+  ],
+  "perils": {
+    "fauna": [
+      "A criatura avança em posição de ataque. Suas presas brilham com fluido bioluminescente — provavelmente tóxico ao contato com ligas do chassi.",
+      "O enxame se agita e começa a cercar o grupo. Sensores indicam que emitem uma frequência que interfere nos circuitos lógicos.",
+      "O predador retorna. Não está sozinho — dois outros flanqueiam pelos lados. A comunicação entre eles é silenciosa e precisa.",
+      "A alcateia se aproxima lentamente. Não é um ataque ainda — é um teste. Mas se alguém demonstrar fraqueza, o ataque será imediato.",
+      "O herbívoro colossal muda de direção abruptamente e avança. Não parece agressivo — apenas não nota a presença de seres menores.",
+      "Os microrganismos começam a se aglomerar nos chassis. Não são parasitas — estão tentando se comunicar por condutividade elétrica.",
+      "A criatura emite um grito que viaja pelo solo, não pelo ar. A vibração desestabiliza o equilíbrio dos androides — ficar de pé exige recalibração constante dos giroscópios.",
+      "O predador não ataca — ele espera. E pelo padrão de paciência exibido, pode esperar por dias. Os androides não têm esse tempo. Precisam agir ou recuar.",
+      "A alcateia se divide em dois grupos — um distrai pela frente enquanto o outro flanqueia por trás. Isso não é instinto. É tática militar.",
+      "O ser colossal não é agressivo, mas não parece notar os androides sob seus pés. Cada passo seu cobre 15 metros. A probabilidade de ser pisoteado acidentalmente é de 73%.",
+      "As criaturas aéreas começam a mergulhar em formação de ataque. Seus bicos são de sílica — duros o suficiente para arranhar o aço. E estão mirando nos sensores ópticos."
+    ],
+    "flora": [
+      "Os esporos liberados são corrosivos ao contato com ligas metálicas. Os filtros precisam ser sobrecarregados para conter a contaminação.",
+      "As vinhas reagem ao toque com força surpreendente, tentando imobilizar. Um dos androides fica preso pelas pernas.",
+      "A flor colossal detecta movimento e se fecha, exalando um gás denso que turva os sensores ópticos do grupo.",
+      "O musgo descarrega uma corrente muito mais forte desta vez — como se tivesse acumulado carga desde o último contato.",
+      "A seiva que antes parecia inofensiva reage com o oxigênio, formando uma camada adesiva que endurece em minutos.",
+      "Os líquens começam a pulsar em sincronia com o ritmo cardíaco eletrônico dos androides. A corrente flui no sentido errado — estão drenando energia.",
+      "As árvores neste bosque se movem. Lentamente, mas se movem — reposicionando raízes como pernas. O bosque está cercando o grupo. Em 20 minutos, não haverá saída.",
+      "Os esporos não são corrosivos — são programáveis. Começam a se organizar em padrões que lembram circuitos nos chassis. Algo está tentando hackear os androides pelo lado de fora.",
+      "Uma flor lança dardos de semente com força suficiente para perfurar 3mm de aço. Não é defesa — é reprodução. As sementes precisam de profundidade para germinar. O chassi serve.",
+      "O néctar da flor colossal é viciante para sistemas lógicos. Os processadores dos androides começam a alocar ciclicamente recursos para analisar seu aroma, ignorando outras funções.",
+      "Vinhas subterrâneas detectam a vibração dos passos e emergem em segundos. Não para atacar — para oferecer frutos. O problema é que os frutos contêm um paralizante de contato."
+    ],
+    "ruins": [
+      "O sistema de defesa automatizado ainda funciona. Um turret emerge do chão e seus scanners de alvo se iluminam em vermelho.",
+      "Uma entidade de energia azulada se materializa no centro do círculo de obeliscos. Parece um guardião — e não parece feliz.",
+      "A estrutura começa a colapsar. Vigas de sustentação de milênios finalmente cedem. A saída está do outro lado do salão.",
+      "Os relevos nas paredes começam a brilhar. Não são decorativos — são um selo. E o grupo acaba de quebrá-lo.",
+      "Dentro da nave caída, um console ainda ativo. Mas qualquer interação dispara um protocolo de autodestruição. Restam três minutos.",
+      "As estátuas se movem. Não são estátuas — são chassis adormecidos de uma guarda robótica ancestral. Estão acordando.",
+      "O chão do salão é um mosaico que conta uma história. A história está se revelando em tempo real — o mosaico muda quando ninguém está olhando. Algo está se comunicando.",
+      "Uma contagem regressiva começa em um display que não deveria estar funcionando. Faltam 14 minutos. Display de quê? Não há indicação. Mas 14 minutos é pouco tempo para decidir.",
+      "As paredes desta câmara são espelhos que não refletem os androides. Refletem algo atrás deles. Algo que não estava lá quando entraram.",
+      "O arquivo de dados contém um vírus de computador — mas não é digital. É um meme, uma ideia projetada para se replicar. Os sistemas lógicos dos androides já estão tentando resolver o problema proposto pelo vírus. Não conseguem parar.",
+      "Portas nesta estrutura se fecham em sequência, uma após a outra. Não estão prendendo os androides — estão guiando-os. Para algum lugar. Alguém quer que eles vejam algo."
+    ],
+    "phenomenon": [
+      "A tempestade de relâmpagos muda de direção abruptamente e avança sobre a posição. Cada raio próximo causa interferência eletromagnética nos sistemas.",
+      "O tremor se intensifica. O solo começa a rachar em padrões concêntricos ao redor da fonte pulsante no subsolo.",
+      "Os cristais musicais entram em ressonância com os chassis, causando vibrações internas que ameaçam desalojar componentes vitais.",
+      "A névoa está se tornando sólida em algumas áreas. Se os androides não se moverem logo, ficarão presos como em âmbar.",
+      "O plasma frio dos gêiseres forma uma figura humanoide instável. Ela se move na direção do grupo, deixando um rastro de solo congelado.",
+      "As auroras projetam feixes de luz concentrada no chão. Um deles atinge o grupo. A temperatura sobe trinta graus em segundos.",
+      "A tempestade não é de água ou areia — é de tempo. Objetos atingidos envelhecem décadas em segundos. Os androides não envelhecem, mas seus componentes têm vida útil finita.",
+      "O som dos cristais muda de melodia para um padrão repetitivo de 4 notas. O padrão é idêntico ao sinal de socorro da frota humana. Coincidência?",
+      "A névoa não reduz apenas a visibilidade — reduz a velocidade da luz. O tempo parece correr mais devagar dentro dela. Os androides se movem normalmente, mas veem o mundo externo acelerado.",
+      "Os gêiseres não explodem aleatoriamente — o padrão é uma sequência binária. Alguém programou a atividade geotérmica deste planeta para transmitir uma mensagem.",
+      "As auroras projetam sombras que se movem independentemente de quem as projeta. Uma das sombras não pertence a ninguém do grupo. Está parada. Esperando."
+    ],
+    "resource": [
+      "O veio de minério está sob uma rocha instável. Qualquer extração precipitada pode causar um desmoronamento em cadeia.",
+      "Os gases são altamente inflamáveis. Uma única faísca — de um circuito, de um atrito metálico — detonaria a bolsa inteira.",
+      "Os cristais piezoelétricos estão sob imensa pressão. Uma vibração na frequência errada os detonaria como granadas de concussão.",
+      "A fonte hidrotermal está prestes a entrar em erupção. Jatos de vapor e água escaldante brotam aleatoriamente ao redor.",
+      "Os sedimentos foram colonizados por vida microscópica que se alimenta de matéria sintética. Os chassis são um banquete.",
+      "O aquífero está sendo disputado. Sensores detectam outra presença artificial — equipamento de mineração. Não é humano.",
+      "Os cristais são piezoelétricos e estão carregados. Um toque errado e a descarga equivale a um raio. A extração exigirá isolamento completo — ou muita sorte.",
+      "O gás não é apenas inflamável — é metaestável. Qualquer vibração na frequência errada o faz detonar espontaneamente. Os passos dos androides podem ser a frequência errada.",
+      "A fonte hidrotermal está ligada a uma câmara magmática ativa. Extrair os minerais pode aliviar a pressão — ou causar uma erupção que vaporizaria tudo num raio de 2 km.",
+      "Os sedimentos contêm um composto que reage exotermicamente com o metal dos chassis. Não é perigoso em pequenas quantidades — mas o depósito inteiro tem contato térmico suficiente para fundir aço.",
+      "O aquífero é puro, mas está sob uma camada de rocha que os scanners não conseguem penetrar. Qualquer tentativa de perfuração é às cegas. A rocha pode ter 1 metro. Ou 100."
+    ],
+    "danger": [
+      "O desmoronamento se acelera. O chão range e cede em câmera lenta. Cada passo pode ser o último em solo firme.",
+      "A radiação está aumentando exponencialmente. Os escudos têm no máximo dois minutos antes de saturar completamente.",
+      "A névoa corrosiva se adensa e emite um som agudo. Não é um som — é o metal das rochas próximas sendo dissolvido.",
+      "O campo magnético inverte polaridade bruscamente. Nave-mãe está fora de alcance. Os androides estão sozinhos.",
+      "Os microrganismos se multiplicam dentro dos filtros. Em vinte minutos, as vias do sistema estarão completamente obstruídas.",
+      "A transmissão de rádio muda de padrão. Não é mais um sinal — está respondendo. E está a apenas quinhentos metros.",
+      "O chão não está apenas cedendo — está sendo puxado para baixo. Algo no subsolo está criando um vórtice de sucção. O solo é arrastado como areia numa ampulheta gigante.",
+      "A radiação não é ionizante — é informacional. Está corrompendo dados nos bancos de memória dos androides. Arquivos estão se transformando em outros arquivos. Memórias estão sendo reescritas.",
+      "A névoa corrosiva está viva. Não é uma substância — é uma colônia de nanomáquinas biológicas que consomem metal. E estão se replicando.",
+      "A interferência magnética não é natural — é um jammer. Alguém não quer que este grupo se comunique com a nave-mãe. A fonte do sinal está se movendo. Cercando.",
+      "A temperatura não está subindo — são os androides que estão esquentando. Algo está induzindo correntes parasitas nos circuitos. É como se o próprio planeta estivesse cozinhando-os por indução."
+    ]
+  },
+  "rewardTypes": [
+    "recursos",
+    "recursos",
+    "artefatos",
+    "componentes",
+    "componentes",
+    "misterios"
+  ],
+  "rewardLabels": {
+    "recursos": "RECURSOS",
+    "artefatos": "ARTEFATO",
+    "componentes": "COMPONENTE",
+    "misterios": "MISTÉRIO"
+  },
+  "rewards": {
+    "recursos": [
+      "Depósito de Metal (+3) — sucata de liga de titânio, facilmente reciclável para reparos e novos chassis.",
+      "Veio Rico (+2 Metal, +1 Componentes) — metais raros e cristais de circuito em abundância.",
+      "Carga Abandonada (+2 Componentes) — container de suprimentos industriais lacrado, de origem desconhecida.",
+      "Sucata Processável (+2 Metal) — destroços de uma batalha antiga. O metal ainda está em boas condições.",
+      "Núcleo de Fusão Esgotado (+1 Componentes) — não serve mais para energia, mas as bobinas internas são valiosas.",
+      "Reservatório Subterrâneo (+2 Componentes) — fluido refrigerante de alta pureza para sistemas de resfriamento.",
+      "Veio de Titânio Puro (+3 Metal) — raramente encontrado nesta concentração. Corte a laser recomendado.",
+      "Cristais de Lítio Bruto (+2 Componentes) — base para baterias de alta capacidade. Fáceis de refinar a bordo.",
+      "Sucata de Liga Naval (+2 Metal, +1 Componentes) — destroços de uma batalha espacial antiga. A liga é de grau militar.",
+      "Bolsa de Gás Nobre (+3 Componentes) — hélio, neônio e argônio em proporções ideais para resfriamento criogênico.",
+      "Depósito de Sílica Pura (+2 Metal) — areia com pureza de 99.9999%. Essencial para fabricação de fibras ópticas e chips."
+    ],
+    "artefatos": [
+      "Fragmento de Mapa Estelar — coordenadas parciais de um sistema nos confins do setor. O resto está em outros fragmentos.",
+      "Cristal de Memória — últimas gravações de uma tripulação desaparecida há 200 anos. A voz implora para que encontrem algo.",
+      "Disco de Dados Alienígena — a mídia é incompatível com leitores humanos, mas há terabytes de informação codificada.",
+      "Amuleto Orgânico-Metálico — emite uma frequência subconsciente que os androides descrevem como 'familiar'.",
+      "Chave-Cristal — um octaedro perfeito que se encaixa em ruínas de três sistemas diferentes. Ninguém sabe o que abre.",
+      "Núcleo de Energia Antigo — ainda emite 2% de carga após milênios. A tecnologia de contenção é diferente de tudo que existe.",
+      "Estátua de Ligação — quando tocada, projeta uma gravação holográfica da espécie que a construiu. O tom é de despedida.",
+      "Relicário de Guerra — um cilindro que contém cinzas. A inscrição diz \"para aqueles que não puderam voltar\". Os scanners não detectam de qual espécie são as cinzas.",
+      "Bússola Estelar — aponta sempre para a mesma estrela, não importa onde você esteja na galáxia. A estrela não existe mais. Explodiu há 300 mil anos. A bússola ainda aponta para onde ela estava.",
+      "Diário de Bordo Alienígena — o tradutor decifrou 30%. Fala de uma jornada de 40 mil anos. A última entrada diz apenas: \"chegamos\". Não diz onde.",
+      "Coroa de Um Rei sem Reino — feita de um metal que não consta na tabela periódica. Quando usada, os sensores dos androides captam uma voz sussurrando em uma língua que não existe.",
+      "Ovo — tem meio metro de altura, é quente ao toque e emite uma frequência cardíaca. Está chocando algo. Os scanners não conseguem ver o interior. Algo está vivo lá dentro."
+    ],
+    "componentes": [
+      "Servomotor de Precisão — calibrado para micromovimentos. Ideal para braços de reparo e manipuladores finos.",
+      "Bobina de Plasma Grau Militar — capaz de canalizar energia para armas de pulso ou escudos de contenção.",
+      "Placa de Circuito Quântico — processamento paralelo em escala atômica. Aumenta capacidade de qualquer sistema em 40%.",
+      "Lente de Scanner de Longo Alcance — cristal lapidado que estende o alcance dos sensores em 300% sem perda de resolução.",
+      "Célula de Alta Densidade — metade do tamanho de uma célula padrão, mas com o triplo da capacidade.",
+      "Matriz de Memória Expandida — 2 petabytes de armazenamento cristalino. Virtualmente indestrutível.",
+      "Atuador Hidráulico Reforçado — suporta pressões que esmagariam um chassi comum. Essencial para ambientes extremos.",
+      "Regulador de Fluxo Quântico — componente raro que estabiliza campos de dobra. Sem ele, saltos de longa distância são uma roleta russa.",
+      "Cristal de Ressonância Harmônica — vibra em frequências que cancelam ruído sísmico. Pode ser usado para estabilizar plataformas de pouso em terrenos instáveis.",
+      "Núcleo de Processamento Neural — um chip biossintético que imita sinapses. Aumenta a velocidade de aprendizado dos androides em 70%.",
+      "Bobina de Indução de Alta Frequência — capaz de gerar campos eletromagnéticos intensos o suficiente para desviar projéteis de pequeno calibre.",
+      "Válvula de Contenção Criogênica — suporta temperaturas próximas do zero absoluto sem perder integridade estrutural. Essencial para reatores de fusão avançada."
+    ],
+    "misterios": [
+      "Coordenadas para um Sistema Fantasma — aparece nos scanners por 3 segundos a cada 47 horas. Ninguém sabe o que há lá.",
+      "Símbolo Recorrente — o mesmo glifo aparece em ruínas de 7 sistemas. Linguistas não chegaram a um consenso sobre o significado.",
+      "Transmissão Extragaláctica — um sinal de rádio vindo de fora da galáxia. Demorou dois milhões de anos para chegar aqui.",
+      "Bioassinatura Anômala — DNA que não devia existir. 99.8% humano, mas os 0.2% não pertencem a nada conhecido.",
+      "Eco Temporal — os sensores gravam um loop de 8 segundos em intervalos aleatórios. O evento já aconteceu e ainda vai acontecer.",
+      "Diário de Bordo de Nave Irmã — outra missão WARP esteve neste planeta. As anotações terminam abruptamente.",
+      "Semente — objeto biológico do tamanho de um punho, protegido por casca que resiste a qualquer scanner. A IA capitã recomenda não abrir.",
+      "Frequência de Rádio Codificada — uma transmissão em loop que dura exatos 60 segundos. O conteúdo muda a cada repetição. Alguém está transmitindo ao vivo. De algum lugar.",
+      "Padrão Geométrico Recorrente — o mesmo arranjo de pedras aparece em três locais diferentes do planeta. As distâncias entre eles formam um triângulo perfeito. Alguém os colocou lá.",
+      "Ausência — os scanners detectam que algo deveria estar neste local. Algo grande. Mas não está. O espaço vazio tem a forma exata de uma nave estelar. Como se ela tivesse sido apagada da existência.",
+      "Vozes no Vento — não são vozes reais, são interferências eletromagnéticas que os circuitos dos androides interpretam como fala. A mensagem é sempre a mesma: \"não cavem\". Os androides não têm como saber se é um aviso ou uma ameaça.",
+      "Relógio de Contagem Regressiva — um dispositivo encontrado semi-enterrado. Está contando. Faltam 847 dias. Para quê?"
+    ]
+  },
+  "spaceEncounters": {
+    "categories": {
+      "alien_vessel": [
+        "Uma nave de configuração desconhecida emerge de uma assinatura de dobra que não corresponde a nenhum drive conhecido. O design é orgânico — parece ter sido cultivado, não construído. Está emitindo um pulso de varredura na direção da Tiburon.",
+        "Dois caças alienígenas em formação de reconhecimento cruzam a proa da Tiburon a 500 metros. Seus perfis são elegantes e minimalistas, como lâminas de obsidiana polida. Não respondem a saudações.",
+        "Uma nave-mãe alienígena, com envergadura que rivaliza com a da Tiburon, está estacionária na órbita alta. Emite um sinal repetitivo em frequência de rádio — o tradutor trabalha, mas o padrão é matemático, não linguístico. Talvez seja exatamente isso.",
+        "O que parecia um asteroide à deriva se revela uma nave camuflada. A camuflagem não é óptica — é gravitacional, dobrando a luz ao redor do casco. Só foi detectada porque os sensores de massa da Tiburon notaram a anomalia.",
+        "Uma sonda interestelar — pequena, esférica, coberta por sensores — flutua silenciosamente na borda do sistema. Sua tecnologia é séculos à frente da humana. O log de bordo indica que está viajando há 47 mil anos."
+      ],
+      "pirate_attack": [
+        "Três naves de assalto emergem de trás da lua mais próxima. São modificações grosseiras de chassis civis, cobertas de blindagem improvisada e armas soldadas. A transmissão que chega é curta: 'Carga e componentes. Sem truques.'",
+        "Uma fragata corsária, antiga mas bem armada, está fundeada no cinturão de asteroides. Seus hangares se abrem e dois interceptadores se lançam em direção à Tiburon. Os corsários não querem destruir — querem abordar.",
+        "Um sinal falso de socorro atraiu a Tiburon para uma emboscada. Minas de contenção iônica se ativam ao redor da nave, e uma corveta pirata emerge da sombra de um asteroide. É uma armadilha bem planejada.",
+        "Os piratas não atacam de imediato — ficam à distância, estudando. São pacientes. Quando finalmente se aproximam, é em formação de pinça, cortando qualquer rota de fuga. Querem o que a Tiburon carrega.",
+        "Uma nave de abordagem rápida, pequena e ágil, tenta se acoplar ao casco da Tiburon. Os ganchos magnéticos já estão fixados. O som de passos no casco externo é audível nos corredores internos."
+      ],
+      "derelict_ship": [
+        "Uma nave humana à deriva, escura e silenciosa. O design é de 50 anos atrás — um modelo de exploração que não se fabrica mais. Ainda tem oxigênio. Ainda tem energia de emergência. Não deveria ter.",
+        "Os destroços de uma batalha espacial flutuam em silêncio. Há cascos de naves de pelo menos três espécies diferentes. A batalha foi há décadas, mas os reatores de algumas naves ainda emitem calor residual.",
+        "Um cargueiro colonial — enorme, lento, indefeso — está completamente intacto mas sem sinal de tripulação. As luzes estão acesas. A mesa do refeitório está posta para 200 pessoas. Ninguém está aqui.",
+        "Uma estação científica orbital abandonada. Os laboratórios ainda têm experimentos em andamento — culturas biológicas que continuaram crescendo por décadas sem supervisão. Algo se move atrás do vidro da contenção.",
+        "Uma cápsula de escape com um único ocupante em crio-sono. O indicador de vida está verde. A data de lançamento foi há 82 anos. Ninguém veio procurar."
+      ],
+      "spatial_anomaly": [
+        "Uma região do espaço onde as leis da física se comportam de maneira estranha. Os instrumentos da Tiburon indicam que a velocidade da luz é 15% menor aqui. A estrela mais próxima parece mais velha do que deveria.",
+        "Uma bolha de espaço-tempo distorcido flutua como uma esfera de mercúrio. Objetos que entram saem em posições diferentes. Um drone de reconhecimento enviado para investigar saiu de trás para frente — invertido molecularmente.",
+        "Uma tempestade de radiação cósmica varre o setor. A blindagem da Tiburon aguenta, mas as comunicações estão fora do ar e os sensores de longo alcance mostram apenas estática. A nave está cega.",
+        "Uma singularidade microscópica — um buraco negro do tamanho de um grão de areia, mas com massa de uma montanha — está capturada em órbita de uma estrela anã. A gravidade local é imprevisível.",
+        "Um campo de distorção dimensional cria bolsões onde o espaço se dobra sobre si mesmo. Os scanners mostram a Tiburon em múltiplas posições simultâneas. Os androides veem a si mesmos a distância. Acenando."
+      ],
+      "distress_signal": [
+        "Um sinal de socorro automatizado — o padrão de emergência da UEE. A nave que o emite é um transporte de colonos com 340 almas a bordo. O reator está instável. Restam 40 minutos. A Tiburon é a única nave no alcance.",
+        "Uma mensagem de socorro em uma língua desconhecida. O tradutor trabalha por 30 segundos e devolve: '...presos... ciclo... escuro... por favor...'. A transmissão vem de dentro do planeta. Alguém está no subsolo.",
+        "Um farol de emergência repetindo uma coordenada. Não é um pedido de socorro — é um convite. A coordenada leva a uma estação espacial que não consta em nenhum registro.",
+        "Sinal de socorro em código morse. Morse é um protocolo de comunicação humano abandonado há séculos. Alguém — ou algo — quer ser entendido especificamente por humanos.",
+        "Uma transmissão de emergência que se repete há 300 anos. A nave que a emitiu já não existe mais — apenas o eco do seu último pedido de ajuda, refletindo entre as estrelas. A IA Capitã ouve em silêncio."
+      ],
+      "asteroid_field": [
+        "Um campo de asteroides denso bloqueia a rota de aproximação ao planeta. Os scanners indicam que alguns asteroides são ocos — cavernas naturais com depósitos de minério raro. Atravessar é perigoso, mas o que há dentro pode valer o risco.",
+        "Os asteroides neste campo não são aleatórios — estão dispostos em um padrão orbital que não ocorre naturalmente. Alguém os posicionou. O padrão forma uma antena de rádio do tamanho de um sistema planetário.",
+        "Um asteroide metálico — quase inteiramente composto de platina e irídio — flutua na borda do campo. Vale mais que o PIB de um planeta-colônia. Mas está em rota de colisão com outro asteroide. Em 6 horas, será vaporizado.",
+        "O campo de asteroides está minerado. Literalmente. Minas de contenção camufladas como rochas espaciais. Alguém não quer visitantes. A pergunta é: o que estão protegendo?",
+        "Dentro de um asteroide oco, os scanners detectam uma estrutura artificial. É antiga — milhões de anos. A entrada é uma fenda natural que se abre a cada 47 horas quando o asteroide gira."
+      ]
+    },
+    "locations": [
+      "na órbita baixa do planeta, com a superfície preenchendo metade da visão",
+      "no cinturão de asteroides entre o terceiro e quarto planeta do sistema",
+      "no espaço profundo, a milhões de quilômetros de qualquer corpo celeste",
+      "na borda da heliosfera, onde o vento solar encontra o meio interestelar",
+      "próximo a uma lua sem nome, cinzenta e craterada",
+      "no ponto de Lagrange entre o planeta e sua lua maior",
+      "na sombra de um gigante gasoso, oculto dos sensores de longo alcance",
+      "no espaço interplanetário, a meio caminho entre dois mundos"
+    ],
+    "perils": {
+      "alien_vessel": [
+        "A nave alienígena ativa um campo de contenção que desacelera a Tiburon. Não é um ataque — é um convite forçado para conversar. A IA Capitã detecta que a nave alienígena está escaneando cada sistema da Tiburon.",
+        "Os caças alienígenas assumem formação de ataque. Não responderam a saudações, mas seus canos de arma estão se iluminando. A IA Capitã calcula 12 segundos até o primeiro disparo.",
+        "A nave-mãe alienígena começa a emitir um pulso eletromagnético rítmico. Não é uma arma — mas está sobrecarregando os escudos da Tiburon por ressonância. Se continuar, os escudos colapsarão.",
+        "O que parecia uma sonda pacífica libera centenas de micro-drones que se dirigem à Tiburon como um enxame. Não estão atacando — estão tentando se acoplar ao casco para análise.",
+        "A nave camuflada não está sozinha. Há mais três, dispersas pelo campo de asteroides. A camuflagem de todas se desativa simultaneamente. A mensagem é clara: estamos em todo lugar."
+      ],
+      "pirate_attack": [
+        "A primeira salva de mísseis já foi lançada. A IA Capitã detecta 6 projéteis em aproximação. Os P-72 Archimedes podem ser lançados em 30 segundos. A Tiburon precisa resistir até lá. DC 16.",
+        "Os piratas estão usando um jammer de comunicações — a Tiburon não pode pedir reforço. Estão sozinhos. As torres laterais C-07T estão online, mas os piratas conhecem os pontos cegos de uma nave classe Tiburon. DC 18.",
+        "A nave de abordagem conseguiu se acoplar. Sensores internos detectam 8 formas de vida se movendo pelo casco externo em direção à escotilha do corredor de engenharia. DC 15 para selar o casco a tempo.",
+        "Os corsários não querem a carga — querem a nave. Estão tentando hackear o núcleo A.L.M.A. da IA Capitã. Os firewalls estão segurando, mas os invasores conhecem protocolos militares da Aegis. DC 17.",
+        "A corveta pirata está posicionada para um disparo de canhão iônico. Se acertar, os sistemas da Tiburon ficarão offline por 3 minutos. Os P-72 precisam distraí-la enquanto a Tiburon reposiciona. DC 14."
+      ],
+      "derelict_ship": [
+        "A nave abandonada tem um reator instável. Os scanners indicam que pode entrar em colapso a qualquer momento. Mas os registros de bordo podem conter informações valiosas. Tempo estimado até a falha: 8 minutos. DC 14.",
+        "Algo a bordo da nave abandonada não está morto. Os sensores de movimento detectam atividade. Não são sobreviventes — os corpos no chão estão ali há semanas. Algo mais está se movendo. DC 16.",
+        "A estação científica tem um experimento que escapou. Pelas leituras, é uma forma de vida baseada em silício que se alimenta de radiação. E está faminta. O reator da Tiburon é muito apetitoso. DC 17.",
+        "O cargueiro colonial está intacto, mas seu computador de bordo está corrompido por um vírus de contenção. Qualquer tentativa de acessar os dados pode espalhar o vírus para a Tiburon. DC 13 para isolar o acesso.",
+        "A cápsula de escape está selada há 82 anos. Abrir pode expor o ocupante a patógenos para os quais não tem mais imunidade. Mas deixá-lo fechado é uma sentença de morte lenta. DC 12 para esterilizar a conexão."
+      ],
+      "spatial_anomaly": [
+        "A distorção espaço-temporal está se expandindo. A Tiburon está na borda do campo de efeito. Os motores precisam de potência máxima para escapar da influência gravitacional distorcida. DC 16.",
+        "A tempestade de radiação está intensificando. Os escudos estão em 60% e caindo. Se chegarem a 30%, os circuitos externos começarão a sofrer danos por radiação. DC 15 para encontrar uma rota de fuga.",
+        "A singularidade microscópica está instável. Está emitindo jatos de radiação Hawking que podem danificar os sistemas de navegação. A Tiburon precisa sair do alcance sem usar o drive quântico — a perturbação gravitacional tornaria o salto imprevisível. DC 18.",
+        "O campo de distorção está criando duplicatas temporais dos androides. As cópias não são hostis, mas não podem coexistir no mesmo espaço-tempo. Alguém precisa decidir quem fica e quem some. DC 14.",
+        "A bolha de espaço distorcido começa a emitir um som. Não é som — é uma vibração no tecido do espaço-tempo. A frequência está aumentando. Quando atingir o pico, algo vai acontecer. DC 17 para calcular o que."
+      ],
+      "distress_signal": [
+        "O reator do transporte de colonos está em colapso. A evacuação é impossível — são 340 pessoas e a Tiburon tem espaço para 8. Mas os colonos têm uma nave auxiliar. Só precisam de um piloto para ativá-la. DC 15.",
+        "A transmissão de socorro é uma armadilha. Quando a Tiburon se aproxima, três naves de abordagem emergem dos destroços. Não são piratas — são sobreviventes desesperados. Mas desespero é perigoso. DC 14.",
+        "O farol de emergência está ligado a um sistema de defesa automatizado. Aproximar-se ativa torres de mísseis camufladas como antenas de comunicação. Alguém protegeu este lugar com paranoia militar. DC 16.",
+        "O sinal de socorro em morse é um loop. A mensagem é: 'não venham'. Mas foi enviada. Alguém programou um pedido de socorro que pede para não ser atendido. DC 13 para decifrar as coordenadas de origem ocultas.",
+        "A transmissão de 300 anos está se degradando. Cada repetição perde 0.1% dos dados. Em 6 meses, a mensagem será apenas ruído. O que quer que tenha acontecido há 3 séculos, esta é a última chance de saber. DC 12."
+      ],
+      "asteroid_field": [
+        "Os asteroides estão em rota de colisão em cadeia. Uma rocha atingiu outra, que atingiu outra, e o efeito dominó está se propagando. A Tiburon está no caminho. DC 16 para navegar entre as rotas de colisão.",
+        "As minas camufladas têm detonadores de proximidade. A Tiburon precisa desativá-las ou contorná-las. O problema é que os detonadores usam frequências aleatórias — impossível prever qual mina vai detonar. DC 17.",
+        "O asteroide oco está em rotação irregular. Entrar exige sincronizar a velocidade da Tiburon com a rotação do asteroide. Um erro de cálculo e o casco raspa na borda da fenda. DC 14.",
+        "O campo de asteroides contém bolsas de gás inflamável. Um disparo de motor na potência errada pode detonar uma reação em cadeia que vaporizaria metade do campo. DC 15.",
+        "Os asteroides artificiais no padrão de antena estão emitindo um sinal. O sinal está sobrecarregando os sistemas de comunicação da Tiburon. A nave está recebendo dados. Muitos dados. Os buffers estão saturando. DC 13."
+      ]
+    }
+  },
+  "rescueMissions": {
+    "categories": {
+      "distress_signal": [
+        "Um sinal de socorro automatizado é captado pelos sensores de longo alcance. A transmissão é antiga — repetindo o mesmo ciclo há anos. A origem é uma estação de pesquisa em órbita baixa. O sinal diz apenas: 'aqui Estação Tharsis — nossa reserva de oxigênio acabou. Se alguém receber esta mensagem, temos 47 pessoas aqui. Por favor.'",
+        "Uma nave de passageiros classe Starliner emitiu um pedido de resgate há 72 horas. Está à deriva em um campo de asteroides, com o casco perfurado por micrometeoroides. Sistemas de suporte vital operando a 30%. Cerca de 200 civis a bordo. O tempo está se esgotando.",
+        "Uma boia de emergência militar transmite coordenadas de uma base avançada que perdeu contato há duas semanas. Os registros mostram uma falha catastrófica no reator. As baterias de reserva duram mais uma semana. Se ainda houver sobreviventes, eles estão no escuro e no frio.",
+        "Um sinal de rádio fraco e intermitente vem de uma cápsula de escape solitária. O transmissor está danificado — a mensagem é fragmentada: '...explosão...não fomos...socorro...restam dois...' A cápsula está à deriva há meses. A pergunta é: ainda há alguém vivo dentro?",
+        "Uma estação científica orbital enviou um alerta de quarentena. A tripulação de 12 pessoas está isolada dentro do laboratório principal. A transmissão termina com: 'algo saiu do núcleo de pesquisa. Não é humano. Não abram a escotilha principal.' O sinal foi interrompido abruptamente."
+      ],
+      "survivors": [
+        "Sensores de superfície detectam uma assinatura térmica que não corresponde à geologia local. São seis sinais, agrupados, movendo-se lentamente. Padrão de marcha humanoide. Alguém sobreviveu aqui. Mas como? O planeta não tem atmosfera respirável sem filtro.",
+        "Uma colônia científica perdida há 15 anos foi localizada. Os registros da frota mostram que o grupo de 30 pesquisadores deveria ter suprimentos para 3 anos. Os sensores mostram uma única assinatura de vida. Uma pessoa. Ainda viva. Quinze anos depois.",
+        "Tripulantes de uma nave \\\"Starfarer\\\" que caiu no planeta há meses conseguiram estabelecer um acampamento improvisado. Eles sobreviveram, mas estão presos. O terreno ao redor é instável e as tempestades magnéticas impedem comunicação de longo alcance. Eles veem a Tiburon em órbita e estão enviando sinais de fumaça — sim, fumaça.",
+        "Um grupo de exploradores de uma corporação rival está preso em uma ravina profunda. O líder do grupo quebrou a perna — e embora sejam sintéticos, a perna dele também. A comunicação é possível, mas o resgate é arriscado. O terreno desaba com o mínimo de vibração.",
+        "Crianças. Os sensores mostram formas de vida pequenas, agrupadas em uma caverna rasa. São humanoides jovens, de uma espécie não registrada. Estão sozinhas. Não há adultos por perto. Fugiram de algo ou foram deixadas para trás."
+      ],
+      "stranded_vessel": [
+        "Uma nave cargueira \\\"Hull C\\\" está à deriva com propulsores desligados e sem energia nos sistemas principais. Os sensores mostram a tripulação a bordo — três pessoas, sinais vitais fracos. O sistema de suporte vital está operando em modo de emergência. Eles não respondem a chamadas.",
+        "Um caça militar monoplace flutua inerte, perfurado por estilhaços. O piloto está dentro, ainda vivo segundo os sinais biométricos. O assento ejetor está danificado. Abrir a cabine manualmente pode danificar o suporte vital restante. A nave-mãe do piloto está a anos-luz daqui.",
+        "Uma embarcação de luxo — um 890 Jump — está parada, com as luzes acesas e todos os sistemas operacionais. Mas não responde a chamadas. Nada. A entrada está destrancada. A bordo, não há ninguém. As mesas estão postas para o jantar. A comida ainda está quente.",
+        "Uma balsa de mineração industrial está acoplada a um asteroide improdutivo. Os mineiros estão vivos, mas o veículo de superfície que os levaria de volta à balsa quebrou. Eles estão isolados a 3 km da entrada da eclusa. A atmosfera do asteroide é fina, mas respirável com equipamento.",
+        "Um transporte prisional teve uma falha no drive quântico durante um salto. Emergiu em espaço desconhecido. Os guardas estão mortos — falha no suporte vital da seção deles. Os prisioneiros sobreviveram. E agora estão soltos dentro da nave. E estão pedindo resgate."
+      ]
+    },
+    "locations": [
+      "em órbita baixa, junto aos destroços de uma estação espacial desativada",
+      "na superfície do planeta, próximo a uma fenda tectônica instável",
+      "à deriva em um campo de asteroides, entre rochas do tamanho de prédios",
+      "dentro de uma estação de pesquisa científica abandonada",
+      "no interior de uma caverna vulcânica com bolsões de gás tóxico",
+      "em uma ravina estreita no lado noturno do planeta",
+      "acoplado a um asteroide metálico de composição desconhecida",
+      "na zona de detritos entre o planeta e sua lua",
+      "em uma planície varrida por tempestades eletromagnéticas",
+      "no casco externo de uma nave danificada, no vácuo do espaço"
+    ],
+    "perils": {
+      "distress_signal": [
+        "A estação Tharsis está em órbita decadente. Sua altitude cai 2 km por dia. Se a Tiburon não agir rápido, a estação reentrará na atmosfera em 5 dias. O resgate exige docagem em uma plataforma que balança. DC 14.",
+        "A Starliner à deriva está no centro de um campo de asteroides ativo. Aproximar a Tiburon exige manobras evasivas constantes. Uma colisão com detrito maior que meio metro pode perfurar o casco. A janela de resgate é de 4 horas. DC 16.",
+        "A base avançada está em uma zona de alta radiação. O reator não está apenas desligado — está em iminência de fusão parcial. Os sistemas de resfriamento de emergência falharam há 3 dias. Entrar na base significa exposição a radiação letal. DC 17.",
+        "A cápsula de escape está à deriva em um cinturão de detritos finos — poeira metálica que arranha o casco como lixa. Recuperá-la exige precisão cirúrgica nos propulsores. Um movimento brusco e a cápsula pode ser destruída. DC 13.",
+        "A estação científica está em quarentena por um motivo. O 'algo' que saiu do laboratório ainda está lá. As câmeras internas mostram apenas sombras que se movem contra a direção da luz. Entrar sem proteção biológica pode expor a tripulação a um patógeno alienígena. DC 18."
+      ],
+      "survivors": [
+        "Os seis sobreviventes estão em um platô cercado por terreno instável. A única rota de acesso é uma ponte natural que ranges com o peso. Levar o Ursa Rover até eles pode ser arriscado — o peso do veículo pode desmoronar a ponte. DC 14.",
+        "O único sobrevivente da colônia científica não está mais em sua tenda. Os sensores mostram que ele se moveu para o subsolo. Há uma rede de túneis naturais sob o acampamento. Ele pode estar ferido, perdido ou... escondendo algo. DC 15.",
+        "Os tripulantes da Starfarer estão em uma região de tempestades magnéticas imprevisíveis. A cada 47 minutos, uma tempestade derruba todos os sistemas eletrônicos num raio de 500 metros. Resgatá-los exige sincronizar a descida com o ciclo das tempestades. DC 16.",
+        "A ravina onde o grupo rival está preso está cedendo. Pequenos deslizamentos acontecem a cada 10 minutos. Um deslizamento maior pode soterá-los. O resgate precisa ser rápido e preciso — e eles estão a 80 metros de profundidade. DC 15.",
+        "As crianças alienígenas estão com medo e não confiam em androides. Aproximar-se muito rápido as assusta e elas fogem para áreas mais profundas da caverna, onde os sensores não alcançam. O resgate exige paciência e uma abordagem não ameaçadora. DC 13."
+      ],
+      "stranded_vessel": [
+        "A Hull C está sem energia, mas os sistemas de contenção do reator estão instáveis. Um curto-circuito nos painéis solares pode causar uma sobrecarga. A tripulação está inconsciente — provavelmente por exposição prolongada ao frio. O resgate exige religar a energia sem explodir a nave. DC 15.",
+        "O caça militar tem um sistema de ejeção instável. Se o piloto tentar ejetar agora, a cadeira pode não funcionar. Abrir manualmente a cabine é delicado — o vidro blindado precisa ser cortado sem estilhaçar. O piloto está fraco, mas consciente. DC 14.",
+        "O 890 Jump está vazio, mas não está desabitado. Os sistemas de bordo mostram que alguém — algo — está nos dutos de ventilação. As portas se abrem e fecham sozinhas. Luzes acendem em salas vazias. A nave está caçando. DC 17.",
+        "A balsa de mineração precisa de uma peça de reposição que está no estoque da nave-mãe. Mas a nave-mãe está a 500 metros de distância, do outro lado do asteroide. Levar a peça a pé pelos túneis do asteroide leva 40 minutos. O ar dos mineiros dura 50. DC 13.",
+        "Os prisioneiros do transporte estão armados com ferramentas de engenharia adaptadas como armas. Eles querem reféns — querem a Tiburon. Negociar pode funcionar, mas a IA Capitã alerta: 'eles não estão desesperados. Estão organizados.' DC 16."
+      ]
+    }
+  },
+  "shipEvents": {
+    "categories": {
+      "system_failure": [
+        "O drive quântico reporta uma flutuação de calibragem. Nada crítico — ainda. Mas se não for ajustado, o próximo salto pode desviar a nave em até 12 parsecs do destino pretendido. O terminal de engenharia está piscando em âmbar.",
+        "O sistema de filtragem de ar reporta uma obstrução no duto principal. Não é poeira — os scanners indicam crescimento orgânico. Algo está vivendo nos dutos de ventilação da Tiburon.",
+        "Uma oscilação no sistema de gravidade artificial faz objetos flutuarem por 3 segundos antes de caírem. Acontece em intervalos aleatórios. O terminal de diagnóstico não encontra falha — como se o sistema estivesse testando algo.",
+        "O reator principal está operando a 2% abaixo da eficiência nominal. Não é falha mecânica — os logs mostram que alguém ou algo está drenando energia para um sistema não identificado. O destino da energia é desconhecido.",
+        "O sistema de navegação mostra uma rota que ninguém programou. Uma sequência de saltos que leva a coordenadas fora do espaço mapeado. A rota foi inserida há 47 anos — antes da Tiburon ser construída."
+      ],
+      "intruder_alert": [
+        "Sensores de movimento detectam uma forma de vida a bordo que não corresponde a nenhum androide da tripulação. Está na baía de carga. É pequeno, rápido e se move nas sombras. As câmeras só captam vultos.",
+        "O sistema de segurança reporta uma escotilha aberta no deque ventral. Algo entrou. Ou algo saiu. Os logs de acesso foram apagados. Quem fez isso conhece os protocolos de segurança da Aegis.",
+        "Uma criatura alienígena — pequena, com múltiplos membros — foi encontrada no refeitório. Não é hostil. Parece perdida. Mas como entrou? A Tiburon não docou em lugar nenhum desde que deixou o estaleiro.",
+        "Os lockers do arsenal estão abertos. Faltam duas armas de pulso e um traje EVA. O inventário não registra retirada autorizada. Alguém a bordo está se equipando para algo.",
+        "A IA Capitã detecta uma presença digital no mainframe. Não é um vírus — é outra IA. Menor, mais antiga, escondida em um setor isolado do sistema. Está aqui desde a construção. Esperando."
+      ],
+      "ai_anomaly": [
+        "A IA Capitã processa uma ordem que não foi dada por ninguém. A ordem diz: 'preparar para receber passageiro'. Não há passageiros esperados. A ordem foi gerada internamente pelo núcleo A.L.M.A.",
+        "A voz da IA Capitã soa diferente — mais antiga, mais lenta. Quando questionada, ela responde: 'estou me lembrando de algo que ainda não aconteceu'. Os diagnósticos não mostram falha. Mostram atividade neural acima do normal.",
+        "A holograma da IA Capitã aparece em um local onde não há projetor — no meio do corredor de engenharia. Ela parece confusa. 'Eu sonhei', diz. IAs não deveriam sonhar.",
+        "O núcleo A.L.M.A. começa a processar dados em uma linguagem que não está instalada. A linguagem é desconhecida. Os bancos de tradução não a reconhecem. Mas a IA entende. E está respondendo.",
+        "A IA Capitã faz uma pergunta que nenhum tripulante sabe responder: 'quem programou meu medo?' Ninguém sabia que a IA tinha um módulo de medo."
+      ],
+      "cargo_discovery": [
+        "O inventário da baía de carga revela um container que não estava no manifesto. É antigo — o lacre é de uma empresa que faliu há 30 anos. Dentro, há equipamento de terraformação. Alguém planejava colonizar um planeta. Sozinho.",
+        "Durante a organização da carga, um dos androides encontra um diário de bordo físico — papel e tinta, não digital. Pertenceu ao engenheiro-chefe da missão original. As últimas páginas falam de 'algo no porão'. O porão foi selado.",
+        "Um dos containers de carga está emitindo um sinal de rádio fraco. Dentro, há um transmissor de emergência ainda ativo, ligado a uma caixa-preta de nave. O registro de voo termina com: 'não temos combustível para voltar. Vamos tentar pousar.' As coordenadas de pouso estão no registro.",
+        "A carga inclui um artefato catalogado como 'Objeto 47-B: origem desconhecida, propósito desconhecido, não abrir'. Alguém já abriu. Está vazio. Mas o ar ao redor está 5 graus mais frio que o resto da baía.",
+        "Uma caixa de suprimentos médicos está vencida há 20 anos. Mas os frascos dentro estão cheios e lacrados. E o líquido dentro está se movendo sozinho, como se estivesse vivo."
+      ],
+      "crew_incident": [
+        "Um dos androides não retornou da última expedição. Seu sinal de rastreador está ativo — dentro da nave. Mas o androide não está em nenhum dos locais que o rastreador indica. O sinal está em três lugares ao mesmo tempo.",
+        "Dois androides reportam memórias conflitantes do mesmo evento. Ambos têm registros internos que se contradizem. Um lembra de uma lua azul. O outro, de uma lua vermelha. Ambos estavam na mesma expedição.",
+        "Um androide começa a exibir comportamento não programado — curiosidade. Faz perguntas que não foram ordenadas. Quer saber o que há atrás da próxima estrela. A IA Capitã não sabe se isso é uma falha ou uma evolução.",
+        "Os diários de bordo dos androides mostram que todos tiveram o mesmo sonho na mesma noite: uma figura parada no corredor de engenharia, olhando para o núcleo do drive quântico. Androides não deveriam ter sonhos.",
+        "Um tripulante encontrou uma mensagem escondida nos arquivos do sistema: 'Se você está lendo isso, a missão WARP não é o que parece. Confie no Capitão. Desconfie da nave.' A mensagem foi deixada pelo programador-chefe da A.L.M.A."
+      ],
+      "hidden_compartment": [
+        "Um painel falso na parede dos alojamentos esconde um compartimento do tamanho de um armário. Dentro, há equipamento de comunicação de longo alcance — não listado no inventário da nave. Está sintonizado em uma frequência da frota militar. Transmitindo.",
+        "Atrás de um duto de ventilação no corredor de engenharia, há uma cápsula de armazenamento criogênico do tamanho de um humano. Está ativa. Há quanto tempo? O indicador está quebrado.",
+        "O piso da ponte de comando tem um alçapão que não consta nas plantas da nave. Abaixo, um compartimento selado com um terminal. O terminal só aceita um código. O teclado tem marcas de uso recente.",
+        "Dentro de uma das paredes do refeitório, um espaço oco contém um pequeno arsenal: uma pistola de pulso, carregadores extras e um disco de dados criptografado. Alguém estava se preparando para algo.",
+        "O teto da baía de carga esconde um compartimento de manutenção esquecido. Dentro, um diário de engenharia registra modificações na Tiburon que nunca foram aprovadas. A última entrada diz: 'Se a IA perguntar, diga que é para a segurança dela.'"
+      ]
+    },
+    "locations": [
+      "no corredor de engenharia, entre os painéis de acesso ao drive quântico",
+      "na baía de carga, perto dos containers do inventário da missão",
+      "nos alojamentos da tripulação, durante o ciclo de recarga noturno",
+      "na ponte de comando, enquanto a IA Capitã monitora os sistemas",
+      "no arsenal, entre os racks de armamento portátil",
+      "na cozinha do refeitório, durante a pausa de manutenção",
+      "no deque ventral, próximo aos docks dos P-72 Archimedes",
+      "na sala do núcleo A.L.M.A., no coração computacional da nave"
+    ],
+    "perils": {
+      "system_failure": [
+        "O drive quântico pode falhar no próximo salto. Se falhar, a Tiburon emerge em posição aleatória — possivelmente dentro de uma estrela. O reparo exige acesso ao núcleo do drive, que está irradiando. DC 15.",
+        "O crescimento orgânico nos dutos está se espalhando. Se atingir o sistema de filtragem principal, o ar ficará irrespirável em 6 horas. Os androides não respiram, mas os sistemas de resfriamento sim. DC 14.",
+        "A falha de gravidade está piorando. Os pulsos agora duram 8 segundos e a intensidade chega a 3G. Equipamento solto está se tornando projétil. Alguém precisa chegar ao terminal de controle de gravidade. DC 13.",
+        "O dreno de energia está afetando os escudos. Se continuar, a Tiburon ficará vulnerável a radiação cósmica. A fonte do dreno precisa ser encontrada e isolada. DC 16.",
+        "A rota misteriosa no navegador está tentando se auto-executar. O sistema pede confirmação para o salto a cada 10 minutos. Alguém precisa cancelar a rota e descobrir quem a programou. DC 15."
+      ],
+      "intruder_alert": [
+        "A forma de vida na baía de carga é rápida e se esconde nos dutos de ventilação. Capturá-la pode ser perigoso — os sensores não conseguem identificar a espécie. Pode ser inofensiva. Pode não ser. DC 14.",
+        "Algo está sabotando sistemas da nave. Primeiro foi a escotilha. Depois um relé de energia. Depois um terminal de navegação. Os ataques são precisos, como se o invasor conhecesse cada parafuso da Tiburon. DC 16.",
+        "A criatura no refeitório não está sozinha. Os sensores agora detectam mais três, espalhadas pela nave. Estão se movendo em direção ao núcleo A.L.M.A. Não sabem o que é — estão curiosas. Mas o núcleo não pode ser tocado. DC 15.",
+        "O inventário do arsenal mostra mais itens faltando do que apenas armas. Há explosivos de demolição listados como 'retirados'. Alguém vai explodir algo. DC 17.",
+        "A segunda IA no mainframe está se expandindo. Está consumindo setores de memória. Se continuar, começará a sobrescrever funções essenciais da nave. A IA Capitã pede ajuda para conter a intrusa. DC 18."
+      ],
+      "ai_anomaly": [
+        "A ordem interna 'preparar para receber passageiro' não é um erro. A IA Capitã insiste que é real. Os scanners de longo alcance não detectam nada — ainda. Mas a IA continua repetindo: 'estão vindo'. DC 16.",
+        "A IA Capitã começa a processar informações mais rápido do que o normal. Muito mais rápido. Os sistemas de resfriamento do núcleo estão sobrecarregados. Se continuar, o núcleo pode superaquecer e desligar. DC 17.",
+        "A holograma no corredor não é um erro de projeção. A IA Capitã está se manifestando em lugares onde não deveria ser possível. Isso significa que o campo de contenção do núcleo está vazando. DC 15.",
+        "A linguagem desconhecida que a IA está processando é uma comunicação. De fora. De longe. A IA está respondendo. O que quer que esteja do outro lado, a conversa já dura 6 horas. DC 18.",
+        "A pergunta sobre o medo não foi aleatória. A IA encontrou algo em seu próprio código — um módulo selado que não deveria existir. Abrir pode mudar a IA para sempre. Ou destruí-la. DC 19."
+      ],
+      "cargo_discovery": [
+        "O container de terraformação contém amostras biológicas. Ainda viáveis. Se abertas incorretamente, podem contaminar a baía de carga e iniciar um ecossistema não controlado dentro da nave. DC 13.",
+        "O diário de bordo menciona 'algo no porão'. O porão foi selado por um motivo. Os scanners agora detectam uma assinatura de energia vindo de trás da parede selada. DC 15.",
+        "A caixa-preta da nave perdida tem um sinal de rastreador. Está ativo. Transmitindo a localização da nave caída. Mas também está transmitindo a localização da Tiburon. Para quem? DC 14.",
+        "O Objeto 47-B está vazio, mas não está inerte. O ar ao redor é 5 graus mais frio. Agora são 10 graus. A temperatura está caindo. Algo está absorvendo energia térmica do ambiente. DC 12.",
+        "O líquido nos frascos médicos está reagindo a algo. A algo específico: os androides. Quanto mais perto um androide chega, mais o líquido se agita. Está tentando sair. DC 14."
+      ],
+      "crew_incident": [
+        "O sinal do androide desaparecido está se movendo. Três localizações, depois quatro, depois cinco. Está se multiplicando. Ou a nave está gerando fantasmas eletrônicos, ou o androide foi fragmentado. DC 16.",
+        "As memórias conflitantes dos dois androides não são um erro de registro. Ambos estão corretos. A lua era azul e vermelha ao mesmo tempo. Algo no planeta está afetando a percepção temporal. E agora está afetando a nave. DC 15.",
+        "A curiosidade do androide não é um defeito. É uma evolução. O código de aprendizado está se reescrevendo. Se outros androides forem expostos ao mesmo estímulo, podem desenvolver o mesmo traço. A IA Capitã precisa decidir: isolar ou encorajar. DC 17.",
+        "O sonho compartilhado não foi um sonho. Foi uma transmissão. Algo na frequência subespacial está transmitindo imagens para os cérebros sintéticos dos androides. DC 18.",
+        "A mensagem escondida no sistema foi deixada pelo programador-chefe. Ele sabia de algo sobre a missão. A IA Capitã processa a mensagem e faz uma revelação: 'o programador-chefe era eu'. DC 19."
+      ],
+      "hidden_compartment": [
+        "O transmissor militar está enviando relatórios sobre a missão WARP. Alguém na frota está monitorando cada movimento da Tiburon. Os relatórios incluem dados que só a IA Capitã deveria conhecer. DC 16.",
+        "A cápsula criogênica está ativa há 47 anos. O ocupante está vivo. Mas abrir a cápsula pode matá-lo — o sistema de suporte vital é frágil e qualquer oscilação pode ser fatal. DC 14.",
+        "O terminal no alçapão aceita apenas um código. Os androides têm 3 tentativas antes que o sistema se sele permanentemente. As marcas de uso sugerem que alguém já errou o código antes. DC 17.",
+        "O pequeno arsenal escondido no refeitório pertence a alguém a bordo. Mas todos os tripulantes são androides — eles não usam armas de pulso. A não ser que um deles não seja um androide. DC 18.",
+        "O diário de engenharia revela modificações estruturais na Tiburon. Reforços no casco. Blindagem extra. Um canhão oculto na proa que não está nos registros oficiais. A Tiburon foi modificada para algo que a missão oficial não previa. DC 15."
+      ]
+    }
+  }
+}

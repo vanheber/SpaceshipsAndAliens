@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WARP-Unit | Gerador de Missão One-Shot</title>
+    <link rel="stylesheet" href="warp.css">
+
+</head>
+<body>
+
+<header>
+    <h1>SISTEMA OPERACIONAL WARP</h1>
+    <p>Gerador de Missão One-Shot &mdash; Exploração Planetária<span class="ai-badge" id="ai-badge">🤖 IA</span></p>
+</header>
+
+<div class="quick-link-wrap">
+    <a href="missioncontrol.html" class="quick-link">Ir para Controle da Missão &rarr;</a>
+</div>
+
+<!-- PAGE 1: PLANETA -->
+<div id="page-planet" class="page active">
+    <div class="card card-center">
+        <div class="text-muted-sm mb-10">
+            A IA Capitã analisa as cartas estelares e seleciona um destino inexplorado.
+            O que será encontrado é desconhecido até mesmo para ela.
+        </div>
+        <button class="btn btn-primary" onclick="generatePlanet()" id="btn-generate">
+            GERAR PLANETA
+        </button>
+        <div id="planet-result" style="display:none;"></div>
+    </div>
+    <div id="planet-expedition-area" style="display:none;">
+        <button class="btn btn-primary" onclick="startExpedition()">
+            INICIAR EXPEDIÇÃO
+        </button>
+    </div>
+</div>
+
+<!-- PAGE 2: EXPEDIÇÃO -->
+<div id="page-expedition" class="page">
+    <button class="back-btn" onclick="location.href='mothership.html'">&larr; Retornar à Nave</button>
+    <div class="card">
+        <div class="exp-header-row">
+            <div>
+                <div class="planet-name" id="exp-planet-name">--</div>
+                <span class="planet-type" id="exp-planet-type">--</span>
+                <div class="planet-desc mt-10" id="exp-planet-desc"></div>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="exportMissionMD()" id="btn-export-exp">
+                📄 Exportar .md
+            </button>
+        </div>
+        <div class="progress-bar mt-12">
+            <span id="exp-progress-text">Descoberta -- de --</span>
+            <div class="disc-slots" id="exp-disc-slots"></div>
+        </div>
+    </div>
+
+    <div id="exp-content">
+        <div class="card empty-card">
+            Preparando scanners... Clique abaixo para iniciar a primeira varredura.
+        </div>
+    </div>
+
+    <div class="btn-row" id="exp-actions" style="display:none;">
+        <button class="btn btn-primary" id="btn-next" onclick="nextDiscovery()">
+            PRÓXIMA DESCOBERTA
+        </button>
+        <button id="btn-finish" class="btn btn-danger" onclick="finishExpedition()">
+            FINALIZAR PLANETA
+        </button>
+    </div>
+</div>
+
+<!-- PAGE 3: DIÁRIO DE BORDO -->
+<div id="page-log" class="page">
+    <button class="back-btn" onclick="goToPlanet()">&larr; Navegação Estelar</button>
+    <div class="card card-center">
+        <div class="planet-name" id="log-planet-name">--</div>
+        <span class="planet-type" id="log-planet-type">--</span>
+        <div class="planet-desc mt-10" id="log-planet-desc"></div>
+        <div class="mt-10">
+            <button class="btn btn-secondary btn-xs" onclick="exportMissionMD()">
+                📄 Exportar .md
+            </button>
+        </div>
+    </div>
+    <div class="card">
+        <div class="log-list" id="log-list"></div>
+    </div>
+    <button class="btn btn-primary" onclick="resetMission()">
+        NOVO PLANETA
+    </button>
+</div>
+
+<footer>
+    <a href="docs/">Documentação</a>
+    &nbsp;·&nbsp;
+    <a href="mothership.html">Nave-Mãe</a>
+    &nbsp;·&nbsp;
+    <a href="index.html">Catálogo de Unidades</a>
+    &nbsp;·&nbsp;
+    <a href="missioncontrol.html">Controle da Missão</a>
+    &nbsp;·&nbsp;
+    <a href="#" onclick="clearMission();return false;">Limpar Missão</a>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════
+// DATA POOLS (loaded from JSON)
+// ═══════════════════════════════════════════
+
+let PLANET_TYPES = [];
+let PLANET_NAMES = { codes: [], prefixes: [], suffixes: [] };
+let DISCOVERY_CATEGORIES = {};
+let LOCATIONS = [];
+let PERILS = {};
+let REWARD_TYPES = [];
+let REWARD_LABELS = {};
+let REWARDS = {};
+
+let SPACE_ENCOUNTERS = null;
+let SPACE_LOCATIONS = [];
+let SPACE_PERILS = {};
+let SHIP_EVENTS = null;
+let SHIP_LOCATIONS = [];
+let SHIP_PERILS = {};
+let RESCUE_MISSIONS = null;
+let RESCUE_LOCATIONS = [];
+let RESCUE_PERILS = {};
+
+const CATEGORY_BASE_DC = { fauna: 14, flora: 12, ruins: 15, phenomenon: 13, resource: 12, danger: 16 };
+const SPACE_BASE_DC = { alien_vessel: 15, pirate_attack: 17, derelict_ship: 13, spatial_anomaly: 16, distress_signal: 14, asteroid_field: 14 };
+const SHIP_BASE_DC = { system_failure: 13, intruder_alert: 15, ai_anomaly: 17, cargo_discovery: 11, crew_incident: 14, hidden_compartment: 12 };
+const RESCUE_BASE_DC = { distress_signal: 15, survivors: 14, stranded_vessel: 16 };
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+
+const STORAGE_KEY = "warp-unit-oneshot";
+let planet = null;
+let discoveries = [];
+let discoveryIndex = 0;
+
+// ═══════════════════════════════════════════
+// DATA LOADING
+// ═══════════════════════════════════════════
+
+async function loadDataPools() {
+    try {
+        const [planetTypes, planetNames, discoveriesData] = await Promise.all([
+            fetch("data/planet-types.json").then(r => r.json()),
+            fetch("data/planet-names.json").then(r => r.json()),
+            fetch("data/discoveries.json").then(r => r.json())
+        ]);
+        PLANET_TYPES = planetTypes;
+        PLANET_NAMES = planetNames;
+        DISCOVERY_CATEGORIES = discoveriesData.categories;
+        LOCATIONS = discoveriesData.locations;
+        PERILS = discoveriesData.perils;
+        REWARD_TYPES = discoveriesData.rewardTypes;
+        REWARD_LABELS = discoveriesData.rewardLabels;
+        REWARDS = discoveriesData.rewards;
+
+        if (discoveriesData.spaceEncounters) {
+            SPACE_ENCOUNTERS = discoveriesData.spaceEncounters.categories;
+            SPACE_LOCATIONS = discoveriesData.spaceEncounters.locations;
+            SPACE_PERILS = discoveriesData.spaceEncounters.perils;
+        }
+        if (discoveriesData.shipEvents) {
+            SHIP_EVENTS = discoveriesData.shipEvents.categories;
+            SHIP_LOCATIONS = discoveriesData.shipEvents.locations;
+            SHIP_PERILS = discoveriesData.shipEvents.perils;
+        }
+        if (discoveriesData.rescueMissions) {
+            RESCUE_MISSIONS = discoveriesData.rescueMissions.categories;
+            RESCUE_LOCATIONS = discoveriesData.rescueMissions.locations;
+            RESCUE_PERILS = discoveriesData.rescueMissions.perils;
+        }
+    } catch (e) {
+        console.warn("Data pools failed to load. AI generation will still work if online.");
+    }
+}
+
+// ═══════════════════════════════════════════
+// AI GENERATION (Pollinations.ai)
+// ═══════════════════════════════════════════
+
+const AI_ENDPOINT = "https://text.pollinations.ai/openai";
+
+async function callAI(systemPrompt, userPrompt) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+
+    try {
+        const res = await fetch(AI_ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                model: "openai",
+                messages: [
+                    { role: "system", content: systemPrompt },
+                    { role: "user", content: userPrompt }
+                ],
+                temperature: 0.95
+            }),
+            signal: controller.signal
+        });
+        clearTimeout(timeout);
+
+        if (!res.ok) return null;
+        const data = await res.json();
+        const content = data?.choices?.[0]?.message?.content;
+        if (!content) return null;
+
+        const jsonMatch = content.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) return null;
+        return JSON.parse(jsonMatch[0]);
+    } catch (e) {
+        return null;
+    } finally {
+        clearTimeout(timeout);
+    }
+}
+
+async function aiGeneratePlanet() {
+    const validTypes = PLANET_TYPES.map(t => t.type).join(", ");
+    const result = await callAI(
+        "You are the AI Captain of an interstellar exploration starship. Generate creative sci-fi planet data. Always respond with valid JSON only, no markdown, no other text.",
+        `Generate a brand new unexplored planet for a sci-fi RPG. Be creative and surprising. Respond with EXACTLY this JSON structure (JSON only):\n{"name":"a planet code like XX-999a (two letters, dash, three digits, one letter)","type":"one exactly from: ${validTypes}","desc":"2-3 atmospheric sentences in Portuguese describing the planet"}`
+    );
+    if (!result?.name || !result?.type || !result?.desc) return null;
+    if (!PLANET_TYPES.find(t => t.type === result.type)) return null;
+    return { name: result.name, type: result.type, desc: result.desc };
+}
+
+async function aiGenerateDiscovery(discNumber, discTotal) {
+    let context;
+    if (discoveries.length === 0) {
+        context = "Nenhum evento anterior — primeira descoberta da missão.";
+    } else {
+        const typeCount = {};
+        discoveries.forEach(d => {
+            const et = d.encounterType || "planet";
+            typeCount[et] = (typeCount[et] || 0) + 1;
+        });
+        const summary = Object.entries(typeCount)
+            .map(([k, v]) => `${v} ${k === "planet" ? "planetário(s)" : k === "space" ? "espacial(is)" : k === "rescue" ? "resgate(s)" : "a bordo"}`)
+            .join(", ");
+        const last = discoveries[discoveries.length - 1];
+        const lastLabel = last.encounterType === "planet" ? "superfície" : last.encounterType === "space" ? "espaço" : last.encounterType === "rescue" ? "resgate" : "bordo";
+        context = `Até agora: ${summary}. Último evento (${lastLabel}): ${last.description.substring(0, 100)}`;
+    }
+
+    const result = await callAI(
+        "You are the AI Captain of the Aegis Tiburon exploration starship generating encounters for a sci-fi RPG campaign. The ship has a crew of androids exploring unknown space. Encounters can happen in FOUR contexts: 1) PLANETARY: on a planet surface, 2) SPACE: in orbit or deep space (alien ships, pirates, anomalies, derelicts), 3) SHIP: aboard the Tiburon itself (system failures, intruders, AI anomalies, hidden compartments, crew incidents), 4) RESCUE: distress signals, stranded vessels, survivors needing evacuation. Each new encounter should connect to or build upon previous events for narrative continuity. Always respond with valid JSON only, no markdown. Be creative and atmospheric in Portuguese.",
+        `Ship: Aegis Tiburon, 121m heavy gunship converted to exploration mothership. Crew of android robots. AI Captain integrated into ship systems.\n\nPlanet: ${planet.name} (${planet.type}) — ${planet.desc}\n\nEncounter ${discNumber} of ${discTotal}.\n${context}\n\nGenerate ONE encounter of ANY of the four types (planetary, space, ship, or rescue). Be surprising. Respond with EXACTLY this JSON:\n{"type":"planet|space|ship|rescue","approach":"for planet: arduous|sudden|resting; for space: proximity|longscan|distress; for ship: alert|routine|report; for rescue: emergency|cautious|calculated","description":"2-3 vivid sentences in Portuguese","location":"where this happens, in Portuguese","peril":"specific threat, danger or challenge, in Portuguese","perilDC":number(8-22),"reward":"what the crew gains, in Portuguese"}`
+    );
+    if (!result?.type || !result?.approach || !result?.description) return null;
+
+    // Normalize type
+    const types = {planet: "planet", space: "space", ship: "ship", nave: "ship", espaco: "space", orbital: "space", rescue: "rescue", resgate: "rescue"};
+    const encounterType = types[result.type?.toLowerCase()] || "planet";
+
+    const dc = parseInt(result.perilDC) || d(6) + 10;
+    return {
+        encounterType,
+        approach: result.approach,
+        description: result.description,
+        location: result.location || "em uma área inexplorada",
+        peril: result.peril || "Um desafio desconhecido surge.",
+        perilDC: Math.min(Math.max(dc, 8), 22),
+        reward: result.reward || "Dados e materiais coletados do evento."
+    };
+}
+
+function showAIBadge(visible) {
+    document.getElementById("ai-badge").classList.toggle("show", visible);
+}
+
+// Encounter type (planet/space/ship/rescue) - 25% each
+function getEncounterType() {
+    const roll = d8();
+    if (roll <= 2) return "planet";
+    if (roll <= 4) return "space";
+    if (roll <= 6) return "ship";
+    return "rescue";
+}
+
+function makeApproach(key, encounterType) {
+    if (encounterType === "space") return makeSpaceApproach(key);
+    if (encounterType === "ship") return makeShipApproach(key);
+    // Planet
+    if (key === "arduous") return {
+        key: "arduous", label: "TERRENO TRAIÇOEIRO", class: "banner-arduous",
+        opener: "O terreno exige manobras cuidadosas. Após vencer o obstáculo, os scanners revelam algo que não estava nos mapas orbitais:",
+        dcMod: 2, logClass: ""
+    };
+    if (key === "sudden") return {
+        key: "sudden", label: "ENCONTRO SÚBITO", class: "banner-sudden",
+        opener: "Sem aviso, os sensores disparam. Vocês se deparam com uma descoberta que nenhum relatório previa:",
+        dcMod: 0, logClass: "sudden"
+    };
+    return {
+        key: "resting", label: "AVISTADO DURANTE DESCANSO", class: "banner-resting",
+        opener: "Durante uma pausa para recarga, os scanners passivos detectam algo nos arredores. Com calma, vocês investigam e encontram:",
+        dcMod: -1, logClass: "rest"
+    };
+}
+
+function makeSpaceApproach(key) {
+    if (key === "proximity") return {
+        key: "proximity", label: "ALERTA DE PROXIMIDADE", class: "banner-space",
+        opener: "Os scanners de curto alcance disparam um alerta. Algo está se aproximando rapidamente da Tiburon:",
+        dcMod: 2, logClass: ""
+    };
+    if (key === "longscan") return {
+        key: "longscan", label: "VARREDURA DE LONGO ALCANCE", class: "banner-space",
+        opener: "A varredura de longo alcance é concluída e os sensores detectam uma anomalia no espaço próximo:",
+        dcMod: 0, logClass: "sudden"
+    };
+    return {
+        key: "distress", label: "SINAL DE SOCORRO", class: "banner-space",
+        opener: "Um sinal de socorro é captado pelas antenas de comunicação da Tiburon. A origem é próxima:",
+        dcMod: -1, logClass: "rest"
+    };
+}
+
+function makeShipApproach(key) {
+    if (key === "alert") return {
+        key: "alert", label: "ALERTA INTERNO", class: "banner-ship",
+        opener: "Um alarme soa nos consoles da Tiburon. Algo não está certo a bordo:",
+        dcMod: 2, logClass: ""
+    };
+    if (key === "report") return {
+        key: "report", label: "RELATÓRIO DA TRIPULAÇÃO", class: "banner-ship",
+        opener: "Um dos androides reporta pelo comunicador interno. Sua voz tem um tom que o vocoder classifica como 'preocupação':",
+        dcMod: 0, logClass: "sudden"
+    };
+    return {
+        key: "routine", label: "VARREDURA DE ROTINA", class: "banner-ship",
+        opener: "Durante a varredura de diagnóstico de rotina, um dado anômalo chama a atenção da IA Capitã:",
+        dcMod: -1, logClass: "rest"
+    };
+}
+
+function makeRescueApproach(key) {
+    if (key === "emergency") return {
+        key: "emergency", label: "ALERTA DE RESGATE", class: "banner-rescue",
+        opener: "Cada segundo conta. Os sinais de socorro são claros e o tempo é curto. A tripulação sabe que hesitar pode custar vidas:",
+        dcMod: 2, logClass: ""
+    };
+    if (key === "cautious") return {
+        key: "cautious", label: "APROXIMAÇÃO CAUTELOSA", class: "banner-rescue",
+        opener: "O cenário é incerto — não há garantia de que os sobreviventes estejam sozinhos ou seguros. Sensores em potência mínima, passo calculado:",
+        dcMod: 0, logClass: "sudden"
+    };
+    return {
+        key: "calculated", label: "RESGATE PLANEJADO", class: "banner-rescue",
+        opener: "Os dados foram coletados, as rotas calculadas. A IA Capitã traçou três cenários — o melhor deles tem 78% de chance de sucesso. É hora de executar:",
+        dcMod: -1, logClass: "rest"
+    };
+}
+
+// ═══════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════
+
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function d(n) { return Math.floor(Math.random() * n) + 1; }
+function d6() { return d(6); }
+function d8() { return d(8); }
+
+function generatePlanetName() {
+    const code = pick(PLANET_NAMES.codes.length ? PLANET_NAMES.codes : ["KX","TD","OP","XR","VY","ZQ","NF","HS"]);
+    const num = Math.floor(Math.random() * 900) + 100;
+    const letter = pick(["a","b","c","d","e"]);
+    return `${code}-${num}${letter}`;
+}
+
+function getApproach(encounterType) {
+    const roll = d6();
+    if (encounterType === "space") {
+        return makeSpaceApproach(roll <= 2 ? "proximity" : roll <= 4 ? "longscan" : "distress");
+    }
+    if (encounterType === "ship") {
+        return makeShipApproach(roll <= 2 ? "alert" : roll <= 4 ? "report" : "routine");
+    }
+    if (encounterType === "rescue") {
+        return makeRescueApproach(roll <= 2 ? "emergency" : roll <= 4 ? "cautious" : "calculated");
+    }
+    return makeApproach(roll <= 2 ? "arduous" : roll <= 4 ? "sudden" : "resting");
+}
+
+function generateLocalDiscovery(encounterType) {
+    if (encounterType === "rescue" && RESCUE_MISSIONS) {
+        const catKeys = Object.keys(RESCUE_MISSIONS);
+        const categoryKey = pick(catKeys);
+        const description = pick(RESCUE_MISSIONS[categoryKey]);
+        const location = pick(RESCUE_LOCATIONS.length ? RESCUE_LOCATIONS : ["em uma área de risco"]);
+        const approach = getApproach("rescue");
+        const baseDC = RESCUE_BASE_DC[categoryKey] || 15;
+        const variation = d(3) - 2;
+        const perilDC = Math.min(Math.max(baseDC + approach.dcMod + variation, 8), 22);
+        const perilText = pick(RESCUE_PERILS[categoryKey] || ["O resgate apresenta riscos imprevistos."]);
+        const rewardType = pick(REWARD_TYPES.length ? REWARD_TYPES : ["recursos"]);
+        const rewardText = pick(REWARDS[rewardType] || ["Recursos básicos coletados."]) + " Sobreviventes resgatados com sucesso.";
+        return { approach, encounterType, categoryKey, description, location, peril: { text: perilText, dc: perilDC }, reward: { type: rewardType, text: rewardText }, index: discoveries.length + 1 };
+    }
+
+    if (encounterType === "space" && SPACE_ENCOUNTERS) {
+        const catKeys = Object.keys(SPACE_ENCOUNTERS);
+        const categoryKey = pick(catKeys);
+        const description = pick(SPACE_ENCOUNTERS[categoryKey]);
+        const location = pick(SPACE_LOCATIONS.length ? SPACE_LOCATIONS : ["no espaço próximo"]);
+        const approach = getApproach("space");
+        const baseDC = SPACE_BASE_DC[categoryKey] || 14;
+        const variation = d(3) - 2;
+        const perilDC = Math.min(Math.max(baseDC + approach.dcMod + variation, 8), 22);
+        const perilText = pick(SPACE_PERILS[categoryKey] || ["Uma ameaça espacial desconhecida."]);
+        const rewardType = pick(REWARD_TYPES.length ? REWARD_TYPES : ["recursos"]);
+        const rewardText = pick(REWARDS[rewardType] || ["Recursos básicos coletados."]);
+        return { approach, encounterType, categoryKey, description, location, peril: { text: perilText, dc: perilDC }, reward: { type: rewardType, text: rewardText }, index: discoveries.length + 1 };
+    }
+
+    if (encounterType === "ship" && SHIP_EVENTS) {
+        const catKeys = Object.keys(SHIP_EVENTS);
+        const categoryKey = pick(catKeys);
+        const description = pick(SHIP_EVENTS[categoryKey]);
+        const location = pick(SHIP_LOCATIONS.length ? SHIP_LOCATIONS : ["a bordo da Tiburon"]);
+        const approach = getApproach("ship");
+        const baseDC = SHIP_BASE_DC[categoryKey] || 13;
+        const variation = d(3) - 2;
+        const perilDC = Math.min(Math.max(baseDC + approach.dcMod + variation, 8), 22);
+        const perilText = pick(SHIP_PERILS[categoryKey] || ["Uma situação imprevista a bordo."]);
+        const rewardType = pick(REWARD_TYPES.length ? REWARD_TYPES : ["recursos"]);
+        const rewardText = pick(REWARDS[rewardType] || ["Recursos básicos coletados."]);
+        return { approach, encounterType, categoryKey, description, location, peril: { text: perilText, dc: perilDC }, reward: { type: rewardType, text: rewardText }, index: discoveries.length + 1 };
+    }
+
+    // Planet fallback (original)
+    const approach = getApproach("planet");
+    const catKeys = Object.keys(DISCOVERY_CATEGORIES);
+    const categoryKey = pick(catKeys.length ? catKeys : ["fauna","flora","ruins","phenomenon","resource","danger"]);
+    const description = pick(DISCOVERY_CATEGORIES[categoryKey] || ["Algo inesperado foi encontrado."]);
+    const location = pick(LOCATIONS.length ? LOCATIONS : ["em uma área inexplorada"]);
+    const baseDC = CATEGORY_BASE_DC[categoryKey] || 13;
+    const variation = d(3) - 2;
+    const perilDC = Math.min(Math.max(baseDC + approach.dcMod + variation, 8), 22);
+    const perilText = pick(PERILS[categoryKey] || ["Um perigo desconhecido."]);
+    const rewardType = pick(REWARD_TYPES.length ? REWARD_TYPES : ["recursos"]);
+    const rewardText = pick(REWARDS[rewardType] || ["Recursos básicos coletados."]);
+    return { approach, encounterType, categoryKey, description, location, peril: { text: perilText, dc: perilDC }, reward: { type: rewardType, text: rewardText }, index: discoveries.length + 1 };
+}
+
+// ═══════════════════════════════════════════
+// PERSISTENCE
+// ═══════════════════════════════════════════
+
+function saveMission() {
+    if (!planet) return;
+    const state = { planet, discoveries, discoveryIndex, currentPage: document.querySelector(".page.active")?.id || "page-planet" };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function showPlanetResult() {
+    if (!planet) return;
+    const div = document.getElementById("planet-result");
+    div.style.display = "block";
+    div.innerHTML = `
+        <div class="mt-20">
+            <div class="planet-name">${planet.name}</div>
+            <span class="planet-type">${planet.type}</span>
+            <div class="planet-desc">${planet.desc}</div>
+        </div>
+        <div class="scan-status">Varredura orbital concluída.</div>
+        <div class="poi-row">
+            <span class="poi-label">Pontos de interesse detectados:</span>
+            <div class="disc-slots">${'<div class="disc-slot">?</div>'.repeat(planet.discTotal)}</div>
+        </div>
+    `;
+    document.getElementById("planet-expedition-area").style.display = "block";
+    document.getElementById("btn-generate").textContent = "GERAR OUTRO PLANETA";
+}
+
+function restoreMission() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    try {
+        const state = JSON.parse(raw);
+        if (!state.planet) return false;
+        planet = state.planet;
+        discoveries = state.discoveries || [];
+        discoveryIndex = state.discoveryIndex || 0;
+        if (state.currentPage === "page-log") { showPage("page-log"); renderLog(); }
+        else if (state.currentPage === "page-expedition") { showPage("page-expedition"); setupExpeditionUI(); }
+        else { showPage("page-planet"); showPlanetResult(); }
+        return true;
+    } catch (e) { return false; }
+}
+
+function clearMission() {
+    localStorage.removeItem(STORAGE_KEY);
+    planet = null;
+    discoveries = [];
+    discoveryIndex = 0;
+    document.getElementById("planet-result").style.display = "none";
+    document.getElementById("planet-expedition-area").style.display = "none";
+    document.getElementById("btn-generate").textContent = "GERAR PLANETA";
+    showAIBadge(false);
+    showPage("page-planet");
+}
+
+// ═══════════════════════════════════════════
+// PLANET GENERATION
+// ═══════════════════════════════════════════
+
+async function generatePlanet() {
+    const btn = document.getElementById("btn-generate");
+    btn.textContent = "GERANDO...";
+    btn.disabled = true;
+
+    let fromAI = false;
+    try {
+        const aiResult = await aiGeneratePlanet();
+        if (aiResult) {
+            planet = { name: aiResult.name, type: aiResult.type, desc: aiResult.desc, discTotal: d6() };
+            fromAI = true;
+        }
+    } catch (e) {}
+
+    if (!fromAI) {
+        const typeData = pick(PLANET_TYPES.length ? PLANET_TYPES : [{ type: "Mundo Desconhecido", desc: "Um planeta inexplorado." }]);
+        planet = { name: generatePlanetName(), type: typeData.type, desc: typeData.desc, discTotal: d6() };
+    }
+
+    discoveries = [];
+    discoveryIndex = 0;
+    btn.disabled = false;
+    showAIBadge(fromAI);
+    showPlanetResult();
+    saveMission();
+}
+
+// ═══════════════════════════════════════════
+// EXPEDITION
+// ═══════════════════════════════════════════
+
+function startExpedition() {
+    if (!planet) return;
+    showPage("page-expedition");
+    setupExpeditionUI();
+    saveMission();
+}
+
+function setupExpeditionUI() {
+    document.getElementById("exp-planet-name").textContent = planet.name;
+    document.getElementById("exp-planet-type").textContent = planet.type;
+    document.getElementById("exp-planet-desc").textContent = planet.desc;
+    document.getElementById("exp-progress-text").textContent = discoveryIndex > 0
+        ? `Descoberta ${discoveryIndex} de ${planet.discTotal}`
+        : `0 de ${planet.discTotal} descobertas`;
+
+    const slotsDiv = document.getElementById("exp-disc-slots");
+    slotsDiv.innerHTML = "";
+    for (let i = 0; i < planet.discTotal; i++) {
+        const slot = document.createElement("div");
+        slot.className = "disc-slot";
+        if (i < discoveries.length) {
+            slot.classList.add("done");
+            slot.classList.add("clickable");
+            slot.title = `Ver descoberta ${i + 1}`;
+            slot.style.cursor = "pointer";
+            slot.onclick = (function(idx) { return function() { goToDiscovery(idx); }; })(i);
+        }
+        if (i === discoveryIndex - 1) slot.classList.add("current");
+        slot.textContent = i < discoveries.length ? "✓" : i === discoveryIndex ? "?" : " ";
+        slotsDiv.appendChild(slot);
+    }
+
+    document.getElementById("exp-actions").style.display = "flex";
+
+    if (discoveries.length === 0) {
+        document.getElementById("exp-content").innerHTML =
+            '<div class="card empty-card">Preparando scanners... Clique abaixo para iniciar a primeira varredura.</div>';
+        document.getElementById("btn-next").textContent = "INICIAR VARREDURA";
+    } else {
+        renderCurrentDiscovery();
+    }
+    updateExpButtons();
+}
+
+function goToDiscovery(idx) {
+    discoveryIndex = idx + 1;
+    setupExpeditionUI();
+}
+
+async function nextDiscovery() {
+    if (!planet) return;
+
+    if (discoveries.length > 0 && discoveryIndex < discoveries.length) {
+        discoveryIndex++;
+        setupExpeditionUI();
+        return;
+    }
+
+    const btn = document.getElementById("btn-next");
+    btn.textContent = "GERANDO...";
+    btn.disabled = true;
+
+    let disc;
+    let fromAI = false;
+    try {
+        const aiResult = await aiGenerateDiscovery(discoveries.length + 1, planet.discTotal);
+        if (aiResult) {
+            const encounterType = aiResult.encounterType || "planet";
+            const approach = makeApproach(aiResult.approach, encounterType);
+            disc = {
+                approach, encounterType, categoryKey: "ai",
+                description: aiResult.description,
+                location: aiResult.location,
+                peril: { text: aiResult.peril, dc: aiResult.perilDC },
+                reward: { type: pick(REWARD_TYPES.length ? REWARD_TYPES : ["recursos"]), text: aiResult.reward },
+                index: discoveries.length + 1
+            };
+            fromAI = true;
+        }
+    } catch (e) {}
+
+    if (!disc) {
+        disc = generateLocalDiscovery(getEncounterType());
+    }
+
+    discoveries.push(disc);
+    discoveryIndex = discoveries.length;
+
+    btn.disabled = false;
+    showAIBadge(fromAI);
+
+    if (discoveryIndex > planet.discTotal) {
+        finishExpedition();
+        return;
+    }
+
+    setupExpeditionUI();
+    saveMission();
+}
+
+function renderCurrentDiscovery() {
+    if (discoveries.length === 0) return;
+    const disc = discoveries[discoveryIndex - 1];
+    if (!disc) return;
+
+    const et = disc.encounterType || "planet";
+    const etLabel = et === "space" ? "ENCONTRO ESPACIAL" : et === "ship" ? "EVENTO A BORDO" : et === "rescue" ? "MISSÃO DE RESGATE" : "SUPERFÍCIE PLANETÁRIA";
+    const etClass = et === "space" ? "encounter-space" : et === "ship" ? "encounter-ship" : et === "rescue" ? "encounter-rescue" : "encounter-planet";
+
+    const container = document.getElementById("exp-content");
+    container.innerHTML = `
+        <div class="discovery-card">
+            <div class="discovery-banner ${disc.approach.class}">
+                ${disc.approach.label}
+            </div>
+            <div class="discovery-body">
+                <span class="encounter-type ${etClass}">${etLabel}</span>
+                <div class="discovery-text">
+                    ${disc.approach.opener}<br><br>
+                    ${disc.description}
+                </div>
+                <div class="discovery-location">📍 ${disc.location}</div>
+                <div class="peril-block">
+                    <div class="peril-header">⚠ PERIGO<span class="peril-dc">DC ${disc.peril.dc}</span></div>
+                    <div class="peril-text">${disc.peril.text}</div>
+                </div>
+                <div class="reward-block">
+                    <div class="reward-header">🏆 RECOMPENSA<span class="reward-tag">${REWARD_LABELS[disc.reward.type] || "RECURSO"}</span></div>
+                    <div class="reward-text">${disc.reward.text}</div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function updateExpButtons() {
+    const btnNext = document.getElementById("btn-next");
+    const btnFinish = document.getElementById("btn-finish");
+
+    if (discoveryIndex >= planet.discTotal) {
+        btnNext.textContent = "FINALIZAR PLANETA";
+        btnNext.className = "btn btn-danger";
+        btnNext.onclick = finishExpedition;
+        btnFinish.style.display = "none";
+    } else {
+        btnNext.textContent = discoveries.length === 0 ? "INICIAR VARREDURA" : "PRÓXIMA DESCOBERTA";
+        btnNext.className = "btn btn-primary";
+        btnNext.onclick = nextDiscovery;
+        btnFinish.style.display = "";
+    }
+}
+
+function finishExpedition() {
+    if (discoveries.length === 0) return;
+    showPage("page-log");
+    renderLog();
+    saveMission();
+}
+
+// ═══════════════════════════════════════════
+// LOG
+// ═══════════════════════════════════════════
+
+function renderLog() {
+    document.getElementById("log-planet-name").textContent = planet.name;
+    document.getElementById("log-planet-type").textContent = planet.type;
+    document.getElementById("log-planet-desc").textContent = planet.desc;
+
+    const list = document.getElementById("log-list");
+    list.innerHTML = discoveries.map((d, i) => {
+        const et = d.encounterType || "planet";
+        const etLabel = et === "space" ? "🌌 ESPAÇO" : et === "ship" ? "🚀 A BORDO" : et === "rescue" ? "🆘 RESGATE" : "🪐 SUPERFÍCIE";
+        return `
+        <div class="log-entry">
+            <div class="log-number">EVENTO ${i + 1} DE ${planet.discTotal} &mdash; ${etLabel}</div>
+            <div class="log-approach ${d.approach.logClass}">${d.approach.label}</div>
+            <div class="log-desc">${d.description}</div>
+            <div class="log-loc">📍 ${d.location}</div>
+            <div class="log-peril">⚡ DC ${d.peril.dc} &mdash; ${d.peril.text}</div>
+            <div class="log-reward">🏆 ${REWARD_LABELS[d.reward.type] || "RECURSO"}: ${d.reward.text}</div>
+        </div>`;
+    }).join("");
+}
+
+function resetMission() {
+    clearMission();
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+
+function showPage(pageId) {
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    document.getElementById(pageId).classList.add("active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function goToPlanet() {
+    showPage("page-planet");
+}
+
+// ═══════════════════════════════════════════
+// EXPORT
+// ═══════════════════════════════════════════
+
+function exportMissionMD() {
+    if (!planet || discoveries.length === 0) return;
+
+    const ET_LABEL = { planet: "🪐 SUPERFÍCIE", space: "🌌 ESPAÇO", ship: "🚀 A BORDO", rescue: "🆘 RESGATE" };
+    let md = `# Missão WARP: ${planet.name}\n`;
+    md += `**Tipo:** ${planet.type}\n\n`;
+    md += `> ${planet.desc}\n\n`;
+    md += `**Eventos registrados:** ${discoveries.length} de ${planet.discTotal}\n\n`;
+    md += `---\n\n`;
+
+    discoveries.forEach((d, i) => {
+        const et = d.encounterType || "planet";
+        md += `## Evento ${i + 1} — ${ET_LABEL[et] || "🪐 SUPERFÍCIE"}\n`;
+        md += `**Abordagem:** ${d.approach.label}\n\n`;
+        md += `${d.approach.opener}\n\n`;
+        md += `${d.description}\n\n`;
+        md += `📍 *${d.location}*\n\n`;
+        md += `**⚠ Perigo (DC ${d.peril.dc}):** ${d.peril.text}\n\n`;
+        md += `**🏆 Recompensa:** ${d.reward.text}\n\n`;
+        md += `---\n\n`;
+    });
+
+    md += `\n*Gerado pelo Sistema Operacional WARP — ${new Date().toISOString().split("T")[0]}*\n`;
+
+    const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${planet.name.replace(/[^a-zA-Z0-9\-]/g, "_")}_missao.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+
+window.onload = async function() {
+    await loadDataPools();
+    restoreMission();
+};
+</script>
+
+</body>
+</html>

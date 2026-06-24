@@ -1,0 +1,15 @@
+{
+  "drone": {
+    "name": "Drone Limitado (M-1)",
+    "subtitle": "Chassi substituto temporário",
+    "ca": 10,
+    "attack": 0,
+    "intellect": 0,
+    "maxEnergy": 6,
+    "startingEnergy": 3,
+    "image": "img/ubas.webp",
+    "modifierLabel": "Sem modificador (Drone)",
+    "toggleActiveLabel": "Destruição: Acionar Protocolo Drone",
+    "toggleInactiveLabel": "Chassi Pronto: Sincronizar"
+  }
+}

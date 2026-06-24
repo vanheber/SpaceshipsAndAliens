@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface de Androides SC-RPG</title>
+    <link rel="stylesheet" href="warp.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <h1>SISTEMA OPERACIONAL WARP</h1>
+        <p>Missão experimental de unidades autônomas equipadas com A.L.M.A.</p>
+    </header>
+
+    <!-- TELA 1: SELEÇÃO DE MODELOS (CATÁLOGO) -->
+    <div id="selection-screen" class="screen active">
+        <div class="mb-10 text-muted text-center">
+            Selecione uma unidade para carregar os parâmetros em campo.
+        </div>
+        <div class="selection-grid" id="catalog-grid">
+            <!-- Cards dos 10 robôs gerados dinamicamente via JS -->
+        </div>
+    </div>
+
+    <!-- TELA 2: FICHA DE JOGO & DADOS (DISPOSITIVO EM CAMPO) -->
+    <div id="sheet-screen" class="screen">
+        <button class="back-btn" onclick="backToCatalog()">
+            &larr; Catálogo de Unidades
+        </button>
+
+        <div class="sheet-container" id="active-sheet">
+            <!-- Gerado via JS de acordo com a seleção -->
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = "warp-unit-catalog";
+
+        let robotModels = [];
+        let droneConfig = null;
+        let activeChar = null;
+        let activeEnergy = 0;
+        let isDroneMode = false;
+
+        function saveState() {
+            if (!activeChar) return;
+            const state = { robotId: activeChar.id, activeEnergy, isDroneMode };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        }
+
+        function restoreState() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return false;
+            try {
+                const state = JSON.parse(raw);
+                const robot = robotModels.find(r => r.id === state.robotId);
+                if (!robot) return false;
+                activeChar = robot;
+                activeEnergy = state.activeEnergy;
+                isDroneMode = state.isDroneMode;
+                document.getElementById("selection-screen").classList.remove("active");
+                document.getElementById("sheet-screen").classList.add("active");
+                renderSheet();
+                return true;
+            } catch (e) { return false; }
+        }
+
+        function clearSession() {
+            localStorage.removeItem(STORAGE_KEY);
+            activeChar = null;
+            activeEnergy = 0;
+            isDroneMode = false;
+            document.getElementById("sheet-screen").classList.remove("active");
+            document.getElementById("selection-screen").classList.add("active");
+            renderCatalog();
+        }
+
+        async function initApp() {
+            const grid = document.getElementById("catalog-grid");
+            if (!grid) return;
+            grid.innerHTML = '<div class="catalog-loading">Carregando catálogo...</div>';
+
+            try {
+                const timeout = new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error("Timeout: servidor não respondeu em 8s")), 8000)
+                );
+
+                const [robotsRes, configRes] = await Promise.race([
+                    Promise.all([
+                        fetch("data/robots.json"),
+                        fetch("data/config.json")
+                    ]),
+                    timeout
+                ]);
+
+                if (!robotsRes.ok || !configRes.ok) throw new Error("Erro HTTP ao carregar dados");
+
+                robotModels = await robotsRes.json();
+                droneConfig = (await configRes.json()).drone;
+
+                if (!robotModels || !robotModels.length) throw new Error("Dados do catálogo vazios");
+
+                if (!restoreState()) {
+                    renderCatalog();
+                }
+            } catch (err) {
+                console.warn("WARP Unit: falha ao carregar catálogo:", err.message);
+                grid.innerHTML = '<div class="catalog-error">Falha ao carregar dados do catálogo.<br><small>Verifique se o servidor está rodando e se os arquivos data/*.json existem.</small></div>';
+            }
+        }
+
+        function renderCatalog() {
+            const grid = document.getElementById("catalog-grid");
+            grid.innerHTML = "";
+
+            robotModels.forEach(robot => {
+                const card = document.createElement("div");
+                card.className = "catalog-card";
+                card.onclick = () => selectAndLoadRobot(robot.id);
+
+                card.innerHTML = `
+                    <div class="catalog-image-container">
+                        <img src="${robot.image}" alt="${robot.model}" class="catalog-image" loading="lazy">
+                    </div>
+                    <div>
+                        <div class="catalog-header">
+                            <span class="catalog-model">${robot.model}</span>
+                            <span class="catalog-tag ${robot.tagClass}">${robot.type}</span>
+                        </div>
+                        <div class="catalog-desc">${robot.desc}</div>
+                    </div>
+                    <div class="catalog-stats-preview">
+                        <span>Ataque: +${robot.attack}</span>
+                        <span>Intel.: +${robot.intellect}</span>
+                        <span>CA: ${robot.ca}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Troca de Telas (Catálogo para Ficha)
+        function selectAndLoadRobot(id) {
+            activeChar = robotModels.find(r => r.id === id);
+            activeEnergy = activeChar.startingEnergy;
+            isDroneMode = false;
+
+            document.getElementById("selection-screen").classList.remove("active");
+            document.getElementById("sheet-screen").classList.add("active");
+
+            saveState();
+            renderSheet();
+        }
+
+        function backToCatalog() {
+            document.getElementById("sheet-screen").classList.remove("active");
+            document.getElementById("selection-screen").classList.add("active");
+            disposeDiceRenderer();
+            renderCatalog();
+        }
+
+        // Renderiza a ficha ativa na tela 2
+        function renderSheet() {
+            const container = document.getElementById("active-sheet");
+            const charImage = isDroneMode ? droneConfig.image : activeChar.image;
+
+            container.innerHTML = `
+                <div class="active-char-header">
+                    <div>
+                        <div class="active-model-name">${isDroneMode ? droneConfig.name : activeChar.model}</div>
+                        <div class="sheet-subtitle">${isDroneMode ? droneConfig.subtitle : activeChar.type}</div>
+                    </div>
+                    <span class="status-badge ${isDroneMode ? 'status-drone' : 'status-online'}">
+                        ${isDroneMode ? 'Modo Drone' : 'Unidade Ativa'}
+                    </span>
+                </div>
+
+                <div class="sheet-image-container">
+                    <img src="${charImage}" alt="Androide Ativo" class="sheet-image">
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">C. Armadura</div>
+                        <div class="stat-val" id="sheet-ca">${isDroneMode ? droneConfig.ca : activeChar.ca}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Mod. Ataque</div>
+                        <div class="stat-val" id="sheet-atk">${isDroneMode ? '+' + droneConfig.attack : '+' + activeChar.attack}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Mod. Intel.</div>
+                        <div class="stat-val" id="sheet-intel">${isDroneMode ? '+' + droneConfig.intellect : '+' + activeChar.intellect}</div>
+                    </div>
+                </div>
+
+                ${isDroneMode ? '' : `
+                <div class="ability-box">
+                    <div class="ability-title">${activeChar.abilityName} (${activeChar.abilityValue >= 0 ? '+' : ''}${activeChar.abilityValue})</div>
+                    <div class="ability-desc">${activeChar.abilityDesc}</div>
+                </div>
+                `}
+
+                <div class="energy-section">
+                    <div class="energy-header">
+                        <span>CÉLULAS DE ENERGIA (ESPERANÇA)</span>
+                        <span id="energy-counter">${activeEnergy}/${isDroneMode ? droneConfig.maxEnergy : activeChar.maxEnergy}</span>
+                    </div>
+                    <div class="token-row" id="token-row"></div>
+                    <div class="energy-actions">
+                        <button class="roll-btn roll-btn-sm" onclick="adjustEnergy(-1)">Gastar Energia (-1)</button>
+                        <button class="roll-btn roll-btn-sm" onclick="adjustEnergy(1)">Adicionar Energia (+1)</button>
+                    </div>
+                </div>
+
+                <div class="roller-controls">
+                    <label class="label-sm">Aplicar modificador à rolagem:</label>
+                    <select id="roll-modifier" class="selector-input">
+                        ${isDroneMode ? `
+                            <option value="0">${droneConfig.modifierLabel}</option>
+                        ` : `
+                            <option value="0">Sem modificador (+0)</option>
+                            <option value="${activeChar.attack}">Modificador de Ataque (+${activeChar.attack})</option>
+                            <option value="${activeChar.intellect}">Modificador de Inteligência (+${activeChar.intellect})</option>
+                            <option value="${activeChar.abilityValue}">Especialidade (+${activeChar.abilityValue})</option>
+                        `}
+                    </select>
+
+                    <div class="roll-row-flex">
+                        <div class="flex-1">
+                            <div class="flex-inline">
+                                <label class="dc-label">CD:</label>
+                                <input type="number" id="roll-dc" class="number-input" placeholder="Dificuldade" value="10">
+                            </div>
+                        </div>
+                        <div class="flex-2">
+                            <button class="roll-btn" onclick="rollDice()">Jogar os dados</button>
+                        </div>
+                    </div>
+
+                <div class="dice-container" id="dice-viewport"></div>
+                <div class="dice-labels">
+                    <span class="die-label-hope">ESPERANÇA</span>
+                    <span class="die-label-fear">MEDO</span>
+                </div>
+
+                    <div class="outcome-box" id="sheet-outcome">
+                        Aguardando lançamento de dados...
+                    </div>
+                </div>
+
+                <button class="drone-trigger" onclick="toggleDrone()">
+                    ${isDroneMode ? droneConfig.toggleInactiveLabel : droneConfig.toggleActiveLabel}
+                </button>
+            `;
+
+            updateEnergyTokens();
+            setTimeout(initDiceRenderer, 50);
+        }
+
+        // Gerencia e renderiza os círculos de energia na tela do celular
+        function updateEnergyTokens() {
+            const row = document.getElementById("token-row");
+            row.innerHTML = "";
+            const max = isDroneMode ? droneConfig.maxEnergy : activeChar.maxEnergy;
+
+            for (let i = 0; i < max; i++) {
+                const token = document.createElement("div");
+                token.className = `energy-token ${i >= activeEnergy ? 'spent' : ''}`;
+                row.appendChild(token);
+            }
+
+            document.getElementById("energy-counter").textContent = `${activeEnergy}/${max}`;
+
+            // Se energia chegar a zero enquanto chassi principal está ativo, vira drone
+            if (activeEnergy === 0 && !isDroneMode) {
+                alert("Unidade principal desativada por perda de energia. Memórias enviadas à nave-mãe. Modo drone ativado.");
+                toggleDrone();
+            }
+        }
+
+        function adjustEnergy(amount) {
+            const max = isDroneMode ? droneConfig.maxEnergy : activeChar.maxEnergy;
+            activeEnergy += amount;
+            if (activeEnergy < 0) activeEnergy = 0;
+            if (activeEnergy > max) activeEnergy = max;
+            saveState();
+            updateEnergyTokens();
+        }
+
+        // Alterna entre o robô principal e o drone limitado
+        function toggleDrone() {
+            isDroneMode = !isDroneMode;
+            if (isDroneMode) {
+                activeEnergy = droneConfig.startingEnergy;
+            } else {
+            activeEnergy = activeChar.startingEnergy;
+            }
+            saveState();
+            renderSheet();
+        }
+
+        // ═══════════════════════════════════════════
+        // 3D DICE (Three.js)
+        // ═══════════════════════════════════════════
+
+        let scene, camera, renderer;
+        let hopeDie, fearDie, diceAnims = [];
+        let diceReady = false;
+
+        function disposeDiceRenderer() {
+            diceReady = false;
+            if (renderer) {
+                renderer.dispose();
+                if (renderer.domElement && renderer.domElement.parentNode)
+                    renderer.domElement.remove();
+                renderer = null;
+            }
+            if (scene) {
+                scene.traverse(o => {
+                    if (o.geometry) o.geometry.dispose();
+                    if (o.material) {
+                        const mats = Array.isArray(o.material) ? o.material : [o.material];
+                        mats.forEach(m => {
+                            if (m.map) m.map.dispose();
+                            m.dispose();
+                        });
+                    }
+                });
+            }
+            scene = null; camera = null;
+            hopeDie = null; fearDie = null; diceAnims = [];
+        }
+
+        function initDiceRenderer() {
+            const container = document.getElementById('dice-viewport');
+            if (!container || typeof THREE === 'undefined') return;
+
+            disposeDiceRenderer();
+
+            const w = container.clientWidth || 600;
+            const h = 220;
+
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
+            camera.position.set(0, 0.8, 5);
+            camera.lookAt(0, 0, 0);
+
+            renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(w, h);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setClearColor(0x000000, 0);
+            container.appendChild(renderer.domElement);
+
+            const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+            const key = new THREE.DirectionalLight(0xffffff, 0.9);
+            key.position.set(3, 4, 5);
+            const fill = new THREE.DirectionalLight(0xffffff, 0.3);
+            fill.position.set(-3, 1, -4);
+            scene.add(ambient, key, fill);
+
+            hopeDie = createDie('#e6a23c', '#7c3aed');
+            hopeDie.position.set(-1.7, 0, 0);
+            scene.add(hopeDie);
+
+            fearDie = createDie('#a78bfa', '#fde047');
+            fearDie.position.set(1.7, 0, 0);
+            scene.add(fearDie);
+
+            diceReady = true;
+            renderLoop();
+        }
+        function createDie(hexColor, textColor) {
+            const group = new THREE.Group();
+            const R = 1.05;
+            const geo = new THREE.DodecahedronGeometry(R, 0);
+            const ni = geo.clone().toNonIndexed();
+            const arr = ni.getAttribute('position').array;
+            const fs = 9;
+
+            let uvs = ni.getAttribute('uv');
+            if (!uvs) {
+                uvs = new THREE.BufferAttribute(new Float32Array(arr.length / 3 * 2), 2);
+                ni.setAttribute('uv', uvs);
+            }
+            const uvArr = uvs.array;
+
+            ni.clearGroups();
+            const mats = [];
+            const norms = [];
+
+            for (let f = 0; f < 12; f++) {
+                ni.addGroup(f * fs, fs, f);
+
+                const uniqueMap = new Map();
+                const keys = [];
+                for (let v = 0; v < fs; v++) {
+                    const i = (f * fs + v) * 3;
+                    const key = `${arr[i].toFixed(4)},${arr[i+1].toFixed(4)},${arr[i+2].toFixed(4)}`;
+                    keys.push(key);
+                    if (!uniqueMap.has(key))
+                        uniqueMap.set(key, [arr[i], arr[i+1], arr[i+2]]);
+                }
+
+                const verts = Array.from(uniqueMap.values()).map(c => new THREE.Vector3(c[0], c[1], c[2]));
+                const center = new THREE.Vector3();
+                verts.forEach(v => center.add(v));
+                center.divideScalar(verts.length);
+                norms.push(center.clone().normalize());
+
+                const local = verts.map(v => v.clone().sub(center));
+                const faceNormal = center.clone().normalize();
+                const axX = local[0].clone().normalize();
+                const axY = new THREE.Vector3().crossVectors(faceNormal, axX).normalize();
+
+                let uMin = Infinity, uMax = -Infinity, vMin = Infinity, vMax = -Infinity;
+                const uvVals = local.map(p => {
+                    const u = p.dot(axX), v = p.dot(axY);
+                    uMin = Math.min(uMin, u); uMax = Math.max(uMax, u);
+                    vMin = Math.min(vMin, v); vMax = Math.max(vMax, v);
+                    return { u, v };
+                });
+                const uRng = uMax - uMin || 1, vRng = vMax - vMin || 1;
+
+                const uvByKey = new Map();
+                let ki = 0;
+                for (const key of uniqueMap.keys()) {
+                    uvByKey.set(key, { u: (uvVals[ki].u - uMin) / uRng + 0.05, v: (uvVals[ki].v - vMin) / vRng });
+                    ki++;
+                }
+
+                for (let v = 0; v < fs; v++) {
+                    const uv = uvByKey.get(keys[v]);
+                    const ui = (f * fs + v) * 2;
+                    uvArr[ui] = uv.u;
+                    uvArr[ui + 1] = uv.v;
+                }
+
+                const cv = document.createElement('canvas');
+                cv.width = 256; cv.height = 256;
+                const ctx = cv.getContext('2d');
+                ctx.fillStyle = hexColor;
+                ctx.fillRect(0, 0, 256, 256);
+                ctx.fillStyle = textColor;
+                ctx.font = 'Bold 140px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(String(f + 1), 128, 132);
+
+                mats.push(new THREE.MeshStandardMaterial({
+                    map: new THREE.CanvasTexture(cv),
+                    roughness: 0.45, metalness: 0.15,
+                }));
+            }
+
+            uvs.needsUpdate = true;
+
+            group.add(new THREE.Mesh(ni, mats));
+            group.userData.faceNormals = norms;
+
+            const edgeMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.12 });
+            group.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat));
+
+            return group;
+        }
+
+        function renderLoop() {
+            if (!diceReady) return;
+            requestAnimationFrame(renderLoop);
+
+            const now = Date.now();
+            for (let i = diceAnims.length - 1; i >= 0; i--) {
+                const a = diceAnims[i];
+                const t = Math.min((now - a.t0) / a.dur, 1);
+                const e = 1 - Math.pow(1 - t, 3);
+                a.die.rotation.x = a.sx + (a.tx - a.sx) * e;
+                a.die.rotation.y = a.sy + (a.ty - a.sy) * e;
+                a.die.rotation.z = a.sz + (a.tz - a.sz) * e;
+                if (t >= 1) { a.die.rotation.set(a.tx, a.ty, a.tz); diceAnims.splice(i, 1); }
+            }
+
+            if (diceAnims.length === 0 && hopeDie && fearDie) {
+                hopeDie.rotation.y += 0.001;
+                fearDie.rotation.y += 0.001;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        function startDiceRoll(hopeVal, fearVal) {
+            if (!diceReady || !hopeDie || !fearDie) return;
+            const camPos = new THREE.Vector3(0, 0.8, 5);
+            const targets = [hopeVal - 1, fearVal - 1];
+            [hopeDie, fearDie].forEach((die, idx) => {
+                const toCamera = camPos.clone().sub(die.position).normalize();
+                const fn = die.userData.faceNormals[targets[idx]];
+                const q = new THREE.Quaternion().setFromUnitVectors(fn, toCamera);
+                const te = new THREE.Euler().setFromQuaternion(q);
+                const sx = die.rotation.x, sy = die.rotation.y, sz = die.rotation.z;
+                diceAnims.push({
+                    die, t0: Date.now(), dur: 1200 + Math.random() * 300,
+                    sx, sy, sz,
+                    tx: te.x + Math.PI * 2 * (3 + Math.floor(Math.random() * 4)),
+                    ty: te.y + Math.PI * 2 * (4 + Math.floor(Math.random() * 4)),
+                    tz: te.z + Math.PI * 2 * (1 + Math.floor(Math.random() * 3))
+                });
+            });
+        }
+
+        // Lançador de dados com regras de Daggerheart
+        function rollDice() {
+            const hope = Math.floor(Math.random() * 12) + 1;
+            const fear = Math.floor(Math.random() * 12) + 1;
+
+            const modifier = parseInt(document.getElementById("roll-modifier").value) || 0;
+            const dc = parseInt(document.getElementById("roll-dc").value) || 10;
+            const total = hope + fear + modifier;
+
+            const isSuccess = total >= dc;
+            const statusStr = isSuccess ? "SUCESSO" : "FALHA";
+
+            let message = "";
+            let color = "";
+
+            if (hope === fear) {
+                message = `CRÍTICO! ${statusStr} com grande vantagem táctica.`;
+                color = "var(--drone-color)";
+                adjustEnergy(1);
+            } else if (hope > fear) {
+                message = `${statusStr} COM ESPERANÇA! Ação executada com benefício colateral.`;
+                color = "var(--accent-hope)";
+                adjustEnergy(1);
+            } else {
+                message = `${statusStr} COM MEDO! Surge uma complicação no cenário ou de energia.`;
+                color = "var(--accent-fear)";
+            }
+
+            startDiceRoll(hope, fear);
+
+            const outcome = document.getElementById("sheet-outcome");
+            outcome.innerHTML = `<div class="text-muted-sm">Rolando...</div>`;
+
+            setTimeout(() => {
+                outcome.innerHTML = `
+                    <div class="outcome-title" style="color:${color}">Esperança ${hope} | Medo ${fear} · Soma: ${total} vs Dificuldade ${dc}</div>
+                    <div class="subtitle-text">${message}</div>
+                `;
+            }, 1500);
+        }
+
+        window.onload = initApp;
+    </script>
+
+    <footer>
+        <a href="docs/">Documentação</a>
+        &nbsp;·&nbsp;
+        <a href="mothership.html">Nave-Mãe</a>
+        &nbsp;·&nbsp;
+        <a href="oneshot.html">Gerador de Missão</a>
+        &nbsp;·&nbsp;
+        <a href="missioncontrol.html">Controle da Missão</a>
+        &nbsp;·&nbsp;
+        <a href="#" onclick="clearSession();return false;">Limpar Sessão</a>
+    </footer>
+</body>
+
+</html>

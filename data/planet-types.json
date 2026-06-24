@@ -1,0 +1,82 @@
+[
+  {
+    "type": "Deserto de Sílica",
+    "desc": "Um mundo árido coberto por dunas de areia vítrea e cristais de sílica que refletem a luz da estrela-mãe como um mar de brasas. Tempestades de partículas abrasivas varrem a superfície em ciclos de quatorze horas. A atmosfera é respirável, mas extremamente seca — a umidade não passa de 4%."
+  },
+  {
+    "type": "Selva Bioluminescente",
+    "desc": "Uma densa cobertura vegetal emite um brilho azul-esverdeado constante, tornando a noite tão clara quanto o dia. A umidade beira os 98% e os scanners detectam esporos flutuantes com bioassinaturas desconhecidas. O sub-bosque vibra com o som de vida alienígena em todas as frequências."
+  },
+  {
+    "type": "Oceano de Metano",
+    "desc": "A superfície é um oceano escuro de metano e etano líquidos, pontuado por icebergs de hidrocarbonetos congelados. A chuva constante é de compostos orgânicos que nunca tocam o solo — evaporam antes. Os sensores indicam correntes profundas com algo grande se movendo."
+  },
+  {
+    "type": "Tundra Cristalina",
+    "desc": "Planícies intermináveis de gelo azulado cobrem o planeta. Formações de cristal hexagonal brotam do solo como árvores petrificadas, cantarolando em frequências hipnóticas quando o vento passa. A temperatura é de -62°C constantes, mas os sensores detectam calor vindo de profundidades inesperadas."
+  },
+  {
+    "type": "Mundo Vulcânico",
+    "desc": "Rios de lava serpenteiam por planícies de basalto recém-formado. A cada poucas horas, erupções lançam cinzas à estratosfera. Apesar da hostilidade, os scanners detectam bolsões de ar respirável e depósitos minerais raros expostos pela atividade tectônica incessante."
+  },
+  {
+    "type": "Lua Gasosa",
+    "desc": "Um satélite rochoso orbitando um gigante gasoso que ocupa metade do céu. A gravidade é de apenas 0.4G e os saltos cobrem dezenas de metros. A magnetosfera do planeta-mãe cria auroras permanentes que dançam sobre a superfície estéril."
+  },
+  {
+    "type": "Planície de Cinzas",
+    "desc": "Cinzas vulcânicas com metros de profundidade cobrem cada centímetro do terreno. O solo abaixo é fértil, mas nenhuma planta nativa sobreviveu à última erupção cataclísmica. Os passos levantam nuvens que demoram minutos para assentar na baixa gravidade."
+  },
+  {
+    "type": "Cavernas Subterrâneas",
+    "desc": "A superfície é inóspita e estéril, mas uma rede de cavernas se estende por quilômetros abaixo. Túneis de basalto com formações de cristal luminescentes fornecem luz natural. A temperatura é constante e agradável, e cursos d'água subterrâneos sugerem um ecossistema isolado."
+  },
+  {
+    "type": "Pântano Fúngico",
+    "desc": "Um ecossistema dominado por fungos de todos os tamanhos — desde tapetes microscópicos até estruturas do tamanho de edifícios. O ar é denso com esporos que os filtros precisam processar constantemente. Poeiras de micélio brilham no escuro como estrelas terrestres."
+  },
+  {
+    "type": "Anel de Asteroides",
+    "desc": "Não é um planeta, mas um aglomerado denso de asteroides no ponto de Lagrange de dois gigantes gasosos. Cada rocha tem sua própria microgravidade e composição. Algumas são ocas e grandes o suficiente para abrigar uma base inteira."
+  },
+  {
+    "type": "Mundo Oceânico",
+    "desc": "Cobertura de 99% de água líquida com apenas alguns arquipélagos vulcânicos como terra firme. A coluna d'água tem em média 40 km de profundidade. Sensores sonares detectam estruturas geométricas no leito oceânico — naturais ou não, é impossível afirmar."
+  },
+  {
+    "type": "Ermo Radioativo",
+    "desc": "Algum cataclisma antigo — natural ou artificial — esterilizou a superfície com radiação. O solo ainda brilha fracamente em alguns espectros. Ruínas de uma civilização carbonizada pontuam o horizonte. Apesar do perigo, os níveis de radiação estão caindo — em mil anos, será habitável."
+  },
+  {
+    "type": "Floresta de Cristal",
+    "desc": "Gigantescos cristais naturais brotam do solo como árvores, formando uma floresta de quartzo e ametista que se estende por continentes inteiros. A luz solar refrata em incontáveis cores através das formações, criando um espetáculo visual permanente. Os cristais crescem cerca de um centímetro por século — alguns têm milhões de anos."
+  },
+  {
+    "type": "Mundo Tempestade",
+    "desc": "A atmosfera é um turbilhão perpétuo de tempestades elétricas que nunca cessam. Ventos de 400 km/h esculpem a paisagem em formas impossíveis. Curiosamente, o olho de cada tempestade é uma zona de calmaria absoluta onde a vida prospera em bolsões isolados."
+  },
+  {
+    "type": "Paraíso de Safira",
+    "desc": "Oceanos de um azul tão intenso que parecem artificiais cobrem 70% da superfície, pontuados por ilhas de areia branca. A atmosfera é quase idêntica à da Terra primordial — respirável, temperatura amena de 22°C constantes, sem predadores de topo. Os scanners insistem que é real."
+  },
+  {
+    "type": "Cascata de Ferro",
+    "desc": "Rios de ferro líquido correm de montanhas magnéticas para vales profundos, solidificando em formas retorcidas no caminho. O campo magnético do planeta é tão intenso que qualquer equipamento não blindado é inutilizado em minutos. As auroras no polo são permanentes e visíveis até do equador."
+  },
+  {
+    "type": "Colmeia Abandonada",
+    "desc": "A superfície é perfurada por milhares de túneis hexagonais perfeitamente simétricos, cada um com dezenas de metros de diâmetro. As paredes são revestidas por uma resina orgânica fossilizada que ainda emite calor. Algo escavou este planeta por milênios — e então simplesmente partiu."
+  },
+  {
+    "type": "Planeta Morto",
+    "desc": "Planeta sem vida e sem atmosfera, mas com recursos minerais valiosos."
+  },
+  {
+    "type": "Planeta Artificial",
+    "desc": "Um mundo construído por alienígenas desconhecidos, com cidades, estradas e tecnologia avançada."
+  },
+  {
+    "type": "Planeta Gasoso",
+    "desc": "Um planeta gasoso com atmosfera densa e turbulenta. Ideal para exploração com drones. Com criaturas voadoras colossais."
+  }
+]

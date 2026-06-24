@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WARP-Unit | Controle da Missão</title>
+    <link rel="stylesheet" href="warp.css">
+
+</head>
+<body>
+
+<header>
+    <h1>SISTEMA OPERACIONAL WARP</h1>
+    <p>Controle da Missão &mdash; Painel do Mestre</p>
+</header>
+
+<div class="mc-back-link">
+    <button class="back-btn" onclick="location.href='mothership.html'">&larr; Retornar à Nave</button>
+</div>
+
+<div class="mc-page active">
+
+    <!-- PONTOS DE MEDO (GM) -->
+    <div class="mc-section">
+        <div class="mc-section-title">Recursos do Mestre</div>
+        <div class="mc-character-card">
+            <div class="mc-character-header">
+                <span class="mc-character-name">PONTOS DE MEDO</span>
+                <span class="mc-fear-counter" id="fear-counter">0/7</span>
+            </div>
+            <div class="mc-token-row" id="fear-token-row"></div>
+            <div class="mc-actions">
+                <button class="mc-btn fear" onclick="adjustFear(-1)">Gastar (-1)</button>
+                <button class="mc-btn fear" onclick="adjustFear(1)">Adicionar (+1)</button>
+                <button class="mc-btn fear ml-auto" onclick="resetFear()">Zerar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PERSONAGENS -->
+    <div class="mc-section">
+        <div class="mc-section-title">Unidades em Campo</div>
+        <div id="characters-container"></div>
+    </div>
+
+    <!-- NPCs -->
+    <div class="mc-section">
+        <div class="mc-section-title">PNJs &amp; Aliados</div>
+        <div id="npcs-container"></div>
+    </div>
+
+</div>
+
+<footer>
+    <a href="docs/">Documentação</a>
+    &nbsp;·&nbsp;
+    <a href="mothership.html">Nave-Mãe</a>
+    &nbsp;·&nbsp;
+    <a href="index.html">Catálogo de Unidades</a>
+    &nbsp;·&nbsp;
+    <a href="oneshot.html">Gerador de Missão</a>
+    &nbsp;·&nbsp;
+    <a href="#" onclick="localStorage.removeItem('warp-unit-mission');location.reload();return false;">Limpar Missão</a>
+</footer>
+
+<script>
+// ===== STATE =====
+const STORAGE_KEY = "warp-unit-mission";
+const FEAR_MAX = 7;
+const NPC_MAX = 20;
+const NPC_START = 5;
+
+const NPC_NAMES = ["PNJ 1", "PNJ 2", "PNJ 3"];
+
+let state = {
+    fear: 0,
+    robots: {},
+    npcs: [NPC_START, NPC_START, NPC_START]
+};
+
+// Load state
+function loadState() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+            const saved = JSON.parse(raw);
+            state.fear = typeof saved.fear === "number" ? saved.fear : 0;
+            state.robots = saved.robots || {};
+            state.npcs = Array.isArray(saved.npcs) ? saved.npcs : [NPC_START, NPC_START, NPC_START];
+        }
+    } catch (e) {}
+}
+
+function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+// ===== FEAR POINTS =====
+function renderFearTokens() {
+    const row = document.getElementById("fear-token-row");
+    row.innerHTML = "";
+    for (let i = 0; i < FEAR_MAX; i++) {
+        const token = document.createElement("div");
+        token.className = `mc-token fear ${i >= state.fear ? 'spent' : ''}`;
+        token.title = i < state.fear ? `Medo ${i+1}/${FEAR_MAX}` : "Vazio";
+        token.addEventListener("click", () => setFear(i + 1));
+        row.appendChild(token);
+    }
+    document.getElementById("fear-counter").textContent = `${state.fear}/${FEAR_MAX}`;
+}
+
+function setFear(val) {
+    state.fear = Math.max(0, Math.min(FEAR_MAX, val));
+    saveState();
+    renderFearTokens();
+}
+
+function adjustFear(amount) {
+    setFear(state.fear + amount);
+}
+
+function resetFear() {
+    setFear(0);
+}
+
+// ===== CHARACTERS =====
+function renderCharacterCard(robot) {
+    const id = robot.id;
+    const model = robot.model;
+    const type = robot.type;
+    const maxEnergy = robot.maxEnergy;
+    const starting = robot.startingEnergy;
+
+    // Ensure robot has an entry in state
+    if (typeof state.robots[id] !== "number") {
+        state.robots[id] = starting;
+    }
+    const current = state.robots[id];
+
+    const card = document.createElement("div");
+    card.className = "mc-character-card";
+    card.id = "char-" + id;
+
+    const header = document.createElement("div");
+    header.className = "mc-character-header";
+    header.innerHTML = `
+        <div>
+            <div class="mc-character-name">${model}</div>
+            <div class="mc-character-type">${type}</div>
+        </div>
+        <span class="mc-energy-counter" id="ce-${id}">${current}/${maxEnergy}</span>
+    `;
+    card.appendChild(header);
+
+    const tokenRow = document.createElement("div");
+    tokenRow.className = "mc-token-row";
+    tokenRow.id = "tr-" + id;
+
+    for (let i = 0; i < maxEnergy; i++) {
+        const token = document.createElement("div");
+        token.className = `mc-token energy ${i >= current ? 'spent' : ''}`;
+        token.addEventListener("click", () => setRobotEnergy(id, i + 1));
+        tokenRow.appendChild(token);
+    }
+    card.appendChild(tokenRow);
+
+    const actions = document.createElement("div");
+    actions.className = "mc-actions";
+    actions.innerHTML = `
+        <button class="mc-btn" onclick="adjustRobotEnergy('${id}', -1)">Gastar (-1)</button>
+        <button class="mc-btn" onclick="adjustRobotEnergy('${id}', 1)">Adicionar (+1)</button>
+        <button class="mc-btn ml-auto" onclick="resetRobotEnergy('${id}')">Recarregar</button>
+    `;
+    card.appendChild(actions);
+
+    return card;
+}
+
+function setRobotEnergy(id, val) {
+    const robot = ROBOTS.find(r => r.id === id);
+    if (!robot) return;
+    state.robots[id] = Math.max(0, Math.min(robot.maxEnergy, val));
+    saveState();
+    renderAll();
+}
+
+function adjustRobotEnergy(id, amount) {
+    const robot = ROBOTS.find(r => r.id === id);
+    if (!robot) return;
+    state.robots[id] = Math.max(0, Math.min(robot.maxEnergy, (state.robots[id] || robot.startingEnergy) + amount));
+    saveState();
+    renderAll();
+}
+
+function resetRobotEnergy(id) {
+    const robot = ROBOTS.find(r => r.id === id);
+    if (!robot) return;
+    state.robots[id] = robot.startingEnergy;
+    saveState();
+    renderAll();
+}
+
+// ===== NPCS =====
+function renderNPC(index) {
+    const name = NPC_NAMES[index];
+    const current = state.npcs[index];
+
+    const card = document.createElement("div");
+    card.className = "mc-character-card";
+    card.id = "npc-card-" + index;
+
+    const header = document.createElement("div");
+    header.className = "mc-character-header";
+    header.innerHTML = `
+        <span class="mc-character-name">${name}</span>
+        <span class="mc-npc-counter" id="npc-counter-${index}">${current}/${NPC_MAX}</span>
+    `;
+    card.appendChild(header);
+
+    const tokenRow = document.createElement("div");
+    tokenRow.className = "mc-token-row";
+    tokenRow.id = "npc-tr-" + index;
+
+    for (let i = 0; i < NPC_MAX; i++) {
+        const token = document.createElement("div");
+        token.className = `mc-token npc ${i >= current ? 'spent' : ''}`;
+        token.addEventListener("click", () => setNPCEnergy(index, i + 1));
+        tokenRow.appendChild(token);
+    }
+    card.appendChild(tokenRow);
+
+    const actions = document.createElement("div");
+    actions.className = "mc-actions";
+    actions.innerHTML = `
+        <button class="mc-btn npc" onclick="adjustNPCEnergy(${index}, -1)">Gastar (-1)</button>
+        <button class="mc-btn npc" onclick="adjustNPCEnergy(${index}, 1)">Adicionar (+1)</button>
+        <button class="mc-btn npc ml-auto" onclick="resetNPCEnergy(${index})">Recarregar</button>
+    `;
+    card.appendChild(actions);
+
+    return card;
+}
+
+function setNPCEnergy(index, val) {
+    state.npcs[index] = Math.max(0, Math.min(NPC_MAX, val));
+    saveState();
+    renderAll();
+}
+
+function adjustNPCEnergy(index, amount) {
+    state.npcs[index] = Math.max(0, Math.min(NPC_MAX, state.npcs[index] + amount));
+    saveState();
+    renderAll();
+}
+
+function resetNPCEnergy(index) {
+    state.npcs[index] = NPC_START;
+    saveState();
+    renderAll();
+}
+
+// ===== RENDER ALL =====
+let ROBOTS = [];
+
+function renderAll() {
+    // Fear
+    renderFearTokens();
+
+    // Characters
+    const container = document.getElementById("characters-container");
+    container.innerHTML = "";
+    if (!ROBOTS.length) {
+        container.innerHTML = '<div class="mc-empty">Nenhuma unidade disponível. Carregando...</div>';
+        return;
+    }
+
+    // Sort by model name for consistent order
+    const sorted = [...ROBOTS].sort((a, b) => a.model.localeCompare(b.model));
+    sorted.forEach(robot => {
+        container.appendChild(renderCharacterCard(robot));
+    });
+
+    // NPCs
+    const npcContainer = document.getElementById("npcs-container");
+    npcContainer.innerHTML = "";
+    for (let i = 0; i < NPC_NAMES.length; i++) {
+        npcContainer.appendChild(renderNPC(i));
+    }
+}
+
+// ===== INIT =====
+async function init() {
+    loadState();
+
+    try {
+        const res = await fetch("data/robots.json");
+        ROBOTS = await res.json();
+    } catch (e) {
+        document.getElementById("characters-container").innerHTML =
+            '<div class="mc-empty">Erro ao carregar unidades. Verifique data/robots.json</div>';
+    }
+
+    renderAll();
+}
+
+init();
+</script>
+</body>
+</html>

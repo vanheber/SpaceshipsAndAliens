@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WARP-Unit — Documentação</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="../warp.css">
+</head>
+<body class="docs-body">
+
+    <button class="docs-hamburger" onclick="toggleSidebar()" aria-label="Menu">&#9776;</button>
+    <div class="docs-overlay" id="docs-overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="docs-sidebar" id="docs-sidebar">
+        <a href="../index.html" class="docs-sidebar-logo">&#8592; WARP-Unit</a>
+
+        <span class="docs-sidebar-section">Páginas</span>
+        <a href="../index.html">Catálogo de Unidades</a>
+        <a href="../oneshot.html">Gerador de Missão</a>
+        <a href="../mothership.html">Nave-Mãe Tiburon</a>
+        <a href="../missioncontrol.html">Controle da Missão</a>
+
+        <span class="docs-sidebar-section">Regras</span>
+        <a href="#" data-doc="mecanicas">Mecânica de Rolagem</a>
+        <a href="#" data-doc="energia">Sistema de Energia</a>
+
+        <span class="docs-sidebar-section">Referência</span>
+        <a href="#" data-doc="personagens">Catálogo de Unidades</a>
+        <a href="#" data-doc="schema">Schema de Dados</a>
+        <a href="#" data-doc="missao">Painel do Mestre</a>
+        <a href="#" data-doc="nave">Nave-Mãe Tiburon</a>
+
+        <div class="docs-back-link">&copy; 2026 — WARP-Unit Docs</div>
+    </nav>
+
+    <div class="docs-main">
+        <div class="docs-content" id="docs-content">
+            <div class="docs-loading">Selecione um tópico na navegação.</div>
+        </div>
+    </div>
+
+    <script>
+        const sidebar = document.getElementById("docs-sidebar");
+        const overlay = document.getElementById("docs-overlay");
+        const content = document.getElementById("docs-content");
+        const navLinks = document.querySelectorAll(".docs-sidebar a[data-doc]");
+
+        function toggleSidebar() {
+            sidebar.classList.toggle("open");
+            overlay.classList.toggle("open");
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove("open");
+            overlay.classList.remove("open");
+        }
+
+        navLinks.forEach(link => {
+            link.addEventListener("click", async (e) => {
+                e.preventDefault();
+                closeSidebar();
+
+                const doc = link.dataset.doc;
+                content.innerHTML = '<div class="docs-loading">Carregando...</div>';
+
+                navLinks.forEach(l => l.classList.remove("active"));
+                link.classList.add("active");
+
+                try {
+                    const res = await fetch(`${doc}.md`);
+                    if (!res.ok) throw new Error("Não encontrado");
+                    const md = await res.text();
+                    content.innerHTML = marked.parse(md);
+                } catch {
+                    content.innerHTML = '<div class="docs-error">Falha ao carregar o documento.</div>';
+                }
+            });
+        });
+
+        // Carrega o primeiro doc automaticamente ao abrir
+        if (navLinks.length > 0) {
+            navLinks[0].click();
+        }
+    </script>
+
+</body>
+</html>
