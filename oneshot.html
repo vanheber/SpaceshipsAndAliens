@@ -11,7 +11,7 @@
 
 <header>
     <h1>SISTEMA OPERACIONAL WARP</h1>
-    <p>Gerador de Missão One-Shot &mdash; Exploração Planetária<span class="ai-badge" id="ai-badge">🤖 IA</span></p>
+    <p>Gerador de Missão One-Shot &mdash; Exploração Planetária<span class="ai-badge" id="ai-badge"></span></p>
 </header>
 
 <div class="quick-link-wrap">
@@ -108,8 +108,24 @@
 
 <script>
 // ═══════════════════════════════════════════
-// DATA POOLS (loaded from JSON)
+// DATA POOLS (loaded from JSON, with inline fallback)
 // ═══════════════════════════════════════════
+
+const DEFAULT_PLANET_TYPES = [
+  { type: "Deserto de Sílica", desc: "Um mundo árido coberto por dunas de areia vítrea e cristais de sílica que refletem a luz da estrela-mãe como um mar de brasas. Tempestades de partículas abrasivas varrem a superfície em ciclos de quatorze horas." },
+  { type: "Selva Bioluminescente", desc: "Uma densa cobertura vegetal emite um brilho azul-esverdeado constante, tornando a noite tão clara quanto o dia. A umidade beira os 98% e o sub-bosque vibra com o som de vida alienígena." },
+  { type: "Oceano de Metano", desc: "A superfície é um oceano escuro de metano e etano líquidos, pontuado por icebergs de hidrocarbonetos congelados. Os sensores indicam correntes profundas com algo grande se movendo." },
+  { type: "Tundra Cristalina", desc: "Planícies intermináveis de gelo azulado cobrem o planeta. Formações de cristal hexagonal brotam do solo como árvores petrificadas, cantarolando em frequências hipnóticas quando o vento passa." },
+  { type: "Mundo Vulcânico", desc: "Rios de lava serpenteiam por planícies de basalto recém-formado. Os scanners detectam bolsões de ar respirável e depósitos minerais raros expostos pela atividade tectônica incessante." },
+  { type: "Cavernas Subterrâneas", desc: "A superfície é inóspita, mas uma rede de cavernas se estende por quilômetros abaixo. Túneis de basalto com formações de cristal luminescentes fornecem luz natural." },
+  { type: "Pântano Fúngico", desc: "Um ecossistema dominado por fungos de todos os tamanhos. O ar é denso com esporos e poeiras de micélio brilham no escuro como estrelas terrestres." },
+  { type: "Mundo Oceânico", desc: "Cobertura de 99% de água líquida com apenas alguns arquipélagos vulcânicos como terra firme. Sensores detectam estruturas geométricas no leito oceânico." },
+  { type: "Ermo Radioativo", desc: "O solo ainda brilha fracamente em alguns espectros. Ruínas de uma civilização carbonizada pontuam o horizonte. Em mil anos, será habitável." },
+  { type: "Floresta de Cristal", desc: "Gigantescos cristais naturais brotam do solo como árvores. A luz solar refrata em incontáveis cores, criando um espetáculo visual permanente." },
+  { type: "Mundo Tempestade", desc: "A atmosfera é um turbilhão perpétuo de tempestades elétricas. O olho de cada tempestade é uma zona de calmaria onde a vida prospera." },
+  { type: "Planície de Cinzas", desc: "Cinzas vulcânicas com metros de profundidade cobrem o terreno. O solo abaixo é fértil, mas nenhuma planta nativa sobreviveu à última erupção cataclísmica." }
+];
+const DEFAULT_PLANET_NAMES = { codes: ["KX", "TD", "OP", "XR", "VY", "ZQ", "NF", "HS"], prefixes: [], suffixes: [] };
 
 let PLANET_TYPES = [];
 let PLANET_NAMES = { codes: [], prefixes: [], suffixes: [] };
@@ -143,6 +159,7 @@ const STORAGE_KEY = "warp-unit-oneshot";
 let planet = null;
 let discoveries = [];
 let discoveryIndex = 0;
+let lastAIProvider = null;
 
 // ═══════════════════════════════════════════
 // DATA LOADING
@@ -179,27 +196,47 @@ async function loadDataPools() {
             RESCUE_LOCATIONS = discoveriesData.rescueMissions.locations;
             RESCUE_PERILS = discoveriesData.rescueMissions.perils;
         }
+        return true;
     } catch (e) {
-        console.warn("Data pools failed to load. AI generation will still work if online.");
+        console.warn("Data files could not be loaded. Using inline fallback data.");
+        PLANET_TYPES = DEFAULT_PLANET_TYPES;
+        PLANET_NAMES = DEFAULT_PLANET_NAMES;
+        return false;
     }
 }
 
 // ═══════════════════════════════════════════
-// AI GENERATION (Pollinations.ai)
+// AI GENERATION (multi-provider cascade)
 // ═══════════════════════════════════════════
 
-const AI_ENDPOINT = "https://text.pollinations.ai/openai";
+const AI_PROVIDERS = [
+    {
+        name: "Pollinations.ai",
+        endpoint: "https://text.pollinations.ai/openai",
+        model: "openai",
+        timeout: 10000,
+        headers: { "Content-Type": "application/json" }
+    },
+    {
+        name: "Hermes (uncloseai)",
+        endpoint: "https://hermes.ai.unturf.com/v1/chat/completions",
+        model: "adamo1139/Hermes-3-Llama-3.1-8B-FP8-Dynamic",
+        timeout: 10000,
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer warp-unit" }
+    }
+];
 
-async function callAI(systemPrompt, userPrompt) {
+async function callAI(provider, systemPrompt, userPrompt) {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
+    const timeout = setTimeout(() => controller.abort(), provider.timeout);
 
     try {
-        const res = await fetch(AI_ENDPOINT, {
+        const res = await fetch(provider.endpoint, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            cache: "no-store",
+            headers: provider.headers,
             body: JSON.stringify({
-                model: "openai",
+                model: provider.model,
                 messages: [
                     { role: "system", content: systemPrompt },
                     { role: "user", content: userPrompt }
@@ -225,14 +262,24 @@ async function callAI(systemPrompt, userPrompt) {
     }
 }
 
+async function tryAIProviders(systemPrompt, userPrompt) {
+    for (const provider of AI_PROVIDERS) {
+        const result = await callAI(provider, systemPrompt, userPrompt);
+        if (result) return { data: result, providerName: provider.name };
+    }
+    return { data: null, providerName: null };
+}
+
 async function aiGeneratePlanet() {
     const validTypes = PLANET_TYPES.map(t => t.type).join(", ");
-    const result = await callAI(
+    const seed = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    const { data: result, providerName } = await tryAIProviders(
         "You are the AI Captain of an interstellar exploration starship. Generate creative sci-fi planet data. Always respond with valid JSON only, no markdown, no other text.",
-        `Generate a brand new unexplored planet for a sci-fi RPG. Be creative and surprising. Respond with EXACTLY this JSON structure (JSON only):\n{"name":"a planet code like XX-999a (two letters, dash, three digits, one letter)","type":"one exactly from: ${validTypes}","desc":"2-3 atmospheric sentences in Portuguese describing the planet"}`
+        `Generate a brand new unexplored planet for a sci-fi RPG. Be creative and surprising. Respond with EXACTLY this JSON structure (JSON only):\n{"name":"a planet code like XX-999a (two letters, dash, three digits, one letter)","type":"one exactly from: ${validTypes}","desc":"2-3 atmospheric sentences in Portuguese describing the planet"}\n(seed: ${seed})`
     );
     if (!result?.name || !result?.type || !result?.desc) return null;
     if (!PLANET_TYPES.find(t => t.type === result.type)) return null;
+    lastAIProvider = providerName;
     return { name: result.name, type: result.type, desc: result.desc };
 }
 
@@ -254,11 +301,14 @@ async function aiGenerateDiscovery(discNumber, discTotal) {
         context = `Até agora: ${summary}. Último evento (${lastLabel}): ${last.description.substring(0, 100)}`;
     }
 
-    const result = await callAI(
+    const seed = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    const { data: result, providerName } = await tryAIProviders(
         "You are the AI Captain of the Aegis Tiburon exploration starship generating encounters for a sci-fi RPG campaign. The ship has a crew of androids exploring unknown space. Encounters can happen in FOUR contexts: 1) PLANETARY: on a planet surface, 2) SPACE: in orbit or deep space (alien ships, pirates, anomalies, derelicts), 3) SHIP: aboard the Tiburon itself (system failures, intruders, AI anomalies, hidden compartments, crew incidents), 4) RESCUE: distress signals, stranded vessels, survivors needing evacuation. Each new encounter should connect to or build upon previous events for narrative continuity. Always respond with valid JSON only, no markdown. Be creative and atmospheric in Portuguese.",
-        `Ship: Aegis Tiburon, 121m heavy gunship converted to exploration mothership. Crew of android robots. AI Captain integrated into ship systems.\n\nPlanet: ${planet.name} (${planet.type}) — ${planet.desc}\n\nEncounter ${discNumber} of ${discTotal}.\n${context}\n\nGenerate ONE encounter of ANY of the four types (planetary, space, ship, or rescue). Be surprising. Respond with EXACTLY this JSON:\n{"type":"planet|space|ship|rescue","approach":"for planet: arduous|sudden|resting; for space: proximity|longscan|distress; for ship: alert|routine|report; for rescue: emergency|cautious|calculated","description":"2-3 vivid sentences in Portuguese","location":"where this happens, in Portuguese","peril":"specific threat, danger or challenge, in Portuguese","perilDC":number(8-22),"reward":"what the crew gains, in Portuguese"}`
+        `Ship: Aegis Tiburon, 121m heavy gunship converted to exploration mothership. Crew of android robots. AI Captain integrated into ship systems.\n\nPlanet: ${planet.name} (${planet.type}) — ${planet.desc}\n\nEncounter ${discNumber} of ${discTotal}.\n${context}\n\nGenerate ONE encounter of ANY of the four types (planetary, space, ship, or rescue). Be surprising. Respond with EXACTLY this JSON:\n{"type":"planet|space|ship|rescue","approach":"for planet: arduous|sudden|resting; for space: proximity|longscan|distress; for ship: alert|routine|report; for rescue: emergency|cautious|calculated","description":"2-3 vivid sentences in Portuguese","location":"where this happens, in Portuguese","peril":"specific threat, danger or challenge, in Portuguese","perilDC":number(8-22),"reward":"what the crew gains, in Portuguese"}\n(seed: ${seed})`
     );
     if (!result?.type || !result?.approach || !result?.description) return null;
+
+    lastAIProvider = providerName;
 
     // Normalize type
     const types = {planet: "planet", space: "space", ship: "ship", nave: "ship", espaco: "space", orbital: "space", rescue: "rescue", resgate: "rescue"};
@@ -276,8 +326,15 @@ async function aiGenerateDiscovery(discNumber, discTotal) {
     };
 }
 
-function showAIBadge(visible) {
-    document.getElementById("ai-badge").classList.toggle("show", visible);
+function showAIBadge(providerName) {
+    const badge = document.getElementById("ai-badge");
+    if (providerName) {
+        badge.textContent = `🤖 ${providerName}`;
+        badge.classList.add("show");
+    } else {
+        badge.textContent = "📁 Dados Locais";
+        badge.classList.add("show");
+    }
 }
 
 // Encounter type (planet/space/ship/rescue) - 25% each
@@ -292,6 +349,7 @@ function getEncounterType() {
 function makeApproach(key, encounterType) {
     if (encounterType === "space") return makeSpaceApproach(key);
     if (encounterType === "ship") return makeShipApproach(key);
+    if (encounterType === "rescue") return makeRescueApproach(key);
     // Planet
     if (key === "arduous") return {
         key: "arduous", label: "TERRENO TRAIÇOEIRO", class: "banner-arduous",
@@ -461,7 +519,7 @@ function generateLocalDiscovery(encounterType) {
 
 function saveMission() {
     if (!planet) return;
-    const state = { planet, discoveries, discoveryIndex, currentPage: document.querySelector(".page.active")?.id || "page-planet" };
+    const state = { planet, discoveries, discoveryIndex, lastAIProvider, currentPage: document.querySelector(".page.active")?.id || "page-planet" };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
@@ -494,6 +552,8 @@ function restoreMission() {
         planet = state.planet;
         discoveries = state.discoveries || [];
         discoveryIndex = state.discoveryIndex || 0;
+        lastAIProvider = state.lastAIProvider || null;
+        if (lastAIProvider) showAIBadge(lastAIProvider);
         if (state.currentPage === "page-log") { showPage("page-log"); renderLog(); }
         else if (state.currentPage === "page-expedition") { showPage("page-expedition"); setupExpeditionUI(); }
         else { showPage("page-planet"); showPlanetResult(); }
@@ -506,10 +566,11 @@ function clearMission() {
     planet = null;
     discoveries = [];
     discoveryIndex = 0;
+    lastAIProvider = null;
     document.getElementById("planet-result").style.display = "none";
     document.getElementById("planet-expedition-area").style.display = "none";
     document.getElementById("btn-generate").textContent = "GERAR PLANETA";
-    showAIBadge(false);
+    document.getElementById("ai-badge").classList.remove("show");
     showPage("page-planet");
 }
 
@@ -522,16 +583,16 @@ async function generatePlanet() {
     btn.textContent = "GERANDO...";
     btn.disabled = true;
 
-    let fromAI = false;
+    lastAIProvider = null;
+    planet = null;
     try {
         const aiResult = await aiGeneratePlanet();
         if (aiResult) {
             planet = { name: aiResult.name, type: aiResult.type, desc: aiResult.desc, discTotal: d6() };
-            fromAI = true;
         }
     } catch (e) {}
 
-    if (!fromAI) {
+    if (!planet) {
         const typeData = pick(PLANET_TYPES.length ? PLANET_TYPES : [{ type: "Mundo Desconhecido", desc: "Um planeta inexplorado." }]);
         planet = { name: generatePlanetName(), type: typeData.type, desc: typeData.desc, discTotal: d6() };
     }
@@ -539,7 +600,7 @@ async function generatePlanet() {
     discoveries = [];
     discoveryIndex = 0;
     btn.disabled = false;
-    showAIBadge(fromAI);
+    showAIBadge(lastAIProvider);
     showPlanetResult();
     saveMission();
 }
@@ -610,8 +671,8 @@ async function nextDiscovery() {
     btn.textContent = "GERANDO...";
     btn.disabled = true;
 
+    lastAIProvider = null;
     let disc;
-    let fromAI = false;
     try {
         const aiResult = await aiGenerateDiscovery(discoveries.length + 1, planet.discTotal);
         if (aiResult) {
@@ -625,7 +686,6 @@ async function nextDiscovery() {
                 reward: { type: pick(REWARD_TYPES.length ? REWARD_TYPES : ["recursos"]), text: aiResult.reward },
                 index: discoveries.length + 1
             };
-            fromAI = true;
         }
     } catch (e) {}
 
@@ -637,7 +697,7 @@ async function nextDiscovery() {
     discoveryIndex = discoveries.length;
 
     btn.disabled = false;
-    showAIBadge(fromAI);
+    showAIBadge(lastAIProvider);
 
     if (discoveryIndex > planet.discTotal) {
         finishExpedition();
@@ -794,7 +854,12 @@ function exportMissionMD() {
 // ═══════════════════════════════════════════
 
 window.onload = async function() {
-    await loadDataPools();
+    const dataLoaded = await loadDataPools();
+    if (!dataLoaded) {
+        const badge = document.getElementById("ai-badge");
+        badge.textContent = "📁 Dados Locais";
+        badge.classList.add("show");
+    }
     restoreMission();
 };
 </script>
