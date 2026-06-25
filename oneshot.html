@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WARP-Unit | Gerador de Missão One-Shot</title>
     <link rel="stylesheet" href="warp.css">
+    <style>
+        .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:999; align-items:center; justify-content:center; }
+        .modal-card { background:var(--bg-card,#16162a); border:1px solid var(--border,#2a2a5a); border-radius:12px; padding:28px 24px; width:360px; max-width:90vw; }
+        .modal-card h2 { margin:0 0 8px; font-size:1.1em; color:var(--accent-hope,#4fc3f7); }
+        .modal-card .text-muted-sm { font-size:.85em; opacity:.6; margin-bottom:16px; }
+        .modal-card input { display:block; width:100%; box-sizing:border-box; margin-bottom:10px; padding:10px 12px; border-radius:8px; border:1px solid var(--border,#2a2a5a); background:var(--bg,#0a0a1e); color:var(--text,#e0e0e0); font-family:inherit; font-size:.95em; }
+        .modal-card input:focus { outline:none; border-color:var(--accent-hope,#4fc3f7); }
+        .login-error { color:var(--accent-fear,#e06c75); font-size:.85em; margin-top:8px; text-align:center; }
+    </style>
 
 </head>
 <body>
@@ -104,7 +113,23 @@
     <a href="missioncontrol.html">Controle da Missão</a>
     &nbsp;·&nbsp;
     <a href="#" onclick="clearMission();return false;">Limpar Missão</a>
+    &nbsp;·&nbsp;
+    <a href="#" id="auth-link" onclick="toggleLogin();return false;">🔑 Login</a>
 </footer>
+
+<div id="login-modal" class="modal-overlay">
+    <div class="modal-card">
+        <h2>Autenticação</h2>
+        <p class="text-muted-sm">Senha + código do Google Authenticator</p>
+        <input type="password" id="login-password" placeholder="Senha" autocomplete="off">
+        <input type="text" id="login-totp" placeholder="Código TOTP (6 dígitos)" maxlength="6" inputmode="numeric" autocomplete="off">
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="doLogin()">ENTRAR</button>
+            <button class="btn btn-secondary" onclick="toggleLogin()">CANCELAR</button>
+        </div>
+        <div id="login-error" class="login-error" style="display:none;"></div>
+    </div>
+</div>
 
 <script>
 // ═══════════════════════════════════════════
@@ -160,6 +185,7 @@ let planet = null;
 let discoveries = [];
 let discoveryIndex = 0;
 let lastAIProvider = null;
+let isAuthenticated = false;
 
 // ═══════════════════════════════════════════
 // DATA LOADING
@@ -209,22 +235,37 @@ async function loadDataPools() {
 // AI GENERATION (multi-provider cascade)
 // ═══════════════════════════════════════════
 
-const AI_PROVIDERS = [
-    {
-        name: "Pollinations.ai",
-        endpoint: "https://text.pollinations.ai/openai",
-        model: "openai",
-        timeout: 10000,
-        headers: { "Content-Type": "application/json" }
-    },
-    {
-        name: "Hermes (uncloseai)",
-        endpoint: "https://hermes.ai.unturf.com/v1/chat/completions",
-        model: "adamo1139/Hermes-3-Llama-3.1-8B-FP8-Dynamic",
-        timeout: 10000,
-        headers: { "Content-Type": "application/json", "Authorization": "Bearer warp-unit" }
+let AI_PROVIDERS = [];
+
+function buildProviderList() {
+    const providers = [];
+    if (isAuthenticated) {
+        providers.push({
+            name: "Gemini",
+            endpoint: window.location.origin + "/api/proxy.php",
+            model: "gemini-3.1-flash-lite-preview",
+            timeout: 30000,
+            headers: { "Content-Type": "application/json" }
+        });
     }
-];
+    providers.push(
+        {
+            name: "Pollinations.ai",
+            endpoint: "https://text.pollinations.ai/openai",
+            model: "openai",
+            timeout: 10000,
+            headers: { "Content-Type": "application/json" }
+        },
+        {
+            name: "Hermes (fallback)",
+            endpoint: "https://hermes.ai.unturf.com/v1/chat/completions",
+            model: "adamo1139/Hermes-3-Llama-3.1-8B-FP8-Dynamic",
+            timeout: 15000,
+            headers: { "Content-Type": "application/json", "Authorization": "Bearer warp-unit" }
+        }
+    );
+    AI_PROVIDERS = providers;
+}
 
 async function callAI(provider, systemPrompt, userPrompt) {
     const controller = new AbortController();
@@ -334,6 +375,72 @@ function showAIBadge(providerName) {
     } else {
         badge.textContent = "📁 Dados Locais";
         badge.classList.add("show");
+    }
+}
+
+async function checkAuth() {
+    try {
+        const res = await fetch('/api/auth.php?check=1');
+        if (!res.ok) return false;
+        const data = await res.json();
+        return data.authenticated === true;
+    } catch (e) { return false; }
+}
+
+function toggleLogin() {
+    const modal = document.getElementById('login-modal');
+    if (modal.style.display === 'flex') {
+        modal.style.display = 'none';
+    } else {
+        modal.style.display = 'flex';
+        document.getElementById('login-password').value = '';
+        document.getElementById('login-totp').value = '';
+        document.getElementById('login-error').style.display = 'none';
+        document.getElementById('login-password').focus();
+    }
+}
+
+async function doLogin() {
+    const password = document.getElementById('login-password').value;
+    const totp = document.getElementById('login-totp').value;
+    const errorEl = document.getElementById('login-error');
+    errorEl.style.display = 'none';
+    if (!password) { errorEl.textContent = 'Digite a senha'; errorEl.style.display = 'block'; return; }
+    try {
+        const res = await fetch('/api/auth.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password, totp }) });
+        const data = await res.json();
+        if (data.success) {
+            isAuthenticated = true;
+            buildProviderList();
+            toggleLogin();
+            updateAuthUI();
+            showAIBadge(null);
+        } else {
+            errorEl.textContent = data.error || 'Falha na autenticacao';
+            errorEl.style.display = 'block';
+        }
+    } catch (e) {
+        errorEl.textContent = 'Erro de conexao com o servidor';
+        errorEl.style.display = 'block';
+    }
+}
+
+function doLogout() {
+    isAuthenticated = false;
+    buildProviderList();
+    document.cookie = 'warp_auth=; Max-Age=0; path=/';
+    updateAuthUI();
+    showAIBadge(null);
+}
+
+function updateAuthUI() {
+    const link = document.getElementById('auth-link');
+    if (isAuthenticated) {
+        link.textContent = '🔓 Logout';
+        link.onclick = function() { doLogout(); return false; };
+    } else {
+        link.textContent = '🔑 Login';
+        link.onclick = function() { toggleLogin(); return false; };
     }
 }
 
@@ -855,10 +962,13 @@ function exportMissionMD() {
 
 window.onload = async function() {
     const dataLoaded = await loadDataPools();
+    isAuthenticated = await checkAuth();
+    buildProviderList();
+    updateAuthUI();
     if (!dataLoaded) {
-        const badge = document.getElementById("ai-badge");
-        badge.textContent = "📁 Dados Locais";
-        badge.classList.add("show");
+        showAIBadge(null);
+    } else if (isAuthenticated) {
+        showAIBadge(null);
     }
     restoreMission();
 };

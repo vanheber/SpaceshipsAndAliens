@@ -10,17 +10,24 @@ if [ ! -f "$ENV_FILE" ]; then
     exit 1
 fi
 
-source "$ENV_FILE"
+read_env_var() {
+    local key="$1"
+    grep "^${key}=" "$ENV_FILE" | head -1 | cut -d= -f2-
+}
 
-REQUIRED_VARS=(FTP_HOST FTP_USER FTP_PASSWORD FTP_PATH)
-for var in "${REQUIRED_VARS[@]}"; do
+FTP_HOST=$(read_env_var "FTP_HOST")
+FTP_USER=$(read_env_var "FTP_USER")
+FTP_PASSWORD=$(read_env_var "FTP_PASSWORD")
+FTP_PATH=$(read_env_var "FTP_PATH")
+FTP_PORT=$(read_env_var "FTP_PORT")
+PORT="${FTP_PORT:-21}"
+
+for var in FTP_HOST FTP_USER FTP_PASSWORD FTP_PATH; do
     if [ -z "${!var:-}" ]; then
         echo "Erro: $var não definido no .env"
         exit 1
     fi
 done
-
-PORT="${FTP_PORT:-21}"
 
 if ! command -v lftp &>/dev/null; then
     echo "lftp não encontrado. Instale com: brew install lftp"
@@ -34,7 +41,6 @@ set ftp:ssl-allow no
 set mirror:use-pget-n 5
 mirror --reverse --delete --verbose \
     --exclude .git/ \
-    --exclude .env \
     --exclude .env.example \
     --exclude .gitignore \
     --exclude deploy.sh \
