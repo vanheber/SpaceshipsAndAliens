@@ -250,6 +250,13 @@ function buildProviderList() {
     }
     providers.push(
         {
+            name: "NVIDIA (DeepSeek V4 Flash)",
+            endpoint: window.location.origin + "/api/proxy-nvidia.php",
+            model: "deepseek-ai/deepseek-v4-flash",
+            timeout: 15000,
+            headers: { "Content-Type": "application/json" }
+        },
+        {
             name: "Pollinations.ai",
             endpoint: "https://text.pollinations.ai/openai",
             model: "openai",

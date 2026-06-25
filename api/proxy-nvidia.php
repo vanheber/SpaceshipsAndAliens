@@ -1,0 +1,84 @@
+<?php
+$envFile = __DIR__ . '/../.env';
+if (file_exists($envFile)) {
+    foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+        $line = trim($line);
+        if ($line === '' || $line[0] === '#') continue;
+        putenv($line);
+    }
+}
+
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Access-Control-Max-Age: 86400');
+header('Cache-Control: no-store, must-revalidate');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+    exit;
+}
+
+$input = json_decode(file_get_contents('php://input'), true);
+if (!$input || empty($input['messages'])) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Invalid request']);
+    exit;
+}
+
+$model = $input['model'] ?? 'deepseek-ai/deepseek-v4-flash';
+$messages = $input['messages'];
+$temperature = $input['temperature'] ?? 0.95;
+
+$nvidiaKey = getenv('NVIDIA_KEY');
+if (!$nvidiaKey) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Server misconfigured: NVIDIA_KEY not set']);
+    exit;
+}
+
+$url = 'https://integrate.api.nvidia.com/v1/chat/completions';
+
+$body = [
+    'model' => $model,
+    'messages' => $messages,
+    'temperature' => floatval($temperature),
+    'max_tokens' => 512
+];
+
+$ch = curl_init($url);
+curl_setopt_array($ch, [
+    CURLOPT_HTTPHEADER => [
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . $nvidiaKey
+    ],
+    CURLOPT_POSTFIELDS => json_encode($body),
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_CONNECTTIMEOUT => 5
+]);
+
+$response = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$curlError = curl_error($ch);
+curl_close($ch);
+
+if ($curlError) {
+    http_response_code(502);
+    echo json_encode(['error' => 'Upstream connection failed']);
+    exit;
+}
+
+if ($httpCode !== 200) {
+    http_response_code($httpCode >= 400 ? $httpCode : 500);
+    echo $response;
+    exit;
+}
+
+header('Content-Type: application/json');
+echo $response;
