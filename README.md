@@ -1,6 +1,6 @@
 # WARP-Unit — Sistema Operacional de Exploração Interstelar
 
-Aplicação web estática (HTML + CSS + JS Vanilla) para auxiliar sessões de RPG de mesa sci-fi. Três páginas integradas que cobrem todo o fluxo de jogo: gerenciamento de tripulação androide, geração procedural de missões planetárias e referência da nave-mãe.
+Aplicação web (HTML + CSS + JS Vanilla + PHP) para auxiliar sessões de RPG de mesa sci-fi. Três páginas integradas que cobrem todo o fluxo de jogo: gerenciamento de tripulação androide, geração procedural de missões planetárias via IA (com autenticação do capitão) e referência da nave-mãe.
 
 ---
 
@@ -9,7 +9,7 @@ Aplicação web estática (HTML + CSS + JS Vanilla) para auxiliar sessões de RP
 | Página | Função |
 |---|---|
 | **[index.html](index.html)** | Catálogo de 10 androides + ficha de personagem + rolador de dados Daggerheart |
-| **[oneshot.html](oneshot.html)** | Gerador procedural de planetas com IA (Pollinations) + fallback em pools locais |
+| **[oneshot.html](oneshot.html)** | Gerador procedural de planetas com IA (cascade multi-provedor: Gemini → NVIDIA → Pollinations → Hermes → Local) + login do capitão (TOTP) |
 | **[mothership.html](mothership.html)** | Descrição detalhada da nave-mãe Tiburon, veículos auxiliares e galeria |
 
 ---
@@ -19,8 +19,10 @@ Aplicação web estática (HTML + CSS + JS Vanilla) para auxiliar sessões de RP
 - **HTML5** — Estrutura semântica, 3 SPAs independentes
 - **CSS3** — Tema escuro futurista centralizado em [warp.css](warp.css), custom properties, responsivo
 - **JavaScript Vanilla** — Lógica de estado, renderização, persistência e chamadas à API de IA
+- **PHP 8.x** — Proxies de API no servidor (`api/`), sem framework
 - **localStorage** — Persistência de estado entre sessões em todas as páginas
-- **Pollinations.ai** — Geração procedural de planetas e descobertas via IA (gratuito, sem auth)
+- **Gemini 3.1 Flash Lite** — Provedor premium para usuários autenticados
+- **NVIDIA DeepSeek V4 Flash** — Provedor gratuito para visitantes (via build.nvidia.com)
 
 ---
 
@@ -38,7 +40,10 @@ Aplicação web estática (HTML + CSS + JS Vanilla) para auxiliar sessões de RP
 
 - **Geração de planetas**: 12 tipos, nomes código XX-999a, descrições atmosféricas
 - **Expedição passo a passo**: abordagem + descoberta + perigo (DC) + recompensa
-- **IA integrada**: tenta Pollinations.ai primeiro, fallback silencioso para pools locais
+- **Cascade multi-provedor**: Gemini (auth) → NVIDIA (grátis) → Pollinations → Hermes → Local
+- **Autenticação do capitão**: bcrypt + TOTP (Google Authenticator), cookie HMAC-SHA256
+- **Contexto narrativo**: últimos 3 eventos completos enviados no prompt para continuidade
+- **Badge do provedor**: `🤖 Gemini`, `🤖 NVIDIA`, `🤖 Pollinations` etc.
 - **Diário de bordo**: registro completo das descobertas ao final
 - **Persistência**: missão inteira salva em localStorage (planeta, descobertas, progresso)
 - **Dados externos**: `planet-types.json`, `planet-names.json`, `discoveries.json`
@@ -59,10 +64,19 @@ Aplicação web estática (HTML + CSS + JS Vanilla) para auxiliar sessões de RP
 ```
 WARP-Unit/
 ├── index.html              Catálogo de unidades + ficha + dados
-├── oneshot.html            Gerador de missão one-shot
+├── oneshot.html            Gerador de missão one-shot (auth + IA cascade)
 ├── mothership.html         Nave-mãe Tiburon
 ├── warp.css                CSS centralizado (tema + componentes)
+├── .env                    Credenciais locais (GEMINI_KEY, AUTH_PASSWORD, TOTP_SECRET, NVIDIA_KEY)
+├── .env.example            Template do .env (committado)
+├── .htaccess               Protege .env contra acesso direto
+├── VERSION                 Versão atual (v1.1-beta)
+├── ROADMAP.md              Roadmap do projeto
 ├── deploy.sh               Script de deploy via lftp
+├── api/
+│   ├── auth.php            Login bcrypt + TOTP, cookie HMAC-SHA256
+│   ├── proxy.php           Proxy Gemini (requer cookie de auth)
+│   └── proxy-nvidia.php    Proxy NVIDIA DeepSeek V4 Flash (público)
 ├── data/
 │   ├── robots.json         Catálogo de 10 androides
 │   ├── config.json         Configuração do drone de backup
