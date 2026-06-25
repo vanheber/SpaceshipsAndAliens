@@ -344,9 +344,11 @@ async function aiGenerateDiscovery(discNumber, discTotal) {
         const summary = Object.entries(typeCount)
             .map(([k, v]) => `${v} ${k === "planet" ? "planetário(s)" : k === "space" ? "espacial(is)" : k === "rescue" ? "resgate(s)" : "a bordo"}`)
             .join(", ");
-        const last = discoveries[discoveries.length - 1];
-        const lastLabel = last.encounterType === "planet" ? "superfície" : last.encounterType === "space" ? "espaço" : last.encounterType === "rescue" ? "resgate" : "bordo";
-        context = `Até agora: ${summary}. Último evento (${lastLabel}): ${last.description.substring(0, 100)}`;
+        const recent = discoveries.slice(-3);
+        const detailLines = recent.map(d =>
+            `  [${d.encounterType}] ${d.location}: ${d.description.substring(0, 200)}`
+        );
+        context = `Histórico recente (${recent.length} último(s)):\n${detailLines.join("\n")}\n\nTotal de eventos até agora: ${summary}`;
     }
 
     const seed = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
