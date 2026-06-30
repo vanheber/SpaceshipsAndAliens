@@ -56,7 +56,7 @@ A tripulação é composta por androides humanoides com rostos sintéticos reali
 - **RSI Constellation c9** — Artilharia tática. Personalidade: intenso, leal, age antes de pensar. Habilidade: Sobrecarga de Canhão.
 - **Crusader Spirit-E** — Infiltradora silenciosa. Personalidade: quieta, observadora, presença quase fantasma. Habilidade: Camuflagem Quântica.
 - **C.O. Nomad n1** — Explorador de fronteira. Personalidade: resiliente, otimista, acredita que todo planeta tem algo a ensinar. Habilidade: Sobrevivência de Chassi.
-- **Apoio-Drone D12** — Médica de campo. Personalidade: compassiva, incansável, prioriza os outros. Habilidade: Sutura de Nanites.
+- **UAC HD-12** — Médica de campo. Personalidade: compassiva, incansável, prioriza os outros. Habilidade: Sutura de Nanites.
 - **Aegis Eclipse-AI** — Hacker de sistemas. Personalidade: enigmático, irônico, está sempre processando algo que não conta. Habilidade: Invasão de Rede Local.
 
 > **Nota para o autor humano:** Antes de colar este prompt na IA, risque da lista os androides que não estarão no conto. Deixe apenas 2 a 4. Isso evita que a IA mencione tripulantes ausentes.

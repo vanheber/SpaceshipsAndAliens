@@ -74,7 +74,7 @@ Configuração do drone de backup:
 
 ### `data/planet-types.json`
 
-Array de objetos com tipos de planeta e descrições atmosféricas:
+_Optional fallback apenas._ A IA inventa tipos de planeta livremente; esta lista só é usada se todos os provedores de IA falharem.
 
 ```json
 [
@@ -188,16 +188,35 @@ Missões de resgate com sobreviventes, naves à deriva e sinais de socorro:
 | `locations` | string[] | Locais onde os resgates ocorrem |
 | `perils` | object | Ameaças por categoria, mesma estrutura de `categories` |
 
-### Tipos de Encontro
+### Geração por IA
 
-O gerador de missão sorteia entre 4 tipos de encontro (25% cada):
+Desde v1.1, o gerador de missão prioriza IA para criar descobertas. A IA inventa livremente:
 
-| Tipo | Contexto | Abordagens |
-|---|---|---|
-| `planet` | Superfície planetária | arduous, sudden, resting |
-| `space` | Espaço/órbita | proximity, longscan, distress |
-| `ship` | A bordo da Tiburon | alert, routine, report |
-| `rescue` | Resgate de sobreviventes | emergency, cautious, calculated |
+- **Tipo de encontro**: `planet`, `space`, `ship` ou `rescue`
+- **Abordagem**: rótulo livre em português (sem lista fixa de keywords)
+- **Descrição**, **local**, **perigo** e **recompensa**: textos originais
+- **DC do perigo**: número entre 8 e 22
+
+Se a IA falha (todos os provedores exauridos), o gerador cai no sistema local, que sorteia entre 4 tipos de encontro (25% cada):
+
+| Tipo | Contexto |
+|---|---|
+| `planet` | Superfície planetária |
+| `space` | Espaço/órbita |
+| `ship` | A bordo da Tiburon |
+| `rescue` | Resgate de sobreviventes |
+
+Os dados locais para cada tipo estão em `data/discoveries.json` (categorias, locais, perigos, recompensas).
+
+### Provedores de IA (cascade)
+
+A geração tenta provedores em ordem até um responder:
+
+1. **Gemini** (Google AI) — API key em `localStorage`
+2. **NVIDIA DeepSeek V4 Flash** (build.nvidia.com) — API key em `localStorage`
+3. **Pollinations** (gratuito, sem chave)
+4. **Hermes** (Ollama local, `gemma:4b` legacy)
+5. Fallback para dados locais
 
 ---
 

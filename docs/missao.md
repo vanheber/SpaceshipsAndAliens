@@ -20,6 +20,10 @@ Recurso do mestre para ativar eventos adversos, complicações ou ameaças duran
 
 **Uso**: Clique em uma célula para definir o nível exato. Use os botões +/- para incrementar/decrementar.
 
+### D20 — Rolagem Livre
+
+Um dado de 20 faces (branco com números pretos) para rolagens livres do mestre. Renderizado em 3D com Three.js, animação de quaternion igual aos D12/D6. O visor ocupa 220px de altura.
+
 ### Unidades em Campo
 
 Lista todos os androides disponíveis no catálogo (`data/robots.json`), cada um com seu próprio bloco de energia.

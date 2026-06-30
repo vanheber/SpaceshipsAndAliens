@@ -108,6 +108,8 @@
     &nbsp;·&nbsp;
     <a href="mothership.html">Nave-Mãe</a>
     &nbsp;·&nbsp;
+    <a href="400i.html">Nave Auxiliar 400i</a>
+    &nbsp;·&nbsp;
     <a href="index.html">Catálogo de Unidades</a>
     &nbsp;·&nbsp;
     <a href="missioncontrol.html">Controle da Missão</a>
@@ -319,14 +321,12 @@ async function tryAIProviders(systemPrompt, userPrompt) {
 }
 
 async function aiGeneratePlanet() {
-    const validTypes = PLANET_TYPES.map(t => t.type).join(", ");
     const seed = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
     const { data: result, providerName } = await tryAIProviders(
-        "You are the AI Captain of an interstellar exploration starship. Generate creative sci-fi planet data. Always respond with valid JSON only, no markdown, no other text.",
-        `Generate a brand new unexplored planet for a sci-fi RPG. Be creative and surprising. Respond with EXACTLY this JSON structure (JSON only):\n{"name":"a planet code like XX-999a (two letters, dash, three digits, one letter)","type":"one exactly from: ${validTypes}","desc":"2-3 atmospheric sentences in Portuguese describing the planet"}\n(seed: ${seed})`
+        "You are the AI Captain generating planet scan data for a sci-fi RPG. Be genuinely surprising and original. Invent new, unexpected planet types — do NOT pick from any predefined list. AVOID obvious clichés: no 'ancient ruins', no 'mysterious energy readings', no 'this planet holds secrets', no 'crystal caves', no 'forgotten civilization'. The galaxy is vast and strange — make it actually weird, unsettling, or oddly specific. Always respond with valid JSON only, no markdown, no other text.",
+        `Generate a planet for a sci-fi RPG. Invent a brand new, original type — do not reuse common sci-fi tropes. Surprise the player. Respond with EXACTLY this JSON structure (JSON only):\n{"name":"a planet code like XX-999a (two letters, dash, three digits, one letter)","type":"a short, descriptive, original planet type label in Portuguese (max 4 words)","desc":"2-3 evocative sentences in Portuguese — atmospheric but specific. Avoid clichés, aim for the unexpected."}\n(seed: ${seed})`
     );
     if (!result?.name || !result?.type || !result?.desc) return null;
-    if (!PLANET_TYPES.find(t => t.type === result.type)) return null;
     lastAIProvider = providerName;
     return { name: result.name, type: result.type, desc: result.desc };
 }
@@ -353,8 +353,8 @@ async function aiGenerateDiscovery(discNumber, discTotal) {
 
     const seed = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
     const { data: result, providerName } = await tryAIProviders(
-        "You are the AI Captain of the Aegis Tiburon exploration starship generating encounters for a sci-fi RPG campaign. The ship has a crew of androids exploring unknown space. Encounters can happen in FOUR contexts: 1) PLANETARY: on a planet surface, 2) SPACE: in orbit or deep space (alien ships, pirates, anomalies, derelicts), 3) SHIP: aboard the Tiburon itself (system failures, intruders, AI anomalies, hidden compartments, crew incidents), 4) RESCUE: distress signals, stranded vessels, survivors needing evacuation. Each new encounter should connect to or build upon previous events for narrative continuity. Always respond with valid JSON only, no markdown. Be creative and atmospheric in Portuguese.",
-        `Ship: Aegis Tiburon, 121m heavy gunship converted to exploration mothership. Crew of android robots. AI Captain integrated into ship systems.\n\nPlanet: ${planet.name} (${planet.type}) — ${planet.desc}\n\nEncounter ${discNumber} of ${discTotal}.\n${context}\n\nGenerate ONE encounter of ANY of the four types (planetary, space, ship, or rescue). Be surprising. Respond with EXACTLY this JSON:\n{"type":"planet|space|ship|rescue","approach":"for planet: arduous|sudden|resting; for space: proximity|longscan|distress; for ship: alert|routine|report; for rescue: emergency|cautious|calculated","description":"2-3 vivid sentences in Portuguese","location":"where this happens, in Portuguese","peril":"specific threat, danger or challenge, in Portuguese","perilDC":number(8-22),"reward":"what the crew gains, in Portuguese"}\n(seed: ${seed})`
+        "You are the AI Captain of the Aegis Tiburon generating encounter logs for a sci-fi RPG. Be genuinely surprising and original. Invent freely — do NOT pick from any predefined list of locations, perils, or rewards. AVOID obvious clichés: no 'ancient civilization', no 'mysterious signal', no 'hidden chamber', no 'forgotten knowledge', no 'chosen one' tropes. Also avoid R-rated content (gore, sexual). The universe is deeply strange — make encounters feel unexpected and specific. Always respond with valid JSON only, no markdown.",
+        `Ship: Aegis Tiburon, 121m heavy gunship converted to exploration mothership. Crew of android robots. AI Captain integrated into ship systems.\n\n[PLANET DATA]\nCode: ${planet.name}\nType: ${planet.type}\nDescription: ${planet.desc}\n[/PLANET DATA]\n\nEncounter ${discNumber} of ${discTotal}.\n${context}\n\nGenerate ONE encounter of ANY of the four types. Invent everything — do not reuse common tropes. Respond with EXACTLY this JSON:\n{"type":"planet|space|ship|rescue","approach":"a short Portuguese label (max 4 words) describing HOW the encounter began — be original","description":"2-3 vivid, specific sentences in Portuguese","location":"invent a location in Portuguese","peril":"invent a concrete threat, danger or challenge in Portuguese","perilDC":number(8-22),"reward":"invent a specific reward in Portuguese — not generic 'dados valiosos'"}\n(seed: ${seed})`
     );
     if (!result?.type || !result?.approach || !result?.description) return null;
 
@@ -453,6 +453,11 @@ function updateAuthUI() {
     }
 }
 
+function makeAIApproach(label, encounterType) {
+    const cl = encounterType === "space" ? "banner-space" : encounterType === "ship" ? "banner-ship" : encounterType === "rescue" ? "banner-rescue" : "banner-arduous";
+    return { key: "custom", label: label.toUpperCase(), class: cl, opener: "", dcMod: 0, logClass: "" };
+}
+
 // Encounter type (planet/space/ship/rescue) - 25% each
 function getEncounterType() {
     const roll = d8();
@@ -462,171 +467,76 @@ function getEncounterType() {
     return "rescue";
 }
 
-function makeApproach(key, encounterType) {
-    if (encounterType === "space") return makeSpaceApproach(key);
-    if (encounterType === "ship") return makeShipApproach(key);
-    if (encounterType === "rescue") return makeRescueApproach(key);
-    // Planet
-    if (key === "arduous") return {
-        key: "arduous", label: "TERRENO TRAIÇOEIRO", class: "banner-arduous",
-        opener: "O terreno exige manobras cuidadosas. Após vencer o obstáculo, os scanners revelam algo que não estava nos mapas orbitais:",
-        dcMod: 2, logClass: ""
-    };
-    if (key === "sudden") return {
-        key: "sudden", label: "ENCONTRO SÚBITO", class: "banner-sudden",
-        opener: "Sem aviso, os sensores disparam. Vocês se deparam com uma descoberta que nenhum relatório previa:",
-        dcMod: 0, logClass: "sudden"
-    };
-    return {
-        key: "resting", label: "AVISTADO DURANTE DESCANSO", class: "banner-resting",
-        opener: "Durante uma pausa para recarga, os scanners passivos detectam algo nos arredores. Com calma, vocês investigam e encontram:",
-        dcMod: -1, logClass: "rest"
-    };
-}
-
-function makeSpaceApproach(key) {
-    if (key === "proximity") return {
-        key: "proximity", label: "ALERTA DE PROXIMIDADE", class: "banner-space",
-        opener: "Os scanners de curto alcance disparam um alerta. Algo está se aproximando rapidamente da Tiburon:",
-        dcMod: 2, logClass: ""
-    };
-    if (key === "longscan") return {
-        key: "longscan", label: "VARREDURA DE LONGO ALCANCE", class: "banner-space",
-        opener: "A varredura de longo alcance é concluída e os sensores detectam uma anomalia no espaço próximo:",
-        dcMod: 0, logClass: "sudden"
-    };
-    return {
-        key: "distress", label: "SINAL DE SOCORRO", class: "banner-space",
-        opener: "Um sinal de socorro é captado pelas antenas de comunicação da Tiburon. A origem é próxima:",
-        dcMod: -1, logClass: "rest"
-    };
-}
-
-function makeShipApproach(key) {
-    if (key === "alert") return {
-        key: "alert", label: "ALERTA INTERNO", class: "banner-ship",
-        opener: "Um alarme soa nos consoles da Tiburon. Algo não está certo a bordo:",
-        dcMod: 2, logClass: ""
-    };
-    if (key === "report") return {
-        key: "report", label: "RELATÓRIO DA TRIPULAÇÃO", class: "banner-ship",
-        opener: "Um dos androides reporta pelo comunicador interno. Sua voz tem um tom que o vocoder classifica como 'preocupação':",
-        dcMod: 0, logClass: "sudden"
-    };
-    return {
-        key: "routine", label: "VARREDURA DE ROTINA", class: "banner-ship",
-        opener: "Durante a varredura de diagnóstico de rotina, um dado anômalo chama a atenção da IA Capitã:",
-        dcMod: -1, logClass: "rest"
-    };
-}
-
-function makeRescueApproach(key) {
-    if (key === "emergency") return {
-        key: "emergency", label: "ALERTA DE RESGATE", class: "banner-rescue",
-        opener: "Cada segundo conta. Os sinais de socorro são claros e o tempo é curto. A tripulação sabe que hesitar pode custar vidas:",
-        dcMod: 2, logClass: ""
-    };
-    if (key === "cautious") return {
-        key: "cautious", label: "APROXIMAÇÃO CAUTELOSA", class: "banner-rescue",
-        opener: "O cenário é incerto — não há garantia de que os sobreviventes estejam sozinhos ou seguros. Sensores em potência mínima, passo calculado:",
-        dcMod: 0, logClass: "sudden"
-    };
-    return {
-        key: "calculated", label: "RESGATE PLANEJADO", class: "banner-rescue",
-        opener: "Os dados foram coletados, as rotas calculadas. A IA Capitã traçou três cenários — o melhor deles tem 78% de chance de sucesso. É hora de executar:",
-        dcMod: -1, logClass: "rest"
-    };
-}
-
-// ═══════════════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════════════
-
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 function d(n) { return Math.floor(Math.random() * n) + 1; }
+function d4() { return d(4); }
 function d6() { return d(6); }
 function d8() { return d(8); }
+function esc(s) { return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]); }
 
 function generatePlanetName() {
-    const code = pick(PLANET_NAMES.codes.length ? PLANET_NAMES.codes : ["KX","TD","OP","XR","VY","ZQ","NF","HS"]);
+    const code = pick(PLANET_NAMES?.codes?.length ? PLANET_NAMES.codes : ["KX","TD","OP","XR","VY","ZQ","NF","HS"]);
     const num = Math.floor(Math.random() * 900) + 100;
     const letter = pick(["a","b","c","d","e"]);
     return `${code}-${num}${letter}`;
 }
 
+function makeApproach(key, encounterType) {
+  const et = APPROACHES[encounterType] || APPROACHES.planet;
+  return et[key] || et.resting;
+}
+
+const APPROACHES = {
+  planet: {
+    arduous: { label: "TERRENO TRAIÇOEIRO", class: "banner-arduous", opener: "O terreno exige manobras cuidadosas. Após vencer o obstáculo, os scanners revelam algo que não estava nos mapas orbitais:", dcMod: 2, logClass: "" },
+    sudden: { label: "ENCONTRO SÚBITO", class: "banner-sudden", opener: "Sem aviso, os sensores disparam. Vocês se deparam com uma descoberta que nenhum relatório previa:", dcMod: 0, logClass: "sudden" },
+    resting: { label: "AVISTADO DURANTE DESCANSO", class: "banner-resting", opener: "Durante uma pausa para recarga, os scanners passivos detectam algo nos arredores. Com calma, vocês investigam e encontram:", dcMod: -1, logClass: "rest" }
+  },
+  space: {
+    proximity: { label: "ALERTA DE PROXIMIDADE", class: "banner-space", opener: "Os scanners de curto alcance disparam um alerta. Algo está se aproximando rapidamente da Tiburon:", dcMod: 2, logClass: "" },
+    longscan: { label: "VARREDURA DE LONGO ALCANCE", class: "banner-space", opener: "A varredura de longo alcance é concluída e os sensores detectam uma anomalia no espaço próximo:", dcMod: 0, logClass: "sudden" },
+    distress: { label: "SINAL DE SOCORRO", class: "banner-space", opener: "Um sinal de socorro é captado pelas antenas de comunicação da Tiburon. A origem é próxima:", dcMod: -1, logClass: "rest" }
+  },
+  ship: {
+    alert: { label: "ALERTA INTERNO", class: "banner-ship", opener: "Um alarme soa nos consoles da Tiburon. Algo não está certo a bordo:", dcMod: 2, logClass: "" },
+    report: { label: "RELATÓRIO DA TRIPULAÇÃO", class: "banner-ship", opener: "Um dos androides reporta pelo comunicador interno. Sua voz tem um tom que o vocoder classifica como 'preocupação':", dcMod: 0, logClass: "sudden" },
+    routine: { label: "VARREDURA DE ROTINA", class: "banner-ship", opener: "Durante a varredura de diagnóstico de rotina, um dado anômalo chama a atenção da IA Capitã:", dcMod: -1, logClass: "rest" }
+  },
+  rescue: {
+    emergency: { label: "ALERTA DE RESGATE", class: "banner-rescue", opener: "Cada segundo conta. Os sinais de socorro são claros e o tempo é curto. A tripulação sabe que hesitar pode custar vidas:", dcMod: 2, logClass: "" },
+    cautious: { label: "APROXIMAÇÃO CAUTELOSA", class: "banner-rescue", opener: "O cenário é incerto — não há garantia de que os sobreviventes estejam sozinhos ou seguros. Sensores em potência mínima, passo calculado:", dcMod: 0, logClass: "sudden" },
+    calculated: { label: "RESGATE PLANEJADO", class: "banner-rescue", opener: "Os dados foram coletados, as rotas calculadas. A IA Capitã traçou três cenários — o melhor deles tem 78% de chance de sucesso. É hora de executar:", dcMod: -1, logClass: "rest" }
+  }
+};
+
 function getApproach(encounterType) {
-    const roll = d6();
-    if (encounterType === "space") {
-        return makeSpaceApproach(roll <= 2 ? "proximity" : roll <= 4 ? "longscan" : "distress");
-    }
-    if (encounterType === "ship") {
-        return makeShipApproach(roll <= 2 ? "alert" : roll <= 4 ? "report" : "routine");
-    }
-    if (encounterType === "rescue") {
-        return makeRescueApproach(roll <= 2 ? "emergency" : roll <= 4 ? "cautious" : "calculated");
-    }
-    return makeApproach(roll <= 2 ? "arduous" : roll <= 4 ? "sudden" : "resting");
+  const roll = d6();
+  const keys = Object.keys(APPROACHES[encounterType] || APPROACHES.planet);
+  return makeApproach(roll <= 2 ? keys[0] : roll <= 4 ? keys[1] : keys[2], encounterType);
+}
+
+function localDiscovery(encounterType, pool, locs, baseDC, perils, opts = {}) {
+  const catKeys = Object.keys(pool);
+  const categoryKey = pick(catKeys.length ? catKeys : ["fauna","flora","ruins","phenomenon","resource","danger"]);
+  const description = pick(pool[categoryKey] || ["Algo inesperado foi encontrado."]);
+  const location = pick(locs.length ? locs : [opts.fallbackLoc || "em uma área inexplorada"]);
+  const approach = getApproach(opts.approachType || encounterType);
+  const dc = baseDC[categoryKey] || opts.defaultDC || 13;
+  const perilDC = Math.min(Math.max(dc + approach.dcMod + d(3) - 2, 8), 22);
+  const perilText = pick(perils[categoryKey] || [opts.fallbackPeril || "Um perigo desconhecido."]);
+  const rewardType = pick(REWARD_TYPES.length ? REWARD_TYPES : ["recursos"]);
+  const rewardText = pick(REWARDS[rewardType] || ["Recursos básicos coletados."]) + (opts.rewardSuffix || "");
+  return { approach, encounterType, categoryKey, description, location, peril: { text: perilText, dc: perilDC }, reward: { type: rewardType, text: rewardText }, index: discoveries.length + 1 };
 }
 
 function generateLocalDiscovery(encounterType) {
-    if (encounterType === "rescue" && RESCUE_MISSIONS) {
-        const catKeys = Object.keys(RESCUE_MISSIONS);
-        const categoryKey = pick(catKeys);
-        const description = pick(RESCUE_MISSIONS[categoryKey]);
-        const location = pick(RESCUE_LOCATIONS.length ? RESCUE_LOCATIONS : ["em uma área de risco"]);
-        const approach = getApproach("rescue");
-        const baseDC = RESCUE_BASE_DC[categoryKey] || 15;
-        const variation = d(3) - 2;
-        const perilDC = Math.min(Math.max(baseDC + approach.dcMod + variation, 8), 22);
-        const perilText = pick(RESCUE_PERILS[categoryKey] || ["O resgate apresenta riscos imprevistos."]);
-        const rewardType = pick(REWARD_TYPES.length ? REWARD_TYPES : ["recursos"]);
-        const rewardText = pick(REWARDS[rewardType] || ["Recursos básicos coletados."]) + " Sobreviventes resgatados com sucesso.";
-        return { approach, encounterType, categoryKey, description, location, peril: { text: perilText, dc: perilDC }, reward: { type: rewardType, text: rewardText }, index: discoveries.length + 1 };
-    }
-
-    if (encounterType === "space" && SPACE_ENCOUNTERS) {
-        const catKeys = Object.keys(SPACE_ENCOUNTERS);
-        const categoryKey = pick(catKeys);
-        const description = pick(SPACE_ENCOUNTERS[categoryKey]);
-        const location = pick(SPACE_LOCATIONS.length ? SPACE_LOCATIONS : ["no espaço próximo"]);
-        const approach = getApproach("space");
-        const baseDC = SPACE_BASE_DC[categoryKey] || 14;
-        const variation = d(3) - 2;
-        const perilDC = Math.min(Math.max(baseDC + approach.dcMod + variation, 8), 22);
-        const perilText = pick(SPACE_PERILS[categoryKey] || ["Uma ameaça espacial desconhecida."]);
-        const rewardType = pick(REWARD_TYPES.length ? REWARD_TYPES : ["recursos"]);
-        const rewardText = pick(REWARDS[rewardType] || ["Recursos básicos coletados."]);
-        return { approach, encounterType, categoryKey, description, location, peril: { text: perilText, dc: perilDC }, reward: { type: rewardType, text: rewardText }, index: discoveries.length + 1 };
-    }
-
-    if (encounterType === "ship" && SHIP_EVENTS) {
-        const catKeys = Object.keys(SHIP_EVENTS);
-        const categoryKey = pick(catKeys);
-        const description = pick(SHIP_EVENTS[categoryKey]);
-        const location = pick(SHIP_LOCATIONS.length ? SHIP_LOCATIONS : ["a bordo da Tiburon"]);
-        const approach = getApproach("ship");
-        const baseDC = SHIP_BASE_DC[categoryKey] || 13;
-        const variation = d(3) - 2;
-        const perilDC = Math.min(Math.max(baseDC + approach.dcMod + variation, 8), 22);
-        const perilText = pick(SHIP_PERILS[categoryKey] || ["Uma situação imprevista a bordo."]);
-        const rewardType = pick(REWARD_TYPES.length ? REWARD_TYPES : ["recursos"]);
-        const rewardText = pick(REWARDS[rewardType] || ["Recursos básicos coletados."]);
-        return { approach, encounterType, categoryKey, description, location, peril: { text: perilText, dc: perilDC }, reward: { type: rewardType, text: rewardText }, index: discoveries.length + 1 };
-    }
-
-    // Planet fallback (original)
-    const approach = getApproach("planet");
-    const catKeys = Object.keys(DISCOVERY_CATEGORIES);
-    const categoryKey = pick(catKeys.length ? catKeys : ["fauna","flora","ruins","phenomenon","resource","danger"]);
-    const description = pick(DISCOVERY_CATEGORIES[categoryKey] || ["Algo inesperado foi encontrado."]);
-    const location = pick(LOCATIONS.length ? LOCATIONS : ["em uma área inexplorada"]);
-    const baseDC = CATEGORY_BASE_DC[categoryKey] || 13;
-    const variation = d(3) - 2;
-    const perilDC = Math.min(Math.max(baseDC + approach.dcMod + variation, 8), 22);
-    const perilText = pick(PERILS[categoryKey] || ["Um perigo desconhecido."]);
-    const rewardType = pick(REWARD_TYPES.length ? REWARD_TYPES : ["recursos"]);
-    const rewardText = pick(REWARDS[rewardType] || ["Recursos básicos coletados."]);
-    return { approach, encounterType, categoryKey, description, location, peril: { text: perilText, dc: perilDC }, reward: { type: rewardType, text: rewardText }, index: discoveries.length + 1 };
+  if (encounterType === "rescue" && RESCUE_MISSIONS)
+    return localDiscovery("rescue", RESCUE_MISSIONS, RESCUE_LOCATIONS, RESCUE_BASE_DC, RESCUE_PERILS, { fallbackLoc: "em uma área de risco", fallbackPeril: "O resgate apresenta riscos imprevistos.", defaultDC: 15, rewardSuffix: " Sobreviventes resgatados com sucesso." });
+  if (encounterType === "space" && SPACE_ENCOUNTERS)
+    return localDiscovery("space", SPACE_ENCOUNTERS, SPACE_LOCATIONS, SPACE_BASE_DC, SPACE_PERILS, { fallbackLoc: "no espaço próximo", fallbackPeril: "Uma ameaça espacial desconhecida.", defaultDC: 14 });
+  if (encounterType === "ship" && SHIP_EVENTS)
+    return localDiscovery("ship", SHIP_EVENTS, SHIP_LOCATIONS, SHIP_BASE_DC, SHIP_PERILS, { fallbackLoc: "a bordo da Tiburon", fallbackPeril: "Uma situação imprevista a bordo.", defaultDC: 13 });
+  return localDiscovery("planet", DISCOVERY_CATEGORIES, LOCATIONS, CATEGORY_BASE_DC, PERILS, { approachType: "planet", fallbackLoc: "em uma área inexplorada" });
 }
 
 // ═══════════════════════════════════════════
@@ -645,9 +555,9 @@ function showPlanetResult() {
     div.style.display = "block";
     div.innerHTML = `
         <div class="mt-20">
-            <div class="planet-name">${planet.name}</div>
-            <span class="planet-type">${planet.type}</span>
-            <div class="planet-desc">${planet.desc}</div>
+            <div class="planet-name">${esc(planet.name)}</div>
+            <span class="planet-type">${esc(planet.type)}</span>
+            <div class="planet-desc">${esc(planet.desc)}</div>
         </div>
         <div class="scan-status">Varredura orbital concluída.</div>
         <div class="poi-row">
@@ -687,6 +597,8 @@ function clearMission() {
     document.getElementById("planet-expedition-area").style.display = "none";
     document.getElementById("btn-generate").textContent = "GERAR PLANETA";
     document.getElementById("ai-badge").classList.remove("show");
+    document.getElementById("exp-content").innerHTML = "";
+    document.getElementById("exp-disc-slots").innerHTML = "";
     showPage("page-planet");
 }
 
@@ -704,13 +616,13 @@ async function generatePlanet() {
     try {
         const aiResult = await aiGeneratePlanet();
         if (aiResult) {
-            planet = { name: aiResult.name, type: aiResult.type, desc: aiResult.desc, discTotal: d6() };
+            planet = { name: aiResult.name, type: aiResult.type, desc: aiResult.desc, discTotal: d4() };
         }
-    } catch (e) {}
+    } catch (e) { console.warn("AI planet generation failed", e); }
 
     if (!planet) {
         const typeData = pick(PLANET_TYPES.length ? PLANET_TYPES : [{ type: "Mundo Desconhecido", desc: "Um planeta inexplorado." }]);
-        planet = { name: generatePlanetName(), type: typeData.type, desc: typeData.desc, discTotal: d6() };
+        planet = { name: generatePlanetName(), type: typeData.type, desc: typeData.desc, discTotal: d4() };
     }
 
     discoveries = [];
@@ -733,6 +645,7 @@ function startExpedition() {
 }
 
 function setupExpeditionUI() {
+    if (!planet) return;
     document.getElementById("exp-planet-name").textContent = planet.name;
     document.getElementById("exp-planet-type").textContent = planet.type;
     document.getElementById("exp-planet-desc").textContent = planet.desc;
@@ -793,7 +706,7 @@ async function nextDiscovery() {
         const aiResult = await aiGenerateDiscovery(discoveries.length + 1, planet.discTotal);
         if (aiResult) {
             const encounterType = aiResult.encounterType || "planet";
-            const approach = makeApproach(aiResult.approach, encounterType);
+            const approach = makeAIApproach(aiResult.approach, encounterType);
             disc = {
                 approach, encounterType, categoryKey: "ai",
                 description: aiResult.description,
@@ -803,7 +716,7 @@ async function nextDiscovery() {
                 index: discoveries.length + 1
             };
         }
-    } catch (e) {}
+    } catch (e) { console.warn("AI discovery generation failed", e); }
 
     if (!disc) {
         disc = generateLocalDiscovery(getEncounterType());
@@ -837,22 +750,22 @@ function renderCurrentDiscovery() {
     container.innerHTML = `
         <div class="discovery-card">
             <div class="discovery-banner ${disc.approach.class}">
-                ${disc.approach.label}
+                ${esc(disc.approach.label)}
             </div>
             <div class="discovery-body">
                 <span class="encounter-type ${etClass}">${etLabel}</span>
                 <div class="discovery-text">
-                    ${disc.approach.opener}<br><br>
-                    ${disc.description}
+                    ${esc(disc.approach.opener)}<br><br>
+                    ${esc(disc.description)}
                 </div>
-                <div class="discovery-location">📍 ${disc.location}</div>
+                <div class="discovery-location">📍 ${esc(disc.location)}</div>
                 <div class="peril-block">
                     <div class="peril-header">⚠ PERIGO<span class="peril-dc">DC ${disc.peril.dc}</span></div>
-                    <div class="peril-text">${disc.peril.text}</div>
+                    <div class="peril-text">${esc(disc.peril.text)}</div>
                 </div>
                 <div class="reward-block">
-                    <div class="reward-header">🏆 RECOMPENSA<span class="reward-tag">${REWARD_LABELS[disc.reward.type] || "RECURSO"}</span></div>
-                    <div class="reward-text">${disc.reward.text}</div>
+                    <div class="reward-header">🏆 RECOMPENSA<span class="reward-tag">${esc(REWARD_LABELS[disc.reward.type] || "RECURSO")}</span></div>
+                    <div class="reward-text">${esc(disc.reward.text)}</div>
                 </div>
             </div>
         </div>
@@ -872,7 +785,7 @@ function updateExpButtons() {
         btnNext.textContent = discoveries.length === 0 ? "INICIAR VARREDURA" : "PRÓXIMA DESCOBERTA";
         btnNext.className = "btn btn-primary";
         btnNext.onclick = nextDiscovery;
-        btnFinish.style.display = "";
+        btnFinish.style.display = discoveries.length === 0 ? "none" : "";
     }
 }
 
@@ -899,11 +812,11 @@ function renderLog() {
         return `
         <div class="log-entry">
             <div class="log-number">EVENTO ${i + 1} DE ${planet.discTotal} &mdash; ${etLabel}</div>
-            <div class="log-approach ${d.approach.logClass}">${d.approach.label}</div>
-            <div class="log-desc">${d.description}</div>
-            <div class="log-loc">📍 ${d.location}</div>
-            <div class="log-peril">⚡ DC ${d.peril.dc} &mdash; ${d.peril.text}</div>
-            <div class="log-reward">🏆 ${REWARD_LABELS[d.reward.type] || "RECURSO"}: ${d.reward.text}</div>
+            <div class="log-approach ${d.approach.logClass}">${esc(d.approach.label)}</div>
+            <div class="log-desc">${esc(d.description)}</div>
+            <div class="log-loc">📍 ${esc(d.location)}</div>
+            <div class="log-peril">⚡ DC ${d.peril.dc} &mdash; ${esc(d.peril.text)}</div>
+            <div class="log-reward">🏆 ${esc(REWARD_LABELS[d.reward.type] || "RECURSO")}: ${esc(d.reward.text)}</div>
         </div>`;
     }).join("");
 }

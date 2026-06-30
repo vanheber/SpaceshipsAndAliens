@@ -50,7 +50,7 @@ Para manter a consistência visual em todos os cards, utilize a seguinte base e 
 * **Fabricante**: Consolidated Outland - C.O. (Geometria moderna arrojada, cobre escovado, adaptadores de sobrevivência).
 > A rugged male humanoid android explorer, Consolidated Outland style, realistic synthetic face equipped with tactical breathing apparatus and goggles, wearing a reinforced bronze and titanium hazard-protection suit, external environmental sensor arrays on shoulders, star citizen game style, 3d character render, professional product design render, octane render, photorealistic, soft dramatic studio lighting, dark atmospheric sci-fi background, depth of field, 8k resolution --ar 4:3
 
-### 9. Apoio-Drone D12 (Medicina de Campo)
+### 9. UAC HD-12 (Medicina de Campo)
 * **Fabricante**: Unidade de Amparo de Campo (Design amigável de suporte e socorro médico).
 > A compassionate female humanoid android medic, realistic soft synthetic skin, friendly green glowing optical eyes, wearing a white clinical uniform with medical crosses, arms integrated with subtle nanite injector ports at the wrists, star citizen game style, 3d character render, professional product design render, octane render, photorealistic, soft dramatic studio lighting, dark atmospheric sci-fi background, depth of field, 8k resolution --ar 4:3
 

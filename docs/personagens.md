@@ -27,7 +27,7 @@ Dez androides humanoides com especialidades complementares. Cada unidade possui 
 |---|---|---|---|---|---|
 | Anvil Analyst x8 | +1 | +4 | 11 | 5/10 | Análise de Frequências +3 |
 | MISC Endeavor i3 | +0 | +4 | 12 | 5/10 | Síntese de Reagentes +3 |
-| Apoio-Drone D12 | +0 | +3 | 12 | 6/12 | Sutura de Nanites +3 |
+| UAC HD-12 | +0 | +3 | 12 | 6/12 | Sutura de Nanites +3 |
 
 ### Mobilidade e Exploração
 

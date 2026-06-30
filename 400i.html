@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WARP-Unit | Nave Auxiliar — Origin 400i</title>
+    <link rel="stylesheet" href="warp.css">
+
+</head>
+
+<body>
+
+    <header>
+        <h1>SISTEMA OPERACIONAL WARP</h1>
+        <p>Nave Auxiliar &mdash; Origin 400i</p>
+    </header>
+
+    <div class="mothership-page">
+
+        <!-- VISÃO GERAL -->
+        <div class="ms-card">
+            <div class="ms-title">Visão Geral</div>
+            <div class="ms-overview">
+                <div><strong>Fabricante</strong><br>Origin Jumpworks</div>
+                <div><strong>Modelo</strong><br>400i</div>
+                <div><strong>Função</strong><br>Pathfinder de Luxo</div>
+                <div><strong>Função WARP</strong><br>Nave Auxiliar de Exploração</div>
+                <div><strong>Comprimento</strong><br>56 metros</div>
+                <div><strong>Largura</strong><br>32 metros</div>
+                <div><strong>Altura</strong><br>12,5 metros</div>
+                <div><strong>Tripulação</strong><br>1 a 3 tripulantes</div>
+            </div>
+            <div class="ms-hero-img">
+                <img src="img/400i-hero.webp" alt="Origin 400i cruzeiro sobre planeta" loading="lazy">
+            </div>
+            <a href="https://www.youtube.com/watch?v=SNtwvxjF4Zg" target="_blank" class="yt-link">▶
+                Visão geral da 400i no YouTube</a>
+        </div>
+
+        <!-- ESPECIFICAÇÕES -->
+        <div class="ms-card">
+            <div class="ms-title">Especificações da Missão</div>
+            <div class="spec-grid">
+                <div class="spec-box">
+                    <div class="spec-label">Carga</div>
+                    <div class="spec-val">42 SCU</div>
+                    <div class="spec-sub">Interna</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Velocidade Máxima</div>
+                    <div class="spec-val">1.225 m/s</div>
+                    <div class="spec-sub">SCM: 215 m/s</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Alcance</div>
+                    <div class="spec-val">Estendido</div>
+                    <div class="spec-sub">Drive Quântico S2</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Baia de Veículo</div>
+                    <div class="spec-val">1</div>
+                    <div class="spec-sub">Mirai Pulse</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Acomodações</div>
+                    <div class="spec-val">Luxo</div>
+                    <div class="spec-sub">3 tripulantes</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Computador de Bordo</div>
+                    <div class="spec-val">Origin M50</div>
+                    <div class="spec-sub">Navegação e Varredura</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RECURSOS DE BORDO -->
+        <div class="ms-card">
+            <div class="ms-title">Recursos de Bordo</div>
+            <p class="section-subtitle">
+                Suprimentos, combustível, munição, blindagem e escudo disponíveis para a missão. Clique nas células
+                para consumir ou abastecer.
+            </p>
+
+            <!-- Suprimentos -->
+            <div class="res-card">
+                <div class="res-header">
+                    <span class="res-name">Suprimentos</span>
+                    <span class="res-counter sup" id="res-sup-counter">0/0</span>
+                </div>
+                <div class="res-token-row" id="res-sup-row"></div>
+                <div class="res-actions">
+                    <button class="res-btn sup" onclick="adjustRes('sup', -1)">Consumir (-1)</button>
+                    <button class="res-btn sup" onclick="adjustRes('sup', 1)">Abastecer (+1)</button>
+                    <button class="res-btn sup ml-auto" onclick="resetRes('sup')">Recarregar</button>
+                </div>
+            </div>
+
+            <!-- Combustível -->
+            <div class="res-card">
+                <div class="res-header">
+                    <span class="res-name">Combustível</span>
+                    <span class="res-counter fuel" id="res-fuel-counter">0/0</span>
+                </div>
+                <div class="res-token-row" id="res-fuel-row"></div>
+                <div class="res-actions">
+                    <button class="res-btn fuel" onclick="adjustRes('fuel', -1)">Consumir (-1)</button>
+                    <button class="res-btn fuel" onclick="adjustRes('fuel', 1)">Abastecer (+1)</button>
+                    <button class="res-btn fuel ml-auto" onclick="resetRes('fuel')">Recarregar</button>
+                </div>
+            </div>
+
+            <!-- Munição -->
+            <div class="res-card">
+                <div class="res-header">
+                    <span class="res-name">Munição</span>
+                    <span class="res-counter ammo" id="res-ammo-counter">0/0</span>
+                </div>
+                <div class="res-token-row" id="res-ammo-row"></div>
+                <div class="res-actions">
+                    <button class="res-btn ammo" onclick="adjustRes('ammo', -1)">Consumir (-1)</button>
+                    <button class="res-btn ammo" onclick="adjustRes('ammo', 1)">Abastecer (+1)</button>
+                    <button class="res-btn ammo ml-auto" onclick="resetRes('ammo')">Recarregar</button>
+                </div>
+            </div>
+
+            <!-- Blindagem / Escudo -->
+            <div class="res-card">
+                <div class="res-header">
+                    <span class="res-name">Blindagem / Escudo</span>
+                    <span class="res-counter defense" id="res-defense-counter">0/0</span>
+                </div>
+                <div class="res-token-row" id="res-defense-row"></div>
+                <div class="res-actions">
+                    <button class="res-btn defense" onclick="adjustRes('defense', -1)">Consumir (-1)</button>
+                    <button class="res-btn defense" onclick="adjustRes('defense', 1)">Abastecer (+1)</button>
+                    <button class="res-btn defense ml-auto" onclick="resetRes('defense')">Recarregar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARACTERÍSTICAS -->
+        <div class="ms-card">
+            <div class="ms-title">Características da Nave</div>
+            <p class="section-text">
+                A <strong>Origin 400i</strong> é uma pathfinder de luxo de alto desempenho, projetada para explorar
+                os setores mais hostis do universo sem abrir mão do conforto e da elegância que a Origin Jumpworks
+                oferece. Com alcance superior a qualquer outra nave de sua classe, a 400i é a escolha ideal para
+                missões de reconhecimento de longo prazo.
+            </p>
+            <p class="section-text">
+                O interior luxuoso acomoda a tripulação com espaçosas áreas de estar, acomodações privativas e
+                estações de trabalho ergonômicas. A baia de veículo no nariz comporta uma <strong>Mirai Pulse</strong>
+                ou outro veículo compacto, permitindo exploração local sem atracar a nave.
+            </p>
+            <p class="section-text">
+                O acesso à carga é feito por uma plataforma retrátil na parte traseira inferior, proporcionando
+                carregamento rápido e seguro dos 42 SCU de capacidade interna. Um airlock dedicado permite acesso
+                a ambientes hostis sem expor o restante da nave.
+            </p>
+        </div>
+
+        <!-- SISTEMAS DEFENSIVOS -->
+        <div class="ms-card">
+            <div class="ms-title">Sistemas Defensivos</div>
+            <div class="spec-grid">
+                <div class="spec-box">
+                    <div class="spec-label">Armamento Principal</div>
+                    <div class="spec-val">2× S4 Rhino</div>
+                    <div class="spec-sub">Repetidores Laser — Proa</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Torres Remotas</div>
+                    <div class="spec-val">2× S4</div>
+                    <div class="spec-sub">2× S3 Panther cada — Popa</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Mísseis</div>
+                    <div class="spec-val">32</div>
+                    <div class="spec-sub">16× S2 + 16× S1</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Gerador de Escudo</div>
+                    <div class="spec-val">S3</div>
+                    <div class="spec-sub">Proteção Reforçada</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Contramedidas</div>
+                    <div class="spec-val">Flares</div>
+                    <div class="spec-sub">Sistema Anti-Míssil</div>
+                </div>
+                <div class="spec-box">
+                    <div class="spec-label">Doca de Acoplamento</div>
+                    <div class="spec-val">Padrão UEE</div>
+                    <div class="spec-sub">Bombordo</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MIRAI PULSE -->
+        <div class="ms-card">
+            <div class="ms-title">Veículo de Bordo &mdash; Mirai Pulse</div>
+            <div class="vehicle-card">
+                <div class="vehicle-info">
+                    <p>O <strong>Mirai Pulse</strong> é um grav-cycle compacto de reconhecimento, ideal para
+                        exploração de superfície planetária. Com design aberto e perfil aerodinâmico, o Pulse
+                        oferece agilidade excepcional em terrenos acidentados.</p>
+                    <div class="vehicle-stats">
+                        <span>Tripulação: <b>1</b></span>
+                        <span>Dimensões: <b>3.15 × 0.9 × 1 m</b></span>
+                        <span>Armamento: <b>1× S2 Laser Repeater</b></span>
+                        <span>Velocidade Máx: <b>561 m/s</b></span>
+                        <span>Armazenamento: <b>600K µSCU</b></span>
+                        <span>Acoplamento: <b>Baia Dianteira 400i</b></span>
+                    </div>
+                    <p class="mt-10">Acondicionado na baia de veículo do nariz da 400i, o Pulse é a principal
+                        ferramenta de reconhecimento da tripulação. Sua plataforma de pouso retrátil permite
+                        embarque e desembarque rápidos em qualquer terreno.</p>
+                    <a href="https://robertsspaceindustries.com/media/apdq170qq6l0fr/source/MRAI_Pulse_PulseLX_Explorer_14.mp4" target="_blank"
+                        class="yt-link-sm">▶ Mirai Pulse em ação</a>
+                </div>
+                <div class="vehicle-img gallery-item">
+                    <img src="img/pulse-iso.webp" alt="Mirai Pulse isométrica" loading="lazy">
+                </div>
+            </div>
+        </div>
+
+        <!-- GALERIA -->
+        <div class="ms-card">
+            <div class="ms-title">Galeria</div>
+            <div class="gallery-grid" id="gallery">
+                <div class="gallery-item"><img src="img/400i-hero.webp" alt="400i cruzeiro sobre planeta" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/400i-iso.webp" alt="400i isométrica" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/400i-side.webp" alt="400i vista lateral" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/400i-front.webp" alt="400i vista frontal" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/400i-rear.webp" alt="400i vista traseira" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/400i-top.webp" alt="400i vista superior" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/400i-interior.webp" alt="400i interior — área de estar" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/400i-captain.webp" alt="400i — quarto do capitão" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/pulse-iso.webp" alt="Mirai Pulse isométrica" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/pulse-side.webp" alt="Mirai Pulse lateral" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/pulse-front.webp" alt="Mirai Pulse frontal" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/400i-deck-tech.webp" alt="400i — Mapa do Convés Técnico" loading="lazy"></div>
+                <div class="gallery-item"><img src="img/400i-deck-hab.webp" alt="400i — Mapa do Convés de Habitação" loading="lazy"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <a href="docs/">Documentação</a>
+        &nbsp;·&nbsp;
+        <a href="index.html">Catálogo de Unidades</a>
+        &nbsp;·&nbsp;
+        <a href="oneshot.html">Gerador de Missão</a>
+        &nbsp;·&nbsp;
+        <a href="mothership.html">Nave-Mãe Tiburon</a>
+        &nbsp;·&nbsp;
+        <a href="missioncontrol.html">Controle da Missão</a>
+        &nbsp;·&nbsp;
+        <a href="#" onclick="localStorage.removeItem('warp-unit-400i');location.reload();return false;">Limpar
+            Recursos</a>
+    </footer>
+
+    <!-- LIGHTBOX -->
+    <div class="lb-overlay" id="lb-overlay">
+        <button class="lb-close" onclick="closeLightbox()">&times;</button>
+        <button class="lb-nav lb-prev" onclick="navigateLightbox(-1)">&#8249;</button>
+        <button class="lb-nav lb-next" onclick="navigateLightbox(1)">&#8250;</button>
+        <div class="lb-img-wrap"><img id="lb-img" src="" alt=""></div>
+        <div class="lb-counter" id="lb-counter"></div>
+    </div>
+
+    <script>
+        const galleryImages = [];
+        let lbIndex = 0;
+
+        document.querySelectorAll(".gallery-grid .gallery-item").forEach((item, idx) => {
+            const img = item.querySelector("img");
+            galleryImages[idx] = { src: img.src, alt: img.alt };
+            item.addEventListener("click", () => openLightbox(idx));
+        });
+
+        function openLightbox(idx) {
+            lbIndex = idx;
+            updateLightbox();
+            document.getElementById("lb-overlay").classList.add("open");
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeLightbox() {
+            document.getElementById("lb-overlay").classList.remove("open");
+            document.body.style.overflow = "";
+        }
+
+        function navigateLightbox(dir) {
+            lbIndex = (lbIndex + dir + galleryImages.length) % galleryImages.length;
+            updateLightbox();
+        }
+
+        function updateLightbox() {
+            document.getElementById("lb-img").src = galleryImages[lbIndex].src;
+            document.getElementById("lb-img").alt = galleryImages[lbIndex].alt;
+            document.getElementById("lb-counter").textContent = (lbIndex + 1) + " / " + galleryImages.length;
+        }
+
+        document.getElementById("lb-overlay").addEventListener("click", function (e) {
+            if (e.target === this) closeLightbox();
+        });
+
+        document.addEventListener("keydown", function (e) {
+            if (!document.getElementById("lb-overlay").classList.contains("open")) return;
+            if (e.key === "Escape") closeLightbox();
+            if (e.key === "ArrowLeft") navigateLightbox(-1);
+            if (e.key === "ArrowRight") navigateLightbox(1);
+        });
+
+        // Touch swipe support
+        let touchStartX = 0;
+        document.getElementById("lb-overlay").addEventListener("touchstart", function (e) {
+            touchStartX = e.touches[0].clientX;
+        }, { passive: true });
+        document.getElementById("lb-overlay").addEventListener("touchend", function (e) {
+            const diff = e.changedTouches[0].clientX - touchStartX;
+            if (Math.abs(diff) > 60) {
+                navigateLightbox(diff > 0 ? -1 : 1);
+            }
+        }, { passive: true });
+
+        // ===== RECURSOS DE BORDO =====
+        const RES_STORAGE_KEY = "warp-unit-400i";
+        const RES_DEFAULTS = {
+            sup: { current: 4, max: 8 },
+            fuel: { current: 6, max: 6 },
+            ammo: { current: 4, max: 4 },
+            defense: { current: 8, max: 8 }
+        };
+
+        let resState = {};
+
+        function loadResState() {
+            try {
+                const raw = localStorage.getItem(RES_STORAGE_KEY);
+                if (raw) {
+                    resState = JSON.parse(raw);
+                    Object.keys(RES_DEFAULTS).forEach(key => {
+                        if (typeof resState[key] !== "object" || typeof resState[key].current !== "number") {
+                            resState[key] = { ...RES_DEFAULTS[key] };
+                        }
+                    });
+                } else {
+                    resState = JSON.parse(JSON.stringify(RES_DEFAULTS));
+                }
+            } catch (e) {
+                resState = JSON.parse(JSON.stringify(RES_DEFAULTS));
+            }
+        }
+
+        function saveResState() {
+            localStorage.setItem(RES_STORAGE_KEY, JSON.stringify(resState));
+        }
+
+        function renderResources() {
+            Object.keys(RES_DEFAULTS).forEach(key => {
+                const data = resState[key];
+                const row = document.getElementById(`res-${key}-row`);
+                const counter = document.getElementById(`res-${key}-counter`);
+                if (!row) return;
+                row.innerHTML = "";
+                for (let i = 0; i < data.max; i++) {
+                    const token = document.createElement("div");
+                    let cls = key;
+                    if (key === 'defense') {
+                        const isSpent = i >= data.current;
+                        const color = i < 3 ? '#409eff' : '#67c23a';
+                        token.style.backgroundColor = isSpent ? '#0b0f14' : color;
+                        token.style.boxShadow = isSpent ? 'none' : `0 0 6px ${color}66`;
+                        token.style.borderColor = isSpent ? 'var(--border-color)' : 'transparent';
+                        cls = '';
+                    } else {
+                        cls = key;
+                    }
+                    token.className = `res-token ${cls} ${i >= data.current ? 'spent' : ''}`.trim();
+                    token.addEventListener("click", () => setResource(key, i + 1));
+                    row.appendChild(token);
+                }
+                counter.textContent = `${data.current}/${data.max}`;
+            });
+        }
+
+        function setResource(key, val) {
+            const max = resState[key].max;
+            resState[key].current = Math.max(0, Math.min(max, val));
+            saveResState();
+            renderResources();
+        }
+
+        function adjustRes(key, amount) {
+            setResource(key, resState[key].current + amount);
+        }
+
+        function resetRes(key) {
+            resState[key].current = RES_DEFAULTS[key].current;
+            saveResState();
+            renderResources();
+        }
+
+        loadResState();
+        renderResources();
+    </script>
+
+</body>
+
+</html>

@@ -79,8 +79,8 @@
         <div class="ms-card">
             <div class="ms-title">Recursos de Bordo</div>
             <p class="section-subtitle">
-                Suprimentos, combustível e munição disponíveis para a missão. Clique nas células para consumir ou
-                abastecer.
+                Suprimentos, combustível, munição, blindagem e escudo disponíveis para a missão. Clique nas células
+                para consumir ou abastecer.
             </p>
 
             <!-- Suprimentos -->
@@ -122,6 +122,20 @@
                     <button class="res-btn ammo" onclick="adjustRes('ammo', -1)">Consumir (-1)</button>
                     <button class="res-btn ammo" onclick="adjustRes('ammo', 1)">Abastecer (+1)</button>
                     <button class="res-btn ammo ml-auto" onclick="resetRes('ammo')">Recarregar</button>
+                </div>
+            </div>
+
+            <!-- Blindagem / Escudo -->
+            <div class="res-card">
+                <div class="res-header">
+                    <span class="res-name">Blindagem / Escudo</span>
+                    <span class="res-counter defense" id="res-defense-counter">0/0</span>
+                </div>
+                <div class="res-token-row" id="res-defense-row"></div>
+                <div class="res-actions">
+                    <button class="res-btn defense" onclick="adjustRes('defense', -1)">Consumir (-1)</button>
+                    <button class="res-btn defense" onclick="adjustRes('defense', 1)">Abastecer (+1)</button>
+                    <button class="res-btn defense ml-auto" onclick="resetRes('defense')">Recarregar</button>
                 </div>
             </div>
         </div>
@@ -408,6 +422,8 @@
         &nbsp;·&nbsp;
         <a href="missioncontrol.html">Controle da Missão</a>
         &nbsp;·&nbsp;
+        <a href="400i.html">Nave Auxiliar 400i</a>
+        &nbsp;·&nbsp;
         <a href="#" onclick="localStorage.removeItem('warp-unit-mothership');location.reload();return false;">Limpar
             Recursos</a>
     </footer>
@@ -482,7 +498,8 @@
         const RES_DEFAULTS = {
             sup: { current: 10, max: 20 },
             fuel: { current: 10, max: 10 },
-            ammo: { current: 10, max: 10 }
+            ammo: { current: 10, max: 10 },
+            defense: { current: 20, max: 20 }
         };
 
         let resState = {};
@@ -518,7 +535,18 @@
                 row.innerHTML = "";
                 for (let i = 0; i < data.max; i++) {
                     const token = document.createElement("div");
-                    token.className = `res-token ${key} ${i >= data.current ? 'spent' : ''}`;
+                    let cls = key;
+                    if (key === 'defense') {
+                        const isSpent = i >= data.current;
+                        const color = i < 10 ? '#409eff' : '#67c23a';
+                        token.style.backgroundColor = isSpent ? '#0b0f14' : color;
+                        token.style.boxShadow = isSpent ? 'none' : `0 0 6px ${color}66`;
+                        token.style.borderColor = isSpent ? 'var(--border-color)' : 'transparent';
+                        cls = '';
+                    } else {
+                        cls = key;
+                    }
+                    token.className = `res-token ${cls} ${i >= data.current ? 'spent' : ''}`.trim();
                     token.addEventListener("click", () => setResource(key, i + 1));
                     row.appendChild(token);
                 }

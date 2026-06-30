@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WARP-Unit | Controle da Missão</title>
     <link rel="stylesheet" href="warp.css">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
@@ -33,6 +33,17 @@
                 <button class="mc-btn fear" onclick="adjustFear(-1)">Gastar (-1)</button>
                 <button class="mc-btn fear" onclick="adjustFear(1)">Adicionar (+1)</button>
                 <button class="mc-btn fear ml-auto" onclick="resetFear()">Zerar</button>
+            </div>
+        </div>
+
+        <div class="mc-character-card">
+            <div class="mc-character-header">
+                <span class="mc-character-name">ROLADOR D20</span>
+                <span class="mc-fear-counter" id="d20-result">--</span>
+            </div>
+            <div class="dice-container" id="d20-viewport"></div>
+            <div class="mc-actions">
+                <button class="roll-btn" onclick="rollD20()">Rolar D20</button>
             </div>
         </div>
     </div>
@@ -304,6 +315,184 @@ async function init() {
 }
 
 init();
+
+// ===== D20 DICE (Three.js) =====
+let d20Scene, d20Camera, d20Renderer, d20Die, d20Anim, d20Result;
+let d20Ready = false;
+
+function createD20(hexColor, textColor) {
+    const group = new THREE.Group();
+    const R = 1.05;
+    const geo = new THREE.IcosahedronGeometry(R, 0);
+    const ni = geo.clone().toNonIndexed();
+    const arr = ni.getAttribute('position').array;
+    const fs = 3;
+
+    let uvs = ni.getAttribute('uv');
+    if (!uvs) {
+        uvs = new THREE.BufferAttribute(new Float32Array(arr.length / 3 * 2), 2);
+        ni.setAttribute('uv', uvs);
+    }
+    const uvArr = uvs.array;
+
+    ni.clearGroups();
+    const mats = [];
+    const norms = [];
+
+    for (let f = 0; f < 20; f++) {
+        ni.addGroup(f * fs, fs, f);
+
+        const keys = [];
+        const uniqueMap = new Map();
+        for (let v = 0; v < fs; v++) {
+            const i = (f * fs + v) * 3;
+            const key = `${arr[i].toFixed(4)},${arr[i+1].toFixed(4)},${arr[i+2].toFixed(4)}`;
+            keys.push(key);
+            if (!uniqueMap.has(key))
+                uniqueMap.set(key, [arr[i], arr[i+1], arr[i+2]]);
+        }
+
+        const verts = Array.from(uniqueMap.values()).map(c => new THREE.Vector3(c[0], c[1], c[2]));
+        const center = new THREE.Vector3();
+        verts.forEach(v => center.add(v));
+        center.divideScalar(verts.length);
+        norms.push(center.clone().normalize());
+
+        const local = verts.map(v => v.clone().sub(center));
+        const faceNormal = center.clone().normalize();
+        const axX = local[0].clone().normalize();
+        const axY = new THREE.Vector3().crossVectors(faceNormal, axX).normalize();
+
+        let uMin = Infinity, uMax = -Infinity, vMin = Infinity, vMax = -Infinity;
+        const uvVals = local.map(p => {
+            const u = p.dot(axX), v = p.dot(axY);
+            uMin = Math.min(uMin, u); uMax = Math.max(uMax, u);
+            vMin = Math.min(vMin, v); vMax = Math.max(vMax, v);
+            return { u, v };
+        });
+        const uRng = uMax - uMin || 1, vRng = vMax - vMin || 1;
+
+        const uvByKey = new Map();
+        let ki = 0;
+        for (const key of uniqueMap.keys()) {
+            uvByKey.set(key, { u: (uvVals[ki].u - uMin) / uRng + 0.15, v: (uvVals[ki].v - vMin) / vRng + 0.02 });
+            ki++;
+        }
+
+        for (let v = 0; v < fs; v++) {
+            const uv = uvByKey.get(keys[v]);
+            const ui = (f * fs + v) * 2;
+            uvArr[ui] = uv.u;
+            uvArr[ui + 1] = uv.v;
+        }
+
+        const cv = document.createElement('canvas');
+        cv.width = 256; cv.height = 256;
+        const ctx = cv.getContext('2d');
+        ctx.fillStyle = hexColor;
+        ctx.fillRect(0, 0, 256, 256);
+        ctx.fillStyle = textColor;
+        ctx.font = 'Bold 110px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(String(f + 1), 128, 130);
+
+        mats.push(new THREE.MeshStandardMaterial({
+            map: new THREE.CanvasTexture(cv),
+            roughness: 0.45, metalness: 0.1,
+        }));
+    }
+
+    uvs.needsUpdate = true;
+
+    group.add(new THREE.Mesh(ni, mats));
+    group.userData.faceNormals = norms;
+
+    const edgeMat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.15 });
+    group.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat));
+
+    return group;
+}
+
+function initD20() {
+    const container = document.getElementById('d20-viewport');
+    if (!container || typeof THREE === 'undefined') return;
+
+    const w = container.clientWidth || 400;
+    const h = 220;
+
+    d20Scene = new THREE.Scene();
+    d20Camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
+    d20Camera.position.set(0, 0.2, 3.6);
+    d20Camera.lookAt(0, 0, 0);
+
+    d20Renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    d20Renderer.setSize(w, h);
+    d20Renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    d20Renderer.setClearColor(0x000000, 0);
+    container.appendChild(d20Renderer.domElement);
+
+    const ambient = new THREE.AmbientLight(0xffffff, 0.7);
+    const key = new THREE.DirectionalLight(0xffffff, 0.8);
+    key.position.set(3, 4, 5);
+    const fill = new THREE.DirectionalLight(0xffffff, 0.3);
+    fill.position.set(-3, 1, -4);
+    d20Scene.add(ambient, key, fill);
+
+    d20Die = createD20('#ffffff', '#000000');
+    d20Scene.add(d20Die);
+
+    d20Ready = true;
+    d20RenderLoop();
+}
+
+function d20RenderLoop() {
+    if (!d20Ready) return;
+    requestAnimationFrame(d20RenderLoop);
+
+    if (d20Anim) {
+        const now = Date.now();
+        const t = Math.min((now - d20Anim.t0) / d20Anim.dur, 1);
+        const e = 1 - Math.pow(1 - t, 3);
+        d20Die.rotation.x = d20Anim.sx + (d20Anim.tx - d20Anim.sx) * e;
+        d20Die.rotation.y = d20Anim.sy + (d20Anim.ty - d20Anim.sy) * e;
+        d20Die.rotation.z = d20Anim.sz + (d20Anim.tz - d20Anim.sz) * e;
+        if (t >= 1) {
+            d20Die.rotation.set(d20Anim.tx, d20Anim.ty, d20Anim.tz);
+            d20Anim = null;
+            document.getElementById('d20-result').textContent = d20Result;
+        }
+    } else {
+        d20Die.rotation.y += 0.002;
+    }
+
+    d20Renderer.render(d20Scene, d20Camera);
+}
+
+function rollD20() {
+    if (!d20Ready || !d20Die) return;
+
+    d20Result = Math.floor(Math.random() * 20) + 1;
+
+    const camPos = new THREE.Vector3(0, 0.2, 3.6);
+    const toCamera = camPos.clone().sub(d20Die.position).normalize();
+    const fn = d20Die.userData.faceNormals[d20Result - 1];
+    const q = new THREE.Quaternion().setFromUnitVectors(fn, toCamera);
+    const te = new THREE.Euler().setFromQuaternion(q);
+    const sx = d20Die.rotation.x, sy = d20Die.rotation.y, sz = d20Die.rotation.z;
+
+    d20Anim = {
+        t0: Date.now(), dur: 1200 + Math.random() * 300,
+        sx, sy, sz,
+        tx: te.x + Math.PI * 2 * (3 + Math.floor(Math.random() * 4)),
+        ty: te.y + Math.PI * 2 * (4 + Math.floor(Math.random() * 4)),
+        tz: te.z + Math.PI * 2 * (1 + Math.floor(Math.random() * 3))
+    };
+
+    document.getElementById('d20-result').textContent = '...';
+}
+
+window.addEventListener('load', () => setTimeout(initD20, 100));
 </script>
 </body>
 </html>

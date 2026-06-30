@@ -11,6 +11,7 @@ Aplicação web (HTML + CSS + JS Vanilla + PHP) para auxiliar sessões de RPG de
 | **[index.html](index.html)** | Catálogo de 10 androides + ficha de personagem + rolador de dados Daggerheart |
 | **[oneshot.html](oneshot.html)** | Gerador procedural de planetas com IA (cascade multi-provedor: Gemini → NVIDIA → Pollinations → Hermes → Local) + login do capitão (TOTP) |
 | **[mothership.html](mothership.html)** | Descrição detalhada da nave-mãe Tiburon, veículos auxiliares e galeria |
+| **[400i.html](400i.html)** | Descrição da nave auxiliar Origin 400i, recursos de bordo e veículo acoplado |
 
 ---
 
@@ -66,6 +67,7 @@ WARP-Unit/
 ├── index.html              Catálogo de unidades + ficha + dados
 ├── oneshot.html            Gerador de missão one-shot (auth + IA cascade)
 ├── mothership.html         Nave-mãe Tiburon
+├── 400i.html               Nave auxiliar Origin 400i
 ├── warp.css                CSS centralizado (tema + componentes)
 ├── .env                    Credenciais locais (GEMINI_KEY, AUTH_PASSWORD, TOTP_SECRET, NVIDIA_KEY)
 ├── .env.example            Template do .env (committado)

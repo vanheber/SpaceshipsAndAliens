@@ -1,16 +1,14 @@
 <?php
-$envFile = __DIR__ . '/../.env';
-if (file_exists($envFile)) {
-    foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
-        $line = trim($line);
-        if ($line === '' || $line[0] === '#') continue;
-        putenv($line);
-    }
-}
+require_once __DIR__ . '/load-env.php';
+loadEnv();
 
-header('Access-Control-Allow-Origin: *');
+$allowedOrigins = ['http://localhost:3000', 'http://localhost:8080', 'http://localhost', 'null'];
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$corsOrigin = in_array($origin, $allowedOrigins, true) ? $origin : 'null';
+header('Access-Control-Allow-Origin: ' . $corsOrigin);
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-API-Key');
+header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Max-Age: 86400');
 header('Cache-Control: no-store, must-revalidate');
 

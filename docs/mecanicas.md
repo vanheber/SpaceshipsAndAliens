@@ -49,3 +49,15 @@ Antes de cada rolagem, o operador seleciona qual modificador aplicar:
 | **Inteligência** | Análise, hacking, investigação |
 | **Especialidade** | Uso da habilidade única da unidade |
 | **Nenhum (+0)** | Ações genéricas ou modo Drone |
+
+## Vantagem / Desvantagem (D6)
+
+Ações que merecem bônus ou penalidade usam um dado extra de 6 faces:
+
+| Modo | Efeito |
+|---|---|
+| **Com Vantagem** | `+1d6` na soma total. Dado amarelo (roxo) exibido no visor 3D. |
+| **Com Desvantagem** | `-1d6` na soma total. Dado roxo (amarelo) exibido no visor 3D. |
+
+Os D6 não interferem na determinação de Esperança/Medo — apenas os D12 decidem isso.
+As rolagens com Vantagem/Desvantagem mantêm seus dados visíveis no visor 3D até a próxima jogada.

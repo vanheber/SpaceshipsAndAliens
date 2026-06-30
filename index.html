@@ -237,14 +237,18 @@
                                 <input type="number" id="roll-dc" class="number-input" placeholder="Dificuldade" value="10">
                             </div>
                         </div>
-                        <div class="flex-2">
-                            <button class="roll-btn" onclick="rollDice()">Jogar os dados</button>
+                        <div class="flex-2" style="display:flex;gap:4px;">
+                            <button class="roll-btn" onclick="rollDice()" style="flex:1">Jogar</button>
+                            <button class="roll-btn" onclick="rollDiceWithAdvantage()" style="flex:1;background:var(--amber);color:var(--violet)">C/ Vant.</button>
+                            <button class="roll-btn" onclick="rollDiceWithDisadvantage()" style="flex:1;background:var(--violet);color:var(--amber)">C/ Desv.</button>
                         </div>
                     </div>
 
                 <div class="dice-container" id="dice-viewport"></div>
                 <div class="dice-labels">
                     <span class="die-label-hope">ESPERANÇA</span>
+                    <span class="die-label-vant" style="color:var(--amber)">VANTAGEM</span>
+                    <span class="die-label-desv" style="color:var(--violet)">DESVANTAGEM</span>
                     <span class="die-label-fear">MEDO</span>
                 </div>
 
@@ -309,7 +313,7 @@
         // ═══════════════════════════════════════════
 
         let scene, camera, renderer;
-        let hopeDie, fearDie, diceAnims = [];
+        let hopeDie, fearDie, vantDie, desvDie, diceAnims = [];
         let diceReady = false;
 
         function disposeDiceRenderer() {
@@ -333,7 +337,7 @@
                 });
             }
             scene = null; camera = null;
-            hopeDie = null; fearDie = null; diceAnims = [];
+            hopeDie = null; fearDie = null; vantDie = null; desvDie = null; diceAnims = [];
         }
 
         function initDiceRenderer() {
@@ -364,16 +368,73 @@
             scene.add(ambient, key, fill);
 
             hopeDie = createDie('#e6a23c', '#7c3aed');
-            hopeDie.position.set(-1.7, 0, 0);
+            hopeDie.position.set(-2.2, 0, 0);
             scene.add(hopeDie);
 
+            vantDie = createD6('#e6a23c', '#7c3aed');
+            vantDie.position.set(-0.75, 0, 0);
+            vantDie.visible = false;
+            scene.add(vantDie);
+
+            desvDie = createD6('#a78bfa', '#fde047');
+            desvDie.position.set(0.75, 0, 0);
+            desvDie.visible = false;
+            scene.add(desvDie);
+
             fearDie = createDie('#a78bfa', '#fde047');
-            fearDie.position.set(1.7, 0, 0);
+            fearDie.position.set(2.2, 0, 0);
             scene.add(fearDie);
 
             diceReady = true;
             renderLoop();
         }
+        function makeFaceTexture(hexColor, textColor, text, fontSize, yOffset) {
+            const cv = document.createElement('canvas');
+            cv.width = 256; cv.height = 256;
+            const ctx = cv.getContext('2d');
+            ctx.fillStyle = hexColor;
+            ctx.fillRect(0, 0, 256, 256);
+            ctx.fillStyle = textColor;
+            ctx.font = `Bold ${fontSize}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(String(text), 128, yOffset);
+            return new THREE.CanvasTexture(cv);
+        }
+
+        function createD6(hexColor, textColor) {
+            const group = new THREE.Group();
+            const R = 0.7;
+            const geo = new THREE.BoxGeometry(R, R, R);
+            const ni = geo.clone().toNonIndexed();
+            const arr = ni.getAttribute('position').array;
+
+            const norms = [];
+            const mats = [];
+
+            for (let f = 0; f < 6; f++) {
+                ni.addGroup(f * 6, 6, f);
+
+                const cx = (arr[f*18] + arr[f*18+3] + arr[f*18+6] + arr[f*18+9] + arr[f*18+12] + arr[f*18+15]) / 6;
+                const cy = (arr[f*18+1] + arr[f*18+4] + arr[f*18+7] + arr[f*18+10] + arr[f*18+13] + arr[f*18+16]) / 6;
+                const cz = (arr[f*18+2] + arr[f*18+5] + arr[f*18+8] + arr[f*18+11] + arr[f*18+14] + arr[f*18+17]) / 6;
+                norms.push(new THREE.Vector3(cx, cy, cz).normalize());
+
+                mats.push(new THREE.MeshStandardMaterial({
+                    map: makeFaceTexture(hexColor, textColor, f + 1, 160, 134),
+                    roughness: 0.45, metalness: 0.15,
+                }));
+            }
+
+            group.add(new THREE.Mesh(ni, mats));
+            group.userData.faceNormals = norms;
+
+            const edgeMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.15 });
+            group.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat));
+
+            return group;
+        }
+
         function createDie(hexColor, textColor) {
             const group = new THREE.Group();
             const R = 1.05;
@@ -440,19 +501,8 @@
                     uvArr[ui + 1] = uv.v;
                 }
 
-                const cv = document.createElement('canvas');
-                cv.width = 256; cv.height = 256;
-                const ctx = cv.getContext('2d');
-                ctx.fillStyle = hexColor;
-                ctx.fillRect(0, 0, 256, 256);
-                ctx.fillStyle = textColor;
-                ctx.font = 'Bold 140px Arial';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(String(f + 1), 128, 132);
-
                 mats.push(new THREE.MeshStandardMaterial({
-                    map: new THREE.CanvasTexture(cv),
+                    map: makeFaceTexture(hexColor, textColor, f + 1, 140, 132),
                     roughness: 0.45, metalness: 0.15,
                 }));
             }
@@ -485,19 +535,26 @@
 
             if (diceAnims.length === 0 && hopeDie && fearDie) {
                 hopeDie.rotation.y += 0.001;
+                if (vantDie && vantDie.visible) vantDie.rotation.y += 0.001;
+                if (desvDie && desvDie.visible) desvDie.rotation.y += 0.001;
                 fearDie.rotation.y += 0.001;
             }
 
             renderer.render(scene, camera);
         }
 
-        function startDiceRoll(hopeVal, fearVal) {
+        function startDiceRoll(hopeVal, fearVal, vantVal, desvVal) {
             if (!diceReady || !hopeDie || !fearDie) return;
             const camPos = new THREE.Vector3(0, 0.8, 5);
-            const targets = [hopeVal - 1, fearVal - 1];
-            [hopeDie, fearDie].forEach((die, idx) => {
+            const entries = [
+                { die: hopeDie, target: hopeVal - 1 },
+                { die: fearDie, target: fearVal - 1 },
+            ];
+            if (vantVal !== undefined && vantDie) entries.push({ die: vantDie, target: vantVal - 1 });
+            if (desvVal !== undefined && desvDie) entries.push({ die: desvDie, target: desvVal - 1 });
+            entries.forEach(({ die, target }) => {
                 const toCamera = camPos.clone().sub(die.position).normalize();
-                const fn = die.userData.faceNormals[targets[idx]];
+                const fn = die.userData.faceNormals[target];
                 const q = new THREE.Quaternion().setFromUnitVectors(fn, toCamera);
                 const te = new THREE.Euler().setFromQuaternion(q);
                 const sx = die.rotation.x, sy = die.rotation.y, sz = die.rotation.z;
@@ -511,21 +568,20 @@
             });
         }
 
-        // Lançador de dados com regras de Daggerheart
-        function rollDice() {
+        function rollDice(mode) {
             const hope = Math.floor(Math.random() * 12) + 1;
             const fear = Math.floor(Math.random() * 12) + 1;
-
+            const hasD6 = mode && mode !== "normal";
+            const d6val = hasD6 ? Math.floor(Math.random() * 6) + 1 : 0;
             const modifier = parseInt(document.getElementById("roll-modifier").value) || 0;
             const dc = parseInt(document.getElementById("roll-dc").value) || 10;
-            const total = hope + fear + modifier;
+            const sign = mode === "advantage" ? 1 : mode === "disadvantage" ? -1 : 0;
+            const total = hope + fear + sign * d6val + modifier;
 
             const isSuccess = total >= dc;
             const statusStr = isSuccess ? "SUCESSO" : "FALHA";
 
-            let message = "";
-            let color = "";
-
+            let message, color;
             if (hope === fear) {
                 message = `CRÍTICO! ${statusStr} com grande vantagem táctica.`;
                 color = "var(--drone-color)";
@@ -539,18 +595,24 @@
                 color = "var(--accent-fear)";
             }
 
-            startDiceRoll(hope, fear);
+            if (vantDie) vantDie.visible = mode === "advantage";
+            if (desvDie) desvDie.visible = mode === "disadvantage";
+            startDiceRoll(hope, fear, mode === "advantage" ? d6val : undefined, mode === "disadvantage" ? d6val : undefined);
 
             const outcome = document.getElementById("sheet-outcome");
             outcome.innerHTML = `<div class="text-muted-sm">Rolando...</div>`;
 
+            const d6label = !hasD6 ? "" : ` | ${mode === "advantage" ? "Vant" : "Desv"}. ${d6val}`;
             setTimeout(() => {
                 outcome.innerHTML = `
-                    <div class="outcome-title" style="color:${color}">Esperança ${hope} | Medo ${fear} · Soma: ${total} vs Dificuldade ${dc}</div>
+                    <div class="outcome-title" style="color:${color}">Esperança ${hope} | Medo ${fear}${d6label} · Soma: ${total} vs Dificuldade ${dc}</div>
                     <div class="subtitle-text">${message}</div>
                 `;
             }, 1500);
         }
+
+        function rollDiceWithAdvantage() { rollDice("advantage"); }
+        function rollDiceWithDisadvantage() { rollDice("disadvantage"); }
 
         window.onload = initApp;
     </script>
@@ -559,6 +621,8 @@
         <a href="docs/">Documentação</a>
         &nbsp;·&nbsp;
         <a href="mothership.html">Nave-Mãe</a>
+        &nbsp;·&nbsp;
+        <a href="400i.html">Nave Auxiliar 400i</a>
         &nbsp;·&nbsp;
         <a href="oneshot.html">Gerador de Missão</a>
         &nbsp;·&nbsp;

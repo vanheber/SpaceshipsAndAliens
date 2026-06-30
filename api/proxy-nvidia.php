@@ -1,12 +1,6 @@
 <?php
-$envFile = __DIR__ . '/../.env';
-if (file_exists($envFile)) {
-    foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
-        $line = trim($line);
-        if ($line === '' || $line[0] === '#') continue;
-        putenv($line);
-    }
-}
+require_once __DIR__ . '/load-env.php';
+loadEnv();
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
