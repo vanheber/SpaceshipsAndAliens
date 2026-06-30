@@ -297,15 +297,16 @@ async function callAI(provider, systemPrompt, userPrompt) {
         });
         clearTimeout(timeout);
 
-        if (!res.ok) return null;
+        if (!res.ok) { console.warn(`[${provider.name}] HTTP ${res.status}`); return null; }
         const data = await res.json();
         const content = data?.choices?.[0]?.message?.content;
-        if (!content) return null;
+        if (!content) { console.warn(`[${provider.name}] sem content na resposta`); return null; }
 
         const jsonMatch = content.match(/\{[\s\S]*\}/);
-        if (!jsonMatch) return null;
+        if (!jsonMatch) { console.warn(`[${provider.name}] sem JSON na resposta:`, content.slice(0, 200)); return null; }
         return JSON.parse(jsonMatch[0]);
     } catch (e) {
+        console.warn(`[${provider.name}] erro:`, e.message || e);
         return null;
     } finally {
         clearTimeout(timeout);
