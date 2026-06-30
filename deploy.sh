@@ -46,6 +46,7 @@ mirror --reverse --delete --verbose \
     --exclude deploy.sh \
     --exclude .DS_Store \
     --exclude node_modules/ \
+    --exclude plans/ \
     --exclude PROMPTS_IMAGENS.md \
     --exclude README.md \
     --exclude ".*\.log$" \
