@@ -11,7 +11,7 @@ Toda unidade possui dois valores:
 | `startingEnergy` | Energia com que a unidade **inicia a missão** |
 | `maxEnergy` | **Teto máximo** que a unidade pode acumular (2x o inicial) |
 
-Exemplo: Aegis Sentinel v4 — começa com 6 células, pode acumular até 12.
+Exemplo: Regis V4 — começa com 6 células, pode acumular até 12.
 
 ## Gastando e Recuperando
 

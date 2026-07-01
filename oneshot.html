@@ -114,6 +114,8 @@
     &nbsp;·&nbsp;
     <a href="missioncontrol.html">Controle da Missão</a>
     &nbsp;·&nbsp;
+    <a href="equipamento.html">Equipamento</a>
+    &nbsp;·&nbsp;
     <a href="#" onclick="clearMission();return false;">Limpar Missão</a>
     &nbsp;·&nbsp;
     <a href="#" id="auth-link" onclick="toggleLogin();return false;">🔑 Login</a>
@@ -155,7 +157,11 @@ const DEFAULT_PLANET_TYPES = [
 const DEFAULT_PLANET_NAMES = { codes: ["KX", "TD", "OP", "XR", "VY", "ZQ", "NF", "HS"], prefixes: [], suffixes: [] };
 
 let PLANET_TYPES = [];
+let PLANET_PARAMS = null;
 let PLANET_NAMES = { codes: [], prefixes: [], suffixes: [] };
+let EVENTS_PARAMS = null;
+let EVENTS_CATEGORIES = null;
+let ENEMIES = null;
 let DISCOVERY_CATEGORIES = {};
 let LOCATIONS = [];
 let PERILS = {};
@@ -195,13 +201,21 @@ let isAuthenticated = false;
 
 async function loadDataPools() {
     try {
-        const [planetTypes, planetNames, discoveriesData] = await Promise.all([
+        const [planetTypes, planetParams, planetNames, discoveriesData, eventsParams, eventsCategories, enemies] = await Promise.all([
             fetch("data/planet-types.json").then(r => r.json()),
+            fetch("data/planet-params.json").then(r => r.json()),
             fetch("data/planet-names.json").then(r => r.json()),
-            fetch("data/discoveries.json").then(r => r.json())
+            fetch("data/discoveries.json").then(r => r.json()),
+            fetch("data/events-params.json").then(r => r.json()),
+            fetch("data/events-categories.json").then(r => r.json()),
+            fetch("data/enemies.json").then(r => r.json())
         ]);
         PLANET_TYPES = planetTypes;
+        PLANET_PARAMS = planetParams;
         PLANET_NAMES = planetNames;
+        EVENTS_PARAMS = eventsParams;
+        EVENTS_CATEGORIES = eventsCategories;
+        ENEMIES = enemies;
         DISCOVERY_CATEGORIES = discoveriesData.categories;
         LOCATIONS = discoveriesData.locations;
         PERILS = discoveriesData.perils;
@@ -245,7 +259,7 @@ function buildProviderList() {
         providers.push({
             name: "Gemini",
             endpoint: window.location.origin + "/api/proxy.php",
-            model: "gemini-3.1-flash-lite-preview",
+            model: "gemini-3.5-flash",
             timeout: 30000,
             headers: { "Content-Type": "application/json" }
         });
@@ -284,6 +298,7 @@ async function callAI(provider, systemPrompt, userPrompt) {
         const res = await fetch(provider.endpoint, {
             method: "POST",
             cache: "no-store",
+            credentials: "include",
             headers: provider.headers,
             body: JSON.stringify({
                 model: provider.model,
@@ -297,16 +312,25 @@ async function callAI(provider, systemPrompt, userPrompt) {
         });
         clearTimeout(timeout);
 
-        if (!res.ok) { console.warn(`[${provider.name}] HTTP ${res.status}`); return null; }
+        if (!res.ok) {
+            let detail = "";
+            try { const err = await res.text(); detail = err.slice(0, 200); } catch (_) {}
+            console.warn(`[${provider.name}] HTTP ${res.status}`, detail || "");
+            return null;
+        }
         const data = await res.json();
         const content = data?.choices?.[0]?.message?.content;
-        if (!content) { console.warn(`[${provider.name}] sem content na resposta`); return null; }
+        if (!content) {
+            console.warn(`[${provider.name}] sem content — estrutura:`, JSON.stringify(data).slice(0, 300));
+            return null;
+        }
 
         const jsonMatch = content.match(/\{[\s\S]*\}/);
-        if (!jsonMatch) { console.warn(`[${provider.name}] sem JSON na resposta:`, content.slice(0, 200)); return null; }
+        if (!jsonMatch) { console.warn(`[${provider.name}] sem JSON — resposta crua:`, content.slice(0, 200)); return null; }
         return JSON.parse(jsonMatch[0]);
     } catch (e) {
-        console.warn(`[${provider.name}] erro:`, e.message || e);
+        const reason = e.name === "AbortError" ? "timeout" : (e.message || e);
+        console.warn(`[${provider.name}] falhou (${reason})`);
         return null;
     } finally {
         clearTimeout(timeout);
@@ -323,16 +347,51 @@ async function tryAIProviders(systemPrompt, userPrompt) {
 
 async function aiGeneratePlanet() {
     const seed = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    if (!PLANET_PARAMS) {
+        const typeData = pick(PLANET_TYPES.length ? PLANET_TYPES : DEFAULT_PLANET_TYPES);
+        return { name: generatePlanetName(), type: typeData.type, desc: typeData.desc };
+    }
+
+    const params = {};
+    for (const key of Object.keys(PLANET_PARAMS)) {
+        params[key] = pick(PLANET_PARAMS[key]);
+    }
+
+    const paramsStr = Object.entries(params)
+        .map(([k, v]) => `${k}: ${v}`)
+        .join("\n");
+
     const { data: result, providerName } = await tryAIProviders(
-        "You are the AI Captain generating planet scan data for a sci-fi RPG. Be genuinely surprising and original. Invent new, unexpected planet types — do NOT pick from any predefined list. AVOID obvious clichés: no 'ancient ruins', no 'mysterious energy readings', no 'this planet holds secrets', no 'crystal caves', no 'forgotten civilization'. The galaxy is vast and strange — make it actually weird, unsettling, or oddly specific. Always respond with valid JSON only, no markdown, no other text.",
-        `Generate a planet for a sci-fi RPG. Invent a brand new, original type — do not reuse common sci-fi tropes. Surprise the player. Respond with EXACTLY this JSON structure (JSON only):\n{"name":"a planet code like XX-999a (two letters, dash, three digits, one letter)","type":"a short, descriptive, original planet type label in Portuguese (max 4 words)","desc":"2-3 evocative sentences in Portuguese — atmospheric but specific. Avoid clichés, aim for the unexpected."}\n(seed: ${seed})`
+        "You are a planetary survey AI. Given attributes, weave them into a coherent, specific world. Find unexpected connections between them — show how they interact with each other. The attributes are constraints to synthesize, not a checklist to mention. Make the planet feel like a real place with internal logic, where each attribute shapes the others.",
+        `Generate a planet with these scan attributes:\n${paramsStr}\n\nBuild a name (code like XX-999a), a short type label in Portuguese (max 4 words), and a 2-3 sentence description that incorporates ALL attributes above. Don't list them flatly — create connections, tensions, and surprises. What does the crew see, feel, and measure on arrival? Respond with EXACTLY this JSON only:\n{"name":"XX-999a","type":"type label","desc":"description"}\n(seed: ${seed})`
     );
-    if (!result?.name || !result?.type || !result?.desc) return null;
+    if (result?.name && result?.type && result?.desc) {
+        lastAIProvider = providerName;
+        return { name: result.name, type: result.type, desc: result.desc };
+    }
+
     lastAIProvider = providerName;
-    return { name: result.name, type: result.type, desc: result.desc };
+    return fallbackPlanet(params);
+}
+
+function fallbackPlanet(params) {
+    if (!params) {
+        const t = pick(PLANET_TYPES.length ? PLANET_TYPES : DEFAULT_PLANET_TYPES);
+        return { name: generatePlanetName(), type: t.type, desc: t.desc };
+    }
+    const desc = (
+        `Planeta de superfície ${params.superficie}, bioma ${params.bioma}, ` +
+        `atmosfera ${params.atmosfera}. Clima ${params.clima}, ` +
+        `órbita ${params.orbita}, gravidade ${params.gravidade}. ` +
+        `Fauna: ${params.fauna}. Flora: ${params.flora}. ` +
+        `Recursos: ${params.recursos}. Perigo principal: ${params.perigo}.`
+    );
+    return { name: generatePlanetName(), type: params.superficie.charAt(0).toUpperCase() + params.superficie.slice(1), desc };
 }
 
 async function aiGenerateDiscovery(discNumber, discTotal) {
+    if (!EVENTS_PARAMS || !EVENTS_CATEGORIES) return null;
+
     let context;
     if (discoveries.length === 0) {
         context = "Nenhum evento anterior — primeira descoberta da missão.";
@@ -353,27 +412,76 @@ async function aiGenerateDiscovery(discNumber, discTotal) {
     }
 
     const seed = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+
+    const params = {};
+    for (const key of Object.keys(EVENTS_PARAMS)) {
+        params[key] = pick(EVENTS_PARAMS[key]);
+    }
+
+    const catKeys = Object.keys(EVENTS_CATEGORIES);
+    const category = pick(catKeys);
+    const catWord = pick(EVENTS_CATEGORIES[category]);
+
+    let enemy = null;
+    let enemyStr = "";
+    if (params.encontros === 1 && ENEMIES && ENEMIES.length) {
+        enemy = pick(ENEMIES);
+        enemyStr = `\n[INIMIGO CONHECIDO]\nNome: ${enemy.nome}\nDescrição: ${enemy.desc}\n[/INIMIGO CONHECIDO]\n\nEste inimigo está presente no cenário — pode ser a ameaça principal, um oportunista explorando a situação, a vítima do evento, ou até um aliado improvável forçado pelas circunstâncias. Decida o papel dele com base nos parâmetros do evento, não por padrão.`;
+    }
+
+    const paramsStr = Object.entries(params)
+        .filter(([k]) => k !== "encontros")
+        .map(([k, v]) => `${k}: ${v}`)
+        .join("\n");
+
     const { data: result, providerName } = await tryAIProviders(
-        "You are the AI Captain of the Aegis Tiburon generating encounter logs for a sci-fi RPG. Be genuinely surprising and original. Invent freely — do NOT pick from any predefined list of locations, perils, or rewards. AVOID obvious clichés: no 'ancient civilization', no 'mysterious signal', no 'hidden chamber', no 'forgotten knowledge', no 'chosen one' tropes. Also avoid R-rated content (gore, sexual). The universe is deeply strange — make encounters feel unexpected and specific. Always respond with valid JSON only, no markdown.",
-        `Ship: Aegis Tiburon, 121m heavy gunship converted to exploration mothership. Crew of android robots. AI Captain integrated into ship systems.\n\n[PLANET DATA]\nCode: ${planet.name}\nType: ${planet.type}\nDescription: ${planet.desc}\n[/PLANET DATA]\n\nEncounter ${discNumber} of ${discTotal}.\n${context}\n\nGenerate ONE encounter of ANY of the four types. Invent everything — do not reuse common tropes. Respond with EXACTLY this JSON:\n{"type":"planet|space|ship|rescue","approach":"a short Portuguese label (max 4 words) describing HOW the encounter began — be original","description":"2-3 vivid, specific sentences in Portuguese","location":"invent a location in Portuguese","peril":"invent a concrete threat, danger or challenge in Portuguese","perilDC":number(8-22),"reward":"invent a specific reward in Portuguese — not generic 'dados valiosos'"}\n(seed: ${seed})`
+        "You are the AI Captain of the Aegis Tiburon generating encounter logs for a sci-fi RPG. Given parameters, synthesize a coherent, specific encounter. Weave the attributes into a surprising event. The parameters are creative anchors, not a checklist. Always respond with valid JSON only, no markdown.",
+        `Ship: Aegis Tiburon, 121m heavy gunship. Crew of android robots. AI Captain integrated.\n\n[PLANET DATA]\nCode: ${planet.name}\nType: ${planet.type}\nDescription: ${planet.desc}\n[/PLANET DATA]\n\n[EVENT PARAMETERS]\n${paramsStr}\nCategoria: ${category}\nPalavra específica: ${catWord}\n[/EVENT PARAMETERS]${enemyStr}\nEncounter ${discNumber} of ${discTotal}.\n${context}\n\nGenerate ONE encounter incorporating the event parameters. Respond with EXACTLY this JSON:\n{"type":"planet|space|ship|rescue","approach":"a short Portuguese label (max 4 words) describing HOW the encounter began","description":"2-3 vivid, specific sentences in Portuguese","location":"invent a location in Portuguese","peril":"concrete threat, danger or challenge in Portuguese","perilDC":number(8-22),"reward":"specific reward in Portuguese"}\n(seed: ${seed})`
     );
-    if (!result?.type || !result?.approach || !result?.description) return null;
+    if (result?.type && result?.approach && result?.description) {
+        lastAIProvider = providerName;
+        const types = {planet: "planet", space: "space", ship: "ship", nave: "ship", espaco: "space", orbital: "space", rescue: "rescue", resgate: "rescue"};
+        const encounterType = types[result.type?.toLowerCase()] || "planet";
+        const dc = parseInt(result.perilDC) || d(6) + 10;
+        return {
+            encounterType,
+            approach: result.approach,
+            description: result.description,
+            location: result.location || "em uma área inexplorada",
+            peril: result.peril || "Um desafio desconhecido surge.",
+            perilDC: Math.min(Math.max(dc, 8), 22),
+            reward: result.reward || "Dados e materiais coletados do evento."
+        };
+    }
 
     lastAIProvider = providerName;
+    return fallbackDiscovery(params, category, catWord, enemy);
+}
 
-    // Normalize type
-    const types = {planet: "planet", space: "space", ship: "ship", nave: "ship", espaco: "space", orbital: "space", rescue: "rescue", resgate: "rescue"};
-    const encounterType = types[result.type?.toLowerCase()] || "planet";
+function fallbackDiscovery(params, category, catWord, enemy) {
+    const catTypeMap = { resgate: "rescue", escolta: "rescue", naufrágio: "space", anomalia: "space", nave: "ship", encontro: "planet", pesquisa: "planet", perigo: "planet" };
+    const encounterType = catTypeMap[category] || "planet";
+    const catLabelMap = { resgate: "Resgate", escolta: "Escolta", encontro: "Encontro", pesquisa: "Pesquisa", perigo: "Perigo", naufrágio: "Naufrágio", anomalia: "Anomalia", nave: "Nave" };
+    const approachLabel = catLabelMap[category] || "Evento";
+    let description = `${params.cena} de origem ${params.origem}, em estado ${params.estado}. ${params.elemento_chave.charAt(0).toUpperCase() + params.elemento_chave.slice(1)} — ${catWord}. Tom ${params.tom}.`;
+    let peril = `${catWord.charAt(0).toUpperCase() + catWord.slice(1)}. DC ajustado à situação.`;
 
-    const dc = parseInt(result.perilDC) || d(6) + 10;
+    if (enemy) {
+        description += ` Presença detectada: ${enemy.nome} — ${enemy.desc}.`;
+        peril = `${enemy.nome} estão envolvidos. ${peril}`;
+    }
+
+    const location = params.cena;
+    const perilDC = d(6) + 10;
+    const reward = params.recompensa;
     return {
         encounterType,
-        approach: result.approach,
-        description: result.description,
-        location: result.location || "em uma área inexplorada",
-        peril: result.peril || "Um desafio desconhecido surge.",
-        perilDC: Math.min(Math.max(dc, 8), 22),
-        reward: result.reward || "Dados e materiais coletados do evento."
+        approach: approachLabel,
+        description,
+        location,
+        peril,
+        perilDC,
+        reward
     };
 }
 
@@ -390,7 +498,7 @@ function showAIBadge(providerName) {
 
 async function checkAuth() {
     try {
-        const res = await fetch('/api/auth.php?check=1');
+        const res = await fetch('/api/auth.php?check=1', { credentials: "include" });
         if (!res.ok) return false;
         const data = await res.json();
         return data.authenticated === true;
@@ -417,7 +525,7 @@ async function doLogin() {
     errorEl.style.display = 'none';
     if (!password) { errorEl.textContent = 'Digite a senha'; errorEl.style.display = 'block'; return; }
     try {
-        const res = await fetch('/api/auth.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password, totp }) });
+        const res = await fetch('/api/auth.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: "include", body: JSON.stringify({ password, totp }) });
         const data = await res.json();
         if (data.success) {
             isAuthenticated = true;
@@ -619,11 +727,11 @@ async function generatePlanet() {
         if (aiResult) {
             planet = { name: aiResult.name, type: aiResult.type, desc: aiResult.desc, discTotal: d4() };
         }
-    } catch (e) { console.warn("AI planet generation failed", e); }
+    } catch (e) { console.warn("Planet generation failed", e); }
 
     if (!planet) {
-        const typeData = pick(PLANET_TYPES.length ? PLANET_TYPES : [{ type: "Mundo Desconhecido", desc: "Um planeta inexplorado." }]);
-        planet = { name: generatePlanetName(), type: typeData.type, desc: typeData.desc, discTotal: d4() };
+        const t = pick(PLANET_TYPES.length ? PLANET_TYPES : DEFAULT_PLANET_TYPES);
+        planet = { name: generatePlanetName(), type: t.type, desc: t.desc, discTotal: d4() };
     }
 
     discoveries = [];

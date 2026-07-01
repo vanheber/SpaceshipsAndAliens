@@ -70,6 +70,10 @@
         }
 
         function clearSession() {
+            document.getElementById('clear-modal').classList.add('open');
+        }
+        function confirmClear() {
+            document.getElementById('clear-modal').classList.remove('open');
             localStorage.removeItem(STORAGE_KEY);
             activeChar = null;
             activeEnergy = 0;
@@ -77,6 +81,9 @@
             document.getElementById("sheet-screen").classList.remove("active");
             document.getElementById("selection-screen").classList.add("active");
             renderCatalog();
+        }
+        function cancelClear() {
+            document.getElementById('clear-modal').classList.remove('open');
         }
 
         async function initApp() {
@@ -203,6 +210,19 @@
                     <div class="ability-title">${activeChar.abilityName} (${activeChar.abilityValue >= 0 ? '+' : ''}${activeChar.abilityValue})</div>
                     <div class="ability-desc">${activeChar.abilityDesc}</div>
                 </div>
+                <div class="equip-grid-sheet">
+                    ${activeChar.equipment.map(eq => `
+                        <div class="equip-card-sheet">
+                            <a href="equipamento.html#${eq.anchor}" class="equip-img-link">
+                                <img src="${eq.image}" alt="${eq.name}" loading="lazy">
+                            </a>
+                            <div class="equip-card-body">
+                                <span class="equip-card-name">${eq.name}</span>
+                                ${eq.dice ? `<button class="dice-btn-sm" onclick="rollEquipDice(this)" data-dice="${eq.dice}">${eq.dice}</button>` : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
                 `}
 
                 <div class="energy-section">
@@ -245,12 +265,7 @@
                     </div>
 
                 <div class="dice-container" id="dice-viewport"></div>
-                <div class="dice-labels">
-                    <span class="die-label-hope">ESPERANÇA</span>
-                    <span class="die-label-vant" style="color:var(--amber)">VANTAGEM</span>
-                    <span class="die-label-desv" style="color:var(--violet)">DESVANTAGEM</span>
-                    <span class="die-label-fear">MEDO</span>
-                </div>
+
 
                     <div class="outcome-box" id="sheet-outcome">
                         Aguardando lançamento de dados...
@@ -350,7 +365,7 @@
             const h = 220;
 
             scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
+            camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 100);
             camera.position.set(0, 0.8, 5);
             camera.lookAt(0, 0, 0);
 
@@ -368,21 +383,21 @@
             scene.add(ambient, key, fill);
 
             hopeDie = createDie('#e6a23c', '#7c3aed');
-            hopeDie.position.set(-2.2, 0, 0);
+            hopeDie.position.set(-1.7, 0, 0);
             scene.add(hopeDie);
 
             vantDie = createD6('#e6a23c', '#7c3aed');
-            vantDie.position.set(-0.75, 0, 0);
+            vantDie.position.set(0, 0, 0);
             vantDie.visible = false;
             scene.add(vantDie);
 
             desvDie = createD6('#a78bfa', '#fde047');
-            desvDie.position.set(0.75, 0, 0);
+            desvDie.position.set(0, 0, 0);
             desvDie.visible = false;
             scene.add(desvDie);
 
             fearDie = createDie('#a78bfa', '#fde047');
-            fearDie.position.set(2.2, 0, 0);
+            fearDie.position.set(1.7, 0, 0);
             scene.add(fearDie);
 
             diceReady = true;
@@ -399,6 +414,10 @@
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(String(text), 128, yOffset);
+            if (text === 6 || text === 9) {
+                const w = ctx.measureText(String(text)).width;
+                ctx.fillRect(128 - w / 2, yOffset + fontSize * 0.35, w, Math.max(4, fontSize * 0.06));
+            }
             return new THREE.CanvasTexture(cv);
         }
 
@@ -614,6 +633,19 @@
         function rollDiceWithAdvantage() { rollDice("advantage"); }
         function rollDiceWithDisadvantage() { rollDice("disadvantage"); }
 
+        function rollEquipDice(btn) {
+            const dice = btn.getAttribute('data-dice') || btn.textContent.trim();
+            const m = dice.match(/(\d+)d(\d+)/i);
+            if (!m) return;
+            const count = parseInt(m[1]);
+            const sides = parseInt(m[2]);
+            let total = 0;
+            for (let i = 0; i < count; i++) total += Math.floor(Math.random() * sides) + 1;
+            btn.textContent = total;
+            btn.disabled = true;
+            setTimeout(() => { btn.textContent = dice; btn.disabled = false; }, 2000);
+        }
+
         window.onload = initApp;
     </script>
 
@@ -628,8 +660,21 @@
         &nbsp;·&nbsp;
         <a href="missioncontrol.html">Controle da Missão</a>
         &nbsp;·&nbsp;
+        <a href="equipamento.html">Equipamento</a>
+        &nbsp;·&nbsp;
         <a href="#" onclick="clearSession();return false;">Limpar Sessão</a>
     </footer>
+
+    <div class="modal-overlay" id="clear-modal">
+        <div class="modal-card">
+            <div class="modal-title">Limpar Sessão</div>
+            <p style="font-size:0.85rem;color:#a3b1c1;margin:10px 0 16px">Tem certeza? Todos os dados da sessão atual serão perdidos.</p>
+            <div class="btn-row">
+                <button class="btn btn-secondary" onclick="cancelClear()">Cancelar</button>
+                <button class="btn btn-danger" onclick="confirmClear()">Confirmar</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

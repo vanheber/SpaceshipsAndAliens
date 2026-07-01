@@ -2,7 +2,7 @@
 require_once __DIR__ . '/load-env.php';
 loadEnv();
 
-$allowedOrigins = ['http://localhost:3000', 'http://localhost:8080', 'http://localhost', 'null'];
+$allowedOrigins = ['http://localhost:3000', 'http://localhost:8000', 'http://localhost:8080', 'http://localhost', 'http://warp-unit.test', 'null'];
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 $corsOrigin = in_array($origin, $allowedOrigins, true) ? $origin : 'null';
 header('Access-Control-Allow-Origin: ' . $corsOrigin);
@@ -113,11 +113,12 @@ if ($TOTP_SECRET && !verify_totp($TOTP_SECRET, $totp)) {
 $token = bin2hex(random_bytes(32));
 $signature = hash_hmac('sha256', $token, $TOTP_SECRET ?: $AUTH_PASSWORD);
 $cookieValue = $token . '.' . $signature;
+$isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || ($_SERVER['SERVER_PORT'] ?? '') === '443';
 setcookie('warp_auth', $cookieValue, [
     'expires' => time() + 86400 * 30,
     'path' => '/',
     'domain' => '',
-    'secure' => true,
+    'secure' => $isHttps,
     'httponly' => true,
     'samesite' => 'Lax'
 ]);

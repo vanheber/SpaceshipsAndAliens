@@ -72,19 +72,141 @@ Configuração do drone de backup:
 
 ## Gerador de Missão
 
-### `data/planet-types.json`
+### Geração Procedural de Planetas
 
-_Optional fallback apenas._ A IA inventa tipos de planeta livremente; esta lista só é usada se todos os provedores de IA falharem.
+Desde v2.0, planetas são gerados via **sorteio procedural + síntese por IA**. Um sistema local sorteia uma palavra de cada categoria de atributo planetário; a IA recebe esses parâmetros como âncoras e sintetiza uma descrição coerente, encontrando conexões inesperadas entre eles. O trabalho da IA é *combinar* peças, não *inventar* do zero — isso elimina loops criativos e garante variedade combinatória real.
+
+#### `data/planet-params.json`
+
+Arrays de palavras por categoria. A cada geração, uma palavra de cada array é sorteada.
+
+```json
+{
+  "superficie": ["rochoso", "oceânico", "deserto de areia", "gelo", "selva", "pântano", ...],
+  "bioma": ["floresta", "tundra", "deserto", "savana", "recifes", "montanhas", ...],
+  "atmosfera": ["respirável", "tóxica", "corrosiva", "rarefeita", "densa", ...],
+  "clima": ["congelante", "tropical", "árido", "temperado", "vulcânico", ...],
+  "orbita": ["normal", "acoplado tidal", "estrela binária", "órbita excêntrica", ...],
+  "gravidade": ["micro", "baixa", "padrão", "alta"],
+  "fauna": ["insetos coloniais", "voadores", "aquáticos", "simbiótica", "predadora", ...],
+  "flora": ["liquens", "musgos", "fungos", "árvores", "flutuante", "extremófila", ...],
+  "recursos": ["minerais raros", "água líquida", "cristais energéticos", "gases nobres", ...],
+  "perigo": ["radiação de fundo", "tempestades severas", "instabilidade geológica", ...]
+}
+```
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `superficie` | string[] | Tipo dominante de superfície (12 opções) |
+| `bioma` | string[] | Bioma predominante (9 opções) |
+| `atmosfera` | string[] | Composição atmosférica (9 opções) |
+| `clima` | string[] | Clima do planeta (9 opções) |
+| `orbita` | string[] | Característica orbital (8 opções) |
+| `gravidade` | string[] | Nível de gravidade (4 opções) |
+| `fauna` | string[] | Fauna dominante (9 opções) |
+| `flora` | string[] | Flora dominante (10 opções) |
+| `recursos` | string[] | Recurso notável (8 opções) |
+| `perigo` | string[] | Perigo ambiental principal (9 opções) |
+
+**Total de combinações**: ~1.8 bilhão de planetas diferentes.
+
+**Fallback**: se a IA falhar, o gerador monta uma descrição procedural concatenando as palavras sorteadas. Se os JSONs não carregarem, cai no fallback clássico via `planet-types.json`.
+
+---
+
+### Geração Procedural de Descobertas (Eventos)
+
+Descobertas seguem o mesmo princípio: sorteio procedural de parâmetros + síntese por IA. O sistema opera com dois arquivos: parâmetros gerais de cena e categorias de evento.
+
+#### `data/events-params.json`
+
+Parâmetros gerais sorteados em toda descoberta:
+
+```json
+{
+  "cena": ["ruínas alienígenas", "naufrágio de nave", "campo de destroços", "ecossistema único", ...],
+  "origem": ["natural", "artificial alienígena", "humana pré-expansão", "acidental", ...],
+  "estado": ["operacional", "abandonado", "deteriorando", "hibernando", "corrompido", ...],
+  "elemento_chave": ["criatura viva", "máquina funcional", "dados legíveis", "sobrevivente", ...],
+  "recompensa": ["dados de navegação", "tecnologia utilizável", "minério raro", "aliado em potencial", ...],
+  "tom": ["urgente", "ameaçador", "melancólico", "curioso", "desesperado", "sombrio", ...],
+  "encontros": [0, 0, 0, 1]
+}
+```
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `cena` | string[] | Contexto visual da descoberta (16 opções) |
+| `origem` | string[] | Proveniência do elemento encontrado (8 opções) |
+| `estado` | string[] | Condição atual do cenário (9 opções) |
+| `elemento_chave` | string[] | O coração narrativo da descoberta (12 opções) |
+| `recompensa` | string[] | O que a tripulação ganha (12 opções) |
+| `tom` | string[] | Qualidade emocional do evento (10 opções) |
+| `encontros` | number[] | Probabilidade de inimigo conhecido (`[0,0,0,1]` = 25%) |
+
+#### `data/events-categories.json`
+
+Categorias de evento com palavras específicas. A cada descoberta sorteia-se uma categoria e depois uma palavra dentro dela:
+
+```json
+{
+  "resgate": ["tripulação perdida", "cápsula de escape", "nave à deriva", ...],
+  "escolta": ["carga sensível", "comboio minerador", "diplomata em trânsito", ...],
+  "encontro": ["comércio interestelar", "estação neutra flutuante", ...],
+  "pesquisa": ["coleta de amostras", "levantamento geológico", "escavação arqueológica", ...],
+  "perigo": ["colapso estrutural iminente", "criatura à solta", "explosão em cadeia", ...],
+  "naufrágio": ["destroços orbitais recentes", "estação abandonada", "cemitério de naves de guerra", ...],
+  "anomalia": ["distorção temporal localizada", "bolha de espaço dobrado", ...],
+  "nave": ["falha de sistema em cascata", "intruso não identificado", "conspiração entre androides", ...]
+}
+```
+
+| Categoria | Palavras | Mapeia para `encounterType` |
+|---|---|---|
+| `resgate` | 8 | rescue |
+| `escolta` | 7 | rescue |
+| `encontro` | 7 | planet |
+| `pesquisa` | 7 | planet |
+| `perigo` | 8 | planet |
+| `naufrágio` | 7 | space |
+| `anomalia` | 7 | space |
+| `nave` | 8 | ship |
+
+**Total de combinações**: ~98 milhões de descobertas diferentes.
+
+#### Inimigos (`data/enemies.json`)
+
+Quando `encontros` sorteia `1`, um inimigo conhecido é injetado na descoberta. O inimigo pode ser ameaça, oportunista, vítima ou aliado — a IA decide o papel com base no contexto.
+
+```json
+[
+  {
+    "nome": "Piratas Espaciais",
+    "desc": "Saqueadores de rotas comerciais que operam em bandos de 3 a 5 naves leves..."
+  },
+  {
+    "nome": "Reptilus",
+    "desc": "Raça reptiliana humanoide com tecnologia de salto interestelar própria..."
+  }
+]
+```
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `nome` | string | Nome do inimigo (exibido nos logs) |
+| `desc` | string | Descrição narrativa de 2-3 frases |
+
+---
+
+#### `data/planet-types.json`
+
+_Fallback clássico._ Usado apenas quando os JSONs de parâmetros procedurais não carregam (erro de rede).
 
 ```json
 [
   {
     "type": "Deserto de Sílica",
     "desc": "Um mundo árido coberto por dunas de areia vítrea..."
-  },
-  {
-    "type": "Selva Bioluminescente",
-    "desc": "Uma densa cobertura vegetal emite um brilho azul-esverdeado..."
   }
 ]
 ```
@@ -114,109 +236,43 @@ Componentes para geração procedural de nomes no formato `XX-999a`:
 
 ### `data/discoveries.json`
 
-Estrutura com todos os pools de descoberta, incluindo encontros espaciais, eventos de bordo e missões de resgate:
+_Fallback clássico._ Estrutura com pools de descoberta usados quando os JSONs procedurais (`events-params.json` + `events-categories.json`) não carregam:
 
 ```json
 {
-  "categories": {
-    "fauna": ["descrição 1", "descrição 2"],
-    "flora": ["..."],
-    "ruins": ["..."],
-    "phenomenon": ["..."],
-    "resource": ["..."],
-    "danger": ["..."]
-  },
+  "categories": { "fauna": ["..."], "flora": ["..."], "ruins": ["..."], ... },
   "locations": ["local 1", "local 2"],
-  "perils": {
-    "fauna": ["ameaça 1", "ameaça 2"],
-    "flora": ["..."],
-    "ruins": ["..."],
-    "phenomenon": ["..."],
-    "resource": ["..."],
-    "danger": ["..."]
-  },
-  "rewardTypes": ["recursos", "recursos", "artefatos", "componentes", "componentes", "misterios"],
-  "rewardLabels": {
-    "recursos": "RECURSOS",
-    "artefatos": "ARTEFATO",
-    "componentes": "COMPONENTE",
-    "misterios": "MISTÉRIO"
-  },
-  "rewards": {
-    "recursos": ["recompensa 1", "recompensa 2"],
-    "artefatos": ["..."],
-    "componentes": ["..."],
-    "misterios": ["..."]
-  }
+  "perils": { "fauna": ["ameaça 1"], "flora": ["..."], ... },
+  "rewardTypes": ["recursos", "artefatos", ...],
+  "rewardLabels": { "recursos": "RECURSOS", ... },
+  "rewards": { "recursos": ["..."], "artefatos": ["..."], ... },
+  "spaceEncounters": { ... },
+  "shipEvents": { ... },
+  "rescueMissions": { ... }
 }
 ```
 
-| Campo | Tipo | Descrição |
-|---|---|---|
-| `categories` | object | 6 categorias (fauna, flora, ruins, phenomenon, resource, danger), cada uma com array de descrições narrativas |
-| `locations` | string[] | 14 locais possíveis para cada descoberta |
-| `perils` | object | Ameaças por categoria, mesma estrutura de `categories` |
-| `rewardTypes` | string[] | Tipos de recompensa para seleção ponderada (recursos aparece 2x = mais comum) |
-| `rewardLabels` | object | Rótulos de exibição para cada tipo de recompensa |
-| `rewards` | object | Descrições de recompensa por tipo |
+### Geração por IA (fluxo atual)
 
-### `rescueMissions` (dentro de discoveries.json)
+Desde v2.0, a IA não inventa livremente — ela **sintetiza** a partir de parâmetros procedurais:
 
-Missões de resgate com sobreviventes, naves à deriva e sinais de socorro:
+1. **Planetas**: sorteia 1 palavra de cada categoria em `planet-params.json` → IA recebe os atributos e gera nome + tipo + descrição que incorpora todos eles
+2. **Descobertas**: sorteia 1 palavra de cada categoria em `events-params.json` + 1 categoria e palavra de `events-categories.json` → IA recebe os parâmetros e gera um encontro completo (tipo, abordagem, descrição, local, perigo, recompensa)
+3. **Inimigos**: se `encontros === 1` (25% de chance), sorteia inimigo de `enemies.json` e o injeta no prompt — a IA decide o papel do inimigo (ameaça, oportunista, vítima, aliado)
 
-```json
-{
-  "rescueMissions": {
-    "categories": {
-      "distress_signal": ["descrição 1", "descrição 2"],
-      "survivors": ["..."],
-      "stranded_vessel": ["..."]
-    },
-    "locations": ["local 1", "local 2"],
-    "perils": {
-      "distress_signal": ["ameaça 1", "ameaça 2"],
-      "survivors": ["..."],
-      "stranded_vessel": ["..."]
-    }
-  }
-}
-```
-
-| Campo | Tipo | Descrição |
-|---|---|---|
-| `categories` | object | 3 categorias (distress_signal, survivors, stranded_vessel), cada uma com array de descrições narrativas |
-| `locations` | string[] | Locais onde os resgates ocorrem |
-| `perils` | object | Ameaças por categoria, mesma estrutura de `categories` |
-
-### Geração por IA
-
-Desde v1.1, o gerador de missão prioriza IA para criar descobertas. A IA inventa livremente:
-
-- **Tipo de encontro**: `planet`, `space`, `ship` ou `rescue`
-- **Abordagem**: rótulo livre em português (sem lista fixa de keywords)
-- **Descrição**, **local**, **perigo** e **recompensa**: textos originais
-- **DC do perigo**: número entre 8 e 22
-
-Se a IA falha (todos os provedores exauridos), o gerador cai no sistema local, que sorteia entre 4 tipos de encontro (25% cada):
-
-| Tipo | Contexto |
-|---|---|
-| `planet` | Superfície planetária |
-| `space` | Espaço/órbita |
-| `ship` | A bordo da Tiburon |
-| `rescue` | Resgate de sobreviventes |
-
-Os dados locais para cada tipo estão em `data/discoveries.json` (categorias, locais, perigos, recompensas).
+Se a IA falha (todos os provedores exauridos), o gerador cai no sistema local procedural, que monta descrições concatenando as palavras sorteadas. Se nem os JSONs carregarem, cai no fallback clássico via `planet-types.json` e `discoveries.json`.
 
 ### Provedores de IA (cascade)
 
 A geração tenta provedores em ordem até um responder:
 
-1. **Gemini** (Google AI) — API key em `localStorage`
-2. **NVIDIA DeepSeek V4 Flash** (build.nvidia.com) — API key em `localStorage`
-3. **Pollinations** (gratuito, sem chave)
-4. **Hermes** (Ollama local, `gemma:4b` legacy)
-5. Fallback para dados locais
+1. **Gemini 3.5 Flash** (Google AI) — `gemini-3.5-flash`, via proxy local `/api/proxy.php`, requer autenticação
+2. **NVIDIA DeepSeek V4 Flash** — `deepseek-ai/deepseek-v4-flash`, via proxy local `/api/proxy-nvidia.php`
+3. **Pollinations.ai** — gratuito, endpoint público, sem chave
+4. **Hermes** (Llama 3.1 8B) — fallback externo
+5. Fallback para sistema procedural local
+
+**Temperatura**: `1.2` em todas as chamadas.
 
 ---
 

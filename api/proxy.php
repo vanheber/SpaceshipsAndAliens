@@ -2,7 +2,7 @@
 require_once __DIR__ . '/load-env.php';
 loadEnv();
 
-$allowedOrigins = ['http://localhost:3000', 'http://localhost:8080', 'http://localhost', 'null'];
+$allowedOrigins = ['http://localhost:3000', 'http://localhost:8000', 'http://localhost:8080', 'http://localhost', 'http://warp-unit.test', 'null'];
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 $corsOrigin = in_array($origin, $allowedOrigins, true) ? $origin : 'null';
 header('Access-Control-Allow-Origin: ' . $corsOrigin);
@@ -94,7 +94,6 @@ curl_setopt_array($ch, [
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $curlError = curl_error($ch);
-curl_close($ch);
 
 if ($curlError) {
     http_response_code(502);

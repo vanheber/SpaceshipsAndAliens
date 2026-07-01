@@ -48,16 +48,16 @@ A nave é o corpo físico da **IA Capitã A.L.M.A.**, que experimenta cada siste
 
 A tripulação é composta por androides humanoides com rostos sintéticos realistas, corpos de proporção humana e conexões cibernéticas visíveis nas juntas. **Inclua no conto de 2 a 4 tripulantes**, escolhidos entre os seguintes modelos disponíveis na missão:
 
-- **Aegis Sentinel v4** — Tanque de linha de frente. Personalidade: pragmático, protetor, fala pouco. Habilidade: Escudo Térmico Ativo.
-- **Anvil Analyst x8** — Cientista forense. Personalidade: curioso, analítico, faz perguntas desconfortáveis. Habilidade: Análise de Frequências.
-- **Drake Vulture s2** — Mecânico de campo. Personalidade: rude, criativo, resolve problemas com o que tem. Habilidade: Reciclagem Expressa.
-- **MISC Endeavor i3** — Químico de laboratório. Personalidade: calmo, metódico, fala com precisão cirúrgica. Habilidade: Síntese de Reagentes.
-- **Origin Pathfinder 85** — Batedor de reconhecimento. Personalidade: rápido, impaciente, precisa estar em movimento. Habilidade: Sensores de Vetores.
-- **RSI Constellation c9** — Artilharia tática. Personalidade: intenso, leal, age antes de pensar. Habilidade: Sobrecarga de Canhão.
+- **Regis V4** — Tanque de linha de frente. Personalidade: pragmático, protetor, fala pouco. Habilidade: Escudo Térmico Ativo.
+- **Andrew X8** — Cientista forense. Personalidade: curioso, analítico, faz perguntas desconfortáveis. Habilidade: Análise de Frequências.
+- **Drake S2** — Mecânico de campo. Personalidade: rude, criativo, resolve problemas com o que tem. Habilidade: Reciclagem Expressa.
+- **Misc i3** — Químico de laboratório. Personalidade: calmo, metódico, fala com precisão cirúrgica. Habilidade: Síntese de Reagentes.
+- **Origin 85** — Batedor de reconhecimento. Personalidade: rápido, impaciente, precisa estar em movimento. Habilidade: Sensores de Vetores.
+- ** Robert C9** — Artilharia tática. Personalidade: intenso, leal, age antes de pensar. Habilidade: Sobrecarga de Canhão.
 - **Crusader Spirit-E** — Infiltradora silenciosa. Personalidade: quieta, observadora, presença quase fantasma. Habilidade: Camuflagem Quântica.
 - **C.O. Nomad n1** — Explorador de fronteira. Personalidade: resiliente, otimista, acredita que todo planeta tem algo a ensinar. Habilidade: Sobrevivência de Chassi.
-- **UAC HD-12** — Médica de campo. Personalidade: compassiva, incansável, prioriza os outros. Habilidade: Sutura de Nanites.
-- **Aegis Eclipse-AI** — Hacker de sistemas. Personalidade: enigmático, irônico, está sempre processando algo que não conta. Habilidade: Invasão de Rede Local.
+- **Ursula AC-12** — Médica de campo. Personalidade: compassiva, incansável, prioriza os outros. Habilidade: Sutura de Nanites.
+- **Vangelis E-AI** — Hacker de sistemas. Personalidade: enigmático, irônico, está sempre processando algo que não conta. Habilidade: Invasão de Rede Local.
 
 > **Nota para o autor humano:** Antes de colar este prompt na IA, risque da lista os androides que não estarão no conto. Deixe apenas 2 a 4. Isso evita que a IA mencione tripulantes ausentes.
 

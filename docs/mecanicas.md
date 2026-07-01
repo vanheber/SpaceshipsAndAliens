@@ -4,10 +4,14 @@ O sistema utiliza dois dados de 12 faces que representam forças opostas no camp
 
 ## Dados
 
-| Dado | Cor | Significado |
-|---|---|---|
-| **Esperança (Hope)** | Azul | Forças favoráveis, instintos, aliados |
-| **Medo (Fear)** | Vermelho | Ameaças, complicações, ambiente hostil |
+| Dado | Cor | Posição 3D | Significado |
+|---|---|---|---|---|
+| **Esperança (Hope)** | Dourado | X = -1.7 | Forças favoráveis, instintos, aliados |
+| **Vantagem (D6)** | Dourado | X = 0 (centro) | Bônus tático, exibido apenas no modo Vantagem |
+| **Desvantagem (D6)** | Roxo | X = 0 (centro) | Penalidade, exibido apenas no modo Desvantagem |
+| **Medo (Fear)** | Roxo | X = +1.7 | Ameaças, complicações, ambiente hostil |
+
+O D6 de Vantagem e Desvantagem compartilham a mesma posição central (X = 0) — como nunca aparecem simultaneamente, a sobreposição é segura. A câmera usa FOV 50 para evitar recorte em telas estreitas.
 
 ## Fórmula
 

@@ -22,7 +22,7 @@ Recurso do mestre para ativar eventos adversos, complicações ou ameaças duran
 
 ### D20 — Rolagem Livre
 
-Um dado de 20 faces (branco com números pretos) para rolagens livres do mestre. Renderizado em 3D com Three.js, animação de quaternion igual aos D12/D6. O visor ocupa 220px de altura.
+Um dado de 20 faces (branco com números pretos) para rolagens livres do mestre. Renderizado em 3D com Three.js, animação de quaternion igual aos D12/D6. Os números 6 e 9 recebem underline para evitar confusão de orientação — convenção padrão de dados de RPG. O visor ocupa 220px de altura.
 
 ### Unidades em Campo
 

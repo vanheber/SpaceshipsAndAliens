@@ -1,7 +1,7 @@
 [
   {
     "id": "sentinel",
-    "model": "Aegis Sentinel v4",
+    "model": "Regis V4",
     "type": "Defesa e Escolta",
     "tagClass": "tag-combat",
     "desc": "Tanque de linha de frente. Seu Escudo Térmico Ativo gera uma barreira de plasma que absorve projéteis e explosivos, protegendo aliados em zonas de combate pesado.",
@@ -13,11 +13,33 @@
     "abilityDesc": "Modificador para salvaguardar aliados ou mitigar danos de projéteis e explosivos.",
     "startingEnergy": 6,
     "maxEnergy": 12,
-    "image": "img/aegissentinel.webp"
+    "image": "img/aegissentinel.webp",
+    "equipment": [
+      {
+        "name": "QDB-12 QuiKCade",
+        "image": "img/quikcade.webp",
+        "damage": null,
+        "anchor": "quikcade"
+      },
+      {
+        "name": "Arclight Stormfall",
+        "image": "img/arclight-stormfall.webp",
+        "damage": 8,
+        "dice": "2D6",
+        "anchor": "arclight"
+      },
+      {
+        "name": "Pambada Knife",
+        "image": "img/pambada-knife.webp",
+        "damage": 3,
+        "dice": "1D6",
+        "anchor": "pambada"
+      }
+    ]
   },
   {
     "id": "analyst",
-    "model": "Anvil Analyst x8",
+    "model": "Andrew X8",
     "type": "Ciência e Análise",
     "tagClass": "tag-science",
     "desc": "Cientista forense capaz de mapear ecossistemas alienígenas e decifrar assinaturas energéticas. Sua Análise de Frequências revela informações ocultas em sinais encriptados e ruídos de fundo.",
@@ -29,11 +51,32 @@
     "abilityDesc": "Modificador em testes para interpretar assinaturas energéticas e sinais encriptados.",
     "startingEnergy": 5,
     "maxEnergy": 10,
-    "image": "img/anvilanalyst.webp"
+    "image": "img/anvilanalyst.webp",
+    "equipment": [
+      {
+        "name": "FUNT Cryptokey",
+        "image": "img/funt.webp",
+        "damage": null,
+        "anchor": "funt"
+      },
+      {
+        "name": "Pyro RYT Multi-Tool",
+        "image": "img/ryt-microtech.webp",
+        "damage": null,
+        "anchor": "ryt"
+      },
+      {
+        "name": "ParaMed AA Support",
+        "image": "img/paramed-support.webp",
+        "damage": null,
+        "dice": "1D6",
+        "anchor": "paramed"
+      }
+    ]
   },
   {
     "id": "vulture",
-    "model": "Drake Vulture s2",
+    "model": "Drake S2",
     "type": "Logística e Reparos",
     "tagClass": "",
     "desc": "Mecânico de campo que converte destroços em recursos. Com garras de precisão e Reciclagem Expressa, recupera tokens de energia de fuselagens destruídas e reconstrói estruturas danificadas.",
@@ -45,11 +88,31 @@
     "abilityDesc": "Modificador para reconstruir estruturas simples ou recuperar tokens de energia em destroços.",
     "startingEnergy": 6,
     "maxEnergy": 12,
-    "image": "img/drakevulture.webp"
+    "image": "img/drakevulture.webp",
+    "equipment": [
+      {
+        "name": "Cutting Tool",
+        "image": "img/industrial-cutting.webp",
+        "damage": null,
+        "anchor": "industrial-cutting"
+      },
+      {
+        "name": "MaxLift Tractor",
+        "image": "img/maxlift-tractor.webp",
+        "damage": null,
+        "anchor": "maxlift"
+      },
+      {
+        "name": "Pyro RYT Multi-Tool",
+        "image": "img/ryt-microtech.webp",
+        "damage": null,
+        "anchor": "ryt"
+      }
+    ]
   },
   {
     "id": "endeavor",
-    "model": "MISC Endeavor i3",
+    "model": "Misc i3",
     "type": "Pesquisa Química",
     "tagClass": "tag-science",
     "desc": "Laboratório químico ambulante. Sua Síntese de Reagentes processa amostras biológicas em tempo real para criar vacinas, neutralizar toxinas e purificar ambientes contaminados.",
@@ -61,11 +124,32 @@
     "abilityDesc": "Modificador para criar substâncias purificadoras ou neutralizar ameaças patogênicas.",
     "startingEnergy": 5,
     "maxEnergy": 10,
-    "image": "img/miscendeavour.webp"
+    "image": "img/miscendeavour.webp",
+    "equipment": [
+      {
+        "name": "ParaMed AA Support",
+        "image": "img/paramed-support.webp",
+        "damage": null,
+        "dice": "1D6",
+        "anchor": "paramed"
+      },
+      {
+        "name": "Pyro RYT Multi-Tool",
+        "image": "img/ryt-microtech.webp",
+        "damage": null,
+        "anchor": "ryt"
+      },
+      {
+        "name": "FUNT Cryptokey",
+        "image": "img/funt.webp",
+        "damage": null,
+        "anchor": "funt"
+      }
+    ]
   },
   {
     "id": "pathfinder",
-    "model": "Origin Pathfinder 85",
+    "model": "Origin 85",
     "type": "Reconhecimento Rápido",
     "tagClass": "",
     "desc": "Batedor aéreo de baixa altitude. Seus Sensores de Vetores mapeiam rotas seguras em terrenos traiçoeiros e antecipam ameaças, permitindo manobras evasivas antes do contato inimigo.",
@@ -77,11 +161,34 @@
     "abilityDesc": "Modificador em testes de esquiva ou identificação de rotas seguras de voo.",
     "startingEnergy": 6,
     "maxEnergy": 12,
-    "image": "img/originpathfinder.webp"
+    "image": "img/originpathfinder.webp",
+    "equipment": [
+      {
+        "name": "Arclight Stormfall",
+        "image": "img/arclight-stormfall.webp",
+        "damage": 8,
+        "dice": "2D6",
+        "anchor": "arclight"
+      },
+      {
+        "name": "Pulse Laser",
+        "image": "img/pulse-laser.webp",
+        "damage": 3,
+        "dice": "1d12",
+        "anchor": "pulse"
+      },
+      {
+        "name": "Pambada Knife",
+        "image": "img/pambada-knife.webp",
+        "damage": 3,
+        "dice": "1D6",
+        "anchor": "pambada"
+      }
+    ]
   },
   {
     "id": "constellation",
-    "model": "RSI Constellation c9",
+    "model": " Robert C9",
     "type": "Combate Tático",
     "tagClass": "tag-combat",
     "desc": "Plataforma de artilharia terrestre, a ponta de lança em invasões táticas. Sua Sobrecarga de Canhão dispara projéteis de longo alcance capazes de romper fortificações e barreiras físicas.",
@@ -93,7 +200,30 @@
     "abilityDesc": "Modificador para ataques de longo alcance que visam romper barreiras físicas.",
     "startingEnergy": 6,
     "maxEnergy": 12,
-    "image": "img/rsiconstellation.webp"
+    "image": "img/rsiconstellation.webp",
+    "equipment": [
+      {
+        "name": "Zenith Darkwave",
+        "image": "img/zenith-darkwave.webp",
+        "damage": 10,
+        "dice": "2D12",
+        "anchor": "zenith"
+      },
+      {
+        "name": "Coda Ascension",
+        "image": "img/coda-ascension.webp",
+        "damage": 6,
+        "dice": "2D6",
+        "anchor": "coda"
+      },
+      {
+        "name": "Pambada Knife",
+        "image": "img/pambada-knife.webp",
+        "damage": 3,
+        "dice": "1D6",
+        "anchor": "pambada"
+      }
+    ]
   },
   {
     "id": "spirit",
@@ -109,7 +239,29 @@
     "abilityDesc": "Modificador em testes para passar despercebido por sensores de segurança orgânicos ou eletrônicos.",
     "startingEnergy": 5,
     "maxEnergy": 10,
-    "image": "img/crusaderespirit.webp"
+    "image": "img/crusaderespirit.webp",
+    "equipment": [
+      {
+        "name": "FUNT Cryptokey",
+        "image": "img/funt.webp",
+        "damage": null,
+        "anchor": "funt"
+      },
+      {
+        "name": "Coda Ascension",
+        "image": "img/coda-ascension.webp",
+        "damage": 6,
+        "dice": "2D6",
+        "anchor": "coda"
+      },
+      {
+        "name": "Pulse Laser",
+        "image": "img/pulse-laser.webp",
+        "damage": 3,
+        "dice": "1d12",
+        "anchor": "pulse"
+      }
+    ]
   },
   {
     "id": "nomad",
@@ -125,11 +277,32 @@
     "abilityDesc": "Modificador para evitar desgaste em climas de frio absoluto ou calor escaldante.",
     "startingEnergy": 7,
     "maxEnergy": 14,
-    "image": "img/conomad.webp"
+    "image": "img/conomad.webp",
+    "equipment": [
+      {
+        "name": "Pyro RYT Multi-Tool",
+        "image": "img/ryt-microtech.webp",
+        "damage": null,
+        "anchor": "ryt"
+      },
+      {
+        "name": "MaxLift Tractor",
+        "image": "img/maxlift-tractor.webp",
+        "damage": null,
+        "anchor": "maxlift"
+      },
+      {
+        "name": "Pulse Laser",
+        "image": "img/pulse-laser.webp",
+        "damage": 3,
+        "dice": "1d12",
+        "anchor": "pulse"
+      }
+    ]
   },
   {
     "id": "drone-d12",
-    "model": "UAC HD-12",
+    "model": "Ursula AC-12",
     "type": "Medicina de Campo",
     "tagClass": "tag-science",
     "desc": "Unidade de suporte vital projetada para manter o esquadrão de pé. Seus injetores de Sutura de Nanites regeneram a energia de aliados e estabilizam tanto sistemas mecânicos quanto tecidos orgânicos.",
@@ -141,11 +314,33 @@
     "abilityDesc": "Modificador para regenerar energia de outros robôs ou dar suporte vital.",
     "startingEnergy": 6,
     "maxEnergy": 12,
-    "image": "img/apoiodrone.webp"
+    "image": "img/apoiodrone.webp",
+    "equipment": [
+      {
+        "name": "ParaMed AA Support",
+        "image": "img/paramed-support.webp",
+        "damage": null,
+        "dice": "1D6",
+        "anchor": "paramed"
+      },
+      {
+        "name": "Pyro RYT Multi-Tool",
+        "image": "img/ryt-microtech.webp",
+        "damage": null,
+        "anchor": "ryt"
+      },
+      {
+        "name": "Pulse Laser",
+        "image": "img/pulse-laser.webp",
+        "damage": 3,
+        "dice": "1d12",
+        "anchor": "pulse"
+      }
+    ]
   },
   {
     "id": "eclipse",
-    "model": "Aegis Eclipse-AI",
+    "model": "Vangelis E-AI",
     "type": "Segurança de Redes",
     "tagClass": "tag-combat",
     "desc": "Guerreiro cibernético especializado em guerra digital. Sua Invasão de Rede Local hackeia drones, câmeras e torretas inimigas, convertendo a tecnologia adversária em escudos e armas aliadas.",
@@ -157,6 +352,28 @@
     "abilityDesc": "Modificador para sequestrar a visão de câmeras e torretas próximas.",
     "startingEnergy": 5,
     "maxEnergy": 10,
-    "image": "img/aegiseclipse.webp"
+    "image": "img/aegiseclipse.webp",
+    "equipment": [
+      {
+        "name": "FUNT Cryptokey",
+        "image": "img/funt.webp",
+        "damage": null,
+        "anchor": "funt"
+      },
+      {
+        "name": "Arclight Stormfall",
+        "image": "img/arclight-stormfall.webp",
+        "damage": 8,
+        "dice": "2D6",
+        "anchor": "arclight"
+      },
+      {
+        "name": "Pambada Knife",
+        "image": "img/pambada-knife.webp",
+        "damage": 3,
+        "dice": "1D6",
+        "anchor": "pambada"
+      }
+    ]
   }
 ]

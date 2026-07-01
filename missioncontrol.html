@@ -71,6 +71,8 @@
     &nbsp;·&nbsp;
     <a href="oneshot.html">Gerador de Missão</a>
     &nbsp;·&nbsp;
+    <a href="equipamento.html">Equipamento</a>
+    &nbsp;·&nbsp;
     <a href="#" onclick="localStorage.removeItem('warp-unit-mission');location.reload();return false;">Limpar Missão</a>
 </footer>
 
@@ -396,6 +398,15 @@ function createD20(hexColor, textColor) {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(String(f + 1), 128, 130);
+        if (f === 5 || f === 8) {
+            const m = ctx.measureText(String(f + 1));
+            ctx.beginPath();
+            ctx.strokeStyle = textColor;
+            ctx.lineWidth = 3;
+            ctx.moveTo(128 - m.width / 2, 185);
+            ctx.lineTo(128 + m.width / 2, 185);
+            ctx.stroke();
+        }
 
         mats.push(new THREE.MeshStandardMaterial({
             map: new THREE.CanvasTexture(cv),

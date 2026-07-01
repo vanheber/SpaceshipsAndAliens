@@ -1,0 +1,9 @@
+{
+  "cena": ["ruínas alienígenas", "naufrágio de nave", "campo de destroços", "ecossistema único", "estrutura orbital", "cápsula criogênica", "nó de comunicação", "colônia abandonada", "jardim suspenso", "buraco de mineração", "laboratório científico", "cemitério de naves", "formação geológica anômala", "sinal de rádio contínuo", "estação meteorológica", "santuário biológico"],
+  "origem": ["natural", "artificial alienígena", "humana pré-expansão", "humana recente", "desconhecida", "acidental", "autogerada", "colateral"],
+  "estado": ["operacional", "abandonado", "deteriorando", "hibernando", "corrompido", "selado", "instável", "crescendo/mutando", "preservado perfeitamente"],
+  "elemento_chave": ["criatura viva", "máquina funcional", "dados legíveis", "artefato inerte", "sobrevivente", "recurso valioso", "sinal contínuo", "organismo morto", "mapa/registro", "arma/defesa", "fonte de energia", "arquivo de conhecimento"],
+  "recompensa": ["dados de navegação", "tecnologia utilizável", "minério raro", "medicamento/antídoto", "rota estelar", "conhecimento biológico", "peça de nave", "aliado em potencial", "fonte de energia", "mapa de recursos", "código de acesso", "amostra genética"],
+  "tom": ["urgente", "ameaçador", "melancólico", "curioso", "desesperado", "solene", "paranoico", "maravilhado", "sombrio", "irreverente"],
+  "encontros": [0, 0, 0, 1]
+}

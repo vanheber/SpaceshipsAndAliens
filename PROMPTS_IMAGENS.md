@@ -18,27 +18,27 @@ Para manter a consistência visual em todos os cards, utilize a seguinte base e 
 
 ## 🤖 Prompts Específicos para Cada Unidade
 
-### 1. Aegis Sentinel v4 (Defesa e Escolta)
+### 1. Regis V4 (Defesa e Escolta)
 * **Fabricante**: Aegis Dynamics (Design militar agressivo, blindagem pesada, acabamento preto/cinza-escuro com detalhes amarelos táticos).
 > A heavily built male humanoid android soldier, Aegis Dynamics style, realistic synthetic face with a stern expression, glowing yellow tactical LED eyes, robust titanium armored plating on chest and shoulders, mechanical joints visible at neck and elbows, star citizen game style, 3d character render, professional product design render, octane render, photorealistic, soft dramatic studio lighting, dark atmospheric sci-fi background, depth of field, 8k resolution --ar 4:3
 
-### 2. Anvil Analyst x8 (Ciência e Análise)
+### 2. Andrew X8 (Ciência e Análise)
 * **Fabricante**: Anvil Aerospace (Geométrico, funcional, ângulos retos, cobre e cinza militar).
 > A focused male humanoid android scientist, Anvil Aerospace style, realistic synthetic face, high-tech holographic scanning visor over one eye, copper and dark gray military-themed flight suit, exposed cybernetic processors on the side of his head, star citizen game style, 3d character render, professional product design render, octane render, photorealistic, soft dramatic studio lighting, dark atmospheric sci-fi background, depth of field, 8k resolution --ar 4:3
 
-### 3. Drake Vulture s2 (Logística e Reparos)
+### 3. Drake S2 (Logística e Reparos)
 * **Fabricante**: Drake Interplanetary (Design utilitário "cru", fiações expostas, metal desgastado, amarelo industrial e cinza escuro).
 > A weathered humanoid android mechanic, Drake Interplanetary style, realistic synthetic face covered in light grease stains, rugged yellow utility flight vest, exposed hydraulic wiring and metallic cybernetic components at the shoulders and arms, industrial design, star citizen game style, 3d character render, professional product design render, octane render, photorealistic, soft dramatic studio lighting, dark atmospheric sci-fi background, depth of field, 8k resolution --ar 4:3
 
-### 4. MISC Endeavor i3 (Pesquisa Química)
+### 4. Misc i3 (Pesquisa Química)
 * **Fabricante**: Musashi Industrial & Starflight Concern - MISC (Acabamento limpo, cantos arredondados, cor branca e azul, sensores azuis).
 > A serene female humanoid android chemist, MISC style, flawless white synthetic skin face, calming blue optical sensors for eyes, wearing a clean sterile white and blue medical research suit, subtle cybernetic seams outlining the jawline, star citizen game style, 3d character render, professional product design render, octane render, photorealistic, soft dramatic studio lighting, dark atmospheric sci-fi background, depth of field, 8k resolution --ar 4:3
 
-### 5. Origin Pathfinder 85 (Reconhecimento Rápido)
+### 5. Origin 85 (Reconhecimento Rápido)
 * **Fabricante**: Origin Jumpworks (Ultra-luxuoso, aerodinâmico, curvas suaves, acabamento branco brilhante com fibra de carbono e luzes azuis).
 > A sleek and elegant female humanoid android scout, Origin Jumpworks style, perfectly sculpted synthetic human face, wearing a premium glossy white and black carbon-fiber flight suit with glowing blue LED lines tracing the joints, high-end luxury aesthetic, star citizen game style, 3d character render, professional product design render, octane render, photorealistic, soft dramatic studio lighting, dark atmospheric sci-fi background, depth of field, 8k resolution --ar 4:3
 
-### 6. RSI Constellation c9 (Combate Tático)
+### 6.  Robert C9 (Combate Tático)
 * **Fabricante**: Roberts Space Industries - RSI (Design clássico de exploração/militar prático, cinza e laranja).
 > A battle-hardened male humanoid android commando, Roberts Space Industries (RSI) style, partially exposed metallic skull on one side showing cybernetic circuits, realistic synthetic face on the other, heavy gray and orange armored combat suit, star citizen game style, 3d character render, professional product design render, octane render, photorealistic, soft dramatic studio lighting, dark atmospheric sci-fi background, depth of field, 8k resolution --ar 4:3
 
@@ -50,11 +50,11 @@ Para manter a consistência visual em todos os cards, utilize a seguinte base e 
 * **Fabricante**: Consolidated Outland - C.O. (Geometria moderna arrojada, cobre escovado, adaptadores de sobrevivência).
 > A rugged male humanoid android explorer, Consolidated Outland style, realistic synthetic face equipped with tactical breathing apparatus and goggles, wearing a reinforced bronze and titanium hazard-protection suit, external environmental sensor arrays on shoulders, star citizen game style, 3d character render, professional product design render, octane render, photorealistic, soft dramatic studio lighting, dark atmospheric sci-fi background, depth of field, 8k resolution --ar 4:3
 
-### 9. UAC HD-12 (Medicina de Campo)
+### 9. Ursula AC-12 (Medicina de Campo)
 * **Fabricante**: Unidade de Amparo de Campo (Design amigável de suporte e socorro médico).
 > A compassionate female humanoid android medic, realistic soft synthetic skin, friendly green glowing optical eyes, wearing a white clinical uniform with medical crosses, arms integrated with subtle nanite injector ports at the wrists, star citizen game style, 3d character render, professional product design render, octane render, photorealistic, soft dramatic studio lighting, dark atmospheric sci-fi background, depth of field, 8k resolution --ar 4:3
 
-### 10. Aegis Eclipse-AI (Segurança de Redes)
+### 10. Vangelis E-AI (Segurança de Redes)
 * **Fabricante**: Aegis Dynamics (Furtivo, cibernético de segurança avançada, visor digital vermelho).
 > A mysterious humanoid android hacker, Aegis Dynamics style, realistic synthetic face partially covered by a glowing red digital visor HUD displaying streams of code, sleek matte-black tactical gear, glowing data ports visible along the neck and hands, star citizen game style, 3d character render, professional product design render, octane render, photorealistic, soft dramatic studio lighting, dark atmospheric sci-fi background, depth of field, 8k resolution --ar 4:3
 

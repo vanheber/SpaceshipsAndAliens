@@ -1,0 +1,10 @@
+{
+  "resgate": ["tripulação perdida", "cápsula de escape", "nave à deriva", "sobrevivente isolado", "colônia sitiada", "cientistas encurralados", "farol de emergência", "reféns de criatura"],
+  "escolta": ["carga sensível", "comboio minerador", "diplomata em trânsito", "nave-hospital danificada", "transporte de refugiados", "protótipo experimental", "mensageiro com dados críticos"],
+  "encontro": ["comércio interestelar", "estação neutra flutuante", "nave mercante errante", "embaixada alienígena", "feira orbital improvisada", "mercadores do vazio", "caçadores de recompensa"],
+  "pesquisa": ["coleta de amostras", "levantamento geológico", "análise atmosférica", "escavação arqueológica", "dissecação de organismo", "estudo de campo prolongado", "calibração de equipamento científico"],
+  "perigo": ["colapso estrutural iminente", "criatura à solta", "contaminação ativa", "explosão em cadeia", "tempestade letal se aproximando", "sistema de defesa ativado", "protocolo de autodestruição", "efeito dominó catastrófico"],
+  "naufrágio": ["destroços orbitais recentes", "estação abandonada", "cemitério de naves de guerra", "cápsula geracional perdida", "fábrica orbital arruinada", "nave científica desaparecida", "casco carbonizado"],
+  "anomalia": ["distorção temporal localizada", "bolha de espaço dobrado", "fenômeno não catalogado", "zona de gravidade zero flutuante", "eco fantasma nos scanners", "padrão matemático impossível", "silêncio total de rádio"],
+  "nave": ["falha de sistema em cascata", "intruso não identificado", "conspiração entre androides", "descoberta no porão de carga", "compartimento secreto revelado", "IA com comportamento errático", "passageiro clandestino", "mensagem criptografada interna"]
+}

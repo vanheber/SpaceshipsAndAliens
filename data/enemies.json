@@ -1,0 +1,22 @@
+[
+  {
+    "nome": "Piratas Espaciais",
+    "desc": "Saqueadores de rotas comerciais que operam em bandos de 3 a 5 naves leves. Atacam rotas isoladas, saqueiam cargueiros e revendem mercadoria no mercado negro. Não são suicidas — fogem quando a resistência é maior que o lucro. Conhecem os becos do setor como ninguém."
+  },
+  {
+    "nome": "Mercenários",
+    "desc": "Soldados de aluguel com equipamento militar de ponta. Trabalham para quem paga mais — corporações, governos ou senhores do crime. Disciplinados, metódicos e perigosamente competentes. Não têm causa, têm contrato. E contratos podem ser comprados. Crie o contrato atual dos mercenários."
+  },
+  {
+    "nome": "Reptilus",
+    "desc": "Raça reptiliana humanoide com tecnologia de salto interestelar própria. Cultura baseada em caça e combate — cada Reptilus adulto deve completar uma Grande Caçada para ganhar nome e posição social. Escamas resistentes a projéteis leves, reflexos sobre-humanos, metabolismo que se adapta a quase qualquer atmosfera. Honram presas dignas e desprezam covardes."
+  },
+  {
+    "nome": "Entidade Interdimensional Z",
+    "desc": "Uma presença que não obedece às leis da física conhecida. Manifesta-se como distorções no espaço — sombras que se movem contra a luz, ecos de vozes que ninguém emitiu, instrumentos que marcam leituras impossíveis. Não é necessariamente hostil, mas sua mera existência corrompe a realidade ao redor. Comunicação é teórica; sobrevivência, improvisada. Propõe sempre um desafio moral.Quer saber se os androides são dignos de serem chamados de seres vivos. Crie o desafio moral."
+  },
+  {
+    "nome": "Entidade Puramente Malígna",
+    "desc": "Algo que não negocia, não se distrai, não demonstra misericórdia. Não é animal, não é máquina, não é vida como a ciência define. Infernal. Odeia a existência de forma pura e gratuita. Corrompe, destrói e consome tudo que toca. Encontrá-la não é azar — é sentença. Pode ser destruída, mas com dificuldade.Talvez seja um coletivo do mal, pois sempre retorna. Fuga e distância é outra estratégia. Crie a condição de vitória ou fuga."
+  }
+]

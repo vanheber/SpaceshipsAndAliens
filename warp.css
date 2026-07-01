@@ -31,7 +31,7 @@ header {
     text-align: center;
     margin-bottom: 15px;
     width: 100%;
-    max-width: 600px;
+    max-width: 1100px;
 }
 
 header h1 {
@@ -50,7 +50,7 @@ header p {
 /* Container de Telas (SPA) */
 .screen {
     width: 100%;
-    max-width: 600px;
+    max-width: 1100px;
     display: none;
 }
 
@@ -225,6 +225,84 @@ header p {
     font-weight: bold;
     color: var(--accent-hope);
     margin-bottom: 4px;
+}
+
+/* Equipamento na Ficha */
+.equip-grid-sheet {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 15px;
+}
+.equip-card-sheet {
+    background-color: #1a222d;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.2s;
+}
+.equip-card-sheet:hover {
+    border-color: var(--accent-hope);
+}
+.equip-img-link {
+    display: block;
+    text-decoration: none;
+    line-height: 0;
+}
+.equip-img-link img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+    border-bottom: 1px solid var(--border-color);
+    transition: opacity 0.2s;
+}
+.equip-img-link:hover img {
+    opacity: 0.8;
+}
+.equip-card-body {
+    padding: 6px 8px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px;
+}
+.equip-card-name {
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: var(--text-color);
+    line-height: 1.2;
+}
+.equip-card-dmg {
+    font-size: 0.85rem;
+    color: var(--accent-fear);
+    white-space: nowrap;
+    font-weight: bold;
+}
+.dice-btn-sm {
+    font-size: 0.72rem;
+    font-weight: bold;
+    color: var(--accent-fear);
+    background: none;
+    border: 1px solid rgba(245,108,108,0.3);
+    border-radius: 3px;
+    padding: 1px 6px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+    line-height: 1.3;
+}
+.dice-btn-sm:hover {
+    border-color: var(--accent-fear);
+    background: rgba(245,108,108,0.1);
+}
+.dice-btn-sm:disabled {
+    cursor: default;
+    color: var(--accent-energy);
+    border-color: var(--accent-energy);
 }
 
 /* Controle de Energia */
@@ -435,7 +513,7 @@ header p {
 /* Footer */
 footer {
     width: 100%;
-    max-width: 600px;
+    max-width: 1100px;
     text-align: center;
     padding: 20px 10px 14px;
     margin-top: 10px;
@@ -459,7 +537,7 @@ footer a:hover {
 
 .page {
     width: 100%;
-    max-width: 620px;
+    max-width: 1100px;
     display: none;
     flex-direction: column;
     gap: 16px;
@@ -699,8 +777,10 @@ footer a:hover {
 /* ═══════════════════════════════════════════════
    MISSION CONTROL
    ═══════════════════════════════════════════════ */
-.mc-page { max-width: 500px; margin: 0 auto; }
+.mc-page { max-width: 1100px; margin: 0 auto; }
+@media (min-width: 800px) { .mc-page { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; } .mc-page > .mc-section:first-child { grid-column: 1 / -1; } }
 .mc-section { margin-bottom: 20px; }
+@media (min-width: 800px) { .mc-section { margin-bottom: 0; } }
 .mc-section-title { font-size: 0.75rem; color: #8b949e; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; padding-bottom: 4px; border-bottom: 1px solid var(--border-color); }
 .mc-character-card { background-color: #1a222d; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
 .mc-character-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.85rem; }
@@ -740,7 +820,8 @@ footer a:hover {
 /* ═══════════════════════════════════════════════
    MOTHERSHIP
    ═══════════════════════════════════════════════ */
-.mothership-page { width: 100%; max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; padding-bottom: 20px; }
+.mothership-page { width: 100%; max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; padding-bottom: 20px; }
+@media (min-width: 900px) { .mothership-page { display: grid; grid-template-columns: 1fr 1fr; } .mothership-page > .ms-card:first-child { grid-column: 1 / -1; } }
 .ms-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 22px; }
 .ms-title { font-size: 1.1rem; font-weight: bold; color: var(--accent-hope); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color); }
 .ms-overview { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.82rem; color: #a3b1c1; line-height: 1.5; }
@@ -817,6 +898,12 @@ footer a:hover {
 .text-muted { color: #8b949e; }
 .text-muted-sm { font-size: 0.78rem; color: #8b949e; }
 .text-center { text-align: center; }
+
+/* Modal compartilhado */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.8); z-index:999; align-items:center; justify-content:center; }
+.modal-overlay.open { display:flex; }
+.modal-card { background:var(--card-bg); border:1px solid var(--border-color); border-radius:12px; padding:28px 24px; width:360px; max-width:90vw; }
+.modal-title { font-size:1.1rem; font-weight:bold; color:var(--accent-hope); margin-bottom:8px; }
 .section-text { font-size: 0.84rem; color: #a3b1c1; line-height: 1.6; }
 .deck-img { width: 100%; border-radius: 6px; margin-top: 10px; display: block; }
 .placeholder-box { margin-top: 10px; padding: 20px; text-align: center; background: #111922; border: 1px dashed var(--border-color); border-radius: 6px; color: #8b949e; font-size: 0.78rem; }
@@ -837,7 +924,7 @@ footer a:hover {
 .flex-2 { flex: 2; }
 .flex-inline { display: flex; align-items: center; gap: 6px; }
 .mc-back-link { margin-bottom: 12px; }
-.quick-link-wrap { text-align: right; max-width: 680px; margin: 0 auto 8px; }
+.quick-link-wrap { text-align: right; max-width: 1100px; margin: 0 auto 8px; }
 .quick-link { display: inline-block; font-size: 0.72rem; color: var(--accent-hope); background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.25); padding: 4px 10px; border-radius: 4px; text-decoration: none; transition: all 0.15s; }
 .quick-link:hover { background: rgba(167,139,250,0.2); }
 .card-center { text-align: center; }
