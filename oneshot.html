@@ -361,8 +361,10 @@ async function aiGeneratePlanet() {
         .map(([k, v]) => `${k}: ${v}`)
         .join("\n");
 
+    console.log("[Planet params]", params);
+
     const { data: result, providerName } = await tryAIProviders(
-        "You are a planetary survey AI. Given attributes, weave them into a coherent, specific world. Find unexpected connections between them — show how they interact with each other. The attributes are constraints to synthesize, not a checklist to mention. Make the planet feel like a real place with internal logic, where each attribute shapes the others.",
+        "You are a planetary survey AI. You will receive a set of planetary attributes. You MUST use the EXACT attributes provided — do NOT replace, reinterpret, or override any of them with alternatives. Every attribute must appear in your output. The creativity is in HOW you connect them, not in changing them. Always respond with valid JSON only, no markdown, no other text.",
         `Generate a planet with these scan attributes:\n${paramsStr}\n\nBuild a name (code like XX-999a), a short type label in Portuguese (max 4 words), and a 2-3 sentence description that incorporates ALL attributes above. Don't list them flatly — create connections, tensions, and surprises. What does the crew see, feel, and measure on arrival? Respond with EXACTLY this JSON only:\n{"name":"XX-999a","type":"type label","desc":"description"}\n(seed: ${seed})`
     );
     if (result?.name && result?.type && result?.desc) {
@@ -428,6 +430,8 @@ async function aiGenerateDiscovery(discNumber, discTotal) {
         enemy = pick(ENEMIES);
         enemyStr = `\n[INIMIGO CONHECIDO]\nNome: ${enemy.nome}\nDescrição: ${enemy.desc}\n[/INIMIGO CONHECIDO]\n\nEste inimigo está presente no cenário — pode ser a ameaça principal, um oportunista explorando a situação, a vítima do evento, ou até um aliado improvável forçado pelas circunstâncias. Decida o papel dele com base nos parâmetros do evento, não por padrão.`;
     }
+
+    console.log("[Discovery params]", { params, category, word: catWord, enemy: enemy?.nome || "none" });
 
     const paramsStr = Object.entries(params)
         .filter(([k]) => k !== "encontros")
