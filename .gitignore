@@ -4,3 +4,8 @@ Thumbs.db
 node_modules/
 *.log
 plans/
+narracao/.env
+narracao/*.ssml
+narracao/*.wav
+narracao/*.mp3
+narracao/.venv/

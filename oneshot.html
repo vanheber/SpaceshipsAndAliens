@@ -16,18 +16,31 @@
     </style>
 
 </head>
-<body>
+<body class="warp-has-nav">
+
+<div class="warp-nav">
+    <button class="warp-nav-menu" onclick="document.getElementById('warp-menu-overlay').classList.add('open')" aria-label="Menu">&#9776;</button>
+    <img src="img/logo.svg" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
+</div>
+<div id="warp-menu-overlay" class="warp-nav-overlay" onclick="this.classList.remove('open')">
+    <button class="warp-nav-close" onclick="document.getElementById('warp-menu-overlay').classList.remove('open')">&#10005;</button>
+    <nav onclick="event.stopPropagation()">
+        <a href="index.html">Início</a>
+        <a href="mothership.html">Nave-Mãe</a>
+        <a href="400i.html">Nave Auxiliar</a>
+        <a href="missioncontrol.html">Controle da Missão</a>
+        <a href="index.html?readonly=1">Catálogo de Unidades</a>
+        <a href="oneshot.html">Gerador de Missão</a>
+        <a href="equipamento.html">Equipamento</a>
+        <a href="diariodebordo.html">Diário de Bordo</a>
+    </nav>
+</div>
 
 <header>
     <h1>SISTEMA OPERACIONAL WARP</h1>
     <p>Gerador de Missão One-Shot &mdash; Exploração Planetária<span class="ai-badge" id="ai-badge"></span></p>
 </header>
 
-<div class="quick-link-wrap">
-    <a href="missioncontrol.html" class="quick-link">Ir para Controle da Missão &rarr;</a>
-</div>
-
-<!-- PAGE 1: PLANETA -->
 <div id="page-planet" class="page active">
     <div class="card card-center">
         <div class="text-muted-sm mb-10">
@@ -58,6 +71,9 @@
             </div>
             <button class="btn btn-secondary btn-sm" onclick="exportMissionMD()" id="btn-export-exp">
                 📄 Exportar .md
+            </button>
+            <button class="btn btn-sm" onclick="saveToSession()" id="btn-save-session-exp" style="display:none;background:rgba(45,212,191,0.12);color:var(--teal);border:1px solid rgba(45,212,191,0.3)">
+                💾 Salvar na Sessão
             </button>
         </div>
         <div class="progress-bar mt-12">
@@ -93,6 +109,9 @@
             <button class="btn btn-secondary btn-xs" onclick="exportMissionMD()">
                 📄 Exportar .md
             </button>
+            <button class="btn btn-xs" onclick="saveToSession()" id="btn-save-session-log" style="display:none;background:rgba(45,212,191,0.12);color:var(--teal);border:1px solid rgba(45,212,191,0.3);margin-left:6px">
+                💾 Salvar na Sessão
+            </button>
         </div>
     </div>
     <div class="card">
@@ -104,36 +123,10 @@
 </div>
 
 <footer>
-    <a href="docs/">Documentação</a>
+    <a href="termos-de-uso.html">Termos de Uso</a>
     &nbsp;·&nbsp;
-    <a href="mothership.html">Nave-Mãe</a>
-    &nbsp;·&nbsp;
-    <a href="400i.html">Nave Auxiliar 400i</a>
-    &nbsp;·&nbsp;
-    <a href="index.html">Catálogo de Unidades</a>
-    &nbsp;·&nbsp;
-    <a href="missioncontrol.html">Controle da Missão</a>
-    &nbsp;·&nbsp;
-    <a href="equipamento.html">Equipamento</a>
-    &nbsp;·&nbsp;
-    <a href="#" onclick="clearMission();return false;">Limpar Missão</a>
-    &nbsp;·&nbsp;
-    <a href="#" id="auth-link" onclick="toggleLogin();return false;">🔑 Login</a>
+    <a href="licenciamento.html">Licenciamento</a>
 </footer>
-
-<div id="login-modal" class="modal-overlay">
-    <div class="modal-card">
-        <h2>Autenticação</h2>
-        <p class="text-muted-sm">Senha + código do Google Authenticator</p>
-        <input type="password" id="login-password" placeholder="Senha" autocomplete="off">
-        <input type="text" id="login-totp" placeholder="Código TOTP (6 dígitos)" maxlength="6" inputmode="numeric" autocomplete="off">
-        <div class="btn-row">
-            <button class="btn btn-primary" onclick="doLogin()">ENTRAR</button>
-            <button class="btn btn-secondary" onclick="toggleLogin()">CANCELAR</button>
-        </div>
-        <div id="login-error" class="login-error" style="display:none;"></div>
-    </div>
-</div>
 
 <script>
 // ═══════════════════════════════════════════
@@ -193,7 +186,6 @@ let planet = null;
 let discoveries = [];
 let discoveryIndex = 0;
 let lastAIProvider = null;
-let isAuthenticated = false;
 
 // ═══════════════════════════════════════════
 // DATA LOADING
@@ -255,15 +247,13 @@ let AI_PROVIDERS = [];
 
 function buildProviderList() {
     const providers = [];
-    if (isAuthenticated) {
-        providers.push({
-            name: "Gemini",
-            endpoint: window.location.origin + "/api/proxy.php",
-            model: "gemini-3.5-flash",
-            timeout: 30000,
-            headers: { "Content-Type": "application/json" }
-        });
-    }
+    providers.push({
+        name: "Gemini",
+        endpoint: window.location.origin + "/api/proxy.php",
+        model: "gemini-3.5-flash",
+        timeout: 30000,
+        headers: { "Content-Type": "application/json" }
+    });
     providers.push(
         {
             name: "NVIDIA (DeepSeek V4 Flash)",
@@ -338,11 +328,35 @@ async function callAI(provider, systemPrompt, userPrompt) {
 }
 
 async function tryAIProviders(systemPrompt, userPrompt) {
+    const ctx = buildCampaignContext();
+    const fullPrompt = ctx ? ctx + "\n\n" + userPrompt : userPrompt;
     for (const provider of AI_PROVIDERS) {
-        const result = await callAI(provider, systemPrompt, userPrompt);
+        const result = await callAI(provider, systemPrompt, fullPrompt);
         if (result) return { data: result, providerName: provider.name };
     }
     return { data: null, providerName: null };
+}
+
+function buildCampaignContext() {
+    if (!window.WarpStore || WarpStore.mode !== "remote") return "";
+    try {
+        var state = WarpStore.getAll();
+        if (!state || !state.robots) return "";
+        var lines = [];
+        var robotIds = Object.keys(state.robots);
+        if (robotIds.length > 0) {
+            lines.push("Estado da tripulação:");
+            for (var i = 0; i < robotIds.length; i++) {
+                var id = robotIds[i];
+                lines.push("  " + id + ": " + state.robots[id] + " de energia");
+            }
+        }
+        if (typeof state.fear === "number") lines.push("Medo do mestre: " + state.fear + "/7");
+        if (state.mothership) {
+            lines.push("Recursos da Tiburon: suprimentos " + (state.mothership.sup ? state.mothership.sup.current + "/" + state.mothership.sup.max : "?") + ", combustível " + (state.mothership.fuel ? state.mothership.fuel.current + "/" + state.mothership.fuel.max : "?"));
+        }
+        return "[CONTEXTO DA MISSÃO]\n" + lines.join("\n") + "\n[/CONTEXTO]";
+    } catch (e) { return ""; }
 }
 
 async function aiGeneratePlanet() {
@@ -497,72 +511,6 @@ function showAIBadge(providerName) {
     } else {
         badge.textContent = "📁 Dados Locais";
         badge.classList.add("show");
-    }
-}
-
-async function checkAuth() {
-    try {
-        const res = await fetch('/api/auth.php?check=1', { credentials: "include" });
-        if (!res.ok) return false;
-        const data = await res.json();
-        return data.authenticated === true;
-    } catch (e) { return false; }
-}
-
-function toggleLogin() {
-    const modal = document.getElementById('login-modal');
-    if (modal.style.display === 'flex') {
-        modal.style.display = 'none';
-    } else {
-        modal.style.display = 'flex';
-        document.getElementById('login-password').value = '';
-        document.getElementById('login-totp').value = '';
-        document.getElementById('login-error').style.display = 'none';
-        document.getElementById('login-password').focus();
-    }
-}
-
-async function doLogin() {
-    const password = document.getElementById('login-password').value;
-    const totp = document.getElementById('login-totp').value;
-    const errorEl = document.getElementById('login-error');
-    errorEl.style.display = 'none';
-    if (!password) { errorEl.textContent = 'Digite a senha'; errorEl.style.display = 'block'; return; }
-    try {
-        const res = await fetch('/api/auth.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: "include", body: JSON.stringify({ password, totp }) });
-        const data = await res.json();
-        if (data.success) {
-            isAuthenticated = true;
-            buildProviderList();
-            toggleLogin();
-            updateAuthUI();
-            showAIBadge(null);
-        } else {
-            errorEl.textContent = data.error || 'Falha na autenticacao';
-            errorEl.style.display = 'block';
-        }
-    } catch (e) {
-        errorEl.textContent = 'Erro de conexao com o servidor';
-        errorEl.style.display = 'block';
-    }
-}
-
-function doLogout() {
-    isAuthenticated = false;
-    buildProviderList();
-    document.cookie = 'warp_auth=; Max-Age=0; path=/';
-    updateAuthUI();
-    showAIBadge(null);
-}
-
-function updateAuthUI() {
-    const link = document.getElementById('auth-link');
-    if (isAuthenticated) {
-        link.textContent = '🔓 Logout';
-        link.onclick = function() { doLogout(); return false; };
-    } else {
-        link.textContent = '🔑 Login';
-        link.onclick = function() { toggleLogin(); return false; };
     }
 }
 
@@ -992,19 +940,63 @@ function exportMissionMD() {
 }
 
 // ═══════════════════════════════════════════
+// ═══════════════════════════════════════════
+// SESSION MODE — salvar planeta via localStorage + BroadcastChannel
+// ═══════════════════════════════════════════
+
+function initSessionMode() {
+    // Always show save buttons — available in P2P/local sessions
+    document.getElementById("btn-save-session-exp").style.display = "inline-block";
+    document.getElementById("btn-save-session-log").style.display = "inline-block";
+}
+
+function saveToSession() {
+    if (!planet) return;
+    const btn = document.activeElement;
+    const orig = btn ? btn.textContent : "";
+    if (btn) { btn.textContent = "Salvando..."; btn.disabled = true; }
+
+    var payload = {
+        name: planet.name,
+        type: planet.type,
+        desc: planet.desc,
+        discoveries: discoveries.map(function(d) {
+            return {
+                index: d.index,
+                encounterType: d.encounterType,
+                approach: d.approach,
+                description: d.description,
+                location: d.location,
+                peril: d.peril,
+                perilDC: d.perilDC,
+                reward: d.reward
+            };
+        })
+    };
+
+    localStorage.setItem("warp-pending-planet", JSON.stringify(payload));
+
+    // Notify GM tab via BroadcastChannel
+    try {
+        if (typeof BroadcastChannel !== "undefined") {
+            var ch = new BroadcastChannel("warp-unit");
+            ch.postMessage({ type: "planet-saved", name: payload.name, type: payload.type, desc: payload.desc, discoveries: payload.discoveries });
+            setTimeout(function() { ch.close(); }, 100);
+        }
+    } catch (e) {}
+
+    if (btn) { btn.textContent = "✓ Salvo!"; }
+    setTimeout(function() { if (btn) { btn.textContent = orig; btn.disabled = false; } }, 2000);
+}
+
 // INIT
 // ═══════════════════════════════════════════
 
 window.onload = async function() {
     const dataLoaded = await loadDataPools();
-    isAuthenticated = await checkAuth();
     buildProviderList();
-    updateAuthUI();
-    if (!dataLoaded) {
-        showAIBadge(null);
-    } else if (isAuthenticated) {
-        showAIBadge(null);
-    }
+    initSessionMode();
+    showAIBadge(null);
     restoreMission();
 };
 </script>

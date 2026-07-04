@@ -1,509 +1,1310 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WARP-Unit | Controle da Missão</title>
     <link rel="stylesheet" href="warp.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/p2p.js"></script>
+    <script src="js/db.js"></script>
 </head>
-<body>
+
+<body class="warp-has-nav">
+
+<div class="warp-nav">
+    <button class="warp-nav-menu" onclick="document.getElementById('warp-menu-overlay').classList.add('open')" aria-label="Menu">&#9776;</button>
+    <img src="img/logo.svg" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
+</div>
+<div id="warp-menu-overlay" class="warp-nav-overlay" onclick="this.classList.remove('open')">
+    <button class="warp-nav-close" onclick="document.getElementById('warp-menu-overlay').classList.remove('open')">&#10005;</button>
+    <nav onclick="event.stopPropagation()">
+        <a href="index.html">Início</a>
+        <a href="mothership.html">Nave-Mãe</a>
+        <a href="400i.html">Nave Auxiliar</a>
+        <a href="missioncontrol.html">Controle da Missão</a>
+        <a href="index.html?readonly=1">Catálogo de Unidades</a>
+        <a href="oneshot.html">Gerador de Missão</a>
+        <a href="equipamento.html">Equipamento</a>
+        <a href="diariodebordo.html">Diário de Bordo</a>
+    </nav>
+</div>
 
 <header>
-    <h1>SISTEMA OPERACIONAL WARP</h1>
-    <p>Controle da Missão &mdash; Painel do Mestre</p>
-</header>
+        <h1>SISTEMA OPERACIONAL WARP</h1>
+        <p>Controle da Missão &mdash; Painel do Mestre</p>
+    </header>
 
-<div class="mc-back-link">
-    <button class="back-btn" onclick="location.href='mothership.html'">&larr; Retornar à Nave</button>
-</div>
+    <div class="mc-page active w-100">
 
-<div class="mc-page active">
+        <div class="mc-col">
+
+            <!-- CAMPANHA -->
+            <div class="mc-section">
+                <div class="mc-section-title">Campanha</div>
+                <div class="mc-character-card">
+                    <label class="mc-label">Nome da nova campanha</label>
+                    <div style="display:flex;align-items:center;gap:8px;padding:0 12px 8px">
+                        <input type="text" id="campaign-name-input" class="selector-input"
+                            placeholder="Ex: Fronteira de KX-415" style="flex:1;box-sizing:border-box;font-size:0.9rem">
+                        <button class="btn btn-sm btn-primary" id="btn-create-campaign"
+                            onclick="createCampaign()">Criar</button>
+                    </div>
+                    <label class="mc-label">Campanhas criadas</label>
+                    <div style="display:flex;align-items:center;gap:8px;padding:0 12px 8px">
+                    <select id="campaign-select" class="selector-input" style="flex:1;font-size:0.82rem"
+                        onchange="onCampaignSelect()">
+                        <option value="">— Local —</option>
+                    </select>
+                </div>
+                    <div id="campaign-info" style="display:none;padding:0 12px 8px;font-size:0.78rem;color:#a3b1c1">
+                        <span id="campaign-join-code"></span>
+                        <span id="campaign-mode-badge"
+                            style="margin-left:8px;font-size:0.72rem;padding:2px 6px;border-radius:3px;background:var(--card-hover)">💾
+                            Local</span>
+                    </div>
+                    <div id="campaign-actions" style="display:none;padding:0 12px 8px;gap:6px;flex-wrap:wrap">
+                        <button class="btn btn-sm btn-primary" onclick="exportCampaign()">Exportar</button>
+                        <button class="btn btn-sm btn-secondary" onclick="document.getElementById('import-file').click()">Importar</button>
+                        <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImportFile(event)">
+                        <button class="btn btn-sm btn-danger" id="btn-archive" onclick="showArchiveModal()">Arquivar
+                            campanha</button>
+                    </div>
+                    <!-- P2P Serverless -->
+                    <div id="p2p-section" style="padding:0 12px 8px;border-top:1px solid var(--border-color);margin-top:4px;display:none">
+                        <div style="font-size:0.68rem;color:#556677;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px">P2P Serverless</div>
+                        <div id="p2p-offer-area" style="display:none;margin-bottom:4px">
+                            <div style="font-size:0.65rem;color:#8b949e;margin-bottom:2px">Código para o jogador:</div>
+                            <textarea id="p2p-offer" readonly rows="2" style="width:100%;font-size:0.6rem;box-sizing:border-box;resize:none;font-family:monospace;background:var(--card-bg);color:var(--text-color);border:1px solid var(--border-color);border-radius:4px;padding:4px"></textarea>
+                        </div>
+                        <div style="display:flex;gap:4px;align-items:center">
+                            <input id="p2p-answer" class="selector-input" placeholder="Resposta do jogador..." style="flex:1;font-size:0.65rem;height:24px">
+                            <button class="btn btn-xs btn-primary" id="btn-p2p-connect" onclick="p2pConnectPlayer()" style="height:24px;display:none">Conectar</button>
+                            <button class="btn btn-xs btn-secondary" id="btn-p2p-create" onclick="p2pCreateRoom()" style="height:24px">Nova Sala</button>
+                        </div>
+                        <div id="p2p-status" style="font-size:0.68rem;color:#556677;margin-top:4px"></div>
+                    </div>
+                    <!-- Pending Actions -->
+                    <div id="pending-banner" class="pending-banner" style="display:none">
+                        <div style="font-size:0.78rem;color:var(--amber);margin-bottom:6px;font-weight:600">⚠️ Ações
+                            pendentes (<span id="pending-count">0</span>)</div>
+                        <div id="pending-list"></div>
+                    </div>
+                </div>
+    </div>
+
+    <!-- SESSÃO -->
+    <div class="mc-section" id="session-section">
+        <div class="mc-section-title">Sessão</div>
+        <div class="mc-character-card" id="session-card">
+            <!-- No session: start button -->
+            <div id="session-start" style="padding:8px 12px;display:none">
+                <button class="btn btn-sm btn-primary" onclick="startSession()">Iniciar Sessão</button>
+            </div>
+            <!-- Active session -->
+            <div id="session-active" style="display:none">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px 4px">
+                    <span style="font-size:0.78rem;color:var(--amber)">🟢 <span id="session-started"></span></span>
+                    <button class="btn btn-xs btn-danger" onclick="confirmEndSession()">Encerrar</button>
+                </div>
+                <div style="padding:0 12px 8px">
+                    <textarea id="session-notes" class="selector-input" placeholder="Anotações da sessão..." rows="3"
+                        style="width:100%;box-sizing:border-box;font-size:0.82rem;resize:vertical;font-family:inherit"
+                        onchange="saveSessionNotes()"></textarea>
+                </div>
+                <div id="session-planets" style="padding:0 12px 8px"></div>
+                <div id="session-log-wrap" style="padding:0 12px 8px">
+                    <div style="font-size:0.72rem;color:#8b949e;margin-bottom:4px">Eventos da Sessão</div>
+                    <div id="session-log" style="max-height:100px;overflow-y:auto;margin-bottom:6px"></div>
+                    <div style="display:flex;gap:4px">
+                        <input id="quick-event" class="selector-input" placeholder="+ evento rápido..."
+                            style="flex:1;font-size:0.72rem;height:28px"
+                            onkeydown="if(event.key==='Enter')addLogEntry()">
+                        <button class="btn btn-xs btn-primary" onclick="addLogEntry()" style="height:28px">+</button>
+                    </div>
+                </div>
+                <div style="padding:0 12px 8px">
+                    <button class="btn btn-sm btn-secondary" id="btn-generate" onclick="openOneshot()">Gerar Planeta</button>
+                </div>
+            </div>
+            <!-- Session history -->
+            <div id="session-history" style="padding:8px 12px">
+                <div style="font-size:0.72rem;color:#8b949e;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Histórico</div>
+                <div id="session-history-list"></div>
+            </div>
+        </div>
+    </div>
 
     <!-- PONTOS DE MEDO (GM) -->
-    <div class="mc-section">
-        <div class="mc-section-title">Recursos do Mestre</div>
-        <div class="mc-character-card">
-            <div class="mc-character-header">
-                <span class="mc-character-name">PONTOS DE MEDO</span>
-                <span class="mc-fear-counter" id="fear-counter">0/7</span>
+            <div class="mc-section">
+                <div class="mc-section-title">Recursos do Mestre</div>
+                <div class="mc-character-card">
+                    <div class="mc-character-header">
+                        <span class="mc-character-name">PONTOS DE MEDO</span>
+                        <span class="mc-fear-counter" id="fear-counter">0/7</span>
+                    </div>
+                    <div class="mc-token-row" id="fear-token-row"></div>
+                    <div class="mc-actions">
+                        <button class="mc-btn fear" onclick="adjustFear(-1)">Gastar (-1)</button>
+                        <button class="mc-btn fear" onclick="adjustFear(1)">Adicionar (+1)</button>
+                        <button class="mc-btn fear ml-auto" onclick="resetFear()">Zerar</button>
+                    </div>
+                </div>
+
+                <div class="mc-character-card">
+                    <div class="mc-character-header">
+                        <span class="mc-character-name">ROLADOR D20</span>
+                        <span class="mc-fear-counter" id="d20-result">--</span>
+                    </div>
+                    <div class="dice-container" id="d20-viewport"></div>
+                    <div class="mc-actions">
+                        <button class="roll-btn" onclick="rollD20()">Rolar D20</button>
+                    </div>
+                </div>
             </div>
-            <div class="mc-token-row" id="fear-token-row"></div>
-            <div class="mc-actions">
-                <button class="mc-btn fear" onclick="adjustFear(-1)">Gastar (-1)</button>
-                <button class="mc-btn fear" onclick="adjustFear(1)">Adicionar (+1)</button>
-                <button class="mc-btn fear ml-auto" onclick="resetFear()">Zerar</button>
+
+            <!-- NPCs -->
+            <div class="mc-section">
+                <div class="mc-section-title">PNJs &amp; Aliados</div>
+                <div id="npcs-container"></div>
+            </div>
+
+        </div><!-- /mc-col -->
+
+        <div class="mc-col">
+
+            <!-- PERSONAGENS -->
+            <div class="mc-section">
+                <div class="mc-section-title">Unidades em Campo
+                    <button class="btn btn-xs" onclick="window.open('index.html?readonly=1','_blank')" style="margin-left:8px;background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.25);color:var(--accent-hope);font-size:0.68rem;padding:2px 8px">visualizar catálogo</button>
+                </div>
+                <div id="characters-container"></div>
+            </div>
+
+            <!-- MENSAGENS -->
+            <div class="mc-section" id="msg-section">
+                <div class="mc-section-title">Mensagens</div>
+                <div class="mc-character-card">
+                    <div style="display:flex;align-items:center;gap:8px;padding:8px 12px 4px">
+                        <select id="msg-target" class="selector-input" style="flex:1;font-size:0.82rem">
+                            <option value="">Selecionar personagem...</option>
+                        </select>
+                    </div>
+                    <div style="padding:0 12px 8px">
+                        <textarea id="msg-text" class="selector-input" placeholder="Mensagem para o jogador..." rows="2"
+                            style="width:100%;box-sizing:border-box;font-size:0.82rem;resize:vertical;font-family:inherit"></textarea>
+                    </div>
+                    <div style="padding:0 12px 8px">
+                        <button class="btn btn-sm btn-primary" onclick="sendGMMessage()">Enviar</button>
+                    </div>
+                    <div id="msg-inbox" style="padding:0 12px 8px"></div>
+                </div>
+            </div>
+
+        </div><!-- /mc-col -->
+
+    </div>
+
+    <footer>
+        <a href="termos-de-uso.html">Termos de Uso</a>
+        &nbsp;·&nbsp;
+        <a href="licenciamento.html">Licenciamento</a>
+    </footer>
+
+    <div id="archive-modal" class="modal-overlay" style="display:none">
+        <div class="modal-card">
+            <div class="modal-title">Arquivar Campanha</div>
+            <p style="font-size:0.85rem;color:#a3b1c1;margin:10px 0 16px">A campanha será ocultada da lista principal.
+                Você poderá restaurá-la depois.</p>
+            <div class="btn-row">
+                <button class="btn btn-secondary" onclick="cancelArchive()">Cancelar</button>
+                <button class="btn btn-danger" onclick="confirmArchive()">Arquivar</button>
             </div>
         </div>
-
-        <div class="mc-character-card">
-            <div class="mc-character-header">
-                <span class="mc-character-name">ROLADOR D20</span>
-                <span class="mc-fear-counter" id="d20-result">--</span>
-            </div>
-            <div class="dice-container" id="d20-viewport"></div>
-            <div class="mc-actions">
-                <button class="roll-btn" onclick="rollD20()">Rolar D20</button>
-            </div>
-        </div>
     </div>
 
-    <!-- PERSONAGENS -->
-    <div class="mc-section">
-        <div class="mc-section-title">Unidades em Campo</div>
-        <div id="characters-container"></div>
-    </div>
+    <script>
+        // ===== STATE =====
+        const FEAR_MAX = 7;
+        const NPC_MAX = 20;
+        const NPC_START = 5;
 
-    <!-- NPCs -->
-    <div class="mc-section">
-        <div class="mc-section-title">PNJs &amp; Aliados</div>
-        <div id="npcs-container"></div>
-    </div>
+        const NPC_NAMES = ["PNJ 1", "PNJ 2", "PNJ 3"];
 
-</div>
+        let state = {
+            fear: 0,
+            robots: {},
+            npcs: [NPC_START, NPC_START, NPC_START]
+        };
 
-<footer>
-    <a href="docs/">Documentação</a>
-    &nbsp;·&nbsp;
-    <a href="mothership.html">Nave-Mãe</a>
-    &nbsp;·&nbsp;
-    <a href="index.html">Catálogo de Unidades</a>
-    &nbsp;·&nbsp;
-    <a href="oneshot.html">Gerador de Missão</a>
-    &nbsp;·&nbsp;
-    <a href="equipamento.html">Equipamento</a>
-    &nbsp;·&nbsp;
-    <a href="#" onclick="localStorage.removeItem('warp-unit-mission');location.reload();return false;">Limpar Missão</a>
-</footer>
-
-<script>
-// ===== STATE =====
-const STORAGE_KEY = "warp-unit-mission";
-const FEAR_MAX = 7;
-const NPC_MAX = 20;
-const NPC_START = 5;
-
-const NPC_NAMES = ["PNJ 1", "PNJ 2", "PNJ 3"];
-
-let state = {
-    fear: 0,
-    robots: {},
-    npcs: [NPC_START, NPC_START, NPC_START]
-};
-
-// Load state
-function loadState() {
-    try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) {
-            const saved = JSON.parse(raw);
-            state.fear = typeof saved.fear === "number" ? saved.fear : 0;
-            state.robots = saved.robots || {};
-            state.npcs = Array.isArray(saved.npcs) ? saved.npcs : [NPC_START, NPC_START, NPC_START];
+        function syncStateFromStore() {
+            state.fear = WarpStore.get("fear") || 0;
+            state.robots = WarpStore.get("robots") || {};
+            state.npcs = WarpStore.get("npcs") || [NPC_START, NPC_START, NPC_START];
         }
-    } catch (e) {}
-}
 
-function saveState() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
+        function loadState() {
+            syncStateFromStore();
+        }
 
-// ===== FEAR POINTS =====
-function renderFearTokens() {
-    const row = document.getElementById("fear-token-row");
-    row.innerHTML = "";
-    for (let i = 0; i < FEAR_MAX; i++) {
-        const token = document.createElement("div");
-        token.className = `mc-token fear ${i >= state.fear ? 'spent' : ''}`;
-        token.title = i < state.fear ? `Medo ${i+1}/${FEAR_MAX}` : "Vazio";
-        token.addEventListener("click", () => setFear(i + 1));
-        row.appendChild(token);
-    }
-    document.getElementById("fear-counter").textContent = `${state.fear}/${FEAR_MAX}`;
-}
+        function saveState() {
+            WarpStore.set("fear", state.fear);
+            WarpStore.set("robots", state.robots);
+            WarpStore.set("npcs", state.npcs);
+        }
 
-function setFear(val) {
-    state.fear = Math.max(0, Math.min(FEAR_MAX, val));
-    saveState();
-    renderFearTokens();
-}
+        // ===== FEAR POINTS =====
+        function renderFearTokens() {
+            const row = document.getElementById("fear-token-row");
+            row.innerHTML = "";
+            for (let i = 0; i < FEAR_MAX; i++) {
+                const token = document.createElement("div");
+                token.className = `mc-token fear ${i >= state.fear ? 'spent' : ''}`;
+                token.title = i < state.fear ? `Medo ${i + 1}/${FEAR_MAX}` : "Vazio";
+                token.addEventListener("click", () => setFear(i + 1));
+                row.appendChild(token);
+            }
+            document.getElementById("fear-counter").textContent = `${state.fear}/${FEAR_MAX}`;
+        }
 
-function adjustFear(amount) {
-    setFear(state.fear + amount);
-}
+        function setFear(val) {
+            state.fear = Math.max(0, Math.min(FEAR_MAX, val));
+            saveState();
+            renderFearTokens();
+        }
 
-function resetFear() {
-    setFear(0);
-}
+        function adjustFear(amount) {
+            setFear(state.fear + amount);
+        }
 
-// ===== CHARACTERS =====
-function renderCharacterCard(robot) {
-    const id = robot.id;
-    const model = robot.model;
-    const type = robot.type;
-    const maxEnergy = robot.maxEnergy;
-    const starting = robot.startingEnergy;
+        function resetFear() {
+            setFear(0);
+        }
 
-    // Ensure robot has an entry in state
-    if (typeof state.robots[id] !== "number") {
-        state.robots[id] = starting;
-    }
-    const current = state.robots[id];
+        // ===== CHARACTERS =====
+        function renderCharacterCard(robot) {
+            const id = robot.id;
+            const model = robot.model;
+            const type = robot.type;
+            const maxEnergy = robot.maxEnergy;
+            const starting = robot.startingEnergy;
 
-    const card = document.createElement("div");
-    card.className = "mc-character-card";
-    card.id = "char-" + id;
+            // Ensure robot has an entry in state
+            if (typeof state.robots[id] !== "number") {
+                state.robots[id] = starting;
+            }
+            const current = state.robots[id];
 
-    const header = document.createElement("div");
-    header.className = "mc-character-header";
-    header.innerHTML = `
+            const card = document.createElement("div");
+            card.className = "mc-character-card";
+            card.id = "char-" + id;
+
+            const header = document.createElement("div");
+            header.className = "mc-character-header";
+            header.innerHTML = `
         <div>
             <div class="mc-character-name">${model}</div>
             <div class="mc-character-type">${type}</div>
         </div>
         <span class="mc-energy-counter" id="ce-${id}">${current}/${maxEnergy}</span>
     `;
-    card.appendChild(header);
+            card.appendChild(header);
 
-    const tokenRow = document.createElement("div");
-    tokenRow.className = "mc-token-row";
-    tokenRow.id = "tr-" + id;
+            const tokenRow = document.createElement("div");
+            tokenRow.className = "mc-token-row";
+            tokenRow.id = "tr-" + id;
 
-    for (let i = 0; i < maxEnergy; i++) {
-        const token = document.createElement("div");
-        token.className = `mc-token energy ${i >= current ? 'spent' : ''}`;
-        token.addEventListener("click", () => setRobotEnergy(id, i + 1));
-        tokenRow.appendChild(token);
-    }
-    card.appendChild(tokenRow);
+            for (let i = 0; i < maxEnergy; i++) {
+                const token = document.createElement("div");
+                token.className = `mc-token energy ${i >= current ? 'spent' : ''}`;
+                token.addEventListener("click", () => setRobotEnergy(id, i + 1));
+                tokenRow.appendChild(token);
+            }
+            card.appendChild(tokenRow);
 
-    const actions = document.createElement("div");
-    actions.className = "mc-actions";
-    actions.innerHTML = `
+            const actions = document.createElement("div");
+            actions.className = "mc-actions";
+            actions.innerHTML = `
         <button class="mc-btn" onclick="adjustRobotEnergy('${id}', -1)">Gastar (-1)</button>
         <button class="mc-btn" onclick="adjustRobotEnergy('${id}', 1)">Adicionar (+1)</button>
         <button class="mc-btn ml-auto" onclick="resetRobotEnergy('${id}')">Recarregar</button>
     `;
-    card.appendChild(actions);
+            card.appendChild(actions);
 
-    return card;
-}
+            return card;
+        }
 
-function setRobotEnergy(id, val) {
-    const robot = ROBOTS.find(r => r.id === id);
-    if (!robot) return;
-    state.robots[id] = Math.max(0, Math.min(robot.maxEnergy, val));
-    saveState();
-    renderAll();
-}
+        function setRobotEnergy(id, val) {
+            const robot = ROBOTS.find(r => r.id === id);
+            if (!robot) return;
+            state.robots[id] = Math.max(0, Math.min(robot.maxEnergy, val));
+            saveState();
+            renderAll();
+        }
 
-function adjustRobotEnergy(id, amount) {
-    const robot = ROBOTS.find(r => r.id === id);
-    if (!robot) return;
-    state.robots[id] = Math.max(0, Math.min(robot.maxEnergy, (state.robots[id] || robot.startingEnergy) + amount));
-    saveState();
-    renderAll();
-}
+        function adjustRobotEnergy(id, amount) {
+            const robot = ROBOTS.find(r => r.id === id);
+            if (!robot) return;
+            state.robots[id] = Math.max(0, Math.min(robot.maxEnergy, (state.robots[id] || robot.startingEnergy) + amount));
+            saveState();
+            renderAll();
+        }
 
-function resetRobotEnergy(id) {
-    const robot = ROBOTS.find(r => r.id === id);
-    if (!robot) return;
-    state.robots[id] = robot.startingEnergy;
-    saveState();
-    renderAll();
-}
+        function resetRobotEnergy(id) {
+            const robot = ROBOTS.find(r => r.id === id);
+            if (!robot) return;
+            state.robots[id] = robot.startingEnergy;
+            saveState();
+            renderAll();
+        }
 
-// ===== NPCS =====
-function renderNPC(index) {
-    const name = NPC_NAMES[index];
-    const current = state.npcs[index];
+        // ===== NPCS =====
+        function renderNPC(index) {
+            const name = NPC_NAMES[index];
+            const current = state.npcs[index];
 
-    const card = document.createElement("div");
-    card.className = "mc-character-card";
-    card.id = "npc-card-" + index;
+            const card = document.createElement("div");
+            card.className = "mc-character-card";
+            card.id = "npc-card-" + index;
 
-    const header = document.createElement("div");
-    header.className = "mc-character-header";
-    header.innerHTML = `
+            const header = document.createElement("div");
+            header.className = "mc-character-header";
+            header.innerHTML = `
         <span class="mc-character-name">${name}</span>
         <span class="mc-npc-counter" id="npc-counter-${index}">${current}/${NPC_MAX}</span>
     `;
-    card.appendChild(header);
+            card.appendChild(header);
 
-    const tokenRow = document.createElement("div");
-    tokenRow.className = "mc-token-row";
-    tokenRow.id = "npc-tr-" + index;
+            const tokenRow = document.createElement("div");
+            tokenRow.className = "mc-token-row";
+            tokenRow.id = "npc-tr-" + index;
 
-    for (let i = 0; i < NPC_MAX; i++) {
-        const token = document.createElement("div");
-        token.className = `mc-token npc ${i >= current ? 'spent' : ''}`;
-        token.addEventListener("click", () => setNPCEnergy(index, i + 1));
-        tokenRow.appendChild(token);
-    }
-    card.appendChild(tokenRow);
+            for (let i = 0; i < NPC_MAX; i++) {
+                const token = document.createElement("div");
+                token.className = `mc-token npc ${i >= current ? 'spent' : ''}`;
+                token.addEventListener("click", () => setNPCEnergy(index, i + 1));
+                tokenRow.appendChild(token);
+            }
+            card.appendChild(tokenRow);
 
-    const actions = document.createElement("div");
-    actions.className = "mc-actions";
-    actions.innerHTML = `
+            const actions = document.createElement("div");
+            actions.className = "mc-actions";
+            actions.innerHTML = `
         <button class="mc-btn npc" onclick="adjustNPCEnergy(${index}, -1)">Gastar (-1)</button>
         <button class="mc-btn npc" onclick="adjustNPCEnergy(${index}, 1)">Adicionar (+1)</button>
         <button class="mc-btn npc ml-auto" onclick="resetNPCEnergy(${index})">Recarregar</button>
     `;
-    card.appendChild(actions);
+            card.appendChild(actions);
 
-    return card;
-}
-
-function setNPCEnergy(index, val) {
-    state.npcs[index] = Math.max(0, Math.min(NPC_MAX, val));
-    saveState();
-    renderAll();
-}
-
-function adjustNPCEnergy(index, amount) {
-    state.npcs[index] = Math.max(0, Math.min(NPC_MAX, state.npcs[index] + amount));
-    saveState();
-    renderAll();
-}
-
-function resetNPCEnergy(index) {
-    state.npcs[index] = NPC_START;
-    saveState();
-    renderAll();
-}
-
-// ===== RENDER ALL =====
-let ROBOTS = [];
-
-function renderAll() {
-    // Fear
-    renderFearTokens();
-
-    // Characters
-    const container = document.getElementById("characters-container");
-    container.innerHTML = "";
-    if (!ROBOTS.length) {
-        container.innerHTML = '<div class="mc-empty">Nenhuma unidade disponível. Carregando...</div>';
-        return;
-    }
-
-    // Sort by model name for consistent order
-    const sorted = [...ROBOTS].sort((a, b) => a.model.localeCompare(b.model));
-    sorted.forEach(robot => {
-        container.appendChild(renderCharacterCard(robot));
-    });
-
-    // NPCs
-    const npcContainer = document.getElementById("npcs-container");
-    npcContainer.innerHTML = "";
-    for (let i = 0; i < NPC_NAMES.length; i++) {
-        npcContainer.appendChild(renderNPC(i));
-    }
-}
-
-// ===== INIT =====
-async function init() {
-    loadState();
-
-    try {
-        const res = await fetch("data/robots.json");
-        ROBOTS = await res.json();
-    } catch (e) {
-        document.getElementById("characters-container").innerHTML =
-            '<div class="mc-empty">Erro ao carregar unidades. Verifique data/robots.json</div>';
-    }
-
-    renderAll();
-}
-
-init();
-
-// ===== D20 DICE (Three.js) =====
-let d20Scene, d20Camera, d20Renderer, d20Die, d20Anim, d20Result;
-let d20Ready = false;
-
-function createD20(hexColor, textColor) {
-    const group = new THREE.Group();
-    const R = 1.05;
-    const geo = new THREE.IcosahedronGeometry(R, 0);
-    const ni = geo.clone().toNonIndexed();
-    const arr = ni.getAttribute('position').array;
-    const fs = 3;
-
-    let uvs = ni.getAttribute('uv');
-    if (!uvs) {
-        uvs = new THREE.BufferAttribute(new Float32Array(arr.length / 3 * 2), 2);
-        ni.setAttribute('uv', uvs);
-    }
-    const uvArr = uvs.array;
-
-    ni.clearGroups();
-    const mats = [];
-    const norms = [];
-
-    for (let f = 0; f < 20; f++) {
-        ni.addGroup(f * fs, fs, f);
-
-        const keys = [];
-        const uniqueMap = new Map();
-        for (let v = 0; v < fs; v++) {
-            const i = (f * fs + v) * 3;
-            const key = `${arr[i].toFixed(4)},${arr[i+1].toFixed(4)},${arr[i+2].toFixed(4)}`;
-            keys.push(key);
-            if (!uniqueMap.has(key))
-                uniqueMap.set(key, [arr[i], arr[i+1], arr[i+2]]);
+            return card;
         }
 
-        const verts = Array.from(uniqueMap.values()).map(c => new THREE.Vector3(c[0], c[1], c[2]));
-        const center = new THREE.Vector3();
-        verts.forEach(v => center.add(v));
-        center.divideScalar(verts.length);
-        norms.push(center.clone().normalize());
+        function setNPCEnergy(index, val) {
+            state.npcs[index] = Math.max(0, Math.min(NPC_MAX, val));
+            saveState();
+            renderAll();
+        }
 
-        const local = verts.map(v => v.clone().sub(center));
-        const faceNormal = center.clone().normalize();
-        const axX = local[0].clone().normalize();
-        const axY = new THREE.Vector3().crossVectors(faceNormal, axX).normalize();
+        function adjustNPCEnergy(index, amount) {
+            state.npcs[index] = Math.max(0, Math.min(NPC_MAX, state.npcs[index] + amount));
+            saveState();
+            renderAll();
+        }
 
-        let uMin = Infinity, uMax = -Infinity, vMin = Infinity, vMax = -Infinity;
-        const uvVals = local.map(p => {
-            const u = p.dot(axX), v = p.dot(axY);
-            uMin = Math.min(uMin, u); uMax = Math.max(uMax, u);
-            vMin = Math.min(vMin, v); vMax = Math.max(vMax, v);
-            return { u, v };
+        function resetNPCEnergy(index) {
+            state.npcs[index] = NPC_START;
+            saveState();
+            renderAll();
+        }
+
+        // ===== RENDER ALL =====
+        let ROBOTS = [];
+
+        function renderAll() {
+            // Fear
+            renderFearTokens();
+
+            // Characters
+            const container = document.getElementById("characters-container");
+            container.innerHTML = "";
+            if (!ROBOTS.length) {
+                container.innerHTML = '<div class="mc-empty">Nenhuma unidade disponível. Carregando...</div>';
+                return;
+            }
+
+            // Sort by model name for consistent order
+            const sorted = [...ROBOTS].sort((a, b) => a.model.localeCompare(b.model));
+            sorted.forEach(robot => {
+                container.appendChild(renderCharacterCard(robot));
+            });
+
+            // NPCs
+            const npcContainer = document.getElementById("npcs-container");
+            npcContainer.innerHTML = "";
+            for (let i = 0; i < NPC_NAMES.length; i++) {
+                npcContainer.appendChild(renderNPC(i));
+            }
+
+            populateMsgTarget();
+        }
+
+        // ===== INIT =====
+        var currentCampaignId = null;
+        var currentCampaignCode = null;
+
+        async function init() {
+            WarpStore.init({ mode: "local" });
+            loadState();
+            loadLocalCampaigns();
+
+            var nameInput = document.getElementById("campaign-name-input");
+            nameInput.value = WarpStore.get("campaignName") || "";
+            nameInput.addEventListener("input", function () {
+                if (currentCampaignId) {
+                    saveLocalCampaign();
+                } else {
+                    WarpStore.set("campaignName", nameInput.value);
+                }
+            });
+
+            WarpStore.subscribe(function () {
+                syncStateFromStore();
+                renderAll();
+                var newName = WarpStore.get("campaignName") || "";
+                if (nameInput.value !== newName) nameInput.value = newName;
+                var pending = WarpStore.getPendingActions();
+                renderPendingActions(pending);
+                renderSessionUI();
+                renderGMInbox();
+            });
+
+            try {
+                var res = await fetch("data/robots.json");
+                ROBOTS = await res.json();
+            } catch (e) {
+                document.getElementById("characters-container").innerHTML =
+                    '<div class="mc-empty">Erro ao carregar unidades. Verifique data/robots.json</div>';
+            }
+
+            renderAll();
+
+            // Listen for planets from oneshot via BroadcastChannel
+            if (typeof BroadcastChannel !== "undefined") {
+                var _planetChannel = new BroadcastChannel("warp-unit");
+                _planetChannel.onmessage = function (e) {
+                    if (e.data && e.data.type === "planet-saved") {
+                        _pendingPlanet = e.data;
+                        renderSessionUI();
+                    }
+                };
+            }
+        }
+
+        // ===== CAMPAIGN MANAGEMENT =====
+        function loadLocalCampaigns() {
+            var raw = localStorage.getItem("warp-campaigns");
+            var list = raw ? JSON.parse(raw) : [];
+            var select = document.getElementById("campaign-select");
+            select.innerHTML = '<option value="">— Local —</option>';
+            for (var i = 0; i < list.length; i++) {
+                var c = list[i];
+                if (c.archived) continue;
+                select.innerHTML += '<option value="' + c.id + '">' + c.name + ' (' + c.joinCode + ')</option>';
+            }
+            select.innerHTML += '<option value="__create__">+ Criar nova campanha...</option>';
+            if (currentCampaignId) select.value = currentCampaignId;
+        }
+
+        function createCampaign() {
+            var name = document.getElementById("campaign-name-input").value.trim();
+            if (!name) { name = "Nova Campanha"; }
+            var raw = localStorage.getItem("warp-campaigns");
+            var list = raw ? JSON.parse(raw) : [];
+            var joinCode = "";
+            var chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+            for (var j = 0; j < 4; j++) joinCode += chars[Math.floor(Math.random() * chars.length)];
+            var state = WarpStore.getAll();
+            state.campaignName = name;
+            var campaign = { id: "c" + Date.now().toString(36), name: name, joinCode: joinCode, state: state, archived: false, createdAt: new Date().toISOString() };
+            list.push(campaign);
+            localStorage.setItem("warp-campaigns", JSON.stringify(list));
+            loadLocalCampaigns();
+            document.getElementById("campaign-select").value = campaign.id;
+            switchToCampaign(campaign.id, joinCode);
+        }
+
+        function onCampaignSelect() {
+            var select = document.getElementById("campaign-select");
+            var val = select.value;
+            if (val === "__create__") {
+                createCampaign();
+                return;
+            }
+            if (!val) {
+                currentCampaignId = null;
+                currentCampaignCode = null;
+                WarpStore.destroy();
+                WarpStore.init({ mode: "local" });
+                loadState();
+                document.getElementById("campaign-info").style.display = "none";
+                document.getElementById("campaign-actions").style.display = "none";
+                document.getElementById("pending-banner").style.display = "none";
+                document.getElementById("campaign-mode-badge").textContent = "💾 Local";
+                document.getElementById("campaign-mode-badge").style.background = "var(--card-hover)";
+                document.getElementById("campaign-name-input").value = WarpStore.get("campaignName") || "";
+                renderAll();
+                return;
+            }
+            var opt = select.options[select.selectedIndex];
+            var m = opt.text.match(/\(([A-Z0-9]{4})\)/);
+            var code = m ? m[1] : "";
+            switchToCampaign(val, code);
+        }
+
+        function switchToCampaign(id, code) {
+            currentCampaignId = id;
+            currentCampaignCode = code;
+            var raw = localStorage.getItem("warp-campaigns");
+            var list = raw ? JSON.parse(raw) : [];
+            var campaign = null;
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].id === id) { campaign = list[i]; break; }
+            }
+            WarpStore.destroy();
+            WarpStore.init({ mode: "local" });
+            if (campaign && campaign.state) {
+                var currentState = WarpStore.getAll();
+                var merged = campaign.state;
+                for (var k in currentState) {
+                    if (currentState.hasOwnProperty(k) && !merged.hasOwnProperty(k)) {
+                        merged[k] = currentState[k];
+                    }
+                }
+                WarpStore.set("campaignName", merged.campaignName || campaign.name);
+            }
+            loadState();
+            document.getElementById("campaign-info").style.display = "block";
+            document.getElementById("campaign-actions").style.display = "block";
+            document.getElementById("campaign-join-code").textContent = "🔗 Código: " + code;
+            document.getElementById("campaign-mode-badge").textContent = "💾 Local";
+            document.getElementById("campaign-mode-badge").style.background = "var(--card-hover)";
+
+            var name = WarpStore.get("campaignName") || (campaign ? campaign.name : "");
+            document.getElementById("campaign-name-input").value = name;
+            syncStateFromStore();
+            renderAll();
+            var pending = WarpStore.getPendingActions();
+            renderPendingActions(pending);
+            renderSessionUI();
+            renderGMInbox();
+        }
+
+        function saveLocalCampaign() {
+            if (!currentCampaignId) return;
+            var raw = localStorage.getItem("warp-campaigns");
+            var list = raw ? JSON.parse(raw) : [];
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].id === currentCampaignId) {
+                    list[i].name = document.getElementById("campaign-name-input").value.trim();
+                    list[i].state = WarpStore.getAll();
+                    localStorage.setItem("warp-campaigns", JSON.stringify(list));
+                    return;
+                }
+            }
+        }
+
+        function showArchiveModal() {
+            document.getElementById("archive-modal").style.display = "flex";
+        }
+        function cancelArchive() {
+            document.getElementById("archive-modal").style.display = "none";
+        }
+        function confirmArchive() {
+            document.getElementById("archive-modal").style.display = "none";
+            if (!currentCampaignId) return;
+            var raw = localStorage.getItem("warp-campaigns");
+            var list = raw ? JSON.parse(raw) : [];
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].id === currentCampaignId) {
+                    list[i].archived = true;
+                    break;
+                }
+            }
+            localStorage.setItem("warp-campaigns", JSON.stringify(list));
+            currentCampaignId = null;
+            currentCampaignCode = null;
+            WarpStore.destroy();
+            WarpStore.init({ mode: "local" });
+            loadState();
+            document.getElementById("campaign-select").value = "";
+            document.getElementById("campaign-info").style.display = "none";
+            document.getElementById("campaign-actions").style.display = "none";
+            document.getElementById("pending-banner").style.display = "none";
+            document.getElementById("campaign-mode-badge").textContent = "💾 Local";
+            document.getElementById("campaign-mode-badge").style.background = "var(--card-hover)";
+            document.getElementById("campaign-name-input").value = WarpStore.get("campaignName") || "";
+            loadLocalCampaigns();
+            renderAll();
+        }
+
+        // ===== EXPORT / IMPORT =====
+        function exportCampaign() {
+            if (!currentCampaignId) return;
+            var raw = localStorage.getItem("warp-campaigns");
+            var list = raw ? JSON.parse(raw) : [];
+            var campaign = null;
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].id === currentCampaignId) { campaign = list[i]; break; }
+            }
+            if (!campaign) return;
+            campaign.state = WarpStore.getAll();
+            var blob = new Blob([JSON.stringify(campaign, null, 2)], { type: "application/json" });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            a.href = url;
+            a.download = "campanha-" + currentCampaignId + ".json";
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function handleImportFile(ev) {
+            var file = ev.target.files[0];
+            ev.target.value = "";
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function () {
+                try {
+                    var data = JSON.parse(reader.result);
+                    if (!data.name || !data.state) { alert("Arquivo inválido: campanha sem name/state"); return; }
+                    var raw = localStorage.getItem("warp-campaigns");
+                    var list = raw ? JSON.parse(raw) : [];
+                    data.id = "c" + Date.now().toString(36);
+                    data.joinCode = "";
+                    var chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+                    for (var j = 0; j < 4; j++) data.joinCode += chars[Math.floor(Math.random() * chars.length)];
+                    data.archived = false;
+                    data.createdAt = new Date().toISOString();
+                    list.push(data);
+                    localStorage.setItem("warp-campaigns", JSON.stringify(list));
+                    loadLocalCampaigns();
+                    document.getElementById("campaign-select").value = data.id;
+                    switchToCampaign(data.id, data.joinCode);
+                } catch (e) {
+                    alert("Arquivo JSON inválido");
+                }
+            };
+            reader.readAsText(file);
+        }
+        }
+
+        // ===== SESSION MANAGEMENT =====
+        function getActiveSession() {
+            var sessions = WarpStore.getSessions();
+            for (var i = 0; i < sessions.length; i++) {
+                if (!sessions[i].endedAt) return sessions[i];
+            }
+            return null;
+        }
+
+        var _pendingPlanet = null;
+
+        function renderSessionUI() {
+            var active = getActiveSession();
+            var hasCampaign = currentCampaignId;
+
+            document.getElementById("session-start").style.display = (hasCampaign && !active) ? "block" : "none";
+            document.getElementById("session-active").style.display = active ? "block" : "none";
+
+            // Pending planet from oneshot
+            if (_pendingPlanet && hasCampaign) {
+                var ppDiv = document.getElementById("pending-planet-banner");
+                if (!ppDiv) {
+                    ppDiv = document.createElement("div");
+                    ppDiv.id = "pending-planet-banner";
+                    ppDiv.style.cssText = "padding:8px 12px;background:rgba(45,212,191,0.08);border:1px solid rgba(45,212,191,0.25);border-radius:6px;margin:4px 0";
+                    var sessionCard = document.getElementById("session-card");
+                    if (sessionCard) sessionCard.insertBefore(ppDiv, sessionCard.firstChild);
+                }
+                ppDiv.innerHTML = '<div style="font-size:0.78rem;color:var(--teal);font-weight:600;margin-bottom:4px">🪐 Planeta pendente</div>' +
+                    '<div style="font-size:0.72rem;color:#a3b1c1">' + (_pendingPlanet.name || "Sem nome") + ' — ' + (_pendingPlanet.type || "") + '</div>' +
+                    '<div style="margin-top:6px;display:flex;gap:4px">' +
+                    '<button class="btn btn-xs btn-primary" onclick="addPendingPlanet()">Adicionar à sessão</button>' +
+                    '<button class="btn btn-xs btn-secondary" onclick="_pendingPlanet=null;renderSessionUI()">Ignorar</button>' +
+                    '</div>';
+            } else if (!_pendingPlanet) {
+                var ppDiv2 = document.getElementById("pending-planet-banner");
+                if (ppDiv2) ppDiv2.remove();
+            }
+
+            if (active) {
+                var d = new Date(active.startedAt);
+                var label = active.name || "Sessão sem nome";
+                document.getElementById("session-started").textContent =
+                    label + " — " + d.toLocaleDateString("pt-BR") + " " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+                var notesEl = document.getElementById("session-notes");
+                if (notesEl.value !== (active.notes || "")) notesEl.value = active.notes || "";
+
+                var planetsHtml = "";
+                if (active.planets && active.planets.length) {
+                    planetsHtml += '<div style="font-size:0.72rem;color:#8b949e;margin-bottom:4px">Planetas explorados</div>';
+                    for (var i = 0; i < active.planets.length; i++) {
+                        var p = active.planets[i];
+                        var discCount = p.discoveries ? p.discoveries.length : 0;
+                        planetsHtml += '<div class="session-planet">' +
+                            '<strong>' + p.name + '</strong> — ' + p.type +
+                            ' <span style="color:#8b949e">(' + discCount + ' descob.)</span>' +
+                            '</div>';
+                    }
+                }
+                document.getElementById("session-planets").innerHTML = planetsHtml;
+
+                var logHtml = "";
+                if (active.log && active.log.length) {
+                    for (var li = active.log.length - 1; li >= 0; li--) {
+                        var entry = active.log[li];
+                        logHtml += '<div style="font-size:0.73rem;color:#a3b1c1;padding:1px 0">' +
+                            '<span style="color:#556677;font-size:0.62rem;margin-right:6px;white-space:nowrap">' + (entry.time || '') + '</span>' +
+                            (entry.text || '') + '</div>';
+                    }
+                }
+                if (!logHtml) logHtml = '<div style="font-size:0.7rem;color:#556677">Nenhum evento registrado</div>';
+                document.getElementById("session-log").innerHTML = logHtml;
+            }
+
+            var sessions = WarpStore.getSessions();
+            var historyHtml = "";
+            for (var j = sessions.length - 1; j >= 0; j--) {
+                var s = sessions[j];
+                if (!s.endedAt) continue;
+                var sd = new Date(s.startedAt);
+                var planets = s.planets ? s.planets.length : 0;
+                var discTotal = 0;
+                if (s.planets) for (var k = 0; k < s.planets.length; k++) {
+                    discTotal += s.planets[k].discoveries ? s.planets[k].discoveries.length : 0;
+                }
+                historyHtml += '<div class="session-history-item">' +
+                    '<span class="session-history-date">' + (s.name || sd.toLocaleDateString("pt-BR")) + '</span>' +
+                    '<span class="session-history-summary">' + planets + ' planetas, ' + discTotal + ' descobertas' +
+                    (s.notes ? ' — ' + s.notes.substring(0, 60) : '') + '</span>' +
+                    '<button class="btn btn-xs" onclick="event.stopPropagation();restoreSession(\'' + s.id + '\')" ' +
+                    'style="background:rgba(167,139,250,0.12);color:var(--accent-hope);border:1px solid rgba(167,139,250,0.25);margin-left:auto;white-space:nowrap">▶ Continuar</button>' +
+                    '</div>';
+            }
+            if (!historyHtml) historyHtml = '<div style="font-size:0.75rem;color:#556677;padding:4px 0">Nenhuma sessão anterior</div>';
+            document.getElementById("session-history-list").innerHTML = historyHtml;
+        }
+
+        function addLogEntry() {
+            var input = document.getElementById("quick-event");
+            var text = input.value.trim();
+            if (!text || !currentCampaignId) return;
+            var active = getActiveSession();
+            if (!active) return;
+            WarpStore.addLogEntry(active.id, text);
+            input.value = "";
+            // Optimistic: show immediately (poll replaces with server data on next cycle)
+            var now = new Date();
+            var time = ("0" + now.getHours()).slice(-2) + ":" + ("0" + now.getMinutes()).slice(-2);
+            var entry = '<div style="font-size:0.73rem;color:#a3b1c1;padding:1px 0">' +
+                '<span style="color:#556677;font-size:0.62rem;margin-right:6px;white-space:nowrap">' + time + '</span>' +
+                text + '</div>';
+            var logEl = document.getElementById("session-log");
+            if (logEl.innerHTML.indexOf("Nenhum evento") !== -1) logEl.innerHTML = entry;
+            else logEl.innerHTML = entry + logEl.innerHTML;
+        }
+
+        function addPendingPlanet() {
+            if (!_pendingPlanet) return;
+            var active = getActiveSession();
+            if (!active) return;
+            var sessions = WarpStore.getSessions();
+            for (var i = 0; i < sessions.length; i++) {
+                if (sessions[i].id === active.id) {
+                    sessions[i].planets = sessions[i].planets || [];
+                    sessions[i].planets.push({
+                        name: _pendingPlanet.name || "Sem nome",
+                        type: _pendingPlanet.type || "",
+                        desc: _pendingPlanet.desc || "",
+                        discoveries: _pendingPlanet.discoveries || [],
+                    });
+                    if (!sessions[i].name && _pendingPlanet.name) {
+                        sessions[i].name = _pendingPlanet.name;
+                    }
+                    break;
+                }
+            }
+            var state = WarpStore.getAll();
+            state.sessions = sessions;
+            for (var k in state) {
+                if (state.hasOwnProperty(k)) WarpStore.set(k, state[k]);
+            }
+            _pendingPlanet = null;
+            localStorage.removeItem("warp-pending-planet");
+            renderSessionUI();
+            saveLocalCampaign();
+        }
+
+        function startSession() {
+            if (!currentCampaignId) return;
+            var sessions = WarpStore.getSessions();
+            sessions = sessions || [];
+            var active = sessions.find(function (s) { return !s.endedAt; });
+            if (active) return;
+            var session = {
+                id: "s" + Date.now().toString(36),
+                name: "",
+                startedAt: new Date().toISOString(),
+                endedAt: null,
+                notes: "",
+                log: [],
+                planets: [],
+            };
+            sessions.push(session);
+            var state = WarpStore.getAll();
+            state.sessions = sessions;
+            for (var k in state) {
+                if (state.hasOwnProperty(k)) WarpStore.set(k, state[k]);
+            }
+            renderSessionUI();
+            saveLocalCampaign();
+        }
+
+        function confirmEndSession() {
+            if (confirm("Encerrar esta sessão de jogo? As anotações e planetas serão salvos no histórico.")) {
+                endSession();
+            }
+        }
+
+        function endSession() {
+            var active = getActiveSession();
+            if (!active || !currentCampaignId) return;
+            var notes = document.getElementById("session-notes").value;
+            var sessions = WarpStore.getSessions();
+            for (var i = 0; i < sessions.length; i++) {
+                if (sessions[i].id === active.id) {
+                    sessions[i].endedAt = new Date().toISOString();
+                    sessions[i].notes = notes;
+                    break;
+                }
+            }
+            var state = WarpStore.getAll();
+            state.sessions = sessions;
+            for (var k2 in state) {
+                if (state.hasOwnProperty(k2)) WarpStore.set(k2, state[k2]);
+            }
+            renderSessionUI();
+            saveLocalCampaign();
+        }
+
+        function saveSessionNotes() {
+            var active = getActiveSession();
+            if (!active || !currentCampaignId) return;
+            var notes = document.getElementById("session-notes").value;
+            var sessions = WarpStore.getSessions();
+            for (var i = 0; i < sessions.length; i++) {
+                if (sessions[i].id === active.id) {
+                    sessions[i].notes = notes;
+                    break;
+                }
+            }
+            var state = WarpStore.getAll();
+            state.sessions = sessions;
+            for (var j in state) {
+                if (state.hasOwnProperty(j)) WarpStore.set(j, state[j]);
+            }
+        }
+
+        function openOneshot() {
+            window.open("oneshot.html", "_blank");
+        }
+
+        function restoreSession(sessionId) {
+            if (!currentCampaignId) return;
+            var sessions = WarpStore.getSessions();
+            var target = null;
+            for (var i = 0; i < sessions.length; i++) {
+                if (sessions[i].id === sessionId) {
+                    target = sessions[i];
+                    target.endedAt = null;
+                    target.startedAt = new Date().toISOString();
+                    break;
+                }
+            }
+            if (!target) return;
+            var state = WarpStore.getAll();
+            state.sessions = sessions;
+            for (var k in state) {
+                if (state.hasOwnProperty(k)) WarpStore.set(k, state[k]);
+            }
+            renderSessionUI();
+            saveLocalCampaign();
+        }
+
+        // ===== MESSAGING =====
+        function populateMsgTarget() {
+            var sel = document.getElementById("msg-target");
+            var current = sel.value;
+            sel.innerHTML = '<option value="">Selecionar personagem...</option>';
+            if (!ROBOTS || !ROBOTS.length) return;
+            for (var i = 0; i < ROBOTS.length; i++) {
+                sel.innerHTML += '<option value="' + ROBOTS[i].id + '">' + ROBOTS[i].model + '</option>';
+            }
+            sel.value = current;
+        }
+
+        function sendGMMessage() {
+            if (!currentCampaignId) return;
+            var target = document.getElementById("msg-target").value;
+            var text = document.getElementById("msg-text").value.trim();
+            if (!target || !text) return;
+            WarpStore.sendMessage("gm", target, text);
+            document.getElementById("msg-text").value = "";
+        }
+
+        function renderGMInbox() {
+            var msgs = WarpStore.getMessages("gm");
+            if (!msgs || !msgs.length) {
+                document.getElementById("msg-inbox").innerHTML = "";
+                return;
+            }
+            var html = '<div style="font-size:0.7rem;color:#8b949e;margin-top:4px;border-top:1px solid var(--border-color);padding-top:6px">Recebidas</div>';
+            for (var i = 0; i < msgs.length; i++) {
+                var m = msgs[i];
+                var sender = "Jogador";
+                if (ROBOTS) {
+                    var r = ROBOTS.find(function (r2) { return r2.id === m.from; });
+                    if (r) sender = r.model;
+                }
+                html += '<div class="msg-item">' +
+                    '<strong>' + sender + '</strong>: ' + m.text +
+                    ' <button class="btn btn-xs" onclick="WarStore.dismissMessage(\'' + m.id + '\')" ' +
+                    'style="padding:1px 6px;font-size:0.6rem">✕</button>' +
+                    '</div>';
+            }
+            document.getElementById("msg-inbox").innerHTML = html;
+        }
+
+        // ===== PENDING ACTIONS =====
+        function renderPendingActions(pending) {
+            var banner = document.getElementById("pending-banner");
+            var list = document.getElementById("pending-list");
+            if (!pending || !pending.length) {
+                banner.style.display = "none";
+                return;
+            }
+            banner.style.display = "block";
+            document.getElementById("pending-count").textContent = pending.length;
+
+            var html = "";
+            for (var i = 0; i < pending.length; i++) {
+                var p = pending[i];
+                var desc = "";
+                if (p.type === "energyIncrement") {
+                    var r = (typeof ROBOTS !== "undefined" && ROBOTS) ? ROBOTS.find(function (r2) { return r2.id === p.robotId; }) : null;
+                    desc = (r ? r.model : p.robotId) + (p.amount > 0 ? " ganhou +" + p.amount : " perdeu " + Math.abs(p.amount)) + " energia";
+                } else {
+                    desc = "Ação: " + (p.type || "desconhecida");
+                }
+                html += '<div class="pending-item">' +
+                    '<span style="font-size:0.78rem">' + desc + '</span>' +
+                    '<div style="display:flex;gap:4px">' +
+                    '<button class="btn btn-xs btn-success" onclick="confirmPending(\'' + p.id + '\')">✓</button>' +
+                    '<button class="btn btn-xs btn-danger" onclick="rejectPending(\'' + p.id + '\')">✗</button>' +
+                    '</div></div>';
+            }
+            list.innerHTML = html;
+        }
+
+        function confirmPending(requestId) {
+            if (!currentCampaignId) return;
+            var actions = WarpStore.getPendingActions();
+            var action = actions.find(function (a) { return a.id === requestId; });
+            if (!action) return;
+            if (action.type === "energyIncrement") {
+                var robots = WarpStore.get("robots") || {};
+                robots[action.robotId] = (robots[action.robotId] || 0) + action.amount;
+                WarpStore.set("robots", robots);
+            }
+            WarpStore.set("pendingActions", actions.filter(function (a) { return a.id !== requestId; }));
+            saveLocalCampaign();
+        }
+
+        function rejectPending(requestId) {
+            if (!currentCampaignId) return;
+            var actions = WarpStore.getPendingActions();
+            WarpStore.set("pendingActions", actions.filter(function (a) { return a.id !== requestId; }));
+            saveLocalCampaign();
+        }
+
+        init();
+
+        // ===== D20 DICE (Three.js) =====
+        let d20Scene, d20Camera, d20Renderer, d20Die, d20Anim, d20Result;
+        let d20Ready = false;
+
+        function createD20(hexColor, textColor) {
+            const group = new THREE.Group();
+            const R = 1.05;
+            const geo = new THREE.IcosahedronGeometry(R, 0);
+            const ni = geo.clone().toNonIndexed();
+            const arr = ni.getAttribute('position').array;
+            const fs = 3;
+
+            let uvs = ni.getAttribute('uv');
+            if (!uvs) {
+                uvs = new THREE.BufferAttribute(new Float32Array(arr.length / 3 * 2), 2);
+                ni.setAttribute('uv', uvs);
+            }
+            const uvArr = uvs.array;
+
+            ni.clearGroups();
+            const mats = [];
+            const norms = [];
+
+            for (let f = 0; f < 20; f++) {
+                ni.addGroup(f * fs, fs, f);
+
+                const keys = [];
+                const uniqueMap = new Map();
+                for (let v = 0; v < fs; v++) {
+                    const i = (f * fs + v) * 3;
+                    const key = `${arr[i].toFixed(4)},${arr[i + 1].toFixed(4)},${arr[i + 2].toFixed(4)}`;
+                    keys.push(key);
+                    if (!uniqueMap.has(key))
+                        uniqueMap.set(key, [arr[i], arr[i + 1], arr[i + 2]]);
+                }
+
+                const verts = Array.from(uniqueMap.values()).map(c => new THREE.Vector3(c[0], c[1], c[2]));
+                const center = new THREE.Vector3();
+                verts.forEach(v => center.add(v));
+                center.divideScalar(verts.length);
+                norms.push(center.clone().normalize());
+
+                const local = verts.map(v => v.clone().sub(center));
+                const faceNormal = center.clone().normalize();
+                const axX = local[0].clone().normalize();
+                const axY = new THREE.Vector3().crossVectors(faceNormal, axX).normalize();
+
+                let uMin = Infinity, uMax = -Infinity, vMin = Infinity, vMax = -Infinity;
+                const uvVals = local.map(p => {
+                    const u = p.dot(axX), v = p.dot(axY);
+                    uMin = Math.min(uMin, u); uMax = Math.max(uMax, u);
+                    vMin = Math.min(vMin, v); vMax = Math.max(vMax, v);
+                    return { u, v };
+                });
+                const uRng = uMax - uMin || 1, vRng = vMax - vMin || 1;
+
+                const uvByKey = new Map();
+                let ki = 0;
+                for (const key of uniqueMap.keys()) {
+                    uvByKey.set(key, { u: (uvVals[ki].u - uMin) / uRng + 0.15, v: (uvVals[ki].v - vMin) / vRng + 0.02 });
+                    ki++;
+                }
+
+                for (let v = 0; v < fs; v++) {
+                    const uv = uvByKey.get(keys[v]);
+                    const ui = (f * fs + v) * 2;
+                    uvArr[ui] = uv.u;
+                    uvArr[ui + 1] = uv.v;
+                }
+
+                const cv = document.createElement('canvas');
+                cv.width = 256; cv.height = 256;
+                const ctx = cv.getContext('2d');
+                ctx.fillStyle = hexColor;
+                ctx.fillRect(0, 0, 256, 256);
+                ctx.fillStyle = textColor;
+                ctx.font = 'Bold 110px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(String(f + 1), 128, 130);
+                if (f === 5 || f === 8) {
+                    const m = ctx.measureText(String(f + 1));
+                    ctx.beginPath();
+                    ctx.strokeStyle = textColor;
+                    ctx.lineWidth = 3;
+                    ctx.moveTo(128 - m.width / 2, 185);
+                    ctx.lineTo(128 + m.width / 2, 185);
+                    ctx.stroke();
+                }
+
+                mats.push(new THREE.MeshStandardMaterial({
+                    map: new THREE.CanvasTexture(cv),
+                    roughness: 0.45, metalness: 0.1,
+                }));
+            }
+
+            uvs.needsUpdate = true;
+
+            group.add(new THREE.Mesh(ni, mats));
+            group.userData.faceNormals = norms;
+
+            const edgeMat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.15 });
+            group.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat));
+
+            return group;
+        }
+
+        function initD20() {
+            const container = document.getElementById('d20-viewport');
+            if (!container || typeof THREE === 'undefined') return;
+
+            const w = container.clientWidth || 400;
+            const h = 220;
+
+            d20Scene = new THREE.Scene();
+            d20Camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
+            d20Camera.position.set(0, 0.2, 3.6);
+            d20Camera.lookAt(0, 0, 0);
+
+            d20Renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            d20Renderer.setSize(w, h);
+            d20Renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            d20Renderer.setClearColor(0x000000, 0);
+            container.appendChild(d20Renderer.domElement);
+
+            const ambient = new THREE.AmbientLight(0xffffff, 0.7);
+            const key = new THREE.DirectionalLight(0xffffff, 0.8);
+            key.position.set(3, 4, 5);
+            const fill = new THREE.DirectionalLight(0xffffff, 0.3);
+            fill.position.set(-3, 1, -4);
+            d20Scene.add(ambient, key, fill);
+
+            d20Die = createD20('#ffffff', '#000000');
+            d20Scene.add(d20Die);
+
+            d20Ready = true;
+            d20RenderLoop();
+        }
+
+        function d20RenderLoop() {
+            if (!d20Ready) return;
+            requestAnimationFrame(d20RenderLoop);
+
+            if (d20Anim) {
+                const now = Date.now();
+                const t = Math.min((now - d20Anim.t0) / d20Anim.dur, 1);
+                const e = 1 - Math.pow(1 - t, 3);
+                d20Die.rotation.x = d20Anim.sx + (d20Anim.tx - d20Anim.sx) * e;
+                d20Die.rotation.y = d20Anim.sy + (d20Anim.ty - d20Anim.sy) * e;
+                d20Die.rotation.z = d20Anim.sz + (d20Anim.tz - d20Anim.sz) * e;
+                if (t >= 1) {
+                    d20Die.rotation.set(d20Anim.tx, d20Anim.ty, d20Anim.tz);
+                    d20Anim = null;
+                    document.getElementById('d20-result').textContent = d20Result;
+                }
+            } else {
+                d20Die.rotation.y += 0.002;
+            }
+
+            d20Renderer.render(d20Scene, d20Camera);
+        }
+
+        function rollD20() {
+            if (!d20Ready || !d20Die) return;
+
+            d20Result = Math.floor(Math.random() * 20) + 1;
+
+            const camPos = new THREE.Vector3(0, 0.2, 3.6);
+            const toCamera = camPos.clone().sub(d20Die.position).normalize();
+            const fn = d20Die.userData.faceNormals[d20Result - 1];
+            const q = new THREE.Quaternion().setFromUnitVectors(fn, toCamera);
+            const te = new THREE.Euler().setFromQuaternion(q);
+            const sx = d20Die.rotation.x, sy = d20Die.rotation.y, sz = d20Die.rotation.z;
+
+            d20Anim = {
+                t0: Date.now(), dur: 1200 + Math.random() * 300,
+                sx, sy, sz,
+                tx: te.x + Math.PI * 2 * (3 + Math.floor(Math.random() * 4)),
+                ty: te.y + Math.PI * 2 * (4 + Math.floor(Math.random() * 4)),
+                tz: te.z + Math.PI * 2 * (1 + Math.floor(Math.random() * 3))
+            };
+
+            document.getElementById('d20-result').textContent = '...';
+        }
+
+        document.querySelectorAll('.mc-section-title').forEach(function (title) {
+            title.addEventListener('click', function () {
+                this.parentElement.classList.toggle('collapsed');
+            });
         });
-        const uRng = uMax - uMin || 1, vRng = vMax - vMin || 1;
 
-        const uvByKey = new Map();
-        let ki = 0;
-        for (const key of uniqueMap.keys()) {
-            uvByKey.set(key, { u: (uvVals[ki].u - uMin) / uRng + 0.15, v: (uvVals[ki].v - vMin) / vRng + 0.02 });
-            ki++;
+        window.addEventListener('load', () => setTimeout(initD20, 100));
+
+        // ===== P2P =====
+        var p2pPeerIds = [];
+
+        function p2pCreateRoom() {
+            document.getElementById("p2p-section").style.display = "block";
+            document.getElementById("p2p-offer-area").style.display = "none";
+            document.getElementById("p2p-status").textContent = "Gerando sala...";
+            WarpP2P.createOffer().then(function (result) {
+                document.getElementById("p2p-offer").value = result.offer;
+                document.getElementById("p2p-offer-area").style.display = "block";
+                document.getElementById("btn-p2p-connect").style.display = "";
+                document.getElementById("p2p-answer").style.display = "";
+                p2pPeerIds.push(result.peerId);
+                document.getElementById("p2p-status").textContent = "Código gerado — compartilhe com o jogador";
+                document.getElementById("btn-p2p-create").textContent = "+ Jogador";
+                // Init store in local mode with P2P broadcast
+                if (WarpStore.mode !== "local") {
+                    WarpStore.init({ mode: "local" });
+                }
+            }).catch(function (e) {
+                document.getElementById("p2p-status").textContent = "Erro: " + (e.message || e);
+            });
         }
 
-        for (let v = 0; v < fs; v++) {
-            const uv = uvByKey.get(keys[v]);
-            const ui = (f * fs + v) * 2;
-            uvArr[ui] = uv.u;
-            uvArr[ui + 1] = uv.v;
+        function p2pConnectPlayer() {
+            var answer = document.getElementById("p2p-answer").value.trim();
+            if (!answer || !p2pPeerIds.length) return;
+            var peerId = p2pPeerIds[p2pPeerIds.length - 1];
+            document.getElementById("p2p-status").textContent = "Conectando...";
+            WarpP2P.acceptAnswer(peerId, answer).then(function () {
+                document.getElementById("p2p-answer").value = "";
+                document.getElementById("p2p-offer-area").style.display = "none";
+                document.getElementById("p2p-status").textContent = "";
+                updateP2PPeers();
+            }).catch(function (e) {
+                document.getElementById("p2p-status").textContent = "Erro: " + (e.message || e);
+            });
         }
 
-        const cv = document.createElement('canvas');
-        cv.width = 256; cv.height = 256;
-        const ctx = cv.getContext('2d');
-        ctx.fillStyle = hexColor;
-        ctx.fillRect(0, 0, 256, 256);
-        ctx.fillStyle = textColor;
-        ctx.font = 'Bold 110px Arial';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(String(f + 1), 128, 130);
-        if (f === 5 || f === 8) {
-            const m = ctx.measureText(String(f + 1));
-            ctx.beginPath();
-            ctx.strokeStyle = textColor;
-            ctx.lineWidth = 3;
-            ctx.moveTo(128 - m.width / 2, 185);
-            ctx.lineTo(128 + m.width / 2, 185);
-            ctx.stroke();
+        function updateP2PPeers() {
+            var count = p2pPeerIds.length;
+            document.getElementById("p2p-peers").textContent = count ? "Jogadores na sala: " + count : "";
         }
 
-        mats.push(new THREE.MeshStandardMaterial({
-            map: new THREE.CanvasTexture(cv),
-            roughness: 0.45, metalness: 0.1,
-        }));
-    }
-
-    uvs.needsUpdate = true;
-
-    group.add(new THREE.Mesh(ni, mats));
-    group.userData.faceNormals = norms;
-
-    const edgeMat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.15 });
-    group.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat));
-
-    return group;
-}
-
-function initD20() {
-    const container = document.getElementById('d20-viewport');
-    if (!container || typeof THREE === 'undefined') return;
-
-    const w = container.clientWidth || 400;
-    const h = 220;
-
-    d20Scene = new THREE.Scene();
-    d20Camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
-    d20Camera.position.set(0, 0.2, 3.6);
-    d20Camera.lookAt(0, 0, 0);
-
-    d20Renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    d20Renderer.setSize(w, h);
-    d20Renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    d20Renderer.setClearColor(0x000000, 0);
-    container.appendChild(d20Renderer.domElement);
-
-    const ambient = new THREE.AmbientLight(0xffffff, 0.7);
-    const key = new THREE.DirectionalLight(0xffffff, 0.8);
-    key.position.set(3, 4, 5);
-    const fill = new THREE.DirectionalLight(0xffffff, 0.3);
-    fill.position.set(-3, 1, -4);
-    d20Scene.add(ambient, key, fill);
-
-    d20Die = createD20('#ffffff', '#000000');
-    d20Scene.add(d20Die);
-
-    d20Ready = true;
-    d20RenderLoop();
-}
-
-function d20RenderLoop() {
-    if (!d20Ready) return;
-    requestAnimationFrame(d20RenderLoop);
-
-    if (d20Anim) {
-        const now = Date.now();
-        const t = Math.min((now - d20Anim.t0) / d20Anim.dur, 1);
-        const e = 1 - Math.pow(1 - t, 3);
-        d20Die.rotation.x = d20Anim.sx + (d20Anim.tx - d20Anim.sx) * e;
-        d20Die.rotation.y = d20Anim.sy + (d20Anim.ty - d20Anim.sy) * e;
-        d20Die.rotation.z = d20Anim.sz + (d20Anim.tz - d20Anim.sz) * e;
-        if (t >= 1) {
-            d20Die.rotation.set(d20Anim.tx, d20Anim.ty, d20Anim.tz);
-            d20Anim = null;
-            document.getElementById('d20-result').textContent = d20Result;
+        if (typeof WarpP2P !== "undefined") {
+            WarpP2P.on("ready", function (peerId) {
+                document.getElementById("p2p-status").textContent = "Conectado!";
+                // Send full state sync to new peer
+                var state = WarpStore.getAll();
+                setTimeout(function () {
+                    WarpP2P.send(peerId, {
+                        type: "sync",
+                        state: state,
+                        sessions: state.sessions,
+                        messages: state.messages,
+                        pendingActions: state.pendingActions,
+                    });
+                }, 500);
+            });
+            WarpP2P.on("close", function (peerId) {
+                var idx = p2pPeerIds.indexOf(peerId);
+                if (idx >= 0) p2pPeerIds.splice(idx, 1);
+                updateP2PPeers();
+                document.getElementById("p2p-status").textContent = "Jogador desconectado";
+            });
         }
-    } else {
-        d20Die.rotation.y += 0.002;
-    }
 
-    d20Renderer.render(d20Scene, d20Camera);
-}
-
-function rollD20() {
-    if (!d20Ready || !d20Die) return;
-
-    d20Result = Math.floor(Math.random() * 20) + 1;
-
-    const camPos = new THREE.Vector3(0, 0.2, 3.6);
-    const toCamera = camPos.clone().sub(d20Die.position).normalize();
-    const fn = d20Die.userData.faceNormals[d20Result - 1];
-    const q = new THREE.Quaternion().setFromUnitVectors(fn, toCamera);
-    const te = new THREE.Euler().setFromQuaternion(q);
-    const sx = d20Die.rotation.x, sy = d20Die.rotation.y, sz = d20Die.rotation.z;
-
-    d20Anim = {
-        t0: Date.now(), dur: 1200 + Math.random() * 300,
-        sx, sy, sz,
-        tx: te.x + Math.PI * 2 * (3 + Math.floor(Math.random() * 4)),
-        ty: te.y + Math.PI * 2 * (4 + Math.floor(Math.random() * 4)),
-        tz: te.z + Math.PI * 2 * (1 + Math.floor(Math.random() * 3))
-    };
-
-    document.getElementById('d20-result').textContent = '...';
-}
-
-window.addEventListener('load', () => setTimeout(initD20, 100));
-</script>
+        // ServiceWorker
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/sw.js").catch(function () {});
+        }
+    </script>
 </body>
+
 </html>

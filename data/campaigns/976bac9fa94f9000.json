@@ -1,0 +1,20 @@
+{
+    "id": "976bac9fa94f9000",
+    "name": "Fronteira de KX-415",
+    "joinCode": "9JMN",
+    "createdAt": "2026-07-03T16:15:16+00:00",
+    "state": [],
+    "pendingActions": [],
+    "sessions": [
+        {
+            "id": "24822d9f004d",
+            "startedAt": "2026-07-03T19:47:50+00:00",
+            "endedAt": "2026-07-03T19:48:02+00:00",
+            "startState": [],
+            "notes": "",
+            "planets": [],
+            "endState": []
+        }
+    ],
+    "archived": true
+}

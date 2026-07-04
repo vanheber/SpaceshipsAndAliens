@@ -262,17 +262,104 @@ Desde v2.0, a IA não inventa livremente — ela **sintetiza** a partir de parâ
 
 Se a IA falha (todos os provedores exauridos), o gerador cai no sistema local procedural, que monta descrições concatenando as palavras sorteadas. Se nem os JSONs carregarem, cai no fallback clássico via `planet-types.json` e `discoveries.json`.
 
+---
+
+## API de Campanha & Sessão
+
+### Armazenamento: `data/campaigns/{id}.json`
+
+```json
+{
+  "id": "abc123def456",
+  "name": "Fronteira de KX-415",
+  "joinCode": "XK42",
+  "archived": false,
+  "createdAt": "2026-07-03T10:00:00Z",
+  "state": {
+    "robots": { "sentinel": 5, "analyst": 3 },
+    "npcs": [5, 5, 5],
+    "fear": 0,
+    "mothership": { "sup": {"current":10,"max":20}, "fuel": {"current":10,"max":10} },
+    "ship400i": { "sup": {"current":4,"max":8}, "fuel": {"current":6,"max":6} },
+    "activeRobot": "sentinel",
+    "isDroneMode": false
+  },
+  "pendingActions": [
+    { "id": "req-abc123", "type": "energyIncrement", "robotId": "sentinel", "amount": 1, "requestedAt": "..." }
+  ],
+  "messages": [
+    { "id": "msg-abc123", "from": "gm", "to": "sentinel", "text": "Cuidado com a armadilha!", "sentAt": "...", "read": false }
+  ],
+  "sessions": [
+    {
+      "id": "s1",
+      "name": "KX-415b",
+      "startedAt": "2026-07-03T20:00:00Z",
+      "endedAt": "2026-07-03T23:30:00Z",
+      "startState": { },
+      "endState": { },
+      "notes": "Combate com piratas. Robert C9 perdeu 2E.",
+      "planets": [
+        {
+          "name": "KX-415b",
+          "type": "Deserto de Sílica",
+          "desc": "Mundo árido com dunas de areia vítrea...",
+          "discoveries": [
+            { "index": 1, "encounterType": "planet", "approach": "...", "description": "...", "location": "...", "peril": "...", "perilDC": 14, "reward": "..." }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Endpoints (`api/campaign.php`)
+
+| Action | Método | Auth | Descrição |
+|--------|--------|------|-----------|
+| `create` | POST | GM | Cria campanha, gera joinCode de 4 letras |
+| `save` | POST | GM | Salva estado completo da campanha |
+| `load` | GET | Código | Carrega campanha por id + código |
+| `poll` | GET | Código | Polling: estado, pendingActions, sessions, messages |
+| `list` | GET | GM | Lista campanhas não-arquivadas |
+| `archive` | POST | GM | Arquiva campanha (`archived: true`) |
+| `delete` | POST | GM | Remove permanentemente |
+| `request` | POST | Código | Jogador solicita alteração de energia (±1 a ±3) |
+| `confirm` | POST | GM | Aprova pendingAction e aplica delta |
+| `reject` | POST | GM | Remove pendingAction sem aplicar |
+| `startsession` | POST | GM | Inicia sessão com timestamp e snapshot |
+| `endsession` | POST | GM | Encerra sessão, salva endState e notas |
+| `saveplanet` | POST | GM | Adiciona planeta + descobertas à sessão ativa |
+| `restoresession` | POST | GM | Restaura estado da campanha para endState da sessão |
+| `updatenotes` | POST | GM | Atualiza anotações da sessão ativa |
+| `sendmessage` | POST | GM/Código | Envia mensagem (`from`, `to`, `text`) |
+| `dismissmessage` | POST | GM/Código | Remove mensagem por id |
+
+### Autenticação
+
+- **GM**: cookie `warp_auth` (HMAC-SHA256, 30 dias) via `api/auth.php` (bcrypt + TOTP)
+- **Jogador**: joinCode de 4 letras como parâmetro `code` nos endpoints públicos
+
+### Sincronização
+
+- Polling de 3 segundos no cliente (`WarStore` modo remoto)
+- `ponytail:` polling simples, ceiling ~8 jogadores simultâneos. Upgrade: SSE.
+- `flock(LOCK_EX)` em todas as escritas no servidor. `ponytail:` ceiling ~5 escritas/segundo. Upgrade: SQLite.
+
 ### Provedores de IA (cascade)
 
 A geração tenta provedores em ordem até um responder:
 
-1. **Gemini 3.5 Flash** (Google AI) — `gemini-3.5-flash`, via proxy local `/api/proxy.php`, requer autenticação
-2. **NVIDIA DeepSeek V4 Flash** — `deepseek-ai/deepseek-v4-flash`, via proxy local `/api/proxy-nvidia.php`
+1. **Gemini** (Google AI) — via proxy local `/api/proxy.php`, requer autenticação
+2. **NVIDIA DeepSeek V4 Flash** — via proxy local `/api/proxy-nvidia.php`
 3. **Pollinations.ai** — gratuito, endpoint público, sem chave
 4. **Hermes** (Llama 3.1 8B) — fallback externo
 5. Fallback para sistema procedural local
 
 **Temperatura**: `1.2` em todas as chamadas.
+
+**Contexto de campanha**: quando `oneshot.html` é aberto com `?campaign=&code=`, o `buildCampaignContext()` injeta estado dos robôs e recursos da nave no prompt da IA.
 
 ---
 

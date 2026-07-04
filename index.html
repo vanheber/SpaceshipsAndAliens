@@ -7,17 +7,67 @@
     <title>Interface de Androides SC-RPG</title>
     <link rel="stylesheet" href="warp.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/p2p.js"></script>
+    <script src="js/db.js"></script>
 </head>
 
 <body>
 
-    <header>
-        <h1>SISTEMA OPERACIONAL WARP</h1>
-        <p>Missão experimental de unidades autônomas equipadas com A.L.M.A.</p>
-    </header>
+    <div id="warp-nav" class="warp-nav" style="display:none">
+        <button class="warp-nav-menu" onclick="document.getElementById('warp-menu-overlay').classList.add('open')" aria-label="Menu">&#9776;</button>
+        <img src="img/logo.svg" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
+    </div>
+    <div id="warp-menu-overlay" class="warp-nav-overlay" onclick="this.classList.remove('open')">
+        <button class="warp-nav-close" onclick="document.getElementById('warp-menu-overlay').classList.remove('open')">&#10005;</button>
+        <nav onclick="event.stopPropagation()">
+            <a href="index.html">Início</a>
+            <a href="mothership.html">Nave-Mãe</a>
+            <a href="400i.html">Nave Auxiliar</a>
+            <a href="missioncontrol.html">Controle da Missão</a>
+            <a href="index.html?readonly=1">Catálogo de Unidades</a>
+            <a href="oneshot.html">Gerador de Missão</a>
+            <a href="equipamento.html">Equipamento</a>
+            <a href="diariodebordo.html">Diário de Bordo</a>
+        </nav>
+    </div>
+
+    <div id="campaign-header" class="campaign-header" style="display:none">
+        <span class="campaign-name" id="campaign-name-display"></span>
+        <button class="btn btn-xs" id="msg-open-btn" onclick="openMsgSend()"
+            style="background:rgba(45,212,191,0.12);color:var(--teal);border:1px solid rgba(45,212,191,0.3);margin-right:4px">✉</button>
+        <span style="flex:1"></span>
+        <button class="btn btn-xs btn-danger" id="leave-btn" onclick="showLeaveModal()">Sair</button>
+    </div>
+
+    <div id="entry-screen" class="entry-screen active">
+        <img src="img/logo.svg" alt="WARP-Unit" class="entry-logo" width="200" height="auto">
+        <p class="entry-subtitle">Sistema de Exploração Interestelar</p>
+        <div class="entry-form">
+            <input type="text" id="entry-code" placeholder="Cole o link do mestre aqui…" autocomplete="off" autofocus>
+            <button class="btn btn-primary" onclick="joinCampaign()">Entrar no jogo</button>
+        </div>
+        <div id="p2p-answer-area" style="display:none;margin:12px auto 0;max-width:320px;text-align:left">
+            <div style="font-size:0.72rem;color:#8b949e;margin-bottom:4px">Mostre este código para o mestre:</div>
+            <textarea id="p2p-answer-output" readonly rows="3"
+                style="width:100%;font-size:0.7rem;padding:6px;background:var(--card-bg);border:1px solid var(--teal);border-radius:6px;color:var(--teal);resize:none;font-family:monospace;box-sizing:border-box"></textarea>
+            <div style="font-size:0.72rem;color:#8b949e;margin-top:4px" id="p2p-wait">Aguardando confirmação do mestre...</div>
+        </div>
+        <p id="entry-error" style="display:none;color:#f56c6c;font-size:0.8rem;margin-top:8px"></p>
+        <p class="entry-hint">Cole o link P2P fornecido pelo mestre para conectar.</p>
+        <div class="entry-divider"></div>
+        <a href="missioncontrol.html" class="btn btn-secondary">Entrar como Mestre do Jogo</a>
+        <a href="https://runaris.com.br/donate" target="_blank" rel="noopener" class="entry-donate">☕ Apoie o
+            Projeto</a>
+    </div>
+
+    <div id="news-section" class="news-section">
+        <div class="news-title">📰 Pulso do Autor</div>
+        <div class="news-grid" id="news-grid"></div>
+    </div>
 
     <!-- TELA 1: SELEÇÃO DE MODELOS (CATÁLOGO) -->
-    <div id="selection-screen" class="screen active">
+    <div id="selection-screen" class="screen">
         <div class="mb-10 text-muted text-center">
             Selecione uma unidade para carregar os parâmetros em campo.
         </div>
@@ -38,35 +88,108 @@
     </div>
 
     <script>
-        const STORAGE_KEY = "warp-unit-catalog";
-
         let robotModels = [];
         let droneConfig = null;
         let activeChar = null;
         let activeEnergy = 0;
         let isDroneMode = false;
+        let _readonly = false;
 
         function saveState() {
             if (!activeChar) return;
-            const state = { robotId: activeChar.id, activeEnergy, isDroneMode };
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            WarpStore.set("activeRobot", activeChar.id);
+            WarpStore.set("isDroneMode", isDroneMode);
+            var robots = WarpStore.get("robots") || {};
+            robots[activeChar.id] = activeEnergy;
+            WarpStore.set("robots", robots);
         }
 
         function restoreState() {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) return false;
-            try {
-                const state = JSON.parse(raw);
-                const robot = robotModels.find(r => r.id === state.robotId);
-                if (!robot) return false;
-                activeChar = robot;
-                activeEnergy = state.activeEnergy;
-                isDroneMode = state.isDroneMode;
-                document.getElementById("selection-screen").classList.remove("active");
-                document.getElementById("sheet-screen").classList.add("active");
-                renderSheet();
-                return true;
-            } catch (e) { return false; }
+            var robotId = WarpStore.get("activeRobot");
+            if (!robotId) return false;
+            var robot = robotModels.find(function (r) { return r.id === robotId; });
+            if (!robot) return false;
+            activeChar = robot;
+            isDroneMode = WarpStore.get("isDroneMode") || false;
+            var robots = WarpStore.get("robots") || {};
+            activeEnergy = typeof robots[robotId] === "number" ? robots[robotId] : robot.startingEnergy;
+            document.getElementById("selection-screen").classList.remove("active");
+            document.getElementById("sheet-screen").classList.add("active");
+            renderSheet();
+            return true;
+        }
+
+        function updateCampaignHeader() {
+            if (_readonly) {
+                var h = document.getElementById("campaign-header");
+                document.getElementById("campaign-name-display").textContent = "📖 Visualizando Catálogo";
+                document.getElementById("msg-open-btn").style.display = "none";
+                var lb = document.getElementById("leave-btn");
+                lb.textContent = "Fechar catálogo";
+                lb.onclick = function() { window.close(); };
+                h.style.display = "flex";
+                return;
+            }
+            var name = WarpStore.get("campaignName");
+            var header = document.getElementById("campaign-header");
+            if (name) {
+                var label = "🚀 " + name;
+                if (activeChar) label += " — " + (isDroneMode ? droneConfig.name : activeChar.model);
+                document.getElementById("campaign-name-display").textContent = label;
+                header.style.display = "flex";
+            } else {
+                header.style.display = "none";
+            }
+        }
+
+        function showLeaveModal() {
+            document.getElementById("leave-modal").classList.add("open");
+        }
+        function cancelLeave() {
+            document.getElementById("leave-modal").classList.remove("open");
+        }
+        function confirmLeave() {
+            document.getElementById("leave-modal").classList.remove("open");
+            WarpStore.destroy();
+            history.replaceState(null, "", window.location.pathname);
+            activeChar = null;
+            activeEnergy = 0;
+            isDroneMode = false;
+            document.getElementById("campaign-header").style.display = "none";
+            document.getElementById("sheet-screen").classList.remove("active");
+            document.getElementById("selection-screen").classList.remove("active");
+            document.getElementById("entry-screen").classList.add("active");
+            document.getElementById("news-section").style.display = "block";
+            disposeDiceRenderer();
+        }
+
+        function openMsgSend() {
+            document.getElementById("msg-send-modal").style.display = "flex";
+            document.getElementById("msg-send-text").focus();
+        }
+        function closeMsgSend() {
+            document.getElementById("msg-send-modal").style.display = "none";
+            document.getElementById("msg-send-text").value = "";
+        }
+        function sendPlayerMessage() {
+            var text = document.getElementById("msg-send-text").value.trim();
+            if (!text || !activeChar) return;
+            WarpStore.sendMessage(activeChar.id, "gm", text);
+            document.getElementById("msg-send-text").value = "";
+            document.getElementById("msg-send-modal").style.display = "none";
+        }
+        function dismissMsgModal() {
+            document.getElementById("msg-modal").style.display = "none";
+        }
+
+        function checkPlayerMessages() {
+            if (!activeChar || WarpStore.mode !== "p2p") return;
+            var msgs = WarpStore.getMessages(activeChar.id);
+            if (!msgs || !msgs.length) return;
+            var m = msgs[0];
+            document.getElementById("msg-content").textContent = m.text;
+            document.getElementById("msg-modal").style.display = "flex";
+            WarpStore.dismissMessage(m.id);
         }
 
         function clearSession() {
@@ -74,7 +197,8 @@
         }
         function confirmClear() {
             document.getElementById('clear-modal').classList.remove('open');
-            localStorage.removeItem(STORAGE_KEY);
+            WarpStore.set("activeRobot", null);
+            WarpStore.set("isDroneMode", false);
             activeChar = null;
             activeEnergy = 0;
             isDroneMode = false;
@@ -86,23 +210,85 @@
             document.getElementById('clear-modal').classList.remove('open');
         }
 
-        async function initApp() {
-            const grid = document.getElementById("catalog-grid");
+        function hideEntryScreen() {
+            document.getElementById("entry-screen").classList.remove("active");
+            document.getElementById("news-section").style.display = "none";
+        }
+
+        function joinCampaign() {
+            var code = document.getElementById("entry-code").value.trim();
+            var errorEl = document.getElementById("entry-error");
+            errorEl.style.display = "none";
+
+            if (!code) {
+                errorEl.textContent = "Cole o link P2P do mestre para conectar.";
+                errorEl.style.display = "block";
+                return;
+            }
+
+            // P2P SDP offer (base64 string)
+            if (typeof WarpP2P === "undefined") {
+                errorEl.textContent = "P2P não disponível neste navegador.";
+                errorEl.style.display = "block";
+                return;
+            }
+
+            WarpStore.init({ mode: "p2p", role: "player" });
+
+            WarpP2P.joinRoom(code).then(function (answerB64) {
+                document.getElementById("p2p-answer-output").value = answerB64;
+                document.getElementById("p2p-answer-area").style.display = "block";
+                document.getElementById("p2p-wait").textContent = "Mostre o código acima ao mestre. Aguardando...";
+
+                WarpP2P.on("ready", function () {
+                    document.getElementById("p2p-wait").textContent = "Conectado! Carregando dados...";
+                });
+
+                WarpStore.ready().then(function () {
+                    hideEntryScreen();
+                    updateCampaignHeader();
+                    WarpStore.subscribe(function () {
+                        updateCampaignHeader();
+                        checkPlayerMessages();
+                        if (!activeChar) return;
+                        var robotId = activeChar.id;
+                        var wasDrone = isDroneMode;
+                        isDroneMode = WarpStore.get("isDroneMode") || false;
+                        var robots = WarpStore.get("robots") || {};
+                        var newEnergy = typeof robots[robotId] === "number" ? robots[robotId] : activeEnergy;
+                        if (newEnergy !== activeEnergy || isDroneMode !== wasDrone) {
+                            activeEnergy = newEnergy;
+                            if (isDroneMode !== wasDrone) renderSheet();
+                            else updateEnergyTokens();
+                        }
+                    });
+                    loadDataAndRender();
+                });
+            }).catch(function (e) {
+                errorEl.textContent = "Erro P2P: " + (e.message || e);
+                errorEl.style.display = "block";
+            });
+        }
+
+        async function loadDataAndRender() {
+            var grid = document.getElementById("catalog-grid");
             if (!grid) return;
             grid.innerHTML = '<div class="catalog-loading">Carregando catálogo...</div>';
 
             try {
-                const timeout = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error("Timeout: servidor não respondeu em 8s")), 8000)
-                );
+                var timeout = new Promise(function (_, reject) {
+                    return setTimeout(function () { return reject(new Error("Timeout: servidor não respondeu em 8s")); }, 8000);
+                });
 
-                const [robotsRes, configRes] = await Promise.race([
+                var _ref = await Promise.race([
                     Promise.all([
                         fetch("data/robots.json"),
                         fetch("data/config.json")
                     ]),
                     timeout
                 ]);
+                var robotsRes = _ref[0];
+                var configRes = _ref[1];
 
                 if (!robotsRes.ok || !configRes.ok) throw new Error("Erro HTTP ao carregar dados");
 
@@ -118,6 +304,55 @@
                 console.warn("WARP Unit: falha ao carregar catálogo:", err.message);
                 grid.innerHTML = '<div class="catalog-error">Falha ao carregar dados do catálogo.<br><small>Verifique se o servidor está rodando e se os arquivos data/*.json existem.</small></div>';
             }
+        }
+
+        async function initApp() {
+            // Read-only mode (GM viewing catalog)
+            if (window.location.search.indexOf("readonly=1") !== -1) {
+                _readonly = true;
+                document.body.classList.add("warp-has-nav");
+                document.getElementById("warp-nav").style.display = "flex";
+                WarpStore.init({ mode: "local" });
+                hideEntryScreen();
+                document.getElementById("selection-screen").classList.add("active");
+                loadDataAndRender();
+                return;
+            }
+
+            loadNewsFeed();
+            document.getElementById("entry-screen").classList.add("active");
+        }
+
+        async function loadNewsFeed() {
+            try {
+                var res = await fetch("https://runaris.com.br/ghost/news/news.json");
+                if (!res.ok) return;
+                var data = await res.json();
+                if (data.news && data.news.length) renderNewsCards(data.news);
+            } catch (e) { }
+        }
+
+        function renderNewsCards(items) {
+            var section = document.getElementById("news-section");
+            var grid = document.getElementById("news-grid");
+            section.style.display = "block";
+            grid.innerHTML = "";
+            items.forEach(function (item) {
+                var card = document.createElement("a");
+                card.className = "news-card" + (item.size === "large" ? " large" : "");
+                card.href = item.url;
+                card.target = "_blank";
+                card.rel = "noopener";
+                var badge = item.type === "novidade" ? "✨" : item.type === "video" ? "▶" : "🚀";
+                card.innerHTML =
+                    (item.image ? '<img src="' + item.image + '" alt="" class="news-card-img" loading="lazy">' : "") +
+                    '<div class="news-card-body">' +
+                    '<span class="news-badge ' + (item.type || "") + '">' + badge + " " + item.type + "</span>" +
+                    '<div class="news-card-title">' + item.title + "</div>" +
+                    '<div class="news-card-text">' + item.content + "</div>" +
+                    "</div>";
+                grid.appendChild(card);
+            });
         }
 
         function renderCatalog() {
@@ -156,6 +391,7 @@
             activeEnergy = activeChar.startingEnergy;
             isDroneMode = false;
 
+            if (_readonly) hideEntryScreen();
             document.getElementById("selection-screen").classList.remove("active");
             document.getElementById("sheet-screen").classList.add("active");
 
@@ -164,6 +400,7 @@
         }
 
         function backToCatalog() {
+            if (_readonly) hideEntryScreen();
             document.getElementById("sheet-screen").classList.remove("active");
             document.getElementById("selection-screen").classList.add("active");
             disposeDiceRenderer();
@@ -231,12 +468,15 @@
                         <span id="energy-counter">${activeEnergy}/${isDroneMode ? droneConfig.maxEnergy : activeChar.maxEnergy}</span>
                     </div>
                     <div class="token-row" id="token-row"></div>
+                    ${_readonly ? '' : `
                     <div class="energy-actions">
                         <button class="roll-btn roll-btn-sm" onclick="adjustEnergy(-1)">Gastar Energia (-1)</button>
                         <button class="roll-btn roll-btn-sm" onclick="adjustEnergy(1)">Adicionar Energia (+1)</button>
                     </div>
+                    `}
                 </div>
 
+                ${_readonly ? '' : `
                 <div class="roller-controls">
                     <label class="label-sm">Aplicar modificador à rolagem:</label>
                     <select id="roll-modifier" class="selector-input">
@@ -271,10 +511,13 @@
                         Aguardando lançamento de dados...
                     </div>
                 </div>
+                `}
 
+                ${_readonly ? '' : `
                 <button class="drone-trigger" onclick="toggleDrone()">
                     ${isDroneMode ? droneConfig.toggleInactiveLabel : droneConfig.toggleActiveLabel}
                 </button>
+                `}
             `;
 
             updateEnergyTokens();
@@ -317,7 +560,7 @@
             if (isDroneMode) {
                 activeEnergy = droneConfig.startingEnergy;
             } else {
-            activeEnergy = activeChar.startingEnergy;
+                activeEnergy = activeChar.startingEnergy;
             }
             saveState();
             renderSheet();
@@ -434,9 +677,9 @@
             for (let f = 0; f < 6; f++) {
                 ni.addGroup(f * 6, 6, f);
 
-                const cx = (arr[f*18] + arr[f*18+3] + arr[f*18+6] + arr[f*18+9] + arr[f*18+12] + arr[f*18+15]) / 6;
-                const cy = (arr[f*18+1] + arr[f*18+4] + arr[f*18+7] + arr[f*18+10] + arr[f*18+13] + arr[f*18+16]) / 6;
-                const cz = (arr[f*18+2] + arr[f*18+5] + arr[f*18+8] + arr[f*18+11] + arr[f*18+14] + arr[f*18+17]) / 6;
+                const cx = (arr[f * 18] + arr[f * 18 + 3] + arr[f * 18 + 6] + arr[f * 18 + 9] + arr[f * 18 + 12] + arr[f * 18 + 15]) / 6;
+                const cy = (arr[f * 18 + 1] + arr[f * 18 + 4] + arr[f * 18 + 7] + arr[f * 18 + 10] + arr[f * 18 + 13] + arr[f * 18 + 16]) / 6;
+                const cz = (arr[f * 18 + 2] + arr[f * 18 + 5] + arr[f * 18 + 8] + arr[f * 18 + 11] + arr[f * 18 + 14] + arr[f * 18 + 17]) / 6;
                 norms.push(new THREE.Vector3(cx, cy, cz).normalize());
 
                 mats.push(new THREE.MeshStandardMaterial({
@@ -480,10 +723,10 @@
                 const keys = [];
                 for (let v = 0; v < fs; v++) {
                     const i = (f * fs + v) * 3;
-                    const key = `${arr[i].toFixed(4)},${arr[i+1].toFixed(4)},${arr[i+2].toFixed(4)}`;
+                    const key = `${arr[i].toFixed(4)},${arr[i + 1].toFixed(4)},${arr[i + 2].toFixed(4)}`;
                     keys.push(key);
                     if (!uniqueMap.has(key))
-                        uniqueMap.set(key, [arr[i], arr[i+1], arr[i+2]]);
+                        uniqueMap.set(key, [arr[i], arr[i + 1], arr[i + 2]]);
                 }
 
                 const verts = Array.from(uniqueMap.values()).map(c => new THREE.Vector3(c[0], c[1], c[2]));
@@ -647,31 +890,61 @@
         }
 
         window.onload = initApp;
+
+        // ServiceWorker
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/sw.js").catch(function () {});
+        }
     </script>
 
     <footer>
         <a href="docs/">Documentação</a>
         &nbsp;·&nbsp;
-        <a href="mothership.html">Nave-Mãe</a>
-        &nbsp;·&nbsp;
-        <a href="400i.html">Nave Auxiliar 400i</a>
-        &nbsp;·&nbsp;
-        <a href="oneshot.html">Gerador de Missão</a>
-        &nbsp;·&nbsp;
-        <a href="missioncontrol.html">Controle da Missão</a>
-        &nbsp;·&nbsp;
-        <a href="equipamento.html">Equipamento</a>
-        &nbsp;·&nbsp;
-        <a href="#" onclick="clearSession();return false;">Limpar Sessão</a>
+        <a href="diariodebordo.html">Diário de Bordo</a>
     </footer>
 
     <div class="modal-overlay" id="clear-modal">
         <div class="modal-card">
             <div class="modal-title">Limpar Sessão</div>
-            <p style="font-size:0.85rem;color:#a3b1c1;margin:10px 0 16px">Tem certeza? Todos os dados da sessão atual serão perdidos.</p>
+            <p style="font-size:0.85rem;color:#a3b1c1;margin:10px 0 16px">Tem certeza? Todos os dados da sessão atual
+                serão perdidos.</p>
             <div class="btn-row">
                 <button class="btn btn-secondary" onclick="cancelClear()">Cancelar</button>
                 <button class="btn btn-danger" onclick="confirmClear()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="leave-modal">
+        <div class="modal-card">
+            <div class="modal-title">Sair da Campanha</div>
+            <p style="font-size:0.85rem;color:#a3b1c1;margin:10px 0 16px">Tem certeza? Você será desconectado e voltará
+                à tela inicial.</p>
+            <div class="btn-row">
+                <button class="btn btn-secondary" onclick="cancelLeave()">Cancelar</button>
+                <button class="btn btn-danger" onclick="confirmLeave()">Sair</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="msg-modal" style="display:none">
+        <div class="modal-card" style="max-width:360px">
+            <div class="modal-title">📨 Mensagem do Mestre</div>
+            <div id="msg-content" style="font-size:0.85rem;color:#a3b1c1;margin:10px 0 16px;line-height:1.5"></div>
+            <div class="btn-row">
+                <button class="btn btn-secondary" onclick="dismissMsgModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="msg-send-modal" style="display:none">
+        <div class="modal-card" style="max-width:360px">
+            <div class="modal-title">Enviar ao Mestre</div>
+            <textarea id="msg-send-text" class="selector-input" placeholder="Mensagem..." rows="3"
+                style="width:100%;box-sizing:border-box;font-size:0.85rem;font-family:inherit;resize:vertical;margin:8px 0"></textarea>
+            <div class="btn-row">
+                <button class="btn btn-secondary" onclick="closeMsgSend()">Cancelar</button>
+                <button class="btn btn-primary" onclick="sendPlayerMessage()">Enviar</button>
             </div>
         </div>
     </div>

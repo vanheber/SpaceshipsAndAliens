@@ -1,0 +1,14 @@
+{
+    "id": "8b4c5c132d6c0b9b",
+    "name": "Fronteira de KX-415",
+    "joinCode": "RE7Z",
+    "createdAt": "2026-07-03T15:42:34+00:00",
+    "state": {
+        "robots": {
+            "sentinel": 9
+        }
+    },
+    "pendingActions": [],
+    "sessions": [],
+    "archived": true
+}

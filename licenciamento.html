@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WARP-Unit — Licenciamento</title>
+    <link rel="stylesheet" href="warp.css">
+    <style>
+        .legal-page { max-width: 700px; width: 100%; margin: 0 auto; padding: 0 16px 40px; }
+        .legal-page h1 { color: var(--accent-hope); font-size: 1.3rem; margin-bottom: 8px; }
+        .legal-page h2 { color: var(--text-color); font-size: 1rem; margin-top: 28px; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border-color); }
+        .legal-page p, .legal-page li { font-size: 0.84rem; color: #a3b1c1; line-height: 1.7; }
+        .legal-page ul { padding-left: 20px; }
+        .legal-page a { color: var(--accent-hope); }
+        .legal-page blockquote { border-left: 3px solid var(--accent-hope); padding-left: 12px; margin: 12px 0; color: #8b949e; font-style: italic; font-size: 0.84rem; }
+        .legal-notice { background: rgba(167, 139, 250, 0.06); border: 1px solid rgba(167, 139, 250, 0.2); border-radius: 8px; padding: 14px 18px; margin: 20px 0; font-size: 0.82rem; color: #c4b5e8; line-height: 1.6; }
+        .legal-notice strong { color: var(--accent-hope); }
+    </style>
+</head>
+<body class="warp-has-nav">
+
+<div class="warp-nav">
+    <button class="warp-nav-menu" onclick="document.getElementById('warp-menu-overlay').classList.add('open')" aria-label="Menu">&#9776;</button>
+    <img src="img/logo.svg" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
+</div>
+<div id="warp-menu-overlay" class="warp-nav-overlay" onclick="this.classList.remove('open')">
+    <button class="warp-nav-close" onclick="document.getElementById('warp-menu-overlay').classList.remove('open')">&#10005;</button>
+    <nav onclick="event.stopPropagation()">
+        <a href="index.html">Início</a>
+        <a href="mothership.html">Nave-Mãe</a>
+        <a href="400i.html">Nave Auxiliar</a>
+        <a href="missioncontrol.html">Controle da Missão</a>
+        <a href="index.html?readonly=1">Catálogo de Unidades</a>
+        <a href="oneshot.html">Gerador de Missão</a>
+        <a href="equipamento.html">Equipamento</a>
+        <a href="diariodebordo.html">Diário de Bordo</a>
+    </nav>
+</div>
+
+<header>
+    <h1>LICENCIAMENTO</h1>
+    <p>Fankit &amp; Fandom — Star Citizen</p>
+</header>
+
+<div class="legal-page">
+
+    <div class="legal-notice">
+        <strong>Este é um site de fãs não-oficial.</strong> WARP-Unit não é afiliado, endossado ou patrocinado pela Cloud Imperium Games, Roberts Space Industries ou quaisquer de suas afiliadas. Todo conteúdo originário de Star Citizen e Squadron 42 é propriedade da Cloud Imperium Rights LLC e Cloud Imperium Rights Limited.
+    </div>
+
+    <h2>Star Citizen Fankit</h2>
+    <p>WARP-Unit utiliza ativos visuais do <a href="https://robertsspaceindustries.com/fankit" target="_blank" rel="noopener">Star Citizen Fankit</a>, disponibilizado publicamente pela Roberts Space Industries. Conforme a <a href="https://support.robertsspaceindustries.com/hc/en-us/articles/360006895793-Star-Citizen-Fankit-and-Fandom-FAQ" target="_blank" rel="noopener">política de fandom da RSI</a>, este uso é permitido para projetos pessoais e não-comerciais.</p>
+
+    <h2>Uso Pessoal e Não-Comercial</h2>
+    <p>De acordo com a política da RSI, o uso pessoal de propriedade intelectual de Star Citizen é permitido sem permissão expressa, desde que:</p>
+    <ul>
+        <li>O uso seja limitado a você e até 5 outras pessoas (6 no total).</li>
+        <li>Não haja comercialização, venda, troca ou qualquer forma de monetização.</li>
+        <li>Não haja associação com empreendimento comercial.</li>
+    </ul>
+    <p>WARP-Unit é uma ferramenta gratuita para mesas de RPG. Nenhum conteúdo é vendido, anunciado ou monetizado. Nenhum dado de usuário é coletado ou compartilhado.</p>
+
+    <h2>Atribuição e Créditos</h2>
+    <p>Todas as imagens de naves, logos e arte conceitual utilizadas no WARP-Unit são originárias do Star Citizen Fankit ou de capturas de tela do jogo Star Citizen. O projeto respeita integralmente os termos do Fankit Agreement da RSI.</p>
+    <blockquote>
+        "Made by the Community." — Star Citizen Fankit and Fandom FAQ, Roberts Space Industries
+    </blockquote>
+    <p>O logo WARP-Unit é criação original dos autores do projeto e não utiliza marcas registradas da RSI.</p>
+
+    <h2>Código Aberto</h2>
+    <p>O código-fonte do WARP-Unit está disponível publicamente. O projeto é uma aplicação web estática (HTML/CSS/JS) sem dependência de servidor. Toda a lógica de jogo é executada no navegador do usuário.</p>
+
+    <h2>Links de Referência</h2>
+    <ul>
+        <li><a href="https://robertsspaceindustries.com/fankit" target="_blank" rel="noopener">Star Citizen Fankit Oficial</a></li>
+        <li><a href="https://support.robertsspaceindustries.com/hc/en-us/articles/360006895793-Star-Citizen-Fankit-and-Fandom-FAQ" target="_blank" rel="noopener">Fankit and Fandom FAQ (RSI Knowledge Base)</a></li>
+    </ul>
+
+</div>
+
+<footer>
+    <a href="termos-de-uso.html">Termos de Uso</a>
+    &nbsp;·&nbsp;
+    <a href="licenciamento.html">Licenciamento</a>
+</footer>
+
+</body>
+</html>

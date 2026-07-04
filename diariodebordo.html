@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WARP-Unit — Diário de Bordo</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="warp.css">
+</head>
+<body class="warp-has-nav">
+
+<div class="warp-nav">
+    <button class="warp-nav-menu" onclick="document.getElementById('warp-menu-overlay').classList.add('open')" aria-label="Menu">&#9776;</button>
+    <img src="img/logo.svg" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
+</div>
+<div id="warp-menu-overlay" class="warp-nav-overlay" onclick="this.classList.remove('open')">
+    <button class="warp-nav-close" onclick="document.getElementById('warp-menu-overlay').classList.remove('open')">&#10005;</button>
+    <nav onclick="event.stopPropagation()">
+        <a href="index.html">Início</a>
+        <a href="mothership.html">Nave-Mãe</a>
+        <a href="400i.html">Nave Auxiliar</a>
+        <a href="missioncontrol.html">Controle da Missão</a>
+        <a href="index.html?readonly=1">Catálogo de Unidades</a>
+        <a href="oneshot.html">Gerador de Missão</a>
+        <a href="equipamento.html">Equipamento</a>
+        <a href="diariodebordo.html">Diário de Bordo</a>
+    </nav>
+</div>
+
+<header>
+    <h1>DIÁRIO DE BORDO</h1>
+    <p>Registros de missões reais conduzidas pelo criador do WARP-Unit</p>
+</header>
+
+<div class="dblog-page active">
+
+    <!-- INTRODUCTION -->
+    <div class="dblog-intro" id="dblog-intro">
+        <p>
+            Estes são exemplos de aventuras de sessões reais, narradas pelo mestre que criou o WARP-Unit.
+            Servem como inspiração e demonstração do resultado que se pode alcançar ao jogar — mostrando na
+            prática como as mecânicas de energia, rolagens Daggerheart, geração procedural de planetas e
+            decisões da tripulação se transformam em histórias memoráveis.
+        </p>
+    </div>
+
+    <!-- ENTRY LIST + CONTENT -->
+    <div class="dblog-layout">
+        <div class="dblog-sidebar" id="dblog-sidebar">
+            <div class="dblog-sidebar-title">Missões</div>
+            <div id="dblog-list"></div>
+        </div>
+        <div class="dblog-content" id="dblog-content">
+            <div class="dblog-placeholder">Selecione uma missão para ler o registro completo.</div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <a href="termos-de-uso.html">Termos de Uso</a>
+    &nbsp;·&nbsp;
+    <a href="licenciamento.html">Licenciamento</a>
+</footer>
+
+<script>
+var MISSIONS = [
+    { file: "missao01.md", title: "Missão ZP-882e", date: "3142-138", summary: "Planeta com mecanismo de defesa nativo. Emboscada por líquen vivo e criaturas de rocha. Classificação: Extremamente Perigoso." }
+    // Para adicionar áudio: insira <!-- audio: https://...mp3 --> no topo do arquivo .md
+];
+
+var activeFile = null;
+
+function buildList() {
+    var list = document.getElementById("dblog-list");
+    list.innerHTML = "";
+    MISSIONS.forEach(function (m) {
+        var item = document.createElement("div");
+        item.className = "dblog-item" + (activeFile === m.file ? " active" : "");
+        item.innerHTML =
+            '<div class="dblog-item-title">' + m.title + '</div>' +
+            '<div class="dblog-item-date">Data Estelar: ' + m.date + '</div>' +
+            '<div class="dblog-item-summary">' + m.summary + '</div>';
+        item.addEventListener("click", function () { loadMission(m); });
+        list.appendChild(item);
+    });
+}
+
+async function loadMission(mission) {
+    activeFile = mission.file;
+    buildList();
+    var content = document.getElementById("dblog-content");
+    content.innerHTML = '<div class="dblog-loading">Carregando registro...</div>';
+
+    try {
+        var res = await fetch("diariodebordo/" + mission.file);
+        if (!res.ok) throw new Error("Arquivo não encontrado");
+        var md = await res.text();
+
+        var audioUrl = null;
+        var audioMatch = md.match(/<!--\s*audio:\s*(.+?)\s*-->/);
+        if (audioMatch) {
+            audioUrl = audioMatch[1].trim();
+            md = md.replace(/<!--\s*audio:\s*.+?\s*-->\n?/, "");
+        }
+
+        var html = marked.parse(md);
+        var audioHtml = "";
+        if (audioUrl) {
+            audioHtml = '<div class="dblog-audio">' +
+                '<audio controls preload="metadata" style="width:100%">' +
+                '<source src="' + audioUrl + '" type="audio/mpeg">' +
+                '</audio></div>';
+        }
+        content.innerHTML = audioHtml + '<div class="dblog-entry">' + html + '</div>';
+    } catch (e) {
+        content.innerHTML = '<div class="dblog-error">Erro ao carregar o registro. Verifique se o servidor está rodando.</div>';
+    }
+}
+
+buildList();
+</script>
+
+</body>
+</html>

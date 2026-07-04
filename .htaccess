@@ -1,3 +1,8 @@
 <Files .env>
     Require all denied
 </Files>
+
+<FilesMatch "\.json$">
+    RewriteEngine On
+    RewriteRule ^data/campaigns/ - [F]
+</FilesMatch>
