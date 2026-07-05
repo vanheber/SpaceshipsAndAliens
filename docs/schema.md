@@ -264,15 +264,16 @@ Se a IA falha (todos os provedores exauridos), o gerador cai no sistema local pr
 
 ---
 
-## API de Campanha & Sessão
+## Campanha & Sessão
 
-### Armazenamento: `data/campaigns/{id}.json`
+### Armazenamento: `localStorage` (chave `warp-campaigns`)
+
+Campanhas são armazenadas exclusivamente no `localStorage` do navegador. Não há backend — o sistema opera 100% offline/local.
 
 ```json
 {
-  "id": "abc123def456",
+  "id": "cabc123",
   "name": "Fronteira de KX-415",
-  "joinCode": "XK42",
   "archived": false,
   "createdAt": "2026-07-03T10:00:00Z",
   "state": {
@@ -282,70 +283,66 @@ Se a IA falha (todos os provedores exauridos), o gerador cai no sistema local pr
     "mothership": { "sup": {"current":10,"max":20}, "fuel": {"current":10,"max":10} },
     "ship400i": { "sup": {"current":4,"max":8}, "fuel": {"current":6,"max":6} },
     "activeRobot": "sentinel",
-    "isDroneMode": false
-  },
-  "pendingActions": [
-    { "id": "req-abc123", "type": "energyIncrement", "robotId": "sentinel", "amount": 1, "requestedAt": "..." }
-  ],
-  "messages": [
-    { "id": "msg-abc123", "from": "gm", "to": "sentinel", "text": "Cuidado com a armadilha!", "sentAt": "...", "read": false }
-  ],
-  "sessions": [
-    {
-      "id": "s1",
-      "name": "KX-415b",
-      "startedAt": "2026-07-03T20:00:00Z",
-      "endedAt": "2026-07-03T23:30:00Z",
-      "startState": { },
-      "endState": { },
-      "notes": "Combate com piratas. Robert C9 perdeu 2E.",
-      "planets": [
-        {
-          "name": "KX-415b",
-          "type": "Deserto de Sílica",
-          "desc": "Mundo árido com dunas de areia vítrea...",
-          "discoveries": [
-            { "index": 1, "encounterType": "planet", "approach": "...", "description": "...", "location": "...", "peril": "...", "perilDC": 14, "reward": "..." }
-          ]
-        }
-      ]
-    }
-  ]
+    "isDroneMode": false,
+    "pendingActions": [
+      { "id": "req-abc123", "type": "energyIncrement", "robotId": "sentinel", "amount": 1, "requestedAt": "..." }
+    ],
+    "messages": [
+      { "id": "msg-abc123", "from": "gm", "to": "sentinel", "text": "Cuidado com a armadilha!", "sentAt": "...", "read": false }
+    ],
+    "sessions": [
+      {
+        "id": "s1",
+        "name": "KX-415b",
+        "startedAt": "2026-07-03T20:00:00Z",
+        "endedAt": "2026-07-03T23:30:00Z",
+        "startState": { },
+        "endState": { },
+        "notes": "Combate com piratas. Robert C9 perdeu 2E.",
+        "planets": [
+          {
+            "name": "KX-415b",
+            "type": "Deserto de Sílica",
+            "desc": "Mundo árido com dunas de areia vítrea...",
+            "discoveries": [
+              { "index": 1, "encounterType": "planet", "approach": "...", "description": "...", "location": "...", "peril": "...", "perilDC": 14, "reward": "..." }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }
 ```
 
-### Endpoints (`api/campaign.php`)
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `id` | string | `c` + `Date.now().toString(36)` |
+| `name` | string | Nome da campanha |
+| `archived` | boolean | `true` = oculta do seletor, visível em `arquivadas.html` |
+| `createdAt` | string | ISO 8601 |
+| `state` | object | Snapshot completo do `WarpStore.getAll()` |
 
-| Action | Método | Auth | Descrição |
-|--------|--------|------|-----------|
-| `create` | POST | GM | Cria campanha, gera joinCode de 4 letras |
-| `save` | POST | GM | Salva estado completo da campanha |
-| `load` | GET | Código | Carrega campanha por id + código |
-| `poll` | GET | Código | Polling: estado, pendingActions, sessions, messages |
-| `list` | GET | GM | Lista campanhas não-arquivadas |
-| `archive` | POST | GM | Arquiva campanha (`archived: true`) |
-| `delete` | POST | GM | Remove permanentemente |
-| `request` | POST | Código | Jogador solicita alteração de energia (±1 a ±3) |
-| `confirm` | POST | GM | Aprova pendingAction e aplica delta |
-| `reject` | POST | GM | Remove pendingAction sem aplicar |
-| `startsession` | POST | GM | Inicia sessão com timestamp e snapshot |
-| `endsession` | POST | GM | Encerra sessão, salva endState e notas |
-| `saveplanet` | POST | GM | Adiciona planeta + descobertas à sessão ativa |
-| `restoresession` | POST | GM | Restaura estado da campanha para endState da sessão |
-| `updatenotes` | POST | GM | Atualiza anotações da sessão ativa |
-| `sendmessage` | POST | GM/Código | Envia mensagem (`from`, `to`, `text`) |
-| `dismissmessage` | POST | GM/Código | Remove mensagem por id |
+### Página de Arquivadas
 
-### Autenticação
+`arquivadas.html` lista campanhas com `archived: true`. Oferece **Restaurar** (volta `archived` para `false`) e **Excluir** (remove do array). Mantém-se no máximo **10** — as mais antigas são removidas automaticamente em `missioncontrol.html:confirmArchive()`.
 
-- **GM**: cookie `warp_auth` (HMAC-SHA256, 30 dias) via `api/auth.php` (bcrypt + TOTP)
-- **Jogador**: joinCode de 4 letras como parâmetro `code` nos endpoints públicos
+### Conexão P2P
 
-### Sincronização
+Quando GM e jogador estão em sessão remota, a comunicação usa WebRTC com hub de persistência:
 
-- Polling de 3 segundos no cliente (`WarStore` modo remoto)
-- `ponytail:` polling simples, ceiling ~8 jogadores simultâneos. Upgrade: SSE.
-- `flock(LOCK_EX)` em todas as escritas no servidor. `ponytail:` ceiling ~5 escritas/segundo. Upgrade: SQLite.
+```
+Página ← BroadcastChannel → Hub (p2p-hub.html, popup) ← WebRTC → Peer
+```
+
+Mensagens P2P trafegadas:
+
+| Tipo | Descrição |
+|---|---|
+| `request` | Jogador solicita alteração de energia (±1 a ±3) |
+| `diceResult` | Resultado de rolagem (`hope`, `fear`, `total`, `dc`, `robotId`) |
+| `message` | Texto entre GM e jogador |
+| `stateUpdate` | Sincronização de estado |
 
 ### Provedores de IA (cascade)
 

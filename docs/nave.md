@@ -15,18 +15,14 @@ A **Aegis Tiburon** é a nave-mãe da missão WARP — o corpo físico da IA Cap
 
 ## Recursos de Bordo
 
-A nave possui três pools de recursos narrativos gerenciáveis pelo operador, todos persistidos em `localStorage` (chave `warp-unit-mothership`):
+Os recursos da Tiburon são gerenciados no **Controle da Missão** (`missioncontrol.html`), na seção "Nave-Mãe Tiburon" dentro do painel à esquerda. Os recursos não são mais editáveis na página da nave — apenas consultados.
 
 | Recurso | Máximo | Inicial | Cor | Uso |
-|---|---|---|---|---|---|
+|---|---|---|---|---|
 | **Suprimentos** | 20 | 10 | Verde | Reparos, equipamentos, cura |
 | **Combustível** | 10 | 10 | Roxo | Saltos interplanetários, geradores, rover |
 | **Munição** | 10 | 10 | Vermelho | Armas da nave e defesa |
 | **Blindagem/Escudo** | 20 | 20 | Azul/Verde | Resistência física (10) + barreira energética (10) |
-
-**Operação**: Clique em uma célula para definir o nível exato. Use os botões Consumir/Abastecer para incrementar/decrementar. O botão Recarregar restaura o valor inicial.
-
-**Limpar dados**: link "Limpar Recursos" no footer.
 
 ## Layout do Convés
 
@@ -78,7 +74,7 @@ A **Origin 400i** é uma pathfinder de luxo que serve como nave auxiliar da miss
 
 ## Recursos de Bordo
 
-Recursos narrativos gerenciáveis pelo operador, persistidos em `localStorage` (chave `warp-unit-400i`):
+Os recursos da 400i são gerenciados no **Controle da Missão** (`missioncontrol.html`), na seção "Origin 400i" dentro do painel à esquerda. A página da 400i é apenas consultiva — não possui controles de recurso.
 
 | Recurso | Máximo | Inicial | Cor | Uso |
 |---|---|---|---|---|

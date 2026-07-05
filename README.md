@@ -1,6 +1,6 @@
 # WARP-Unit — Sistema Operacional de Exploração Interestelar
 
-Aplicação web (HTML + CSS + JS Vanilla + PHP) para auxiliar sessões de RPG de mesa sci-fi. Quatro páginas integradas que cobrem todo o fluxo de jogo: gerenciamento de tripulação androide, painel do mestre com controle de campanha e sessão, geração procedural de missões planetárias via IA e referência das naves.
+Aplicação web (HTML + CSS + JS Vanilla) para auxiliar sessões de RPG de mesa sci-fi. Seis páginas integradas que cobrem todo o fluxo de jogo: gerenciamento de tripulação androide, painel do mestre com controle de campanha e sessão, geração procedural de missões planetárias via IA e referência das naves.
 
 ---
 
@@ -8,11 +8,12 @@ Aplicação web (HTML + CSS + JS Vanilla + PHP) para auxiliar sessões de RPG de
 
 | Página | Função |
 |---|---|
-| **[index.html](index.html)** | Catálogo de 10 androides + ficha de personagem + rolador de dados Daggerheart. Página de entrada do sistema com tela para ingressar em campanha por código, continuar offline, ou acessar como mestre. |
-| **[missioncontrol.html](missioncontrol.html)** | Painel do Mestre: campanhas (criar, arquivar), sessões (iniciar, encerrar, histórico, restaurar), recursos (medo, D20), energia de todas as unidades, PNJs, mensagens jogador↔mestre. |
-| **[oneshot.html](oneshot.html)** | Gerador procedural de planetas com IA (cascade multi-provedor: Gemini → NVIDIA → Pollinations → Hermes → Local) + login do capitão (TOTP). Integração com campanha: salva planetas e descobertas na sessão ativa. |
-| **[mothership.html](mothership.html)** | Descrição detalhada da nave-mãe Tiburon, veículos auxiliares e galeria. Recursos de bordo editáveis pelo mestre, modo leitura para jogadores. |
-| **[400i.html](400i.html)** | Descrição da nave auxiliar Origin 400i, recursos de bordo e veículo acoplado. Mesmo modelo de permissões da Tiburon. |
+| **[index.html](index.html)** | Catálogo de 10 androides + ficha de personagem + rolador de dados Daggerheart. Página de entrada do sistema com tela para conectar por QR/link P2P, modo leitura do catálogo, mensagens do mestre. |
+| **[missioncontrol.html](missioncontrol.html)** | Painel do Mestre: campanhas (criar, arquivar, exportar/importar), sessões (iniciar, encerrar, histórico, restaurar), recursos (medo, D20), energia de todas as unidades, PNJs, mensagens jogador↔mestre, recursos das naves. |
+| **[oneshot.html](oneshot.html)** | Gerador procedural de planetas com IA (cascade multi-provedor: Gemini → NVIDIA → Pollinations → Hermes → Local). Integração com campanha: salva planetas e descobertas na sessão ativa. |
+| **[mothership.html](mothership.html)** | Descrição detalhada da nave-mãe Tiburon, veículos auxiliares e galeria. Modo consultivo — recursos editáveis apenas no Controle da Missão. |
+| **[400i.html](400i.html)** | Descrição da nave auxiliar Origin 400i, veículo acoplado e galeria. Modo consultivo. |
+| **[arquivadas.html](arquivadas.html)** | Gerencia campanhas arquivadas: restaurar ou excluir permanentemente. |
 
 ---
 
@@ -21,11 +22,13 @@ Aplicação web (HTML + CSS + JS Vanilla + PHP) para auxiliar sessões de RPG de
 - **HTML5** — Estrutura semântica, SPAs independentes
 - **CSS3** — Tema escuro futurista centralizado em [warp.css](warp.css), custom properties, responsivo
 - **JavaScript Vanilla** — Lógica de estado, renderização, persistência e chamadas à API de IA
-- **PHP 8.x** — API de campanha (`api/campaign.php`), autenticação (`api/auth.php`), proxies de IA
-- **localStorage + sessionStorage** — Persistência local e âncora de reconexão entre recargas
+- **WebRTC** — P2P serverless entre GM e jogadores via `RTCPeerConnection` + `RTCDataChannel`
+- **BroadcastChannel** — Persistência de conexão P2P entre reloads (hub popup)
+- **localStorage + sessionStorage** — Persistência de campanhas, estado e âncora de reconexão
+- **PHP 8.x** — Proxies de IA (`api/proxy.php`, `api/proxy-nvidia.php`)
+- **Bootstrap Icons** — Ícones outlined via CDN
 - **Gemini 3.1 Flash Lite** — Provedor premium para usuários autenticados
-- **NVIDIA DeepSeek V4 Flash** — Provedor gratuito para visitantes (via build.nvidia.com)
-- **JSON file storage** — Armazenamento de campanhas no servidor (`data/campaigns/`), com `flock()`
+- **NVIDIA DeepSeek V4 Flash** — Provedor gratuito para visitantes
 
 ---
 
@@ -37,22 +40,26 @@ Aplicação web (HTML + CSS + JS Vanilla + PHP) para auxiliar sessões de RPG de
 - **Ficha de personagem** com stats, habilidade especial e contador de energia
 - **Rolador Daggerheart**: 1d12 Esperança + 1d12 Medo + modificador vs DC + Vantagem/Desvantagem (D6)
 - **Protocolo Drone**: chassi substituto ao zerar energia (configurável em `data/config.json`)
-- **Entrada por código de campanha**: jogador digita código de 4 letras e conecta ao servidor
+- **Entrada P2P**: jogador conecta via link/QR code gerado pelo GM — sem servidor
+- **Modo Leitura**: `?readonly=1` exibe o catálogo sem ficha de personagem
 - **Campaign header**: nome da campanha + robô selecionado + botão sair
-- **Mensagens**: modal para receber mensagens do mestre e enviar respostas
-- **Persistência**: estado do robô e energia salvos via `WarpStore`
+- **Rolagem remota**: resultados de dados enviados ao GM via P2P (diceResult)
+- **Mensagens**: modal para receber mensagens do mestre e enviar respostas via P2P
+- **Persistência**: estado do robô e energia salvos via `WarpStore` (localStorage)
 
 ### Painel do Mestre (`missioncontrol.html`)
 
-- **Campanhas**: criar, selecionar, arquivar no servidor. Código de acesso de 4 letras para jogadores.
+- **Campanhas**: criar, salvar, alternar, exportar/importar JSON, arquivar (limite 10 arquivadas)
 - **Sessões**: iniciar, encerrar, anotações, planetas explorados, histórico com restauração
+- **Recursos das Naves**: Tiburon + 400i (suprimentos, combustível, munição, blindagem) — edição centralizada
 - **Recursos do Mestre**: pontos de Medo (0-7), rolador D20 3D
 - **Unidades em Campo**: energia de todos os androides com controle granular
 - **PNJs & Aliados**: 3 entradas genéricas com barras de HP
-- **Mensagens**: enviar mensagens para jogadores específicos, receber respostas
-- **Autenticação**: bcrypt + TOTP (Google Authenticator), cookie HMAC-SHA256
-- **Accordion**: todas as seções colapsáveis para melhor navegação
-- **Layout 2 colunas**: esquerda (campanha, recursos, PNJs), direita (unidades, mensagens)
+- **P2P Serverless**: GM gera sala → jogador conecta por link/QR → dados, mensagens e rolagem em tempo real
+- **Hub de Persistência**: popup (`p2p-hub.html`) segura WebRTC enquanto a página recarrega
+- **Ações Pendentes**: solicitações de energia e resultados de rolagem com confirmação/rejeição
+- **Mensagens (Inbox)**: enviar/receber mensagens de jogadores conectados via P2P
+- **Arquivamento**: `arquivadas.html` — restaurar ou excluir campanhas arquivadas
 
 ### Gerador de Missão (`oneshot.html`)
 
@@ -79,42 +86,24 @@ Aplicação web (HTML + CSS + JS Vanilla + PHP) para auxiliar sessões de RPG de
 
 ### Estado Compartilhado (`js/store.js`)
 
-API unificada `WarpStore` com dois backends:
-- **Modo Local**: `localStorage` — para uso offline ou single-machine
-- **Modo Remoto**: `fetch()` com polling 3s — para multi-dispositivo via servidor PHP
+`WarpStore` opera em modo **local** (`localStorage`) com suporte a sessão P2P via `js/p2p.js` + `js/p2p-hub.js`.
 
 ### Modelo de Dados
 
 ```
-Campanha "Fronteira de KX-415"
-├─ Estado atual: robots{}, npcs[], fear, mothership{}, ship400i{}
-├─ pendingActions[] — alterações de energia aguardando confirmação do GM
-├─ messages[] — mensagens entre GM e jogadores
-└─ sessions[]
-   ├─ #1: nome, data, planetas, descobertas, estado final
-   └─ #2: (em andamento)
+localStorage["warp-campaigns"] = [
+  { id, name, archived, createdAt, state: { robots, npcs, fear, mothership, ship400i,
+    pendingActions[], messages[], sessions[] } }
+]
 ```
 
-### API (`api/campaign.php`)
+### Conexão P2P
 
-| Endpoint | Auth | Descrição |
-|----------|------|-----------|
-| `create` | GM | Cria campanha com código de 4 letras |
-| `save` | GM | Salva estado completo |
-| `load` | Código | Carrega campanha por ID + código |
-| `poll` | Código | Polling leve (estado + pendências + sessões + mensagens) |
-| `list` | GM | Lista campanhas não-arquivadas |
-| `archive` | GM | Arquiva campanha (não deleta) |
-| `delete` | GM | Remove permanentemente |
-| `request` | Código | Jogador solicita alteração de energia |
-| `confirm` / `reject` | GM | Aprova/recusa solicitação |
-| `startsession` | GM | Inicia nova sessão de jogo |
-| `endsession` | GM | Encerra sessão com snapshot |
-| `saveplanet` | GM | Salva planeta + descobertas na sessão |
-| `restoresession` | GM | Restaura estado de uma sessão anterior |
-| `updatenotes` | GM | Salva anotações da sessão |
-| `sendmessage` | GM/Código | Envia mensagem |
-| `dismissmessage` | GM/Código | Remove mensagem |
+```
+GM (missioncontrol) ←→ Hub (p2p-hub.html, popup) ←WebRTC→ Jogador (index.html)
+```
+
+O hub sobrevive a reloads via BroadcastChannel. Sem servidor intermediário — conexão direta entre os peers.
 
 ---
 
@@ -122,22 +111,22 @@ Campanha "Fronteira de KX-415"
 
 ```
 WARP-Unit/
-├── index.html              Catálogo de unidades + ficha + dados + entrada
-├── missioncontrol.html     Painel do mestre (campanha, sessão, recursos, mensagens)
-├── oneshot.html            Gerador de missão one-shot (auth + IA cascade + sessão)
-├── mothership.html         Nave-mãe Tiburon
-├── 400i.html               Nave auxiliar Origin 400i
+├── index.html              Catálogo de unidades + ficha + entrada P2P
+├── missioncontrol.html     Painel do mestre (campanhas, sessões, P2P, recursos)
+├── oneshot.html            Gerador de missão one-shot (IA cascade + sessão)
+├── mothership.html         Nave-mãe Tiburon (consultivo)
+├── 400i.html               Nave auxiliar Origin 400i (consultivo)
 ├── equipamento.html        Catálogo de equipamentos
+├── arquivadas.html         Gerencia campanhas arquivadas
+├── p2p-hub.html            Popup hub que segura WebRTC entre reloads
 ├── warp.css                CSS centralizado (tema + componentes)
-├── .env                    Credenciais locais (não commitado)
-├── .env.example            Template do .env
-├── .htaccess               Protege .env e data/campaigns/
+├── sw.js                   Service Worker (network-first navegações)
+├── .htaccess               Cache-Control + proteção de arquivos
 ├── js/
-│   └── store.js            WarpStore — estado compartilhado (local + remoto)
+│   ├── store.js            WarpStore — estado compartilhado (localStorage)
+│   ├── p2p.js              Núcleo WebRTC (RTCPeerConnection + DataChannel)
+│   └── p2p-hub.js          Proxy BroadcastChannel para o hub
 ├── api/
-│   ├── auth.php            Login bcrypt + TOTP, cookie HMAC-SHA256
-│   ├── campaign.php        CRUD de campanha, sessão, mensagens, polling
-│   ├── join.php            Busca campanha por código (HTML + JSON)
 │   ├── proxy.php           Proxy Gemini (requer cookie de auth)
 │   ├── proxy-nvidia.php    Proxy NVIDIA DeepSeek V4 Flash (público)
 │   ├── load-env.php        .env loader compartilhado
@@ -151,12 +140,10 @@ WARP-Unit/
 │   ├── discoveries.json    Pools de descoberta (fallback)
 │   ├── events-params.json  Parâmetros de eventos
 │   ├── events-categories.json Categorias de eventos
-│   ├── enemies.json        Inimigos do universo
-│   └── campaigns/          JSON files de campanhas (gerados pelo servidor)
+│   └── enemies.json        Inimigos do universo
 ├── img/                    Imagens dos androides, naves, logo, background
 ├── docs/                   Documentação detalhada
 └── plans/                  Planos de implementação
-    └── campaign-control.md Plano de controle de campanha e sessão
 ```
 
 ---
@@ -184,22 +171,29 @@ WARP-Unit/
 
 | Chave | Tipo | Conteúdo |
 |---|---|---|
-| `warp-unit-state` | localStorage | Estado unificado (robôs, recursos, medo, campanha ativa) |
-| `warp-session` | sessionStorage | Âncora de reconexão (campaignId, code, mode) — sobrevive reload |
+| `warp-campaigns` | localStorage | Array de campanhas (nome, estado, sessões, arquivadas) |
+| `warp-unit-state` | localStorage | Estado unificado (robôs, recursos, medo) |
+| `warp-session` | sessionStorage | Âncora de reconexão (campaignId, mode, P2P role) |
 | `warp-unit-oneshot` | localStorage | Estado da missão one-shot (planeta, descobertas) |
-| `data/campaigns/*.json` | Servidor | Estado completo das campanhas (multi-dispositivo) |
 
 ---
 
 ## Como Executar
 
 1. Clone o repositório
-2. Copie `.env.example` para `.env` e configure as credenciais
-3. Sirva com PHP embutido ou Apache:
+2. Sirva com qualquer servidor HTTP estático:
    ```bash
-   php -S localhost:8000
+   npx serve .
+   # ou: python3 -m http.server 8000
+   # ou: php -S localhost:8000  (para proxies de IA)
    ```
-4. Acesse `http://localhost:8000`
+3. Acesse `http://localhost:8000`
+
+> Para usar geração por IA, é necessário PHP com os proxies em `api/`.
+
+## Deploy
+
+`deploy.sh` envia via FTP para o servidor de produção. SSL verify desabilitado (`set ssl:verify-certificate no`).
 
 ---
 
