@@ -4,22 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/favicon.png">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Interface de Androides SC-RPG</title>
-    <link rel="stylesheet" href="warp.css">
+    <link rel="stylesheet" href="warp.css?t=1783272137">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="js/store.js"></script>
-    <script src="js/p2p.js"></script>
-    <script src="js/db.js"></script>
+    <script src="js/store.js?t=1783272137"></script>
+    <script src="js/p2p.js?t=1783272137"></script>
+    <script src="js/p2p-hub.js?t=1783272137"></script>
+    <script src="js/db.js?t=1783272137"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 </head>
 
 <body>
 
     <div id="warp-nav" class="warp-nav" style="display:none">
         <button class="warp-nav-menu" onclick="document.getElementById('warp-menu-overlay').classList.add('open')" aria-label="Menu">&#9776;</button>
-        <img src="img/logo.svg" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
+        <img src="img/logo.svg?t=1783272137" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
     </div>
     <div id="warp-menu-overlay" class="warp-nav-overlay" onclick="this.classList.remove('open')">
-        <button class="warp-nav-close" onclick="document.getElementById('warp-menu-overlay').classList.remove('open')">&#10005;</button>
+        <button class="warp-nav-close" onclick="document.getElementById('warp-menu-overlay').classList.remove('open')"><i class="bi bi-x-lg"></i></button>
         <nav onclick="event.stopPropagation()">
             <a href="index.html">Início</a>
             <a href="mothership.html">Nave-Mãe</a>
@@ -28,41 +36,59 @@
             <a href="index.html?readonly=1">Catálogo de Unidades</a>
             <a href="oneshot.html">Gerador de Missão</a>
             <a href="equipamento.html">Equipamento</a>
-            <a href="diariodebordo.html">Diário de Bordo</a>
-        </nav>
+        <a href="diariodebordo.html">Diário de Bordo</a>
+        <a href="arquivadas.html">Campanhas Arquivadas</a>
+    </nav>
     </div>
 
     <div id="campaign-header" class="campaign-header" style="display:none">
         <span class="campaign-name" id="campaign-name-display"></span>
         <button class="btn btn-xs" id="msg-open-btn" onclick="openMsgSend()"
-            style="background:rgba(45,212,191,0.12);color:var(--teal);border:1px solid rgba(45,212,191,0.3);margin-right:4px">✉</button>
+            style="background:rgba(45,212,191,0.12);color:var(--teal);border:1px solid rgba(45,212,191,0.3);margin-right:4px"><i class="bi bi-envelope"></i></button>
         <span style="flex:1"></span>
         <button class="btn btn-xs btn-danger" id="leave-btn" onclick="showLeaveModal()">Sair</button>
     </div>
 
     <div id="entry-screen" class="entry-screen active">
-        <img src="img/logo.svg" alt="WARP-Unit" class="entry-logo" width="200" height="auto">
-        <p class="entry-subtitle">Sistema de Exploração Interestelar</p>
-        <div class="entry-form">
+        <img src="img/logo.svg?t=1783272137" alt="WARP-Unit" id="entry-logo" class="entry-logo" width="200" height="auto">
+        <p id="entry-subtitle" class="entry-subtitle">Sistema de Exploração Interestelar</p>
+        <div id="entry-form" class="entry-form">
             <input type="text" id="entry-code" placeholder="Cole o link do mestre aqui…" autocomplete="off" autofocus>
-            <button class="btn btn-primary" onclick="joinCampaign()">Entrar no jogo</button>
+            <div class="btn-row" style="gap:6px">
+                <button class="btn btn-primary" onclick="joinCampaign()">Entrar no jogo</button>
+                <button class="btn btn-secondary" onclick="openQrScanner()" style="font-size:0.82rem;padding:8px 14px"><i class="bi bi-camera"></i> Entrar por QrCode</button>
+            </div>
         </div>
-        <div id="p2p-answer-area" style="display:none;margin:12px auto 0;max-width:320px;text-align:left">
+        <div id="qr-scanner-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;align-items:center;justify-content:center">
+            <div style="width:100%;max-width:360px;background:var(--card-bg);border:1px solid var(--border-color);padding:16px;border-radius:8px">
+                <div style="text-align:right;margin-bottom:6px">
+                    <button class="btn btn-xs btn-secondary" onclick="closeQrScanner()" style="font-size:0.75rem">Fechar</button>
+                </div>
+                <div id="qr-reader" style="width:100%;min-height:280px;background:#000;border-radius:4px;overflow:hidden"></div>
+                <div id="qr-error" style="display:none;color:#f56c6c;font-size:0.75rem;margin-top:8px;text-align:center"></div>
+            </div>
+        </div>
+        <div id="p2p-answer-area" style="display:none;margin:12px auto 0;max-width:340px;text-align:left">
             <div style="font-size:0.72rem;color:#8b949e;margin-bottom:4px">Mostre este código para o mestre:</div>
             <textarea id="p2p-answer-output" readonly rows="3"
                 style="width:100%;font-size:0.7rem;padding:6px;background:var(--card-bg);border:1px solid var(--teal);border-radius:6px;color:var(--teal);resize:none;font-family:monospace;box-sizing:border-box"></textarea>
-            <div style="font-size:0.72rem;color:#8b949e;margin-top:4px" id="p2p-wait">Aguardando confirmação do mestre...</div>
+            <div id="p2p-answer-qrcode-container" style="text-align:center;margin-top:10px">
+                <div id="p2p-answer-qrcode" style="display:inline-block;padding:8px;background:white;border-radius:6px"></div>
+                <div style="font-size:0.65rem;color:#8b949e;margin-top:4px">Ou toque no QR Code acima para ampliar</div>
+            </div>
         </div>
+
+        <div id="p2p-status-msg" style="display:none;font-size:0.85rem;color:var(--teal);margin-top:12px;text-align:center"></div>
         <p id="entry-error" style="display:none;color:#f56c6c;font-size:0.8rem;margin-top:8px"></p>
-        <p class="entry-hint">Cole o link P2P fornecido pelo mestre para conectar.</p>
-        <div class="entry-divider"></div>
-        <a href="missioncontrol.html" class="btn btn-secondary">Entrar como Mestre do Jogo</a>
-        <a href="https://runaris.com.br/donate" target="_blank" rel="noopener" class="entry-donate">☕ Apoie o
+        <p id="entry-hint" class="entry-hint">Cole o link P2P fornecido pelo mestre para conectar.</p>
+        <div id="entry-divider" class="entry-divider"></div>
+        <a href="missioncontrol.html" id="entry-back-mc" class="btn btn-secondary">Entrar como Mestre do Jogo</a>
+        <a href="https://runaris.com.br/donate" target="_blank" rel="noopener" id="entry-donate" class="entry-donate"><i class="bi bi-cup-hot"></i> Apoie o
             Projeto</a>
     </div>
 
     <div id="news-section" class="news-section">
-        <div class="news-title">📰 Pulso do Autor</div>
+        <div class="news-title"><i class="bi bi-newspaper"></i> Pulso do Autor</div>
         <div class="news-grid" id="news-grid"></div>
     </div>
 
@@ -122,7 +148,7 @@
         function updateCampaignHeader() {
             if (_readonly) {
                 var h = document.getElementById("campaign-header");
-                document.getElementById("campaign-name-display").textContent = "📖 Visualizando Catálogo";
+                document.getElementById("campaign-name-display").innerHTML = '<i class="bi bi-book"></i> Visualizando Catálogo';
                 document.getElementById("msg-open-btn").style.display = "none";
                 var lb = document.getElementById("leave-btn");
                 lb.textContent = "Fechar catálogo";
@@ -133,9 +159,9 @@
             var name = WarpStore.get("campaignName");
             var header = document.getElementById("campaign-header");
             if (name) {
-                var label = "🚀 " + name;
+                var label = '<i class="bi bi-rocket-takeoff"></i> ' + name;
                 if (activeChar) label += " — " + (isDroneMode ? droneConfig.name : activeChar.model);
-                document.getElementById("campaign-name-display").textContent = label;
+                document.getElementById("campaign-name-display").innerHTML = label;
                 header.style.display = "flex";
             } else {
                 header.style.display = "none";
@@ -215,7 +241,30 @@
             document.getElementById("news-section").style.display = "none";
         }
 
-        function joinCampaign() {
+        function resolveJoinCode(raw) {
+            if (!raw) throw new Error("Código de conexão vazio");
+            var safe = raw.replace(/-/g, "+").replace(/_/g, "/");
+            while (safe.length % 4) safe += "=";
+            var decoded;
+            try { decoded = atob(safe); } catch (e) { decoded = raw; }
+
+            // Compact format: pipe-separated SDP fields
+            if (decoded.indexOf("|") !== -1) {
+                return { method: "compact", data: decoded };
+            }
+
+            // Old format: full base64 SDP offer (JSON with type/sdp)
+            if (decoded.indexOf("{") !== -1 && decoded.indexOf('"sdp"') !== -1) {
+                return { method: "full", data: decoded };
+            }
+            // Raw format: base64 that might be the offer directly
+            if (decoded.indexOf("{") !== -1) {
+                return { method: "full", data: decoded };
+            }
+            throw new Error("Formato de código P2P não reconhecido");
+        }
+
+        async function joinCampaign() {
             var code = document.getElementById("entry-code").value.trim();
             var errorEl = document.getElementById("entry-error");
             errorEl.style.display = "none";
@@ -226,27 +275,61 @@
                 return;
             }
 
-            // P2P SDP offer (base64 string)
+            if (code.indexOf("?join=") !== -1) {
+                var m = /[?&]join=([^&\s#]*)/.exec(code);
+                if (m) code = decodeURIComponent(m[1].replace(/\+/g, " "));
+            }
+
             if (typeof WarpP2P === "undefined") {
                 errorEl.textContent = "P2P não disponível neste navegador.";
                 errorEl.style.display = "block";
                 return;
             }
 
+            var resolved;
+            try {
+                resolved = resolveJoinCode(code);
+            } catch (e) {
+                errorEl.textContent = e.message || "Código inválido";
+                errorEl.style.display = "block";
+                return;
+            }
             WarpStore.init({ mode: "p2p", role: "player" });
 
-            WarpP2P.joinRoom(code).then(function (answerB64) {
-                document.getElementById("p2p-answer-output").value = answerB64;
-                document.getElementById("p2p-answer-area").style.display = "block";
-                document.getElementById("p2p-wait").textContent = "Mostre o código acima ao mestre. Aguardando...";
+            // Connect to P2P hub (popup) so reloads don't kill WebRTC
+            if (typeof WarpP2P !== "undefined" && WarpP2P.hubConnect) {
+                WarpP2P.hubConnect().catch(function () {});
+            }
+
+            // Hide entry form, show only waiting area
+            document.getElementById("entry-logo").style.display = "none";
+            document.getElementById("entry-subtitle").style.display = "none";
+            document.getElementById("entry-form").style.display = "none";
+            document.getElementById("entry-hint").style.display = "none";
+            document.getElementById("entry-divider").style.display = "none";
+            document.getElementById("entry-back-mc").style.display = "none";
+            document.getElementById("entry-donate").style.display = "none";
+            document.getElementById("p2p-status-msg").textContent = "Conectando ao mestre...";
+            document.getElementById("p2p-status-msg").style.display = "block";
+
+            var joinPromise = resolved.method === "compact"
+                ? WarpP2P.joinRoomCompact(resolved.data)
+                : WarpP2P.joinRoom(resolved.data);
+
+            joinPromise.then(function (answerB64) {
+                displayPlayerAnswer(answerB64);
+                document.getElementById("p2p-status-msg").textContent = "Mostre o código acima ao mestre. Aguardando...";
 
                 WarpP2P.on("ready", function () {
-                    document.getElementById("p2p-wait").textContent = "Conectado! Carregando dados...";
+                    document.getElementById("p2p-status-msg").textContent = "Conectado! Carregando dados...";
                 });
 
                 WarpStore.ready().then(function () {
+                    document.getElementById("p2p-answer-area").style.display = "none";
+                    document.getElementById("p2p-status-msg").style.display = "none";
                     hideEntryScreen();
                     updateCampaignHeader();
+                    if (typeof WarpStore !== "undefined") WarpStore.makeNavExternal();
                     WarpStore.subscribe(function () {
                         updateCampaignHeader();
                         checkPlayerMessages();
@@ -270,6 +353,105 @@
             });
         }
 
+        function displayPlayerAnswer(answerB64) {
+            compressAnswer(answerB64).then(function (compressed) {
+                document.getElementById("p2p-answer-output").value = "c1:" + compressed;
+                document.getElementById("p2p-answer-area").style.display = "block";
+
+                var qrDiv = document.getElementById("p2p-answer-qrcode");
+                qrDiv.innerHTML = "";
+                qrDiv.style.cursor = "default";
+                new QRCode(qrDiv, {
+                    text: "c1:" + compressed,
+                    width: 300,
+                    height: 300,
+                    colorDark: "#0f1923",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.L
+                });
+            });
+        }
+
+        async function compressAnswer(str) {
+            var encoder = new TextEncoder();
+            var data = encoder.encode(str);
+            var blob = new Blob([data]);
+            var cs = new CompressionStream("deflate");
+            var compressedStream = blob.stream().pipeThrough(cs);
+            var buf = await new Response(compressedStream).arrayBuffer();
+            var bytes = new Uint8Array(buf);
+            var binary = "";
+            for (var i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+            return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+        }
+
+        var _qrScanner = null;
+
+        function openQrScanner() {
+            var modal = document.getElementById("qr-scanner-modal");
+            var errorEl = document.getElementById("qr-error");
+            modal.style.display = "flex";
+            errorEl.style.display = "none";
+
+            if (typeof Html5Qrcode === "undefined") {
+                errorEl.textContent = "Biblioteca de scanner não carregada. Use o link manualmente.";
+                errorEl.style.display = "block";
+                return;
+            }
+
+            if (_qrScanner) {
+                try { _qrScanner.stop().catch(function () {}); } catch (e) {}
+                _qrScanner = null;
+            }
+
+            _qrScanner = new Html5Qrcode("qr-reader", { verbose: false });
+            _qrScanner.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: function (viewfinderWidth, viewfinderHeight) {
+                        var min = Math.min(viewfinderWidth, viewfinderHeight);
+                        var size = Math.floor(min * 0.75);
+                        return { width: size, height: size };
+                    },
+                    aspectRatio: 1,
+                    experimentalFeatures: { useBarCodeDetectorIfSupported: true }
+                },
+                function (decodedText) {
+                    try { _qrScanner.stop(); } catch (e) {}
+                    closeQrScanner();
+                    document.getElementById("entry-code").value = decodedText;
+                    joinCampaign();
+                },
+                function () {} // ignore scan errors
+            ).catch(function (e) {
+                errorEl.textContent = "Erro na câmera: " + (e.message || e);
+                errorEl.style.display = "block";
+            });
+        }
+
+        function closeQrScanner() {
+            if (_qrScanner) {
+                try { _qrScanner.stop().catch(function () {}); } catch (e) {}
+                _qrScanner = null;
+            }
+            document.getElementById("qr-scanner-modal").style.display = "none";
+        }
+
+        async function decompressOffer(compressedB64) {
+            var safe = compressedB64.replace(/-/g, "+").replace(/_/g, "/");
+            while (safe.length % 4) safe += "=";
+            var binary = atob(safe);
+            var bytes = new Uint8Array(binary.length);
+            for (var i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            var blob = new Blob([bytes]);
+            var ds = new DecompressionStream("deflate");
+            var decompressedStream = blob.stream().pipeThrough(ds);
+            return new Response(decompressedStream).text();
+        }
+
         async function loadDataAndRender() {
             var grid = document.getElementById("catalog-grid");
             if (!grid) return;
@@ -282,8 +464,8 @@
 
                 var _ref = await Promise.race([
                     Promise.all([
-                        fetch("data/robots.json"),
-                        fetch("data/config.json")
+                        fetch("data/robots.json?t=1783272137"),
+                        fetch("data/config.json?t=1783272137")
                     ]),
                     timeout
                 ]);
@@ -306,7 +488,51 @@
             }
         }
 
+        function getParam(name) {
+            var m = new RegExp("[?&]" + name + "=([^&]*)").exec(window.location.search);
+            return m ? decodeURIComponent(m[1].replace(/\+/g, " ")) : null;
+        }
+
         async function initApp() {
+            var joinCode = getParam("join");
+
+            if (joinCode) {
+                // P2P auto-join via ?join= — skip form, enter directly
+                document.getElementById("entry-logo").style.display = "none";
+                document.getElementById("entry-subtitle").style.display = "none";
+                document.getElementById("entry-form").style.display = "none";
+                document.getElementById("entry-hint").style.display = "none";
+                document.getElementById("entry-divider").style.display = "none";
+                document.getElementById("entry-back-mc").style.display = "none";
+                document.getElementById("entry-donate").style.display = "none";
+                document.getElementById("p2p-status-msg").textContent = "Conectando ao mestre...";
+                document.getElementById("p2p-status-msg").style.display = "block";
+
+                WarpStore.init({ mode: "p2p", role: "player" });
+                try {
+                    var resolved = resolveJoinCode(joinCode);
+                    var answerB64 = await (resolved.method === "compact"
+                        ? WarpP2P.joinRoomCompact(resolved.data)
+                        : WarpP2P.joinRoom(resolved.data));
+                    displayPlayerAnswer(answerB64);
+                    document.getElementById("p2p-status-msg").textContent = "Aguardando confirmação do mestre...";
+                    WarpP2P.on("ready", function () {
+                        document.getElementById("p2p-status-msg").textContent = "Conectado! Carregando dados...";
+                        WarpStore.ready().then(function () {
+                            hideEntryScreen();
+                            loadDataAndRender();
+                            checkPlayerMessages();
+                            setInterval(checkPlayerMessages, 2000);
+                        });
+                    });
+                    document.getElementById("entry-code").value = window.location.href;
+                } catch (e) {
+                    document.getElementById("entry-error").textContent = "Erro P2P: " + (e.message || e);
+                    document.getElementById("entry-error").style.display = "block";
+                }
+                return;
+            }
+
             // Read-only mode (GM viewing catalog)
             if (window.location.search.indexOf("readonly=1") !== -1) {
                 _readonly = true;
@@ -343,7 +569,7 @@
                 card.href = item.url;
                 card.target = "_blank";
                 card.rel = "noopener";
-                var badge = item.type === "novidade" ? "✨" : item.type === "video" ? "▶" : "🚀";
+                var badge = item.type === "novidade" ? '<i class="bi bi-stars"></i>' : item.type === "video" ? '<i class="bi bi-play-circle"></i>' : '<i class="bi bi-rocket-takeoff"></i>';
                 card.innerHTML =
                     (item.image ? '<img src="' + item.image + '" alt="" class="news-card-img" loading="lazy">' : "") +
                     '<div class="news-card-body">' +
@@ -468,7 +694,7 @@
                         <span id="energy-counter">${activeEnergy}/${isDroneMode ? droneConfig.maxEnergy : activeChar.maxEnergy}</span>
                     </div>
                     <div class="token-row" id="token-row"></div>
-                    ${_readonly ? '' : `
+                    ${_readonly || (typeof WarpP2P !== "undefined" && WarpP2P.getRole() === "player") ? '' : `
                     <div class="energy-actions">
                         <button class="roll-btn roll-btn-sm" onclick="adjustEnergy(-1)">Gastar Energia (-1)</button>
                         <button class="roll-btn roll-btn-sm" onclick="adjustEnergy(1)">Adicionar Energia (+1)</button>
@@ -476,7 +702,7 @@
                     `}
                 </div>
 
-                ${_readonly ? '' : `
+                ${_readonly || (typeof WarpP2P !== "undefined" && WarpP2P.getRole() === "player") ? '' : `
                 <div class="roller-controls">
                     <label class="label-sm">Aplicar modificador à rolagem:</label>
                     <select id="roll-modifier" class="selector-input">
@@ -843,15 +1069,25 @@
             const isSuccess = total >= dc;
             const statusStr = isSuccess ? "SUCESSO" : "FALHA";
 
+            const _isP2pPlayer = typeof WarpP2P !== "undefined" && WarpP2P.getRole() === "player";
+
             let message, color;
             if (hope === fear) {
                 message = `CRÍTICO! ${statusStr} com grande vantagem táctica.`;
                 color = "var(--drone-color)";
-                adjustEnergy(1);
+                if (_isP2pPlayer) {
+                    WarpP2P.send("gm", { type: "diceResult", robotId: activeChar.id, hope, fear, mode, total, dc, isCrit: true });
+                } else {
+                    adjustEnergy(1);
+                }
             } else if (hope > fear) {
                 message = `${statusStr} COM ESPERANÇA! Ação executada com benefício colateral.`;
                 color = "var(--accent-hope)";
-                adjustEnergy(1);
+                if (_isP2pPlayer) {
+                    WarpP2P.send("gm", { type: "diceResult", robotId: activeChar.id, hope, fear, mode, total, dc, isCrit: false });
+                } else {
+                    adjustEnergy(1);
+                }
             } else {
                 message = `${statusStr} COM MEDO! Surge uma complicação no cenário ou de energia.`;
                 color = "var(--accent-fear)";
@@ -893,7 +1129,7 @@
 
         // ServiceWorker
         if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("/sw.js").catch(function () {});
+            navigator.serviceWorker.register("/sw.js?v=3").catch(function () {});
         }
     </script>
 
@@ -929,7 +1165,7 @@
 
     <div class="modal-overlay" id="msg-modal" style="display:none">
         <div class="modal-card" style="max-width:360px">
-            <div class="modal-title">📨 Mensagem do Mestre</div>
+            <div class="modal-title"><i class="bi bi-envelope-open"></i> Mensagem do Mestre</div>
             <div id="msg-content" style="font-size:0.85rem;color:#a3b1c1;margin:10px 0 16px;line-height:1.5"></div>
             <div class="btn-row">
                 <button class="btn btn-secondary" onclick="dismissMsgModal()">Fechar</button>

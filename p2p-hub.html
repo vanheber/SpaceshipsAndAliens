@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="js/p2p.js"></script>
+<style>
+body{background:#0a0a1e;color:#e0e0e0;font-family:monospace;font-size:12px;padding:10px;margin:0}
+#log{max-height:90vh;overflow-y:auto;word-break:break-all}
+</style>
+</head>
+<body>
+<div id="log">WARP-Unit P2P Hub — ativo</div>
+<script>
+var bc = new BroadcastChannel("warp-p2p");
+var log = document.getElementById("log");
+
+function addLog(t) {
+    log.innerHTML += "<br>" + t;
+}
+
+bc.onmessage = function (e) {
+    var m = e.data;
+    if (!m || m.type !== "p2p-cmd") return;
+
+    if (m.cmd === "createOffer") {
+        addLog("createOffer");
+        WarpP2P.createOffer().then(function (r) {
+            bc.postMessage({ type: "p2p-res", id: m.id, peerId: r.peerId, offer: r.offer, compact: r.compact });
+            addLog("offer pronto");
+        }).catch(function (e) {
+            bc.postMessage({ type: "p2p-res", id: m.id, error: e.message });
+            addLog("erro: " + e.message);
+        });
+    } else if (m.cmd === "acceptAnswer") {
+        addLog("acceptAnswer");
+        WarpP2P.acceptAnswer(m.peerId, m.answer).then(function () {
+            bc.postMessage({ type: "p2p-res", id: m.id });
+        }).catch(function (e) {
+            bc.postMessage({ type: "p2p-res", id: m.id, error: e.message });
+        });
+    } else if (m.cmd === "joinRoom") {
+        WarpP2P.joinRoom(m.offer).then(function (answer) {
+            bc.postMessage({ type: "p2p-res", id: m.id, answer: answer });
+        }).catch(function (e) {
+            bc.postMessage({ type: "p2p-res", id: m.id, error: e.message });
+        });
+    } else if (m.cmd === "joinRoomCompact") {
+        addLog("joinRoomCompact");
+        WarpP2P.joinRoomCompact(m.compact).then(function (answer) {
+            bc.postMessage({ type: "p2p-res", id: m.id, answer: answer });
+            addLog("answer pronto");
+        }).catch(function (e) {
+            bc.postMessage({ type: "p2p-res", id: m.id, error: e.message });
+            addLog("erro: " + e.message);
+        });
+    } else if (m.cmd === "send") {
+        WarpP2P.send(m.peerId, m.data);
+    } else if (m.cmd === "close") {
+        WarpP2P.close();
+    } else if (m.cmd === "ping") {
+        bc.postMessage({ type: "p2p-event", event: "pong", role: WarpP2P.getRole(), open: WarpP2P.isOpen() });
+    }
+};
+
+WarpP2P.on("ready", function (peerId) {
+    addLog("conectado: " + peerId);
+    bc.postMessage({ type: "p2p-event", event: "ready", peerId: peerId });
+});
+WarpP2P.on("close", function (peerId) {
+    addLog("desconectado: " + peerId);
+    bc.postMessage({ type: "p2p-event", event: "close", peerId: peerId });
+});
+WarpP2P.on("message", function (msg) {
+    bc.postMessage({ type: "p2p-event", event: "message", data: msg });
+});
+
+window.addEventListener("beforeunload", function () { WarpP2P.close(); });
+</script>
+</body>
+</html>

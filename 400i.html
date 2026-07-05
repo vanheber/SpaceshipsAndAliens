@@ -4,9 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/favicon.png">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>WARP-Unit | Nave Auxiliar — Origin 400i</title>
-    <link rel="stylesheet" href="warp.css">
-    <script src="js/store.js"></script>
+    <link rel="stylesheet" href="warp.css?t=1783272137">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="js/store.js?t=1783272137"></script>
 
 </head>
 
@@ -14,10 +19,10 @@
 
 <div class="warp-nav">
     <button class="warp-nav-menu" onclick="document.getElementById('warp-menu-overlay').classList.add('open')" aria-label="Menu">&#9776;</button>
-    <img src="img/logo.svg" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
+    <img src="img/logo.svg?t=1783272137" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
 </div>
 <div id="warp-menu-overlay" class="warp-nav-overlay" onclick="this.classList.remove('open')">
-    <button class="warp-nav-close" onclick="document.getElementById('warp-menu-overlay').classList.remove('open')">&#10005;</button>
+    <button class="warp-nav-close" onclick="document.getElementById('warp-menu-overlay').classList.remove('open')"><i class="bi bi-x-lg"></i></button>
     <nav onclick="event.stopPropagation()">
         <a href="index.html">Início</a>
         <a href="mothership.html">Nave-Mãe</a>
@@ -27,6 +32,7 @@
         <a href="oneshot.html">Gerador de Missão</a>
         <a href="equipamento.html">Equipamento</a>
         <a href="diariodebordo.html">Diário de Bordo</a>
+        <a href="arquivadas.html">Campanhas Arquivadas</a>
     </nav>
 </div>
 
@@ -53,7 +59,7 @@
             <div class="ms-hero-img">
                 <img src="img/400i-hero.webp" alt="Origin 400i cruzeiro sobre planeta" loading="lazy">
             </div>
-            <a href="https://www.youtube.com/watch?v=SNtwvxjF4Zg" target="_blank" class="yt-link">▶
+            <a href="https://www.youtube.com/watch?v=SNtwvxjF4Zg" target="_blank" class="yt-link"><i class="bi bi-play-circle"></i>
                 Visão geral da 400i no YouTube</a>
         </div>
 
@@ -90,71 +96,6 @@
                     <div class="spec-label">Computador de Bordo</div>
                     <div class="spec-val">Origin M50</div>
                     <div class="spec-sub">Navegação e Varredura</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- RECURSOS DE BORDO -->
-        <div class="ms-card">
-            <div class="ms-title">Recursos de Bordo</div>
-            <p class="section-subtitle" id="res-subtitle">
-                Suprimentos, combustível, munição, blindagem e escudo disponíveis para a missão. Clique nas células
-                para consumir ou abastecer.
-            </p>
-
-            <!-- Suprimentos -->
-            <div class="res-card">
-                <div class="res-header">
-                    <span class="res-name">Suprimentos</span>
-                    <span class="res-counter sup" id="res-sup-counter">0/0</span>
-                </div>
-                <div class="res-token-row" id="res-sup-row"></div>
-                <div class="res-actions">
-                    <button class="res-btn sup" onclick="adjustRes('sup', -1)">Consumir (-1)</button>
-                    <button class="res-btn sup" onclick="adjustRes('sup', 1)">Abastecer (+1)</button>
-                    <button class="res-btn sup ml-auto" onclick="resetRes('sup')">Recarregar</button>
-                </div>
-            </div>
-
-            <!-- Combustível -->
-            <div class="res-card">
-                <div class="res-header">
-                    <span class="res-name">Combustível</span>
-                    <span class="res-counter fuel" id="res-fuel-counter">0/0</span>
-                </div>
-                <div class="res-token-row" id="res-fuel-row"></div>
-                <div class="res-actions">
-                    <button class="res-btn fuel" onclick="adjustRes('fuel', -1)">Consumir (-1)</button>
-                    <button class="res-btn fuel" onclick="adjustRes('fuel', 1)">Abastecer (+1)</button>
-                    <button class="res-btn fuel ml-auto" onclick="resetRes('fuel')">Recarregar</button>
-                </div>
-            </div>
-
-            <!-- Munição -->
-            <div class="res-card">
-                <div class="res-header">
-                    <span class="res-name">Munição</span>
-                    <span class="res-counter ammo" id="res-ammo-counter">0/0</span>
-                </div>
-                <div class="res-token-row" id="res-ammo-row"></div>
-                <div class="res-actions">
-                    <button class="res-btn ammo" onclick="adjustRes('ammo', -1)">Consumir (-1)</button>
-                    <button class="res-btn ammo" onclick="adjustRes('ammo', 1)">Abastecer (+1)</button>
-                    <button class="res-btn ammo ml-auto" onclick="resetRes('ammo')">Recarregar</button>
-                </div>
-            </div>
-
-            <!-- Blindagem / Escudo -->
-            <div class="res-card">
-                <div class="res-header">
-                    <span class="res-name">Blindagem / Escudo</span>
-                    <span class="res-counter defense" id="res-defense-counter">0/0</span>
-                </div>
-                <div class="res-token-row" id="res-defense-row"></div>
-                <div class="res-actions">
-                    <button class="res-btn defense" onclick="adjustRes('defense', -1)">Consumir (-1)</button>
-                    <button class="res-btn defense" onclick="adjustRes('defense', 1)">Abastecer (+1)</button>
-                    <button class="res-btn defense ml-auto" onclick="resetRes('defense')">Recarregar</button>
                 </div>
             </div>
         </div>
@@ -237,7 +178,7 @@
                         ferramenta de reconhecimento da tripulação. Sua plataforma de pouso retrátil permite
                         embarque e desembarque rápidos em qualquer terreno.</p>
                     <a href="https://robertsspaceindustries.com/media/apdq170qq6l0fr/source/MRAI_Pulse_PulseLX_Explorer_14.mp4" target="_blank"
-                        class="yt-link-sm">▶ Mirai Pulse em ação</a>
+                        class="yt-link-sm"><i class="bi bi-play-circle"></i> Mirai Pulse em ação</a>
                 </div>
                 <div class="vehicle-img gallery-item">
                     <img src="img/pulse-iso.webp" alt="Mirai Pulse isométrica" loading="lazy">
@@ -338,89 +279,13 @@
             }
         }, { passive: true });
 
-        // ===== RECURSOS DE BORDO =====
-        var isReadOnly = typeof WarpStore !== "undefined" && WarpStore.mode === "remote"
-            && !(WarpStore.getRemoteOpts() && WarpStore.getRemoteOpts().isGM);
-
-        if (isReadOnly) {
-            document.body.classList.add("readonly-mode");
-            document.getElementById("res-subtitle").textContent =
-                "Apenas o mestre pode alterar os recursos. Modo leitura.";
-        }
-        const RES_DEFAULTS = {
-            sup: { current: 4, max: 8 },
-            fuel: { current: 6, max: 6 },
-            ammo: { current: 4, max: 4 },
-            defense: { current: 8, max: 8 }
-        };
-
-        let resState = {};
-
-        function loadResState() {
-            WarpStore.init({ mode: "local" });
-            var saved = WarpStore.get("ship400i");
-            resState = {};
-            Object.keys(RES_DEFAULTS).forEach(function (key) {
-                if (saved && saved[key] && typeof saved[key].current === "number") {
-                    resState[key] = { current: saved[key].current, max: saved[key].max };
-                } else {
-                    resState[key] = { current: RES_DEFAULTS[key].current, max: RES_DEFAULTS[key].max };
-                }
-            });
-        }
-
-        function saveResState() {
-            WarpStore.set("ship400i", resState);
-        }
-
-        function renderResources() {
-            Object.keys(RES_DEFAULTS).forEach(key => {
-                const data = resState[key];
-                const row = document.getElementById(`res-${key}-row`);
-                const counter = document.getElementById(`res-${key}-counter`);
-                if (!row) return;
-                row.innerHTML = "";
-                for (let i = 0; i < data.max; i++) {
-                    const token = document.createElement("div");
-                    let cls = key;
-                    if (key === 'defense') {
-                        const isSpent = i >= data.current;
-                        const color = i < 3 ? '#409eff' : '#67c23a';
-                        token.style.backgroundColor = isSpent ? '#0b0f14' : color;
-                        token.style.boxShadow = isSpent ? 'none' : `0 0 6px ${color}66`;
-                        token.style.borderColor = isSpent ? 'var(--border-color)' : 'transparent';
-                        cls = '';
-                    } else {
-                        cls = key;
-                    }
-                    token.className = `res-token ${cls} ${i >= data.current ? 'spent' : ''}`.trim();
-                    if (!isReadOnly) token.addEventListener("click", () => setResource(key, i + 1));
-                    row.appendChild(token);
-                }
-                counter.textContent = `${data.current}/${data.max}`;
-            });
-        }
-
-        function setResource(key, val) {
-            const max = resState[key].max;
-            resState[key].current = Math.max(0, Math.min(max, val));
-            saveResState();
-            renderResources();
-        }
-
-        function adjustRes(key, amount) {
-            setResource(key, resState[key].current + amount);
-        }
-
-        function resetRes(key) {
-            resState[key].current = RES_DEFAULTS[key].current;
-            saveResState();
-            renderResources();
-        }
-
-        loadResState();
-        renderResources();
     </script>
+
+<script>
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js?v=3").catch(function () {});
+}
+</script>
 
 </body>
 

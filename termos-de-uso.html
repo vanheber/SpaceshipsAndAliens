@@ -2,9 +2,13 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WARP-Unit — Termos de Uso</title>
-    <link rel="stylesheet" href="warp.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/favicon.png">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="warp.css?t=1783272137">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         .legal-page { max-width: 700px; width: 100%; margin: 0 auto; padding: 0 16px 40px; }
         .legal-page h1 { color: var(--accent-hope); font-size: 1.3rem; margin-bottom: 8px; }
@@ -18,10 +22,10 @@
 
 <div class="warp-nav">
     <button class="warp-nav-menu" onclick="document.getElementById('warp-menu-overlay').classList.add('open')" aria-label="Menu">&#9776;</button>
-    <img src="img/logo.svg" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
+    <img src="img/logo.svg?t=1783272137" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
 </div>
 <div id="warp-menu-overlay" class="warp-nav-overlay" onclick="this.classList.remove('open')">
-    <button class="warp-nav-close" onclick="document.getElementById('warp-menu-overlay').classList.remove('open')">&#10005;</button>
+    <button class="warp-nav-close" onclick="document.getElementById('warp-menu-overlay').classList.remove('open')"><i class="bi bi-x-lg"></i></button>
     <nav onclick="event.stopPropagation()">
         <a href="index.html">Início</a>
         <a href="mothership.html">Nave-Mãe</a>
@@ -31,6 +35,7 @@
         <a href="oneshot.html">Gerador de Missão</a>
         <a href="equipamento.html">Equipamento</a>
         <a href="diariodebordo.html">Diário de Bordo</a>
+        <a href="arquivadas.html">Campanhas Arquivadas</a>
     </nav>
 </div>
 
@@ -69,6 +74,12 @@
     &nbsp;·&nbsp;
     <a href="licenciamento.html">Licenciamento</a>
 </footer>
+
+<script>
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js?v=3").catch(function () {});
+}
+</script>
 
 </body>
 </html>

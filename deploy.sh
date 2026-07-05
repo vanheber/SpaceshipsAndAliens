@@ -38,6 +38,7 @@ echo "Deploy para $FTP_USER@$FTP_HOST:$FTP_PATH ..."
 
 lftp -u "$FTP_USER","$FTP_PASSWORD" -p "$PORT" "$FTP_HOST" <<EOF
 set ftp:ssl-allow no
+set ssl:verify-certificate no
 set mirror:use-pget-n 5
 mirror --reverse --delete --verbose \
     --exclude .git/ \

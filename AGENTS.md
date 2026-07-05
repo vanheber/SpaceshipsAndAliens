@@ -49,6 +49,9 @@ Antes de escrever código, pare no primeiro degrau que segurar:
 | Sanitização de IA | `oneshot.html` | `esc()` helper HTML-escape antes de innerHTML com conteúdo gerado por IA |
 | Prompt injection | `oneshot.html` | Dados gerados por IA no prompt seguinte delimitados com `[DATA]...[/DATA]` |
 | Rate limit PHP | `api/rate-limit.php` | Arquivo-based, sem dependências; `ponytail:` nomeia ceiling de race condition |
+| Service Worker cache | `sw.js` | Network-first pra navegações (HTML), cache-first pra assets estáticos; `?v=N` no registration URL |
+| SW version bust | `.htaccess` + `*.html` | `Cache-Control: no-cache` pra sw.js + `register("/sw.js?v=N")` em todas as páginas HTML |
+| SW on all pages | `*.html` | Registrar SW em TODAS as páginas HTML, não só na index — senão navegação direta pra oneshot/mothership/etc não é interceptada |
 
 **Rejeitados por decisão (não auditar de novo):**
 - Three.js dispose: reinit raro (só page reload), impacto baixo

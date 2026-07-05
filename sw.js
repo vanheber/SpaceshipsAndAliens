@@ -1,40 +1,10 @@
-// WARP-Unit ServiceWorker — cache-first offline
-// ponytail: caches everything on install, no runtime caching.
-//           Upgrade: stale-while-revalidate for data/*.json.
+// WARP-Unit ServiceWorker — network-first navigations, cache-first static
+// ponytail: no runtime cache invalidation. Upgrade: versioned URLs + max-age in cache headers.
 
-var CACHE = "warp-v2";
-var FILES = [
-  "/",
-  "/index.html",
-  "/missioncontrol.html",
-  "/oneshot.html",
-  "/mothership.html",
-  "/400i.html",
-  "/equipamento.html",
-  "/diariodebordo.html",
-  "/warp.css",
-  "/js/store.js",
-  "/js/p2p.js",
-  "/js/db.js",
-  "/data/robots.json",
-  "/data/config.json",
-  "/data/planet-types.json",
-  "/data/planet-params.json",
-  "/data/planet-names.json",
-  "/data/discoveries.json",
-  "/data/events-params.json",
-  "/data/events-categories.json",
-  "/data/enemies.json",
-];
+var CACHE = "warp-v3";
 
-self.addEventListener("install", function (e) {
-  e.waitUntil(
-    caches.open(CACHE).then(function (cache) {
-      return Promise.allSettled(FILES.map(function (url) {
-        return cache.add(url).catch(function () {});
-      }));
-    }).then(function () { return self.skipWaiting(); })
-  );
+self.addEventListener("install", function () {
+  self.skipWaiting();
 });
 
 self.addEventListener("activate", function (e) {
@@ -47,9 +17,32 @@ self.addEventListener("activate", function (e) {
 
 self.addEventListener("fetch", function (e) {
   if (e.request.method !== "GET") return;
+  var isNav = e.request.mode === "navigate";
   e.respondWith(
-    caches.match(e.request).then(function (r) {
-      return r || fetch(e.request);
+    (isNav ? networkFirst(e.request) : cacheFirst(e.request)).catch(function () {
+      return isNav ? caches.match(e.request) : new Response("", { status: 503 });
     })
   );
 });
+
+function networkFirst(req) {
+  return fetch(req).then(function (res) {
+    if (res.ok) {
+      var copy = res.clone();
+      caches.open(CACHE).then(function (c) { c.put(req, copy); });
+    }
+    return res;
+  });
+}
+
+function cacheFirst(req) {
+  return caches.match(req).then(function (r) {
+    return r || fetch(req).then(function (res) {
+      if (res.ok) {
+        var copy = res.clone();
+        caches.open(CACHE).then(function (c) { c.put(req, copy); });
+      }
+      return res;
+    });
+  });
+}

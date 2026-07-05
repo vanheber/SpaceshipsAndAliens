@@ -88,9 +88,8 @@
 
     if (_mode === "p2p") {
       _p2pSave(path);
-    } else {
-      _saveLocal();
     }
+    _saveLocal();
     _broadcast();
     _notify(_state);
   }
@@ -148,6 +147,10 @@
       if (delta !== 0) {
         WarpP2P.send("gm", { type: "request", robotId: robotId, amount: delta });
       }
+    }
+    // Notify GM when player picks/changes their android
+    if (path === "activeRobot") {
+      WarpP2P.send("gm", { type: "hello", robotId: _state.activeRobot || null });
     }
   }
 
@@ -239,6 +242,7 @@
 
       if (_mode === "p2p") {
         _remoteOpts = opts;
+        WarpStore.setP2pSession(opts.role);
         _state = deepClone(DEFAULTS);
         if (opts.role === "gm") {
           _migrate();
@@ -259,6 +263,23 @@
                 _saveLocal();
                 _broadcast();
                 _notify(_state);
+              } else if (msg.type === "diceResult") {
+                _state.pendingActions = _state.pendingActions || [];
+                _state.pendingActions.push({
+                  id: "dice-" + Date.now().toString(36),
+                  type: "energyIncrement",
+                  robotId: msg.robotId,
+                  amount: 1,
+                  dice: { hope: msg.hope, fear: msg.fear, mode: msg.mode, total: msg.total, dc: msg.dc, isCrit: !!msg.isCrit },
+                  requestedAt: new Date().toISOString(),
+                });
+                _saveLocal();
+                _broadcast();
+                _notify(_state);
+              } else if (msg.type === "hello") {
+                window.dispatchEvent(new CustomEvent("warp-p2p-hello", {
+                  detail: { peerId: msg._peerId, robotId: msg.robotId }
+                }));
               } else if (msg.type === "chat") {
                 _state.messages = _state.messages || [];
                 _state.messages.push({
@@ -286,8 +307,14 @@
                 if (Array.isArray(msg.sessions)) _state.sessions = msg.sessions;
                 if (Array.isArray(msg.messages)) _state.messages = msg.messages;
                 if (Array.isArray(msg.pendingActions)) _state.pendingActions = msg.pendingActions;
+                _saveLocal();
                 _notify(_state);
-                if (!synced) { synced = true; _p2pSynced(); }
+                if (!synced) {
+                  synced = true;
+                  _p2pSynced();
+                  // Announce presence to GM after first sync
+                  WarpP2P.send("gm", { type: "hello", robotId: _state.activeRobot || null });
+                }
               }
             });
           }
@@ -394,6 +421,37 @@
 
     getRemoteOpts: function () {
       return _remoteOpts ? deepClone(_remoteOpts) : null;
+    },
+
+    setP2pSession: function (role) {
+      try {
+        sessionStorage.setItem("warp-p2p-active", "true");
+        sessionStorage.setItem("warp-p2p-role", role);
+      } catch (e) {}
+    },
+
+    clearP2pSession: function () {
+      try {
+        sessionStorage.removeItem("warp-p2p-active");
+        sessionStorage.removeItem("warp-p2p-role");
+      } catch (e) {}
+    },
+
+    isP2pActive: function () {
+      try { return sessionStorage.getItem("warp-p2p-active") === "true"; } catch (e) { return false; }
+    },
+
+    getP2pRole: function () {
+      try { return sessionStorage.getItem("warp-p2p-role") || null; } catch (e) { return null; }
+    },
+
+    makeNavExternal: function () {
+      document.querySelectorAll('.warp-nav-overlay a, .warp-nav a').forEach(function (a) {
+        if (a.getAttribute("href") && !a.getAttribute("target")) {
+          a.setAttribute("target", "_blank");
+          a.setAttribute("rel", "noopener");
+        }
+      });
     },
 
     destroy: function () {
