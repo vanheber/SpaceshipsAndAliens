@@ -23,11 +23,14 @@
 <body>
 
     <div id="warp-nav" class="warp-nav" style="display:none">
-        <button class="warp-nav-menu" onclick="document.getElementById('warp-menu-overlay').classList.add('open')" aria-label="Menu">&#9776;</button>
+        <button class="warp-nav-menu" onclick="document.getElementById('warp-menu-overlay').classList.add('open')"
+            aria-label="Menu">&#9776;</button>
         <img src="img/logo.svg?t=1783272137" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
     </div>
     <div id="warp-menu-overlay" class="warp-nav-overlay" onclick="this.classList.remove('open')">
-        <button class="warp-nav-close" onclick="document.getElementById('warp-menu-overlay').classList.remove('open')"><i class="bi bi-x-lg"></i></button>
+        <button class="warp-nav-close"
+            onclick="document.getElementById('warp-menu-overlay').classList.remove('open')"><i
+                class="bi bi-x-lg"></i></button>
         <nav onclick="event.stopPropagation()">
             <a href="index.html">Início</a>
             <a href="mothership.html">Nave-Mãe</a>
@@ -36,36 +39,46 @@
             <a href="index.html?readonly=1">Catálogo de Unidades</a>
             <a href="oneshot.html">Gerador de Missão</a>
             <a href="equipamento.html">Equipamento</a>
-        <a href="diariodebordo.html">Diário de Bordo</a>
-        <a href="arquivadas.html">Campanhas Arquivadas</a>
-    </nav>
+            <a href="diariodebordo.html">Diário de Bordo</a>
+            <a href="arquivadas.html">Campanhas Arquivadas</a>
+            <a href="shared-map.html">Mini-Mapa</a>
+            <a href="login.html" class="auth-menu-link">Entrar</a>
+        </nav>
     </div>
 
     <div id="campaign-header" class="campaign-header" style="display:none">
         <span class="campaign-name" id="campaign-name-display"></span>
         <button class="btn btn-xs" id="msg-open-btn" onclick="openMsgSend()"
-            style="background:rgba(45,212,191,0.12);color:var(--teal);border:1px solid rgba(45,212,191,0.3);margin-right:4px"><i class="bi bi-envelope"></i></button>
+            style="background:rgba(45,212,191,0.12);color:var(--teal);border:1px solid rgba(45,212,191,0.3);margin-right:4px"><i
+                class="bi bi-envelope"></i></button>
         <span style="flex:1"></span>
         <button class="btn btn-xs btn-danger" id="leave-btn" onclick="showLeaveModal()">Sair</button>
     </div>
 
     <div id="entry-screen" class="entry-screen active">
-        <img src="img/logo.svg?t=1783272137" alt="WARP-Unit" id="entry-logo" class="entry-logo" width="200" height="auto">
+        <img src="img/logo.svg?t=1783272137" alt="WARP-Unit" id="entry-logo" class="entry-logo" width="200"
+            height="auto">
         <p id="entry-subtitle" class="entry-subtitle">Sistema de Exploração Interestelar</p>
         <div id="entry-form" class="entry-form">
             <input type="text" id="entry-code" placeholder="Cole o link do mestre aqui…" autocomplete="off" autofocus>
             <div class="btn-row" style="gap:6px">
                 <button class="btn btn-primary" onclick="joinCampaign()">Entrar no jogo</button>
-                <button class="btn btn-secondary" onclick="openQrScanner()" style="font-size:0.82rem;padding:8px 14px"><i class="bi bi-camera"></i> Entrar por QrCode</button>
+                <button class="btn btn-secondary" onclick="openQrScanner()"
+                    style="font-size:0.82rem;padding:8px 14px"><i class="bi bi-camera"></i> Entrar por QrCode</button>
             </div>
         </div>
-        <div id="qr-scanner-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;align-items:center;justify-content:center">
-            <div style="width:100%;max-width:360px;background:var(--card-bg);border:1px solid var(--border-color);padding:16px;border-radius:8px">
+        <div id="qr-scanner-modal"
+            style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;align-items:center;justify-content:center">
+            <div
+                style="width:100%;max-width:360px;background:var(--card-bg);border:1px solid var(--border-color);padding:16px;border-radius:8px">
                 <div style="text-align:right;margin-bottom:6px">
-                    <button class="btn btn-xs btn-secondary" onclick="closeQrScanner()" style="font-size:0.75rem">Fechar</button>
+                    <button class="btn btn-xs btn-secondary" onclick="closeQrScanner()"
+                        style="font-size:0.75rem">Fechar</button>
                 </div>
-                <div id="qr-reader" style="width:100%;min-height:280px;background:#000;border-radius:4px;overflow:hidden"></div>
-                <div id="qr-error" style="display:none;color:#f56c6c;font-size:0.75rem;margin-top:8px;text-align:center"></div>
+                <div id="qr-reader"
+                    style="width:100%;min-height:280px;background:#000;border-radius:4px;overflow:hidden"></div>
+                <div id="qr-error"
+                    style="display:none;color:#f56c6c;font-size:0.75rem;margin-top:8px;text-align:center"></div>
             </div>
         </div>
         <div id="p2p-answer-area" style="display:none;margin:12px auto 0;max-width:340px;text-align:left">
@@ -73,17 +86,20 @@
             <textarea id="p2p-answer-output" readonly rows="3"
                 style="width:100%;font-size:0.7rem;padding:6px;background:var(--card-bg);border:1px solid var(--teal);border-radius:6px;color:var(--teal);resize:none;font-family:monospace;box-sizing:border-box"></textarea>
             <div id="p2p-answer-qrcode-container" style="text-align:center;margin-top:10px">
-                <div id="p2p-answer-qrcode" style="display:inline-block;padding:8px;background:white;border-radius:6px"></div>
+                <div id="p2p-answer-qrcode" style="display:inline-block;padding:8px;background:white;border-radius:6px">
+                </div>
                 <div style="font-size:0.65rem;color:#8b949e;margin-top:4px">Ou toque no QR Code acima para ampliar</div>
             </div>
         </div>
 
-        <div id="p2p-status-msg" style="display:none;font-size:0.85rem;color:var(--teal);margin-top:12px;text-align:center"></div>
+        <div id="p2p-status-msg"
+            style="display:none;font-size:0.85rem;color:var(--teal);margin-top:12px;text-align:center"></div>
         <p id="entry-error" style="display:none;color:#f56c6c;font-size:0.8rem;margin-top:8px"></p>
         <p id="entry-hint" class="entry-hint">Cole o link P2P fornecido pelo mestre para conectar.</p>
         <div id="entry-divider" class="entry-divider"></div>
         <a href="missioncontrol.html" id="entry-back-mc" class="btn btn-secondary">Entrar como Mestre do Jogo</a>
-        <a href="https://runaris.com.br/donate" target="_blank" rel="noopener" id="entry-donate" class="entry-donate"><i class="bi bi-cup-hot"></i> Apoie o
+        <a href="https://www.paypal.com/donate/?business=vanheber@gmail.com" target="_blank" rel="noopener"
+            id="entry-donate" class="entry-donate"><i class="bi bi-cup-hot"></i> Apoie o
             Projeto</a>
     </div>
 
@@ -152,7 +168,7 @@
                 document.getElementById("msg-open-btn").style.display = "none";
                 var lb = document.getElementById("leave-btn");
                 lb.textContent = "Fechar catálogo";
-                lb.onclick = function() { window.close(); };
+                lb.onclick = function () { window.close(); };
                 h.style.display = "flex";
                 return;
             }
@@ -298,7 +314,7 @@
 
             // Connect to P2P hub (popup) so reloads don't kill WebRTC
             if (typeof WarpP2P !== "undefined" && WarpP2P.hubConnect) {
-                WarpP2P.hubConnect().catch(function () {});
+                WarpP2P.hubConnect().catch(function () { });
             }
 
             // Hide entry form, show only waiting area
@@ -400,7 +416,7 @@
             }
 
             if (_qrScanner) {
-                try { _qrScanner.stop().catch(function () {}); } catch (e) {}
+                try { _qrScanner.stop().catch(function () { }); } catch (e) { }
                 _qrScanner = null;
             }
 
@@ -418,12 +434,12 @@
                     experimentalFeatures: { useBarCodeDetectorIfSupported: true }
                 },
                 function (decodedText) {
-                    try { _qrScanner.stop(); } catch (e) {}
+                    try { _qrScanner.stop(); } catch (e) { }
                     closeQrScanner();
                     document.getElementById("entry-code").value = decodedText;
                     joinCampaign();
                 },
-                function () {} // ignore scan errors
+                function () { } // ignore scan errors
             ).catch(function (e) {
                 errorEl.textContent = "Erro na câmera: " + (e.message || e);
                 errorEl.style.display = "block";
@@ -432,7 +448,7 @@
 
         function closeQrScanner() {
             if (_qrScanner) {
-                try { _qrScanner.stop().catch(function () {}); } catch (e) {}
+                try { _qrScanner.stop().catch(function () { }); } catch (e) { }
                 _qrScanner = null;
             }
             document.getElementById("qr-scanner-modal").style.display = "none";
@@ -1129,7 +1145,7 @@
 
         // ServiceWorker
         if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("/sw.js?v=3").catch(function () {});
+            navigator.serviceWorker.register("/sw.js?v=3").catch(function () { });
         }
     </script>
 
@@ -1184,6 +1200,15 @@
             </div>
         </div>
     </div>
+<script>
+(function () {
+    var link = document.querySelector('.auth-menu-link');
+    if (!link) return;
+    fetch('api/auth.php', { method: 'GET', credentials: 'include' })
+        .then(function (r) { if (r.ok) link.textContent = 'Sair'; })
+        .catch(function () {});
+})();
+</script>
 </body>
 
 </html>

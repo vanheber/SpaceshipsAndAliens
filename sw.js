@@ -1,7 +1,7 @@
 // WARP-Unit ServiceWorker — network-first navigations, cache-first static
 // ponytail: no runtime cache invalidation. Upgrade: versioned URLs + max-age in cache headers.
 
-var CACHE = "warp-v3";
+var CACHE = "warp-v4";
 
 self.addEventListener("install", function () {
   self.skipWaiting();

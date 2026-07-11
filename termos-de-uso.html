@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="img/favicon.png">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -10,76 +11,160 @@
     <link rel="stylesheet" href="warp.css?t=1783272137">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
-        .legal-page { max-width: 700px; width: 100%; margin: 0 auto; padding: 0 16px 40px; }
-        .legal-page h1 { color: var(--accent-hope); font-size: 1.3rem; margin-bottom: 8px; }
-        .legal-page h2 { color: var(--text-color); font-size: 1rem; margin-top: 28px; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border-color); }
-        .legal-page p, .legal-page li { font-size: 0.84rem; color: #a3b1c1; line-height: 1.7; }
-        .legal-page ul { padding-left: 20px; }
-        .legal-page a { color: var(--accent-hope); }
+        .legal-page {
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 16px 40px;
+        }
+
+        .legal-page h1 {
+            color: var(--accent-hope);
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        .legal-page h2 {
+            color: var(--text-color);
+            font-size: 1rem;
+            margin-top: 28px;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .legal-page p,
+        .legal-page li {
+            font-size: 0.84rem;
+            color: #a3b1c1;
+            line-height: 1.7;
+        }
+
+        .legal-page ul {
+            padding-left: 20px;
+        }
+
+        .legal-page a {
+            color: var(--accent-hope);
+        }
     </style>
 </head>
+
 <body class="warp-has-nav">
 
-<div class="warp-nav">
-    <button class="warp-nav-menu" onclick="document.getElementById('warp-menu-overlay').classList.add('open')" aria-label="Menu">&#9776;</button>
-    <img src="img/logo.svg?t=1783272137" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
-</div>
-<div id="warp-menu-overlay" class="warp-nav-overlay" onclick="this.classList.remove('open')">
-    <button class="warp-nav-close" onclick="document.getElementById('warp-menu-overlay').classList.remove('open')"><i class="bi bi-x-lg"></i></button>
-    <nav onclick="event.stopPropagation()">
-        <a href="index.html">Início</a>
-        <a href="mothership.html">Nave-Mãe</a>
-        <a href="400i.html">Nave Auxiliar</a>
-        <a href="missioncontrol.html">Controle da Missão</a>
-        <a href="index.html?readonly=1">Catálogo de Unidades</a>
-        <a href="oneshot.html">Gerador de Missão</a>
-        <a href="equipamento.html">Equipamento</a>
-        <a href="diariodebordo.html">Diário de Bordo</a>
-        <a href="arquivadas.html">Campanhas Arquivadas</a>
-    </nav>
-</div>
+    <div class="warp-nav">
+        <button class="warp-nav-menu" onclick="document.getElementById('warp-menu-overlay').classList.add('open')"
+            aria-label="Menu">&#9776;</button>
+        <img src="img/logo.svg?t=1783272137" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
+    </div>
+    <div id="warp-menu-overlay" class="warp-nav-overlay" onclick="this.classList.remove('open')">
+        <button class="warp-nav-close"
+            onclick="document.getElementById('warp-menu-overlay').classList.remove('open')"><i
+                class="bi bi-x-lg"></i></button>
+        <nav onclick="event.stopPropagation()">
+            <a href="index.html">Início</a>
+            <a href="mothership.html">Nave-Mãe</a>
+            <a href="400i.html">Nave Auxiliar</a>
+            <a href="missioncontrol.html">Controle da Missão</a>
+            <a href="index.html?readonly=1">Catálogo de Unidades</a>
+            <a href="oneshot.html">Gerador de Missão</a>
+            <a href="equipamento.html">Equipamento</a>
+            <a href="diariodebordo.html">Diário de Bordo</a>
+            <a href="arquivadas.html">Campanhas Arquivadas</a>
+            <a href="shared-map.html">Mini-Mapa</a>
+            <a href="login.html" class="auth-menu-link">Entrar</a>
+        </nav>
+    </div>
 
-<header>
-    <h1>TERMOS DE USO</h1>
-    <p>WARP-Unit — Sistema de Exploração Interestelar</p>
-</header>
+    <header>
+        <h1>TERMOS DE USO</h1>
+        <p>WARP-Unit — Sistema de Exploração Interestelar</p>
+    </header>
 
-<div class="legal-page">
-    <h2>1. Natureza do Projeto</h2>
-    <p>WARP-Unit é um projeto gratuito, de código aberto, desenvolvido por fãs para uso pessoal e não-comercial. Não há cobrança, assinatura ou monetização de qualquer tipo.</p>
+    <div class="legal-page">
+        <h2>1. Natureza do Projeto</h2>
+        <p>WARP-Unit é um projeto gratuito, de código aberto, desenvolvido por fãs para uso pessoal e não-comercial. Não
+            há cobrança, assinatura ou monetização de qualquer tipo.</p>
 
-    <h2>2. Uso do Conteúdo de Star Citizen</h2>
-    <p>WARP-Unit utiliza ativos visuais (imagens de naves, logotipos, conceitos artísticos) do Star Citizen Fankit, disponibilizado publicamente pela Cloud Imperium Games / Roberts Space Industries em <a href="https://robertsspaceindustries.com/fankit" target="_blank" rel="noopener">robertsspaceindustries.com/fankit</a>. O uso destes ativos segue a política de fandom estabelecida pela RSI:</p>
-    <ul>
-        <li>Todo conteúdo de Star Citizen permanece propriedade da Cloud Imperium Rights LLC e Cloud Imperium Rights Limited.</li>
-        <li>WARP-Unit não é afiliado, endossado ou patrocinado pela Cloud Imperium Games ou Roberts Space Industries.</li>
-        <li>Este é um site de fãs não-oficial.</li>
-    </ul>
+        <h2>2. Uso do Conteúdo de Star Citizen</h2>
+        <p>WARP-Unit utiliza ativos visuais (imagens de naves, logotipos, conceitos artísticos) do Star Citizen Fankit,
+            disponibilizado publicamente pela Cloud Imperium Games / Roberts Space Industries em <a
+                href="https://robertsspaceindustries.com/fankit" target="_blank"
+                rel="noopener">robertsspaceindustries.com/fankit</a>. O uso destes ativos segue a política de fandom
+            estabelecida pela RSI:</p>
+        <ul>
+            <li>Todo conteúdo de Star Citizen permanece propriedade da Cloud Imperium Rights LLC e Cloud Imperium Rights
+                Limited.</li>
+            <li>WARP-Unit não é afiliado, endossado ou patrocinado pela Cloud Imperium Games ou Roberts Space
+                Industries.</li>
+            <li>Este é um site de fãs não-oficial.</li>
+        </ul>
 
-    <h2>3. Privacidade e Dados</h2>
-    <p>WARP-Unit é uma aplicação estática que roda inteiramente no navegador do usuário. Nenhum dado de jogo é enviado a servidores externos. O estado da campanha é armazenado exclusivamente no armazenamento local do navegador (localStorage/IndexedDB). As comunicações entre dispositivos ocorrem via WebRTC (peer-to-peer), sem passar por servidores intermediários.</p>
+        <h2>7. Sistema Daggerheart</h2>
+        <p><strong>Daggerheart</strong> é uma marca da <strong>Darrington Press</strong>. O sistema de rolagem e
+            mecânicas fundamentais do WARP-Unit são baseados no núcleo do RPG Daggerheart, utilizados sob os termos da
+            licença disponível em <a href="https://darringtonpress.com/license/" target="_blank"
+                rel="noopener">darringtonpress.com/license/</a>.</p>
+        <p><strong>Daggerheart</strong> é uma marca da <strong>Darrington Press</strong>. O sistema de rolagem e
+            mecânicas fundamentais do WARP-Unit são baseados no núcleo do RPG Daggerheart (<a
+                href="https://daggerheart.com/srd" target="_blank" rel="noopener">SRD 1.0</a>), utilizados sob os termos
+            da <strong>Darrington Press Community Gaming License</strong> disponível em <a
+                href="https://darringtonpress.com/license/" target="_blank"
+                rel="noopener">darringtonpress.com/license/</a> (<a
+                href="https://darringtonpress.com/wp-content/uploads/2025/07/DPCGL-July-30th-2025.pdf" target="_blank"
+                rel="noopener">PDF</a>).</p>
 
-    <h2>4. Isenção de Garantia</h2>
-    <p>O software é fornecido "como está", sem garantias de qualquer tipo, expressas ou implícitas. Os autores não se responsabilizam por perda de dados, interrupções de jogo ou quaisquer danos decorrentes do uso da aplicação.</p>
+        <p>As marcas <strong>WARP</strong>, <strong>IMAGINARIS</strong> e todo o conteúdo criativo autoral (textos,
+            ilustrações, conceitos, identidade visual) são de propriedade exclusiva da <strong>Runaris</strong> &copy;.
+            Nenhum elemento autoral do projeto pode ser reproduzido, distribuído ou utilizado sem autorização prévia,
+            exceto quando expressamente permitido pelos termos de licenciamento do código-fonte.</p>
 
-    <h2>5. Código Aberto</h2>
-    <p>O código-fonte está disponível publicamente e pode ser utilizado, modificado e redistribuído conforme os termos da licença do projeto. Consulte o repositório para detalhes.</p>
 
-    <h2>6. Links Externos</h2>
-    <p>O feed de notícias exibe conteúdo do site runaris.com.br. O conteúdo dos links externos é de responsabilidade de seus respectivos autores.</p>
-</div>
+        <h2>3. Privacidade e Dados</h2>
+        <p>WARP-Unit é uma aplicação estática que roda inteiramente no navegador do usuário. Nenhum dado de jogo é
+            enviado a servidores externos. O estado da campanha é armazenado exclusivamente no armazenamento local do
+            navegador (localStorage/IndexedDB). As comunicações entre dispositivos ocorrem via WebRTC (peer-to-peer),
+            sem passar por servidores intermediários.</p>
 
-<footer>
-    <a href="termos-de-uso.html">Termos de Uso</a>
-    &nbsp;·&nbsp;
-    <a href="licenciamento.html">Licenciamento</a>
-</footer>
+        <h2>4. Isenção de Garantia</h2>
+        <p>O software é fornecido "como está", sem garantias de qualquer tipo, expressas ou implícitas. Os autores não
+            se responsabilizam por perda de dados, interrupções de jogo ou quaisquer danos decorrentes do uso da
+            aplicação.</p>
+
+        <h2>5. Código Aberto (GNU GPL v3)</h2>
+        <p>Este projeto é distribuído sob a <strong>GNU General Public License versão 3</strong> (GPL v3). Em resumo:
+            você tem liberdade para executar, estudar, modificar e redistribuir o software, desde que quaisquer versões
+            modificadas ou derivadas também sejam distribuídas sob a mesma licença, mantendo o código-fonte disponível.
+        </p>
+        <p>O texto integral da licença está disponível em <a href="https://www.gnu.org/licenses/gpl-3.0.html"
+                target="_blank" rel="noopener">gnu.org/licenses/gpl-3.0.html</a>.</p>
+
+        <h2>6. Links Externos</h2>
+        <p>O feed de notícias exibe conteúdo do site runaris.com.br. O conteúdo dos links externos é de responsabilidade
+            de seus respectivos autores.</p>
+    </div>
+
+    <footer>
+        <a href="termos-de-uso.html">Termos de Uso</a>
+        &nbsp;·&nbsp;
+        <a href="licenciamento.html">Licenciamento</a>
+    </footer>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/sw.js?v=3").catch(function () { });
+        }
+    </script>
 
 <script>
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js?v=3").catch(function () {});
-}
+(function () {
+    var link = document.querySelector('.auth-menu-link');
+    if (!link) return;
+    fetch('api/auth.php', { method: 'GET', credentials: 'include' })
+        .then(function (r) { if (r.ok) link.textContent = 'Sair'; })
+        .catch(function () {});
+})();
 </script>
-
 </body>
+
 </html>

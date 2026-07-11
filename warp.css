@@ -716,6 +716,28 @@ footer a:hover {
     overflow: hidden;
 }
 
+.discovery-map {
+    width: 100%;
+    max-width: 1000px;
+    aspect-ratio: 1 / 1;
+    border-top: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+    touch-action: none;
+    margin: 0 auto;
+}
+@media (max-width: 767px) {
+    .discovery-map { max-width: 320px; }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+    .discovery-map { max-width: 600px; }
+}
+.discovery-map canvas {
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+}
+
 .discovery-banner {
     padding: 8px 16px;
     font-size: 0.72rem;

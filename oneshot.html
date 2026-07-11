@@ -10,6 +10,8 @@
     <title>WARP-Unit | Gerador de Missão One-Shot</title>
     <link rel="stylesheet" href="warp.css?t=1783272137">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="js/procgen-map.js?t=1783779360"></script>
     <style>
         .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:999; align-items:center; justify-content:center; }
         .modal-card { background:var(--bg-card,#16162a); border:1px solid var(--border,#2a2a5a); border-radius:12px; padding:28px 24px; width:360px; max-width:90vw; }
@@ -39,6 +41,8 @@
         <a href="equipamento.html">Equipamento</a>
         <a href="diariodebordo.html">Diário de Bordo</a>
         <a href="arquivadas.html">Campanhas Arquivadas</a>
+        <a href="shared-map.html">Mini-Mapa</a>
+        <a href="login.html" class="auth-menu-link">Entrar</a>
     </nav>
 </div>
 
@@ -401,13 +405,65 @@ function fallbackPlanet(params) {
         const t = pick(PLANET_TYPES.length ? PLANET_TYPES : DEFAULT_PLANET_TYPES);
         return { name: generatePlanetName(), type: t.type, desc: t.desc };
     }
-    const desc = (
-        `Planeta de superfície ${params.superficie}, bioma ${params.bioma}, ` +
-        `atmosfera ${params.atmosfera}. Clima ${params.clima}, ` +
-        `órbita ${params.orbita}, gravidade ${params.gravidade}. ` +
-        `Fauna: ${params.fauna}. Flora: ${params.flora}. ` +
-        `Recursos: ${params.recursos}. Perigo principal: ${params.perigo}.`
-    );
+    
+    const surface = params.superficie.toLowerCase();
+    const biome = params.bioma.toLowerCase();
+    let intro = "";
+    
+    if (surface === "espaço profundo" || surface === "órbita") {
+        intro = `Os sensores registram uma aproximação a um setor de ${surface}, `;
+    } else {
+        intro = `O esquadrão aproxima-se de um corpo celeste de superfície ${surface}, `;
+    }
+    
+    if (biome !== "nenhum") {
+        intro += `caracterizado por um bioma predominantemente de ${biome}. `;
+    } else {
+        intro += `sem bioma orgânico detectável. `;
+    }
+    
+    intro += `A gravidade é classificada como ${params.gravidade} e o planeta segue uma rota ${params.orbita}.`;
+
+    let env = "";
+    const atm = params.atmosfera.toLowerCase();
+    const cli = params.clima.toLowerCase();
+    if (atm === "sem atmosfera") {
+        env = `O vácuo espacial domina o ambiente devido à ausência de atmosfera, enquanto o clima local registra um estado ${cli}.`;
+    } else {
+        env = `A atmosfera é ${atm}, sob um clima severamente ${cli}.`;
+    }
+
+    let life = "";
+    const fau = params.fauna.toLowerCase();
+    const flo = params.flora.toLowerCase();
+    if (fau.includes("nenhuma") && flo.includes("nenhuma")) {
+        life = "Varreduras biológicas completas indicam que o planeta é estéril, sem qualquer presença de fauna ou flora nativas.";
+    } else if (fau.includes("extinta") || flo.includes("extinta")) {
+        life = "Fósseis e vestígios biológicos sugerem um passado com ecossistema ativo, mas a biosfera atual está extinta.";
+    } else {
+        let lifeParts = [];
+        if (!flo.includes("nenhuma") && !flo.includes("nenhum")) lifeParts.push(`vegetação composta por ${flo}`);
+        if (!fau.includes("nenhuma") && !fau.includes("nenhum")) lifeParts.push(`formas de vida categorizadas como ${fau}`);
+        life = `Scanners biológicos identificam atividade orgânica: ` + (lifeParts.length ? lifeParts.join(" coexistindo com ") + "." : "presença esparsa de traços biológicos indefinidos.");
+    }
+
+    let resources = "";
+    const rec = params.recursos.toLowerCase();
+    const per = params.perigo.toLowerCase();
+    
+    if (rec.includes("nada") || rec.includes("nenhum")) {
+        resources = "A leitura de recursos minerais e energéticos aponta depósitos escassos ou insignificantes.";
+    } else {
+        resources = `Sensores geológicos apontam depósitos abundantes de ${rec}, representando alto interesse estratégico.`;
+    }
+    
+    if (per.includes("nenhum")) {
+        resources += " Nenhum perigo ambiental iminente foi detectado no perímetro inicial.";
+    } else {
+        resources += ` No entanto, a equipe deve proceder com cautela extrema devido a relatos de ${per}.`;
+    }
+
+    const desc = `${intro} ${env} ${life} ${resources}`;
     return { name: generatePlanetName(), type: params.superficie.charAt(0).toUpperCase() + params.superficie.slice(1), desc };
 }
 
@@ -487,17 +543,37 @@ function fallbackDiscovery(params, category, catWord, enemy) {
     const encounterType = catTypeMap[category] || "planet";
     const catLabelMap = { resgate: "Resgate", escolta: "Escolta", encontro: "Encontro", pesquisa: "Pesquisa", perigo: "Perigo", naufrágio: "Naufrágio", anomalia: "Anomalia", nave: "Nave" };
     const approachLabel = catLabelMap[category] || "Evento";
-    let description = `${params.cena} de origem ${params.origem}, em estado ${params.estado}. ${params.elemento_chave.charAt(0).toUpperCase() + params.elemento_chave.slice(1)} — ${catWord}. Tom ${params.tom}.`;
+    
+    const { cena, origem, estado, elemento_chave, tom, recompensa } = params;
+    
+    let description = "";
+    if (estado === "operacional" || estado === "preservado perfeitamente") {
+        description = `O esquadrão se aproxima de um(a) ${cena} de origem ${origem}. Surpreendentemente, a estrutura se apresenta em estado ${estado}, com luzes de status e consoles ainda piscando sob a penumbra cósmica.`;
+    } else if (estado === "instável" || estado === "corrompido") {
+        description = `Atenção: Leituras de energia oscilam perto de um(a) ${cena} de origem ${origem}. A estrutura está em estado extremamente ${estado}, com vazamentos de radiação ou falha iminente de integridade.`;
+    } else {
+        description = `Os scanners detectam um(a) ${cena} de origem ${origem}. O local está ${estado}, parcialmente coberto pela poeira do tempo e esquecido pelas rotas interestelares.`;
+    }
+
+    description += ` O ambiente evoca uma sensação de mistério e tom ${tom}.`;
+    description += ` No centro da área, a equipe foca as lentes de detecção em um(a) ${elemento_chave}, que parece ser o ponto de convergência de toda a atividade recente.`;
+    
+    if (catWord) {
+        description += ` Sinais de telemetria adicionais revelam anomalias compatíveis com ${catWord}.`;
+    }
+    
     let peril = `${catWord.charAt(0).toUpperCase() + catWord.slice(1)}. DC ajustado à situação.`;
 
     if (enemy) {
-        description += ` Presença detectada: ${enemy.nome} — ${enemy.desc}.`;
-        peril = `${enemy.nome} estão envolvidos. ${peril}`;
+        description += ` Sensores táticos indicam perigo iminente: assinaturas de combate compatíveis com ${enemy.nome} (${enemy.desc}) foram detectadas à espreita nas sombras do perímetro.`;
+        peril = `Enfrentar ou contornar as forças de ${enemy.nome}. ${peril}`;
+    } else {
+        peril = `Superar a complicação ambiental ou a barreira física: ${peril}`;
     }
 
-    const location = params.cena;
+    const location = cena;
     const perilDC = d(6) + 10;
-    const reward = params.recompensa;
+    const reward = recompensa;
     return {
         encounterType,
         approach: approachLabel,
@@ -655,6 +731,7 @@ function restoreMission() {
 }
 
 function clearMission() {
+    disposeDiscoveryMap("disc-map");
     localStorage.removeItem(STORAGE_KEY);
     planet = null;
     discoveries = [];
@@ -814,6 +891,7 @@ function renderCurrentDiscovery() {
     const etClass = et === "space" ? "encounter-space" : et === "ship" ? "encounter-ship" : et === "rescue" ? "encounter-rescue" : "encounter-planet";
 
     const container = document.getElementById("exp-content");
+    disposeDiscoveryMap("disc-map");
     container.innerHTML = `
         <div class="discovery-card">
             <div class="discovery-banner ${disc.approach.class}">
@@ -835,8 +913,41 @@ function renderCurrentDiscovery() {
                     <div class="reward-text">${esc(disc.reward.text)}</div>
                 </div>
             </div>
+            <div class="discovery-map" id="disc-map"></div>
+            <div style="padding:8px 12px;border-top:1px solid var(--border-color);text-align:right">
+                <button class="btn btn-sm" onclick="shareCurrentMap()" id="btn-share-map"
+                    style="background:rgba(45,212,191,0.12);color:var(--teal);border:1px solid rgba(45,212,191,0.3)">
+                    <i class="bi bi-share"></i> <span id="btn-share-text">Compartilhar Mapa</span>
+                </button>
+            </div>
         </div>
     `;
+    buildDiscoveryMap("disc-map", planet, disc);
+    var btn = document.getElementById("btn-share-map");
+    if (btn) btn.style.display = "";
+}
+
+function shareCurrentMap() {
+    if (!planet || !discoveries[discoveryIndex - 1]) return;
+    var disc = discoveries[discoveryIndex - 1];
+    var seed = (disc.index + 1) * 31 + (window._hashCode ? window._hashCode(planet ? planet.name : "") : 0);
+    var roomCount = 3 + Math.abs(seed) % 6;
+    var paletteKey = resolvePaletteKey(planet, disc);
+    var data = { seed: seed, roomCount: roomCount, paletteKey: paletteKey, planetName: planet.name, encounterType: disc.encounterType || "", timestamp: Date.now() };
+    try { localStorage.setItem("warp-shared-map", JSON.stringify(data)); } catch (e) {}
+    try {
+        if (typeof BroadcastChannel !== "undefined") {
+            var ch = new BroadcastChannel("warp-unit");
+            ch.postMessage({ type: "shared-map", data: data });
+            setTimeout(function () { ch.close(); }, 100);
+        }
+    } catch (e) {}
+    if (typeof WarpP2P !== "undefined" && WarpP2P.isReady && WarpP2P.send) {
+        WarpP2P.send(null, { type: "shared-map", data: data });
+    }
+    var txt = document.getElementById("btn-share-text");
+    if (txt) { txt.innerHTML = '<i class="bi bi-check-lg"></i> Compartilhado'; }
+    setTimeout(function () { if (txt) txt.textContent = "Compartilhar Mapa"; }, 3000);
 }
 
 function updateExpButtons() {
@@ -1007,9 +1118,18 @@ window.onload = async function() {
 };
 
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js?v=3").catch(function () {});
+    navigator.serviceWorker.register("/sw.js?v=4").catch(function () {});
 }
 </script>
 
+<script>
+(function () {
+    var link = document.querySelector('.auth-menu-link');
+    if (!link) return;
+    fetch('api/auth.php', { method: 'GET', credentials: 'include' })
+        .then(function (r) { if (r.ok) link.textContent = 'Sair'; })
+        .catch(function () {});
+})();
+</script>
 </body>
 </html>
