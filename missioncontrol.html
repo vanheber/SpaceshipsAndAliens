@@ -1512,7 +1512,7 @@
             }
 
             if (_gmQrScanner) {
-                try { _gmQrScanner.stop().catch(function () {}); } catch (e) {}
+                try { _gmQrScanner.stop().catch(function (err) { console.warn("WARP-Unit: stop failed", err); }); } catch (e) { console.warn("WARP-Unit:", e); }
                 _gmQrScanner = null;
             }
 
@@ -1530,7 +1530,7 @@
                     experimentalFeatures: { useBarCodeDetectorIfSupported: true }
                 },
                 function (decodedText) {
-                    try { _gmQrScanner.stop(); } catch (e) {}
+                    try { _gmQrScanner.stop(); } catch (e) { console.warn("WARP-Unit:", e); }
                     closeGmQrScanner();
                     document.getElementById("p2p-answer").value = decodedText;
                     p2pConnectPlayer();
@@ -1544,7 +1544,7 @@
 
         function closeGmQrScanner() {
             if (_gmQrScanner) {
-                try { _gmQrScanner.stop().catch(function () {}); } catch (e) {}
+                try { _gmQrScanner.stop().catch(function (err) { console.warn("WARP-Unit: stop failed", err); }); } catch (e) { console.warn("WARP-Unit:", e); }
                 _gmQrScanner = null;
             }
             document.getElementById("qr-scanner-modal").style.display = "none";
@@ -1600,7 +1600,7 @@
 
         // ServiceWorker
         if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("/sw.js?v=3").catch(function () {});
+            navigator.serviceWorker.register("/sw.js?v=4").catch(function (e) { console.warn("WARP-Unit: SW registration failed", e); });
         }
     </script>
 <script>
@@ -1609,7 +1609,7 @@
     if (!link) return;
     fetch('api/auth.php', { method: 'GET', credentials: 'include' })
         .then(function (r) { if (r.ok) link.textContent = 'Sair'; })
-        .catch(function () {});
+        .catch(function (e) { console.warn("WARP-Unit: Auth check failed", e); });
 })();
 </script>
 </body>

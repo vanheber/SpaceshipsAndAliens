@@ -161,7 +161,7 @@
                 var data = JSON.parse(raw);
                 if (data.seed != null) return renderMap(data);
             }
-        } catch (e) {}
+        } catch (e) { console.warn("WARP-Unit:", e); }
         renderEmpty();
     }
 
@@ -174,7 +174,7 @@
             if (e.data && e.data.type === "shared-map") {
                 try {
                     localStorage.setItem("warp-shared-map", JSON.stringify(e.data.data));
-                } catch (e) {}
+                } catch (e) { console.warn("WARP-Unit:", e); }
                 renderMap(e.data.data);
             }
         };
@@ -186,7 +186,7 @@
             try {
                 var data = JSON.parse(e.newValue);
                 if (data.seed != null && data.seed !== currentSeed) renderMap(data);
-            } catch (e) {}
+            } catch (e) { console.warn("WARP-Unit:", e); }
         }
     });
 
@@ -195,7 +195,7 @@
         if (typeof WarpP2P === "undefined" || typeof WarpP2P.on !== "function") return;
         WarpP2P.on("message", function (msg) {
             if (msg && msg.type === "shared-map" && msg.data) {
-                try { localStorage.setItem("warp-shared-map", JSON.stringify(msg.data)); } catch (e) {}
+                try { localStorage.setItem("warp-shared-map", JSON.stringify(msg.data)); } catch (e) { console.warn("WARP-Unit:", e); }
                 renderMap(msg.data);
             }
         });
@@ -211,13 +211,13 @@
     if (!link) return;
     fetch('api/auth.php', { method: 'GET', credentials: 'include' })
         .then(function (r) { if (r.ok) link.textContent = 'Sair'; })
-        .catch(function () {});
+        .catch(function (e) { console.warn("WARP-Unit: Auth check failed", e); });
 })();
 </script>
 
 <script>
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js?v=3").catch(function () {});
+    navigator.serviceWorker.register("/sw.js?v=4").catch(function (e) { console.warn("WARP-Unit: SW registration failed", e); });
 }
 </script>
 

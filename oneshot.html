@@ -934,14 +934,14 @@ function shareCurrentMap() {
     var roomCount = 3 + Math.abs(seed) % 6;
     var paletteKey = resolvePaletteKey(planet, disc);
     var data = { seed: seed, roomCount: roomCount, paletteKey: paletteKey, planetName: planet.name, encounterType: disc.encounterType || "", timestamp: Date.now() };
-    try { localStorage.setItem("warp-shared-map", JSON.stringify(data)); } catch (e) {}
+    try { localStorage.setItem("warp-shared-map", JSON.stringify(data)); } catch (e) { console.warn("WARP-Unit:", e); }
     try {
         if (typeof BroadcastChannel !== "undefined") {
             var ch = new BroadcastChannel("warp-unit");
             ch.postMessage({ type: "shared-map", data: data });
             setTimeout(function () { ch.close(); }, 100);
         }
-    } catch (e) {}
+    } catch (e) { console.warn("WARP-Unit:", e); }
     if (typeof WarpP2P !== "undefined" && WarpP2P.isReady && WarpP2P.send) {
         WarpP2P.send(null, { type: "shared-map", data: data });
     }
@@ -1100,7 +1100,7 @@ function saveToSession() {
             ch.postMessage({ type: "planet-saved", name: payload.name, type: payload.type, desc: payload.desc, discoveries: payload.discoveries });
             setTimeout(function() { ch.close(); }, 100);
         }
-    } catch (e) {}
+    } catch (e) { console.warn("WARP-Unit:", e); }
 
     if (btn) { btn.innerHTML = '<i class="bi bi-check-lg"></i> Salvo!'; }
     setTimeout(function() { if (btn) { btn.textContent = orig; btn.disabled = false; } }, 2000);

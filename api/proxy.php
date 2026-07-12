@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/load-env.php';
 loadEnv();
+require_once __DIR__ . '/rate-limit.php';
+checkRateLimit();
 
 $allowedOrigins = ['http://localhost:3000', 'http://localhost:8000', 'http://localhost:8080', 'http://localhost', 'http://warp-unit.test', 'http://projetos-git.test', 'null'];
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';

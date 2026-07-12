@@ -121,7 +121,7 @@ loadArchived();
 
 <script>
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js?v=3").catch(function () {});
+    navigator.serviceWorker.register("/sw.js?v=4").catch(function (e) { console.warn("WARP-Unit: SW registration failed", e); });
 }
 </script>
 
@@ -131,7 +131,7 @@ if ("serviceWorker" in navigator) {
     if (!link) return;
     fetch('api/auth.php', { method: 'GET', credentials: 'include' })
         .then(function (r) { if (r.ok) link.textContent = 'Sair'; })
-        .catch(function () {});
+        .catch(function (e) { console.warn("WARP-Unit: Auth check failed", e); });
 })();
 </script>
 </body>

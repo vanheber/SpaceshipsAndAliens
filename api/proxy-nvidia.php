@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/load-env.php';
 loadEnv();
+require_once __DIR__ . '/rate-limit.php';
+checkRateLimit();
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
