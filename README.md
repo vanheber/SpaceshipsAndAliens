@@ -1,6 +1,22 @@
 # WARP-Unit — Sistema Operacional de Exploração Interestelar
 
-Aplicação web (HTML + CSS + JS Vanilla) para auxiliar sessões de RPG de mesa sci-fi. Seis páginas integradas que cobrem todo o fluxo de jogo: gerenciamento de tripulação androide, painel do mestre com controle de campanha e sessão, geração procedural de missões planetárias via IA e referência das naves.
+O ano é 3142. A humanidade espalhou-se pelas estrelas, mas o universo continua tão hostil quanto belo. Entre colônias esquecidas e nebulosas não mapeadas, a **Aegis Tiburon** — uma canhoneira pesada reconvertida em nave-mãe de exploração — corta o vácuo com sua IA Capitã no comando. A bordo, até oito androides de combate, cada um com sua especialidade, personalidade e uma dívida de existência com a tripulação que os ativou.
+
+Missões são geradas conforme o pulso do cosmos: planetas desconhecidos, sinais de socorro, ruínas de civilizações extintas, e aquilo que espreita nos limites do sensor. Não há alinhamento fixo nem roteiro. Há o inesperado, o perigo, e a escolha de cada passo.
+
+O **WARP-Unit** é o terminal de bordo que documenta, calcula e dá suporte à expedição. O resto — coragem, improviso e cosplay de explorador espacial — é com vocês.
+
+---
+
+**WARP-Unit** é uma aplicação web *serverless* — HTML + CSS + JS vanilla — para mestres e jogadores de RPG de mesa sci-fi. Zero dependência de servidor: funciona em qualquer hospedagem estática (GitHub Pages, Cloudflare, FTP pelado) e maximiza o aproveitamento de HTML estático sem necessidade de PHP, banco ou configuração.
+
+O sistema é **intencionalmente enxuto**: personagens e equipamentos vêm pré-definidos para você sentar e jogar sem perder horas montando ficha. Não busca substituir D&D Beyond, Pathfinder ou mesas tradicionais de progressão — existem para quem quer customização e campanhas longas. O WARP-Unit é para sessões rápidas, prática de narração, e experimentação com regras leves. A estrutura do projeto — dados em JSON, fichas pré-definidas, gerador procedural — funciona como um template reutilizável: no futuro, pode ser adaptado para qualquer temática (fantasia, cyberpunk, horror) trocando dados e assets, sem mexer na arquitetura.
+
+Usa uma **variante adaptada do Daggerheart** (sistema de dados Esperança vs Medo da Darrington Press) como motor de resolução, e **IA generativa como assistente de mesa** — o gerador de planetas e descobertas cria o escopo da história na hora, enquanto o GM entra com a criatividade e improvisação para adaptar e conectar os pontos.
+
+> ⚠️ **Projeto em desenvolvimento.** Espere falhas, dados inconsistentes e mudanças. Use com espírito explorador.
+
+*Nota: este projeto usa assets visuais do universo Star Citizen (RSI) temporariamente, durante a fase beta. Podem ser substituídos por conteúdo original posteriormente.*
 
 ---
 
