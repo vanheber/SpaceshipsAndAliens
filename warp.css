@@ -2496,7 +2496,8 @@ footer a:hover {
     backdrop-filter: blur(16px);
     display: none;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    padding-left: max(32px, 12%);
 }
 .warp-nav-overlay.open { display: flex; }
 .warp-nav-close {
@@ -2509,7 +2510,7 @@ footer a:hover {
     padding: 8px;
 }
 .warp-nav-close:hover { color: var(--accent-fear); }
-.warp-nav-overlay nav { text-align: center; }
+.warp-nav-overlay nav { text-align: left; }
 .warp-nav-overlay nav a {
     display: block;
     color: var(--text-color);
@@ -2519,6 +2520,14 @@ footer a:hover {
     transition: color 0.15s;
 }
 .warp-nav-overlay nav a:hover { color: var(--accent-hope); }
+.warp-nav-overlay nav a i {
+    display: inline-block;
+    width: 1.8rem;
+    margin-right: 12px;
+    font-size: 1.25rem;
+    text-align: center;
+    vertical-align: middle;
+}
 
 body.warp-has-nav { padding-top: 50px; }
 

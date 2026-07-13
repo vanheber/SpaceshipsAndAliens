@@ -1,6 +1,6 @@
 # WARP-Unit — Sistema Operacional de Exploração Interestelar
 
-O ano é 3142. A humanidade espalhou-se pelas estrelas, mas o universo continua tão hostil quanto belo. Entre colônias esquecidas e nebulosas não mapeadas, a **Aegis Tiburon** — uma canhoneira pesada reconvertida em nave-mãe de exploração — corta o vácuo com sua IA Capitã no comando. A bordo, até oito androides de combate, cada um com sua especialidade, personalidade e uma dívida de existência com a tripulação que os ativou.
+O ano é 3142. A humanidade espalhou-se pelas estrelas, mas o universo continua tão hostil quanto belo. Entre colônias esquecidas e nebulosas não mapeadas, a **Aegis Tiburon** — uma canhoneira pesada reconvertida em nave-mãe de exploração — corta o vácuo com sua IA Capitã no comando. A bordo, até 10 androides, cada um com sua especialidade, personalidade e uma dívida de existência com a tripulação que os ativou.
 
 Missões são geradas conforme o pulso do cosmos: planetas desconhecidos, sinais de socorro, ruínas de civilizações extintas, e aquilo que espreita nos limites do sensor. Não há alinhamento fixo nem roteiro. Há o inesperado, o perigo, e a escolha de cada passo.
 
@@ -24,7 +24,7 @@ Usa uma **variante adaptada do Daggerheart** (sistema de dados Esperança vs Med
 
 | Página | Função |
 |---|---|
-| **[index.html](index.html)** | Catálogo de 10 androides + ficha de personagem + rolador de dados Daggerheart. Página de entrada do sistema com tela para conectar por QR/link P2P, modo leitura do catálogo, mensagens do mestre. |
+| **[index.html](index.html)** | Catálogo de 10 androides + ficha de personagem + rolador de dados Daggerheart. Página de entrada do sistema com tela para conectar por QR/link P2P, modo local (ficha manual sem conexão), modo leitura do catálogo. Mensagens do mestre no modo P2P. |
 | **[missioncontrol.html](missioncontrol.html)** | Painel do Mestre: campanhas (criar, arquivar, exportar/importar), sessões (iniciar, encerrar, histórico, restaurar), recursos (medo, D20), energia de todas as unidades, PNJs, mensagens jogador↔mestre, recursos das naves. |
 | **[oneshot.html](oneshot.html)** | Gerador procedural de planetas com IA (cascade multi-provedor: Gemini → NVIDIA → Pollinations → Hermes → Local). Integração com campanha: salva planetas e descobertas na sessão ativa. |
 | **[mothership.html](mothership.html)** | Descrição detalhada da nave-mãe Tiburon, veículos auxiliares e galeria. Modo consultivo — recursos editáveis apenas no Controle da Missão. |

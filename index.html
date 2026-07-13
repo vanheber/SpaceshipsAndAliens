@@ -75,6 +75,7 @@
         <p id="entry-error" style="display:none;color:#f56c6c;font-size:0.8rem;margin-top:8px"></p>
         <p id="entry-hint" class="entry-hint">Cole o link P2P fornecido pelo mestre para conectar.</p>
         <div id="entry-divider" class="entry-divider"></div>
+        <button class="btn btn-secondary" onclick="startLocalMode()" id="entry-local"><i class="bi bi-person"></i> Usar Ficha Manualmente</button>
         <a href="missioncontrol.html" id="entry-back-mc" class="btn btn-secondary">Entrar como Mestre do Jogo</a>
         <a href="https://www.paypal.com/donate/?business=vanheber@gmail.com" target="_blank" rel="noopener"
             id="entry-donate" class="entry-donate"><i class="bi bi-cup-hot"></i> Apoie o
@@ -230,9 +231,16 @@
             document.getElementById('clear-modal').classList.remove('open');
         }
 
+        function startLocalMode() {
+            WarpStore.init({ mode: "local" });
+            hideEntryScreen();
+            document.getElementById("news-section").style.display = "none";
+            document.getElementById("selection-screen").classList.add("active");
+            loadDataAndRender();
+        }
+
         function hideEntryScreen() {
             document.getElementById("entry-screen").classList.remove("active");
-            document.getElementById("news-section").style.display = "none";
         }
 
         function resolveJoinCode(raw) {
@@ -302,6 +310,7 @@
             document.getElementById("entry-hint").style.display = "none";
             document.getElementById("entry-divider").style.display = "none";
             document.getElementById("entry-back-mc").style.display = "none";
+            document.getElementById("entry-local").style.display = "none";
             document.getElementById("entry-donate").style.display = "none";
             document.getElementById("p2p-status-msg").textContent = "Conectando ao mestre...";
             document.getElementById("p2p-status-msg").style.display = "block";
@@ -498,6 +507,7 @@
                 document.getElementById("entry-hint").style.display = "none";
                 document.getElementById("entry-divider").style.display = "none";
                 document.getElementById("entry-back-mc").style.display = "none";
+                document.getElementById("entry-local").style.display = "none";
                 document.getElementById("entry-donate").style.display = "none";
                 document.getElementById("p2p-status-msg").textContent = "Conectando ao mestre...";
                 document.getElementById("p2p-status-msg").style.display = "block";
