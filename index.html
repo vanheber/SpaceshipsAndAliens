@@ -20,31 +20,9 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 </head>
 
-<body>
+<body class="warp-has-nav">
 
-    <div id="warp-nav" class="warp-nav" style="display:none">
-        <button class="warp-nav-menu" onclick="document.getElementById('warp-menu-overlay').classList.add('open')"
-            aria-label="Menu">&#9776;</button>
-        <img src="img/logo.svg?t=1783272137" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
-    </div>
-    <div id="warp-menu-overlay" class="warp-nav-overlay" onclick="this.classList.remove('open')">
-        <button class="warp-nav-close"
-            onclick="document.getElementById('warp-menu-overlay').classList.remove('open')"><i
-                class="bi bi-x-lg"></i></button>
-        <nav onclick="event.stopPropagation()">
-            <a href="index.html">Início</a>
-            <a href="mothership.html">Nave-Mãe</a>
-            <a href="400i.html">Nave Auxiliar</a>
-            <a href="missioncontrol.html">Controle da Missão</a>
-            <a href="index.html?readonly=1">Catálogo de Unidades</a>
-            <a href="oneshot.html">Gerador de Missão</a>
-            <a href="equipamento.html">Equipamento</a>
-            <a href="diariodebordo.html">Diário de Bordo</a>
-            <a href="arquivadas.html">Campanhas Arquivadas</a>
-            <a href="shared-map.html">Mini-Mapa</a>
-            <a href="login.html" class="auth-menu-link">Entrar</a>
-        </nav>
-    </div>
+<!--#include nav-->
 
     <div id="campaign-header" class="campaign-header" style="display:none">
         <span class="campaign-name" id="campaign-name-display"></span>
@@ -552,8 +530,6 @@
             // Read-only mode (GM viewing catalog)
             if (window.location.search.indexOf("readonly=1") !== -1) {
                 _readonly = true;
-                document.body.classList.add("warp-has-nav");
-                document.getElementById("warp-nav").style.display = "flex";
                 WarpStore.init({ mode: "local" });
                 hideEntryScreen();
                 document.getElementById("selection-screen").classList.add("active");
@@ -1149,11 +1125,7 @@
         }
     </script>
 
-    <footer>
-        <a href="docs/">Documentação</a>
-        &nbsp;·&nbsp;
-        <a href="diariodebordo.html">Diário de Bordo</a>
-    </footer>
+<!--#include footer-->
 
     <div class="modal-overlay" id="clear-modal">
         <div class="modal-card">
@@ -1200,15 +1172,7 @@
             </div>
         </div>
     </div>
-<script>
-(function () {
-    var link = document.querySelector('.auth-menu-link');
-    if (!link) return;
-    fetch('api/auth.php', { method: 'GET', credentials: 'include' })
-        .then(function (r) { if (r.ok) link.textContent = 'Sair'; })
-        .catch(function () {});
-})();
-</script>
+
 </body>
 
 </html>

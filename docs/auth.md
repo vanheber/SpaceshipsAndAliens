@@ -1,72 +1,38 @@
-# Autenticação WARP-Unit
+# Configuração de API Keys
 
 ## Por que existe
 
-O WARP-Unit usa inteligência artificial generativa (Gemini, NVIDIA, Pollinations, Hermes) para criar missões, planetas, descobertas e narrativas emergentes no Gerador de Missão (`oneshot.html`). Essas APIs consomem créditos ou exigem chaves armazenadas no servidor.
+O WARP-Unit usa inteligência artificial generativa (Gemini, NVIDIA, Pollinations, Hermes) para criar missões, planetas, descobertas e narrativas emergentes no Gerador de Missão (`oneshot.html`).
 
-A autenticação protege o uso dessas APIs: apenas usuários autorizados podem gerar conteúdo com IA, evitando consumo abusivo e exposição de chaves.
+Cada usuário fornece **suas próprias chaves de API** para os provedores que desejar usar. As chaves ficam armazenadas no `localStorage` do navegador e são enviadas apenas aos servidores dos provedores.
 
-## Como funciona
+## Provedores
 
-### Cookie de Sessão
+| Provedor | Chave necessária? | Como é chamado |
+|---|---|---|
+| **Gemini** | Sim (`warp-gemini-key`) | Direto do browser via Google AI API (`?key=` na URL). Google suporta CORS. |
+| **NVIDIA** | Sim (`warp-nvidia-key`) | Via `api/proxy-nvidia.php` com header `X-API-Key` |
+| **Pollinations.ai** | Não | Direto do browser (público) |
+| **Hermes** | Não | Direto do browser (público) |
 
-O cookie `warp_auth` é definido pelo servidor (`api/auth.php`) após validação da senha:
+## Como configurar
 
-```
-warp_auth = {timestamp}.{HMAC-SHA256(timestamp, key)}
-```
+1. Acesse a página **API Keys** no menu de navegação
+2. Insira sua chave do Gemini (obtenha grátis em [aistudio.google.com/apikey](https://aistudio.google.com/apikey))
+3. Insira sua chave da NVIDIA (obtenha grátis em [build.nvidia.com](https://build.nvidia.com))
+4. Clique em "Salvar"
 
-- **Timestamp** unix do login
-- **HMAC** com a mesma chave usada pelo proxy da API (`TOTP_SECRET`, `AUTH_PASSWORD` ou `GEMINI_KEY`)
-- Validade: 30 dias
-- `httponly: true` (inacessível via JavaScript)
-- `secure: true` (apenas HTTPS)
-- `samesite: Lax`
+As chaves persistem no `localStorage` entre sessões. Use o botão "Limpar" para removê-las.
 
-### Endpoints (`api/auth.php`)
+## Ordem de tentativa (cascade)
 
-| Método | Função |
-|---|---|
-| **GET** | Verifica se o cookie atual é válido → `{ ok: true/false }` |
-| **POST** | Login: recebe `{ password }`, valida contra `AUTH_PASSWORD` (bcrypt) → seta cookie |
-| **DELETE** | Logout: remove o cookie |
+1. **Gemini** (se configurado)
+2. **NVIDIA** (se configurado)
+3. **Pollinations.ai** (gratuito, sem chave)
+4. **Hermes** (gratuito, sem chave)
 
-### Ordem de validação da senha
+Se nenhuma chave for configurada, o gerador usa dados de fallback locais (sem IA).
 
-1. `AUTH_PASSWORD` — hash bcrypt (prefixo `$2y$` ou `$2a$`), via `password_verify()`
-2. `TOTP_SECRET` — comparação direta da string
-3. `GEMINI_KEY` — comparação direta (fallback, não recomendado)
+## Anteriormente
 
-### Proxy da IA (`api/proxy.php`)
-
-O proxy da Gemini lê o mesmo cookie `warp_auth` e rejeita requisições não autenticadas com HTTP 401.
-
-## Interface
-
-### `login.html`
-- Formulário de senha com validação via `api/auth.php`
-- Exibe status online/offline com badge verde/vermelho
-- Botão "Sair" quando autenticado
-
-### Menu
-Todas as páginas incluem no menu:
-```html
-<a href="login.html" class="auth-menu-link">Entrar</a>
-```
-Um script IIFE checa `api/auth.php` via GET e troca o texto para "Sair" se autenticado.
-
-## Setup
-
-No arquivo `.env` do servidor:
-```env
-AUTH_PASSWORD=$2y$10$...  # hash bcrypt da senha
-# ou
-TOTP_SECRET=JBSWY3DPEHPK3PXP  # chave secreta
-```
-
-## Segurança
-
-- Cookie `httponly` + `secure` + `samesite=Lax`
-- HMAC-SHA256 evita forgery do cookie
-- `Access-Control-Allow-Credentials: true` nas APIs
-- CORS com allowlist de origins (localhost, domínios do projeto)
+O sistema usava autenticação por senha (bcrypt/TOTP) com cookie `warp_auth` HMAC-SHA256 para proteger proxies de IA. Esse sistema foi removido em favor do modelo BYOK (Bring Your Own Key) por simplicidade e segurança — elimina a superfície de ataque de senha, cookie e chave fixa no servidor.

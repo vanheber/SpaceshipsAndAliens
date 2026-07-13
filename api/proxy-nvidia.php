@@ -1,12 +1,13 @@
 <?php
-require_once __DIR__ . '/load-env.php';
-loadEnv();
 require_once __DIR__ . '/rate-limit.php';
 checkRateLimit();
 
-header('Access-Control-Allow-Origin: *');
+$allowedOrigins = ['http://localhost:3000', 'http://localhost:8000', 'http://localhost:8080', 'http://localhost', 'http://warp-unit.test', 'http://projetos-git.test', 'null'];
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$corsOrigin = in_array($origin, $allowedOrigins, true) ? $origin : 'null';
+header('Access-Control-Allow-Origin: ' . $corsOrigin);
 header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Access-Control-Allow-Headers: Content-Type, X-API-Key');
 header('Access-Control-Max-Age: 86400');
 header('Cache-Control: no-store, must-revalidate');
 
@@ -17,6 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['error' => 'Method not allowed']);
+    exit;
+}
+
+$apiKey = $_SERVER['HTTP_X_API_KEY'] ?? '';
+if (!$apiKey) {
+    http_response_code(400);
+    echo json_encode(['error' => 'X-API-Key header required']);
     exit;
 }
 
@@ -31,13 +39,6 @@ $model = $input['model'] ?? 'deepseek-ai/deepseek-v4-flash';
 $messages = $input['messages'];
 $temperature = $input['temperature'] ?? 0.95;
 
-$nvidiaKey = getenv('NVIDIA_KEY');
-if (!$nvidiaKey) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Server misconfigured: NVIDIA_KEY not set']);
-    exit;
-}
-
 $url = 'https://integrate.api.nvidia.com/v1/chat/completions';
 
 $body = [
@@ -51,7 +52,7 @@ $ch = curl_init($url);
 curl_setopt_array($ch, [
     CURLOPT_HTTPHEADER => [
         'Content-Type: application/json',
-        'Authorization: Bearer ' . $nvidiaKey
+        'Authorization: Bearer ' . $apiKey
     ],
     CURLOPT_POSTFIELDS => json_encode($body),
     CURLOPT_RETURNTRANSFER => true,

@@ -7,7 +7,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>WARP-Unit | Autenticação</title>
+    <title>WARP-Unit | API Keys</title>
     <link rel="stylesheet" href="warp.css?t=1783272137">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
@@ -21,7 +21,10 @@
         }
         .auth-card h2 { margin: 0 0 8px 0; font-size: 1.3em; color: var(--accent-hope); }
         .auth-card p { margin: 0 0 20px 0; font-size: .9em; opacity: .8; line-height: 1.5; }
-        .auth-card input[type=password] {
+        .auth-card label {
+            display: block; margin: 16px 0 4px; font-size: .85em; opacity: .8;
+        }
+        .auth-card input[type=text], .auth-card input[type=password] {
             width: 100%;
             padding: 12px 14px;
             border: 1px solid var(--border-color);
@@ -33,7 +36,7 @@
             outline: none;
             transition: border .2s;
         }
-        .auth-card input[type=password]:focus { border-color: var(--accent-hope); }
+        .auth-card input:focus { border-color: var(--accent-hope); }
         .auth-card button {
             width: 100%;
             margin-top: 14px;
@@ -50,16 +53,7 @@
         .auth-card button:hover { opacity: .85; }
         .auth-card button:disabled { opacity: .4; cursor: default; }
         .auth-msg { margin-top: 14px; font-size: .85em; text-align: center; }
-        .auth-msg.error { color: var(--accent-fear); }
         .auth-msg.success { color: var(--green); }
-        .auth-info {
-            max-width: 480px;
-            margin: 0 auto 40px;
-            font-size: .85em;
-            opacity: .7;
-            line-height: 1.6;
-            text-align: center;
-        }
         .auth-status {
             display: inline-flex;
             align-items: center;
@@ -67,11 +61,12 @@
             padding: 6px 14px;
             border-radius: 20px;
             font-size: .85em;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         .auth-status.online { background: rgba(103, 194, 58, .15); color: var(--green); }
         .auth-status.offline { background: rgba(245, 108, 108, .15); color: var(--accent-fear); }
-        .auth-logout {
+        .auth-status.partial { background: rgba(255, 193, 7, .15); color: var(--yellow); }
+        .btn-clear {
             background: transparent;
             border: 1px solid var(--accent-fear);
             color: var(--accent-fear);
@@ -79,176 +74,147 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: .9em;
+            margin-top: 8px;
             transition: background .2s;
         }
-        .auth-logout:hover { background: rgba(245, 108, 108, .1); }
-        .auth-info code {
-            background: rgba(255,255,255,.06);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: .9em;
-        }
+        .btn-clear:hover { background: rgba(245, 108, 108, .1); }
+        .btn-row { display: flex; gap: 8px; }
+        .btn-row .btn-clear { flex: 1; }
+        .btn-row .btn-save { flex: 3; }
+        .field-hint { font-size: .75em; opacity: .5; margin-top: 2px; }
     </style>
 </head>
 <body class="warp-has-nav">
 
-<div class="warp-nav">
-    <button class="warp-nav-menu" onclick="document.getElementById('warp-menu-overlay').classList.add('open')" aria-label="Menu">&#9776;</button>
-    <img src="img/logo.svg?t=1783272137" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
-</div>
-<div id="warp-menu-overlay" class="warp-nav-overlay" onclick="this.classList.remove('open')">
-    <button class="warp-nav-close" onclick="document.getElementById('warp-menu-overlay').classList.remove('open')"><i class="bi bi-x-lg"></i></button>
-    <nav onclick="event.stopPropagation()">
-        <a href="index.html">Início</a>
-        <a href="mothership.html">Nave-Mãe</a>
-        <a href="400i.html">Nave Auxiliar</a>
-        <a href="missioncontrol.html">Controle da Missão</a>
-        <a href="index.html?readonly=1">Catálogo de Unidades</a>
-        <a href="oneshot.html">Gerador de Missão</a>
-        <a href="equipamento.html">Equipamento</a>
-        <a href="diariodebordo.html">Diário de Bordo</a>
-        <a href="arquivadas.html">Campanhas Arquivadas</a>
-        <a href="login.html" class="auth-menu-link">Entrar</a>
-    </nav>
-</div>
+<!--#include nav-->
 
 <header>
     <h1>SISTEMA OPERACIONAL WARP</h1>
-    <p>Autenticação &mdash; Controle de Acesso à IA</p>
+    <p>Configuração &mdash; Chaves de API para IA</p>
 </header>
 
 <div id="auth-root"></div>
 
-<div class="auth-info">
+<div class="auth-info" style="max-width:480px;margin:0 auto 40px;font-size:.85em;opacity:.7;line-height:1.6;text-align:center">
     <p>
         O <strong>WARP-Unit</strong> usa inteligência artificial generativa para criar
-        missões, planetas, descobertas e narrativas emergentes. A IA é servida por APIs
-        externas (Gemini, NVIDIA, Pollinations, Hermes) que consomem créditos ou exigem
-        chaves de API armazenadas no servidor.
+        missões, planetas, descobertas e narrativas emergentes. Você fornece suas
+        próprias chaves de API — nada fica no servidor.
     </p>
     <p>
-        A autenticação existe para <strong>proteger o uso dessas APIs</strong>:
-        apenas usuários autorizados podem gerar conteúdo com IA, evitando consumo
-        abusivo e exposição de chaves.
+        <i class="bi bi-info-circle"></i>
+        <strong>Gemini</strong> (gratuito): <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--accent-hope)">aistudio.google.com/apikey</a><br>
+        <strong>NVIDIA</strong> (gratuito): <a href="https://build.nvidia.com" target="_blank" rel="noopener" style="color:var(--accent-hope)">build.nvidia.com</a>
     </p>
     <p>
-        <strong>Como usar:</strong> peça a senha de acesso ao administrador do sistema.
-        Ela é definida via a variável de ambiente <code>AUTH_PASSWORD</code> (bcrypt)
-        ou <code>TOTP_SECRET</code> no arquivo <code>.env</code> do servidor.
-        Uma vez autenticado, o navegador armazena um cookie seguro por 30 dias.
+        <i class="bi bi-shield-check"></i>
+        <strong>Segurança:</strong>
     </p>
-    <p>
-        <i class="bi bi-shield-lock"></i>
-        O cookie de sessão é <code>httponly</code>, <code>secure</code> e
-        <code>samesite=Lax</code> &mdash; não é acessível via JavaScript,
-        apenas enviado nas requisições à API.
+    <p style="margin:2px 0">
+        &#8226; A chave fica <strong>apenas no seu navegador</strong> (<code>localStorage</code>),
+        nunca é enviada ao servidor WARP-Unit.
+    </p>
+    <p style="margin:2px 0">
+        &#8226; <strong>Gemini</strong>: seu navegador chama a Google AI diretamente
+        (<code>?key=</code> na URL, HTTPS). O servidor WARP-Unit não vê a chave.
+    </p>
+    <p style="margin:2px 0">
+        &#8226; <strong>NVIDIA</strong>: a chave passa pelo proxy local apenas durante a
+        requisição (header <code>X-API-Key</code>) e <strong>não é armazenada</strong>
+        no servidor.
+    </p>
+    <p style="margin:2px 0">
+        &#8226; Para segurança extra, restrinja sua chave Gemini no
+        <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener" style="color:var(--accent-hope)">Google Cloud Console</a>
+        &mdash; ative apenas a API "Generative Language API" e limite por
+        referenciador HTTP (<code>seu-dominio.com/*</code>).
     </p>
 </div>
 
-<footer>
-    <a href="termos-de-uso.html">Termos de Uso</a>
-    &nbsp;·&nbsp;
-    <a href="licenciamento.html">Licenciamento</a>
-</footer>
+<!--#include footer-->
 
 <script>
 (function () {
     var root = document.getElementById('auth-root');
 
-    function getCookie(name) {
-        var m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-        return m ? m[2] : null;
+    function hasGemini() { return !!localStorage.getItem('warp-gemini-key'); }
+    function hasNvidia() { return !!localStorage.getItem('warp-nvidia-key'); }
+
+    function getStatus() {
+        var g = hasGemini(), n = hasNvidia();
+        if (g && n) return { cls: 'online', icon: 'check-circle-fill', text: 'Gemini + NVIDIA configurados' };
+        if (g || n) return { cls: 'partial', icon: 'exclamation-circle-fill', text: (g ? 'Gemini' : 'NVIDIA') + ' configurado' };
+        return { cls: 'offline', icon: 'x-circle-fill', text: 'Nenhuma chave configurada' };
     }
 
-    function render(status, msg) {
-        if (status === 'online') {
-            root.innerHTML =
-                '<div class="auth-card" style="text-align:center">' +
-                    '<div class="auth-status online"><i class="bi bi-check-circle-fill"></i> Autenticado</div>' +
-                    '<h2>Sessão Ativa</h2>' +
-                    '<p>Você está autenticado. As chamadas à API de IA serão autorizadas.</p>' +
-                    '<button class="auth-logout" id="btn-logout"><i class="bi bi-box-arrow-right"></i> Sair</button>' +
-                    '<div class="auth-msg success" id="logout-msg"></div>' +
-                '</div>';
-            document.getElementById('btn-logout').onclick = function () {
-                var btn = this;
-                btn.disabled = true;
-                fetch('api/auth.php', { method: 'DELETE', credentials: 'include' })
-                    .then(function (r) { return r.json(); })
-                    .then(function (d) {
-                        document.getElementById('logout-msg').textContent = d.message || 'Sessão encerrada';
-                        setTimeout(function () { render('offline'); }, 1200);
-                    })
-                    .catch(function () {
-                        document.cookie = 'warp_auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-                        render('offline');
-                    });
-            };
-        } else {
-            var errHtml = msg ? '<div class="auth-msg error">' + msg + '</div>' : '';
-            root.innerHTML =
-                '<div class="auth-card">' +
-                    '<div class="auth-status offline"><i class="bi bi-x-circle-fill"></i> Não autenticado</div>' +
-                    '<h2>Acesso à IA</h2>' +
-                    '<p>Entre com a senha definida pelo administrador para usar o gerador de missões com IA.</p>' +
-                    '<form id="login-form">' +
-                        '<input type="password" id="auth-pass" placeholder="Senha de acesso" autocomplete="current-password" required>' +
-                        '<button type="submit" id="btn-login">Autenticar</button>' +
-                    '</form>' +
-                    errHtml +
-                '</div>';
-            document.getElementById('login-form').onsubmit = function (e) {
-                e.preventDefault();
-                var btn = document.getElementById('btn-login');
-                btn.disabled = true;
-                btn.textContent = 'Autenticando…';
-                fetch('api/auth.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify({ password: document.getElementById('auth-pass').value })
-                })
-                .then(function (r) { return r.json().then(function (d) { return { status: r.status, data: d }; }); })
-                .then(function (res) {
-                    if (res.status === 200) {
-                        render('online');
-                    } else {
-                        btn.disabled = false;
-                        btn.textContent = 'Autenticar';
-                        var errEl = document.querySelector('.auth-card .auth-msg');
-                        if (errEl) errEl.textContent = res.data.error || 'Erro desconhecido';
-                        else {
-                            var card = document.querySelector('.auth-card');
-                            var div = document.createElement('div');
-                            div.className = 'auth-msg error';
-                            div.textContent = res.data.error || 'Erro desconhecido';
-                            card.appendChild(div);
-                        }
-                    }
-                })
-                .catch(function () {
-                    btn.disabled = false;
-                    btn.textContent = 'Autenticar';
-                    var card = document.querySelector('.auth-card');
-                    var div = document.createElement('div');
-                    div.className = 'auth-msg error';
-                    div.textContent = 'Erro de conexão com o servidor';
-                    card.appendChild(div);
-                });
-            };
+    function render() {
+        var status = getStatus();
+        var geminiVal = hasGemini() ? localStorage.getItem('warp-gemini-key') : '';
+        var nvidiaVal = hasNvidia() ? localStorage.getItem('warp-nvidia-key') : '';
+
+        root.innerHTML =
+            '<div class="auth-card">' +
+                '<div class="auth-status ' + status.cls + '"><i class="bi bi-' + status.icon + '"></i> ' + status.text + '</div>' +
+                '<h2>Chaves de API</h2>' +
+                '<p>Configure as chaves para os provedores de IA. Preencha pelo menos uma.</p>' +
+                '<form id="keys-form">' +
+                    '<label for="key-gemini">Gemini API Key</label>' +
+                    '<input type="password" id="key-gemini" placeholder="AIza..." value="' + esc(geminiVal) + '" autocomplete="off" spellcheck="false">' +
+                    '<div class="field-hint">Usada como provedor principal. <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--accent-hope)">Conseguir grátis</a></div>' +
+
+                    '<label for="key-nvidia">NVIDIA API Key</label>' +
+                    '<input type="password" id="key-nvidia" placeholder="nvapi-..." value="' + esc(nvidiaVal) + '" autocomplete="off" spellcheck="false">' +
+                    '<div class="field-hint">Usada como fallback. <a href="https://build.nvidia.com" target="_blank" rel="noopener" style="color:var(--accent-hope)">Conseguir grátis</a></div>' +
+
+                    '<div class="btn-row">' +
+                        '<button type="button" class="btn-clear" id="btn-clear">Limpar</button>' +
+                        '<button type="submit" id="btn-save">Salvar</button>' +
+                    '</div>' +
+                '</form>' +
+                '<div class="auth-msg" id="key-msg"></div>' +
+            '</div>';
+    }
+
+    function esc(s) { return String(s).replace(/[&<>"']/g, function(m) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; }); }
+
+    function handleSave(e) {
+        e.preventDefault();
+        var gemini = document.getElementById('key-gemini').value.trim();
+        var nvidia = document.getElementById('key-nvidia').value.trim();
+        var msg = document.getElementById('key-msg');
+
+        if (!gemini && !nvidia) {
+            msg.textContent = 'Preencha pelo menos uma chave.';
+            msg.style.color = 'var(--accent-fear)';
+            return;
         }
+
+        if (gemini) localStorage.setItem('warp-gemini-key', gemini);
+        else localStorage.removeItem('warp-gemini-key');
+
+        if (nvidia) localStorage.setItem('warp-nvidia-key', nvidia);
+        else localStorage.removeItem('warp-nvidia-key');
+
+        msg.textContent = 'Chaves salvas!';
+        msg.style.color = 'var(--green)';
+        setTimeout(render, 1200);
     }
 
-    function checkAuth() {
-        fetch('api/auth.php', { method: 'GET', credentials: 'include' })
-            .then(function (r) {
-                if (r.status === 200) render('online');
-                else render('offline');
-            })
-            .catch(function () { render('offline'); });
+    function handleClear() {
+        localStorage.removeItem('warp-gemini-key');
+        localStorage.removeItem('warp-nvidia-key');
+        render();
     }
 
-    checkAuth();
+    document.addEventListener('click', function(e) {
+        if (e.target.id === 'btn-clear') handleClear();
+    });
+
+    document.addEventListener('submit', function(e) {
+        if (e.target.id === 'keys-form') handleSave(e);
+    });
+
+    render();
 })();
 </script>
 

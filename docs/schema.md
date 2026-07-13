@@ -348,8 +348,8 @@ Mensagens P2P trafegadas:
 
 A geração tenta provedores em ordem até um responder:
 
-1. **Gemini** (Google AI) — via proxy local `/api/proxy.php`, requer autenticação
-2. **NVIDIA DeepSeek V4 Flash** — via proxy local `/api/proxy-nvidia.php`
+1. **Gemini** (Google AI) — chamada direta do browser (CORS, `?key=` na URL), requer chave do usuário
+2. **NVIDIA DeepSeek V4 Flash** — via proxy local `/api/proxy-nvidia.php` (header `X-API-Key`)
 3. **Pollinations.ai** — gratuito, endpoint público, sem chave
 4. **Hermes** (Llama 3.1 8B) — fallback externo
 5. Fallback para sistema procedural local

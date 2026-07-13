@@ -25,7 +25,7 @@ Aplicação web (HTML + CSS + JS Vanilla) para auxiliar sessões de RPG de mesa 
 - **WebRTC** — P2P serverless entre GM e jogadores via `RTCPeerConnection` + `RTCDataChannel`
 - **BroadcastChannel** — Persistência de conexão P2P entre reloads (hub popup)
 - **localStorage + sessionStorage** — Persistência de campanhas, estado e âncora de reconexão
-- **PHP 8.x** — Proxies de IA (`api/proxy.php`, `api/proxy-nvidia.php`)
+- **PHP 8.x** — Proxy NVIDIA (`api/proxy-nvidia.php`)
 - **Bootstrap Icons** — Ícones outlined via CDN
 - **Gemini 3.1 Flash Lite** — Provedor premium para usuários autenticados
 - **NVIDIA DeepSeek V4 Flash** — Provedor gratuito para visitantes
@@ -65,8 +65,8 @@ Aplicação web (HTML + CSS + JS Vanilla) para auxiliar sessões de RPG de mesa 
 
 - **Geração de planetas**: 12 tipos, nomes código XX-999a, descrições atmosféricas
 - **Expedição passo a passo**: abordagem + descoberta + perigo (DC) + recompensa
-- **Cascade multi-provedor**: Gemini (auth) → NVIDIA (grátis) → Pollinations → Hermes → Local
-- **Autenticação do capitão**: bcrypt + TOTP (Google Authenticator), cookie HMAC-SHA256
+- **Cascade multi-provedor**: Gemini (BYOK) → NVIDIA (BYOK) → Pollinations → Hermes → Local
+- **Chaves do usuário**: cada um traz a própria API key (Gemini e/ou NVIDIA), salva no `localStorage`
 - **Contexto narrativo**: últimos 3 eventos completos enviados no prompt para continuidade
 - **Contexto de campanha**: estado dos robôs e recursos injetados nos prompts quando em modo remoto
 - **Integração com sessão**: botão "Salvar na Sessão" envia planeta + descobertas para a campanha ativa
@@ -127,9 +127,7 @@ WARP-Unit/
 │   ├── p2p.js              Núcleo WebRTC (RTCPeerConnection + DataChannel)
 │   └── p2p-hub.js          Proxy BroadcastChannel para o hub
 ├── api/
-│   ├── proxy.php           Proxy Gemini (requer cookie de auth)
-│   ├── proxy-nvidia.php    Proxy NVIDIA DeepSeek V4 Flash (público)
-│   ├── load-env.php        .env loader compartilhado
+│   ├── proxy-nvidia.php    Proxy NVIDIA DeepSeek V4 Flash (X-API-Key do cliente)
 │   └── rate-limit.php      Rate limit file-based
 ├── data/
 │   ├── robots.json         Catálogo de 10 androides
@@ -208,4 +206,59 @@ Todos os dados são carregados de arquivos JSON externos:
 - **Inimigos**: edite `data/enemies.json`
 - **CSS**: edite variáveis em `:root` no `warp.css`
 
+### Prompts de IA
+
+Os prompts usados pelo Gerador de Missão (`oneshot.html`) ficam em `prompts/`, um arquivo por domínio:
+
+| Arquivo | Conteúdo |
+|---------|----------|
+| `prompts/planet.js` | Geração de planetas (`PlanetPrompts`) |
+| `prompts/discovery.js` | Geração de encontros/eventos (`DiscoveryPrompts`) |
+
+Cada arquivo exporta `{ system, user }` via `window`. Para refinar um prompt, abra o arquivo isoladamente, envie o conteúdo para um modelo de IA e substitua pela versão melhorada — sem precisar tocar na página.
+
 Schemas detalhados em [`docs/schema.md`](docs/schema.md).
+
+---
+
+## Build & Deploy
+
+O WARP-Unit é um projeto estático. Nav e footer ficam em `includes/` e são injetados via build.
+
+### Desenvolvimento
+
+Edite os `.html` na raiz — eles têm placeholders `<!--#include nav-->` e `<!--#include footer-->`. Abra direto no navegador para testar (os placeholders aparecem como comentários HTML, não quebram o layout).
+
+### Build
+
+```bash
+npm run build
+```
+
+Gera `public/` (gitignored) com os includes resolvidos e assets copiados. Os placeholders são substituídos pelo conteúdo real de:
+
+| Include | Arquivo | Usado em |
+|---------|--------|----------|
+| `nav` | `includes/nav.html` | Todas as páginas |
+| `footer` | `includes/footer.html` | Todas, exceto index.html |
+| `footer-index` | `includes/footer-index.html` | Apenas index.html |
+
+### Deploy
+
+```bash
+npm run deploy
+```
+
+Faz mirror de `public/` via FTP para o servidor (`deploy.sh`). Configure as credenciais em `.env`.
+
+### Estrutura
+
+```
+├── includes/          # Fragmentos HTML (não versionados no build)
+│   ├── nav.html
+│   ├── footer.html
+│   └── footer-index.html
+├── *.html             # Fontes com placeholders <!--#include -->
+├── build.js           # Resolve includes → public/
+├── public/            # Saída do build (gitignored)
+└── deploy.sh          # Mirror FTP de public/

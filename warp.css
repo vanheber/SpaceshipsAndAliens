@@ -2521,3 +2521,6 @@ footer a:hover {
 .warp-nav-overlay nav a:hover { color: var(--accent-hope); }
 
 body.warp-has-nav { padding-top: 50px; }
+
+body:has(.entry-screen.active) { padding-top: 0; }
+body:has(.entry-screen.active) .warp-nav { display: none; }

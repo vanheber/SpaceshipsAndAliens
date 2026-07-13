@@ -34,24 +34,22 @@ if ! command -v lftp &>/dev/null; then
     exit 1
 fi
 
+# Garante que o build foi feito
+if [ ! -d "$SCRIPT_DIR/public" ]; then
+    echo "public/ não encontrado. Execute 'npm run build' primeiro."
+    exit 1
+fi
+
 echo "Deploy para $FTP_USER@$FTP_HOST:$FTP_PATH ..."
+echo "→ Enviando apenas arquivos modificados. Removendo removidos."
 
 lftp -u "$FTP_USER","$FTP_PASSWORD" -p "$PORT" "$FTP_HOST" <<EOF
 set ftp:ssl-allow no
 set ssl:verify-certificate no
 set mirror:use-pget-n 5
 mirror --reverse --delete --verbose \
-    --exclude .git/ \
-    --exclude .env.example \
-    --exclude .gitignore \
-    --exclude deploy.sh \
     --exclude .DS_Store \
-    --exclude node_modules/ \
-    --exclude plans/ \
-    --exclude PROMPTS_IMAGENS.md \
-    --exclude README.md \
-    --exclude ".*\.log$" \
-    "$SCRIPT_DIR/" "$FTP_PATH"
+    "$SCRIPT_DIR/public/" "$FTP_PATH"
 EOF
 
 echo "Deploy concluído."

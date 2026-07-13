@@ -38,9 +38,9 @@ Antes de escrever código, pare no primeiro degrau que segurar:
 
 | Padrão | Onde | Regra |
 |--------|------|-------|
-| CORS com credenciais | `api/auth.php`, `api/proxy.php` | Reflection com allowlist, nunca `*` quando `Credentials: true` |
-| Compartilhamento PHP | `api/load-env.php` | `.env` loader extraído pra `require_once`; sem copy-paste |
-| Cookie de auth | `api/auth.php` | Sempre `httponly: true` + `secure: true` + `samesite: Lax` |
+| Chave de API do usuário | `login.html`, `oneshot.html` | Keys em `localStorage` com prefixo `warp-*-key`; nunca no servidor |
+| Gemini direto (CORS) | `oneshot.html` | `?key=` na URL da Google AI API — sem proxy, Google suporta CORS |
+| NVIDIA key via header | `api/proxy-nvidia.php` | Cliente envia `X-API-Key`, proxy repassa como `Authorization: Bearer` |
 | DOM handlers pendurados | `oneshot.html` | `innerHTML = ""` no container pra matar listeners antes de esconder/seção |
 | Catch vazio | `oneshot.html` | Nunca `catch (e) {}` sem diagnóstico — no mínimo `console.warn` |
 | Guarda de estado global | `oneshot.html` | `if (!planet) return;` no topo de funções que acessam estado sem dono claro |
@@ -53,13 +53,24 @@ Antes de escrever código, pare no primeiro degrau que segurar:
 | SW version bust | `.htaccess` + `*.html` | `Cache-Control: no-cache` pra sw.js + `register("/sw.js?v=N")` em todas as páginas HTML |
 | SW on all pages | `*.html` | Registrar SW em TODAS as páginas HTML, não só na index — senão navegação direta pra oneshot/mothership/etc não é interceptada |
 
+**Padrões de prompts de IA:**
+- Prompts ficam em `prompts/`, um arquivo por domínio (`planet.js`, `discovery.js`)
+- Exportados via `window.NomePrompts = { system, user }` sem dependências
+- Nunca embutir prompts inline em funções JS de páginas HTML
+- Se o prompt referencia dados dinâmicos, usa function(params) que retorna string
+
+**Padrões de build:**
+- Nav e footer em `includes/` (`nav.html`, `footer.html`, `footer-index.html`)
+- 12 páginas HTML usam `<!--#include nav-->` e `<!--#include footer-->` no source
+- `npm run build` → `node build.js` resolve includes e gera `public/` (gitignored)
+- `npm run deploy` → `bash deploy.sh` faz mirror de `public/`
+- Nav escondido no index.html via CSS: `body:has(.entry-screen.active) .warp-nav { display: none; }`
+- `docs/index.html` tem sidebar própria e NÃO usa os includes
+
 **Rejeitados por decisão (não auditar de novo):**
 - Three.js dispose: reinit raro (só page reload), impacto baixo
 - Euler angles drifting: irrelevante pra sessão típica
 - Regex greedy `/\{[\s\S]*\}/`: edge case improvável
 - Zero testes: reavaliar quando houver build tooling
-- NVIDIA proxy público: intencional (gratuito pra visitantes)
-- CSRF no auth: coberto por `SameSite: Lax` no cookie
 - Prompts EN/PT inconsistente: funcionam, só desperdiçam tokens — adiado
 - Validação de schema do output IA: fallback local cobre falhas
-- Cookie replay window (30 dias): single-user, risco aceito

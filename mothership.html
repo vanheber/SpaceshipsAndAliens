@@ -17,26 +17,7 @@
 
 <body class="warp-has-nav">
 
-<div class="warp-nav">
-    <button class="warp-nav-menu" onclick="document.getElementById('warp-menu-overlay').classList.add('open')" aria-label="Menu">&#9776;</button>
-    <img src="img/logo.svg?t=1783272137" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
-</div>
-<div id="warp-menu-overlay" class="warp-nav-overlay" onclick="this.classList.remove('open')">
-    <button class="warp-nav-close" onclick="document.getElementById('warp-menu-overlay').classList.remove('open')"><i class="bi bi-x-lg"></i></button>
-    <nav onclick="event.stopPropagation()">
-        <a href="index.html">Início</a>
-        <a href="mothership.html">Nave-Mãe</a>
-        <a href="400i.html">Nave Auxiliar</a>
-        <a href="missioncontrol.html">Controle da Missão</a>
-        <a href="index.html?readonly=1">Catálogo de Unidades</a>
-        <a href="oneshot.html">Gerador de Missão</a>
-        <a href="equipamento.html">Equipamento</a>
-        <a href="diariodebordo.html">Diário de Bordo</a>
-        <a href="arquivadas.html">Campanhas Arquivadas</a>
-        <a href="shared-map.html">Mini-Mapa</a>
-        <a href="login.html" class="auth-menu-link">Entrar</a>
-    </nav>
-</div>
+<!--#include nav-->
 
 <header>
         <h1>SISTEMA OPERACIONAL WARP</h1>
@@ -375,11 +356,7 @@
 
     </div>
 
-    <footer>
-        <a href="termos-de-uso.html">Termos de Uso</a>
-        &nbsp;·&nbsp;
-        <a href="licenciamento.html">Licenciamento</a>
-    </footer>
+<!--#include footer-->
 
     <!-- LIGHTBOX -->
     <div class="lb-overlay" id="lb-overlay">
@@ -454,14 +431,6 @@ if ("serviceWorker" in navigator) {
 }
 </script>
 
-<script>
-(function () {
-    var link = document.querySelector('.auth-menu-link');
-    if (!link) return;
-    fetch('api/auth.php', { method: 'GET', credentials: 'include' })
-        .then(function (r) { if (r.ok) link.textContent = 'Sair'; })
-        .catch(function () {});
-})();
-</script>
+
 </body>
 </html>

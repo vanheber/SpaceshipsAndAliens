@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="js/procgen-map.js?t=1783779360"></script>
+    <script src="prompts/planet.js?t=1783272137"></script>
+    <script src="prompts/discovery.js?t=1783272137"></script>
     <style>
         .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:999; align-items:center; justify-content:center; }
         .modal-card { background:var(--bg-card,#16162a); border:1px solid var(--border,#2a2a5a); border-radius:12px; padding:28px 24px; width:360px; max-width:90vw; }
@@ -25,26 +27,7 @@
 </head>
 <body class="warp-has-nav">
 
-<div class="warp-nav">
-    <button class="warp-nav-menu" onclick="document.getElementById('warp-menu-overlay').classList.add('open')" aria-label="Menu">&#9776;</button>
-    <img src="img/logo.svg?t=1783272137" alt="WARP-Unit" class="warp-nav-logo" width="22" height="auto">
-</div>
-<div id="warp-menu-overlay" class="warp-nav-overlay" onclick="this.classList.remove('open')">
-    <button class="warp-nav-close" onclick="document.getElementById('warp-menu-overlay').classList.remove('open')"><i class="bi bi-x-lg"></i></button>
-    <nav onclick="event.stopPropagation()">
-        <a href="index.html">Início</a>
-        <a href="mothership.html">Nave-Mãe</a>
-        <a href="400i.html">Nave Auxiliar</a>
-        <a href="missioncontrol.html">Controle da Missão</a>
-        <a href="index.html?readonly=1">Catálogo de Unidades</a>
-        <a href="oneshot.html">Gerador de Missão</a>
-        <a href="equipamento.html">Equipamento</a>
-        <a href="diariodebordo.html">Diário de Bordo</a>
-        <a href="arquivadas.html">Campanhas Arquivadas</a>
-        <a href="shared-map.html">Mini-Mapa</a>
-        <a href="login.html" class="auth-menu-link">Entrar</a>
-    </nav>
-</div>
+<!--#include nav-->
 
 <header>
     <h1>SISTEMA OPERACIONAL WARP</h1>
@@ -132,11 +115,7 @@
     </button>
 </div>
 
-<footer>
-    <a href="termos-de-uso.html">Termos de Uso</a>
-    &nbsp;·&nbsp;
-    <a href="licenciamento.html">Licenciamento</a>
-</footer>
+<!--#include footer-->
 
 <script>
 // ═══════════════════════════════════════════
@@ -257,21 +236,31 @@ let AI_PROVIDERS = [];
 
 function buildProviderList() {
     const providers = [];
-    providers.push({
-        name: "Gemini",
-        endpoint: window.location.origin + "/api/proxy.php",
-        model: "gemini-3.5-flash",
-        timeout: 30000,
-        headers: { "Content-Type": "application/json" }
-    });
-    providers.push(
-        {
+    const geminiKey = localStorage.getItem("warp-gemini-key");
+    const nvidiaKey = localStorage.getItem("warp-nvidia-key");
+
+    if (geminiKey) {
+        providers.push({
+            name: "Gemini",
+            endpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+            model: "gemini-3.5-flash",
+            timeout: 30000,
+            directGemini: true,
+            geminiKey: geminiKey
+        });
+    }
+
+    if (nvidiaKey) {
+        providers.push({
             name: "NVIDIA (DeepSeek V4 Flash)",
             endpoint: window.location.origin + "/api/proxy-nvidia.php",
             model: "deepseek-ai/deepseek-v4-flash",
             timeout: 15000,
-            headers: { "Content-Type": "application/json" }
-        },
+            headers: { "Content-Type": "application/json", "X-API-Key": nvidiaKey }
+        });
+    }
+
+    providers.push(
         {
             name: "Pollinations.ai",
             endpoint: "https://text.pollinations.ai/openai",
@@ -295,10 +284,42 @@ async function callAI(provider, systemPrompt, userPrompt) {
     const timeout = setTimeout(() => controller.abort(), provider.timeout);
 
     try {
+        // Gemini direct call (no proxy — Google AI supports CORS with ?key=)
+        if (provider.directGemini) {
+            const url = provider.endpoint + "?key=" + encodeURIComponent(provider.geminiKey);
+            const body = {
+                system_instruction: { parts: [{ text: systemPrompt }] },
+                contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+                generationConfig: { temperature: 0.95 }
+            };
+            const res = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body),
+                signal: controller.signal
+            });
+            clearTimeout(timeout);
+            if (!res.ok) {
+                let detail = "";
+                try { const err = await res.text(); detail = err.slice(0, 200); } catch (_) {}
+                console.warn(`[${provider.name}] HTTP ${res.status}`, detail || "");
+                return null;
+            }
+            const data = await res.json();
+            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (!text) {
+                console.warn(`[${provider.name}] sem content — estrutura:`, JSON.stringify(data).slice(0, 300));
+                return null;
+            }
+            const jsonMatch = text.match(/\{[\s\S]*\}/);
+            if (!jsonMatch) { console.warn(`[${provider.name}] sem JSON — resposta crua:`, text.slice(0, 200)); return null; }
+            return JSON.parse(jsonMatch[0]);
+        }
+
+        // Standard OpenAI-compatible (proxy or direct)
         const res = await fetch(provider.endpoint, {
             method: "POST",
             cache: "no-store",
-            credentials: "include",
             headers: provider.headers,
             body: JSON.stringify({
                 model: provider.model,
@@ -388,8 +409,8 @@ async function aiGeneratePlanet() {
     console.log("[Planet params]", params);
 
     const { data: result, providerName } = await tryAIProviders(
-        "You are a planetary survey AI. You will receive a set of planetary attributes. You MUST use the EXACT attributes provided — do NOT replace, reinterpret, or override any of them with alternatives. Every attribute must appear in your output. The creativity is in HOW you connect them, not in changing them. Always respond with valid JSON only, no markdown, no other text.",
-        `Generate a planet with these scan attributes:\n${paramsStr}\n\nBuild a name (code like XX-999a), a short type label in Portuguese (max 4 words), and a 2-3 sentence description that incorporates ALL attributes above. Don't list them flatly — create connections, tensions, and surprises. What does the crew see, feel, and measure on arrival? Respond with EXACTLY this JSON only:\n{"name":"XX-999a","type":"type label","desc":"description"}\n(seed: ${seed})`
+        PlanetPrompts.system(),
+        PlanetPrompts.user(paramsStr, seed)
     );
     if (result?.name && result?.type && result?.desc) {
         lastAIProvider = providerName;
@@ -515,8 +536,8 @@ async function aiGenerateDiscovery(discNumber, discTotal) {
         .join("\n");
 
     const { data: result, providerName } = await tryAIProviders(
-        "You are the AI Captain of the Aegis Tiburon generating encounter logs for a sci-fi RPG. Given parameters, synthesize a coherent, specific encounter. Weave the attributes into a surprising event. The parameters are creative anchors, not a checklist. Always respond with valid JSON only, no markdown.",
-        `Ship: Aegis Tiburon, 121m heavy gunship. Crew of android robots. AI Captain integrated.\n\n[PLANET DATA]\nCode: ${planet.name}\nType: ${planet.type}\nDescription: ${planet.desc}\n[/PLANET DATA]\n\n[EVENT PARAMETERS]\n${paramsStr}\nCategoria: ${category}\nPalavra específica: ${catWord}\n[/EVENT PARAMETERS]${enemyStr}\nEncounter ${discNumber} of ${discTotal}.\n${context}\n\nGenerate ONE encounter incorporating the event parameters. Respond with EXACTLY this JSON:\n{"type":"planet|space|ship|rescue","approach":"a short Portuguese label (max 4 words) describing HOW the encounter began","description":"2-3 vivid, specific sentences in Portuguese","location":"invent a location in Portuguese","peril":"concrete threat, danger or challenge in Portuguese","perilDC":number(8-22),"reward":"specific reward in Portuguese"}\n(seed: ${seed})`
+        DiscoveryPrompts.system(),
+        DiscoveryPrompts.user(planet, paramsStr, category, catWord, enemyStr, discNumber, discTotal, context, seed)
     );
     if (result?.type && result?.approach && result?.description) {
         lastAIProvider = providerName;
@@ -1122,14 +1143,6 @@ if ("serviceWorker" in navigator) {
 }
 </script>
 
-<script>
-(function () {
-    var link = document.querySelector('.auth-menu-link');
-    if (!link) return;
-    fetch('api/auth.php', { method: 'GET', credentials: 'include' })
-        .then(function (r) { if (r.ok) link.textContent = 'Sair'; })
-        .catch(function () {});
-})();
-</script>
+
 </body>
 </html>
