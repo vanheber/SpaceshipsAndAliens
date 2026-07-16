@@ -1,4 +1,6 @@
 ## Data: 3142-02-45
+<!-- audio: https://galeria.agenciaquadri.com.br/warp/missao01.mp3 -->
+
 # Diário do Capitão | Missão ZP-882e
 
 ## Registro de Aproximação Planetária
