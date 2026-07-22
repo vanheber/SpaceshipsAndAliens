@@ -90,7 +90,7 @@
     "aneis de gelo",
     "errante",
     "sem rotação",
-    " dentro de um nebula"
+    "dentro de um nebula"
   ],
   "gravidade": [
     "micro",
@@ -146,5 +146,23 @@
     "atmosfera corrosiva",
     "neblina psicoativa",
     "nenhum detectado"
+  ],
+  "origem": [
+    "mundo natural",
+    "planeta terraformado",
+    "colônia abandonada",
+    "posto avançado",
+    "prisão planetária",
+    "campo de batalha ancestral",
+    "megaestrutura viva",
+    "mundo industrial",
+    "ecossistema experimental",
+    "zona de quarentena",
+    "santuário biológico",
+    "civilização extinta",
+    "laboratório orbital",
+    "mundo minerador",
+    "estação científica perdida",
+    "planeta artificial"
   ]
 }

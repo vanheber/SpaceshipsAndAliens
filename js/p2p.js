@@ -36,9 +36,10 @@
 
   function _waitIce(pc) {
     return new Promise(function (resolve) {
-      if (pc.iceGatheringState === "complete") resolve();
-      else pc.onicegatheringstatechange = function () {
-        if (pc.iceGatheringState === "complete") resolve();
+      if (pc.iceGatheringState === "complete") return resolve();
+      var timer = setTimeout(function () { resolve(); }, 10000);
+      pc.onicegatheringstatechange = function () {
+        if (pc.iceGatheringState === "complete") { clearTimeout(timer); resolve(); }
       };
     });
   }

@@ -2,10 +2,10 @@
     Require all denied
 </Files>
 
-<FilesMatch "\.json$">
+<IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteRule ^data/campaigns/ - [F]
-</FilesMatch>
+</IfModule>
 
 <Files "sw.js">
     <IfModule mod_headers.c>

@@ -116,6 +116,8 @@
         let isDroneMode = false;
         let _readonly = false;
 
+        function esc(s) { return String(s).replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; }); }
+
         function saveState() {
             if (!activeChar) return;
             WarpStore.set("activeRobot", activeChar.id);
@@ -575,9 +577,9 @@
                 card.innerHTML =
                     (item.image ? '<img src="' + item.image + '" alt="" class="news-card-img" loading="lazy">' : "") +
                     '<div class="news-card-body">' +
-                    '<span class="news-badge ' + (item.type || "") + '">' + badge + " " + item.type + "</span>" +
-                    '<div class="news-card-title">' + item.title + "</div>" +
-                    '<div class="news-card-text">' + item.content + "</div>" +
+                    '<span class="news-badge ' + esc(item.type || "") + '">' + badge + " " + esc(item.type) + "</span>" +
+                    '<div class="news-card-title">' + esc(item.title) + "</div>" +
+                    '<div class="news-card-text">' + esc(item.content) + "</div>" +
                     "</div>";
                 grid.appendChild(card);
             });
@@ -594,14 +596,14 @@
 
                 card.innerHTML = `
                     <div class="catalog-image-container">
-                        <img src="${robot.image}" alt="${robot.model}" class="catalog-image" loading="lazy">
+                        <img src="${esc(robot.image)}" alt="${esc(robot.model)}" class="catalog-image" loading="lazy">
                     </div>
                     <div>
                         <div class="catalog-header">
-                            <span class="catalog-model">${robot.model}</span>
+                            <span class="catalog-model">${esc(robot.model)}</span>
                             <span class="catalog-tag ${robot.tagClass}">${robot.type}</span>
                         </div>
-                        <div class="catalog-desc">${robot.desc}</div>
+                        <div class="catalog-desc">${esc(robot.desc)}</div>
                     </div>
                     <div class="catalog-stats-preview">
                         <span>Ataque: +${robot.attack}</span>

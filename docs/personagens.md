@@ -18,7 +18,7 @@ Dez androides humanoides com especialidades complementares. Cada unidade possui 
 | Unidade | Ataque | Int | CA | Energia | Habilidade |
 |---|---|---|---|---|---|
 | Regis V4 | +3 | +1 | 15 | 6/12 | Escudo Térmico Ativo +2 |
-|  Robert C9 | +4 | +0 | 14 | 6/12 | Sobrecarga de Canhão +2 |
+| Robert C9 | +4 | +0 | 14 | 6/12 | Sobrecarga de Canhão +2 |
 | Vangelis E-AI | +3 | +2 | 12 | 5/10 | Invasão de Rede Local +2 |
 
 ### Inteligência e Suporte

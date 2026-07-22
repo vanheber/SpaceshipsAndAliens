@@ -16,7 +16,7 @@ var bc = new BroadcastChannel("warp-p2p");
 var log = document.getElementById("log");
 
 function addLog(t) {
-    log.innerHTML += "<br>" + t;
+    log.textContent += "\n" + t;
 }
 
 bc.onmessage = function (e) {

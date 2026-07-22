@@ -265,6 +265,8 @@
             state.npcs = WarpStore.get("npcs") || [NPC_START, NPC_START, NPC_START];
         }
 
+        function esc(s) { return String(s).replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; }); }
+
         function loadState() {
             syncStateFromStore();
         }
@@ -325,8 +327,8 @@
             header.className = "mc-character-header";
             header.innerHTML = `
         <div>
-            <div class="mc-character-name">${model}</div>
-            <div class="mc-character-type">${type}</div>
+            <div class="mc-character-name">${esc(model)}</div>
+            <div class="mc-character-type">${esc(type)}</div>
         </div>
         <span class="mc-energy-counter" id="ce-${id}">${current}/${maxEnergy}</span>
     `;
@@ -1070,7 +1072,7 @@
                     if (r) sender = r.model;
                 }
                 html += '<div class="msg-item">' +
-                    '<strong>' + sender + '</strong>: ' + m.text +
+                    '<strong>' + esc(sender) + '</strong>: ' + esc(m.text) +
                     ' <button class="btn btn-xs" onclick="WarpStore.dismissMessage(\'' + m.id + '\')" ' +
                     'style="padding:1px 6px;font-size:0.6rem"><i class="bi bi-x-lg"></i></button>' +
                     '</div>';

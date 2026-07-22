@@ -53,7 +53,7 @@ A tripulação é composta por androides humanoides com rostos sintéticos reali
 - **Drake S2** — Mecânico de campo. Personalidade: rude, criativo, resolve problemas com o que tem. Habilidade: Reciclagem Expressa.
 - **Misc i3** — Químico de laboratório. Personalidade: calmo, metódico, fala com precisão cirúrgica. Habilidade: Síntese de Reagentes.
 - **Origin 85** — Batedor de reconhecimento. Personalidade: rápido, impaciente, precisa estar em movimento. Habilidade: Sensores de Vetores.
-- ** Robert C9** — Artilharia tática. Personalidade: intenso, leal, age antes de pensar. Habilidade: Sobrecarga de Canhão.
+- **Robert C9** — Artilharia tática. Personalidade: intenso, leal, age antes de pensar. Habilidade: Sobrecarga de Canhão.
 - **Crusader Spirit-E** — Infiltradora silenciosa. Personalidade: quieta, observadora, presença quase fantasma. Habilidade: Camuflagem Quântica.
 - **C.O. Nomad n1** — Explorador de fronteira. Personalidade: resiliente, otimista, acredita que todo planeta tem algo a ensinar. Habilidade: Sobrevivência de Chassi.
 - **Ursula AC-12** — Médica de campo. Personalidade: compassiva, incansável, prioriza os outros. Habilidade: Sutura de Nanites.

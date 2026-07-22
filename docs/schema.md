@@ -97,15 +97,15 @@ Arrays de palavras por categoria. A cada geração, uma palavra de cada array é
 
 | Campo | Tipo | Descrição |
 |---|---|---|
-| `superficie` | string[] | Tipo dominante de superfície (12 opções) |
-| `bioma` | string[] | Bioma predominante (9 opções) |
+| `superficie` | string[] | Tipo dominante de superfície (35 opções) |
+| `bioma` | string[] | Bioma predominante (13 opções) |
 | `atmosfera` | string[] | Composição atmosférica (9 opções) |
-| `clima` | string[] | Clima do planeta (9 opções) |
-| `orbita` | string[] | Característica orbital (8 opções) |
+| `clima` | string[] | Clima do planeta (16 opções) |
+| `orbita` | string[] | Característica orbital (12 opções) |
 | `gravidade` | string[] | Nível de gravidade (4 opções) |
-| `fauna` | string[] | Fauna dominante (9 opções) |
-| `flora` | string[] | Flora dominante (10 opções) |
-| `recursos` | string[] | Recurso notável (8 opções) |
+| `fauna` | string[] | Fauna dominante (11 opções) |
+| `flora` | string[] | Flora dominante (11 opções) |
+| `recursos` | string[] | Recurso notável (10 opções) |
 | `perigo` | string[] | Perigo ambiental principal (9 opções) |
 
 **Total de combinações**: ~1.8 bilhão de planetas diferentes.

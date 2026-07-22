@@ -38,7 +38,7 @@ Para manter a consistência visual em todos os cards, utilize a seguinte base e 
 * **Fabricante**: Origin Jumpworks (Ultra-luxuoso, aerodinâmico, curvas suaves, acabamento branco brilhante com fibra de carbono e luzes azuis).
 > A sleek and elegant female humanoid android scout, Origin Jumpworks style, perfectly sculpted synthetic human face, wearing a premium glossy white and black carbon-fiber flight suit with glowing blue LED lines tracing the joints, high-end luxury aesthetic, star citizen game style, 3d character render, professional product design render, octane render, photorealistic, soft dramatic studio lighting, dark atmospheric sci-fi background, depth of field, 8k resolution --ar 4:3
 
-### 6.  Robert C9 (Combate Tático)
+### 6. Robert C9 (Combate Tático)
 * **Fabricante**: Roberts Space Industries - RSI (Design clássico de exploração/militar prático, cinza e laranja).
 > A battle-hardened male humanoid android commando, Roberts Space Industries (RSI) style, partially exposed metallic skull on one side showing cybernetic circuits, realistic synthetic face on the other, heavy gray and orange armored combat suit, star citizen game style, 3d character render, professional product design render, octane render, photorealistic, soft dramatic studio lighting, dark atmospheric sci-fi background, depth of field, 8k resolution --ar 4:3
 
