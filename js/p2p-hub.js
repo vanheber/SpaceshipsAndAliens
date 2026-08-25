@@ -1,12 +1,12 @@
-// WARP-Unit P2P Hub Client
-// Proxies WarpP2P through a BroadcastChannel to p2p-hub.html,
+// Spaceships and Aliens P2P Hub Client
+// Proxies SnaP2P through a BroadcastChannel to p2p-hub.html,
 // so page reloads don't kill WebRTC connections.
 
 (function () {
   "use strict";
-  if (typeof BroadcastChannel === "undefined" || typeof WarpP2P === "undefined") return;
+  if (typeof BroadcastChannel === "undefined" || typeof SnaP2P === "undefined") return;
 
-  var bc = new BroadcastChannel("warp-p2p");
+  var bc = new BroadcastChannel("sna-p2p");
   var _reqId = 0;
   var _pending = {};
   var _listeners = {};
@@ -71,7 +71,7 @@
   // Attempt to open hub window (must be called from user gesture)
   function _openHub() {
     if (_hubWindow && !_hubWindow.closed) return Promise.resolve(true);
-    _hubWindow = window.open("p2p-hub.html", "warp-p2p-hub", "width=400,height=300");
+    _hubWindow = window.open("p2p-hub.html", "sna-p2p-hub", "width=400,height=300");
     return new Promise(function (resolve) {
       if (!_hubWindow) { resolve(false); return; }
       // Wait for hub to signal back via first ping
@@ -92,51 +92,51 @@
     });
   }
 
-  // Override WarpP2P with hub proxy
+  // Override SnaP2P with hub proxy
   var _orig = {};
-  ["createOffer", "acceptAnswer", "joinRoom", "joinRoomCompact", "send", "close", "closePeer", "getRole", "isOpen", "on", "off"].forEach(function (k) { _orig[k] = WarpP2P[k]; });
+  ["createOffer", "acceptAnswer", "joinRoom", "joinRoomCompact", "send", "close", "closePeer", "getRole", "isOpen", "on", "off"].forEach(function (k) { _orig[k] = SnaP2P[k]; });
 
   // Partially apply: use hub if active, fallback to direct
   function _useHub() { return _hubWindow && !_hubWindow.closed; }
 
-  WarpP2P._hubActive = false;
+  SnaP2P._hubActive = false;
 
-  WarpP2P.hubConnect = function () {
+  SnaP2P.hubConnect = function () {
     if (_useHub()) return Promise.resolve(true);
     return _openHub().then(function (ok) {
-      WarpP2P._hubActive = ok;
+      SnaP2P._hubActive = ok;
       return ok;
     });
   };
 
-  WarpP2P.createOffer = function () {
+  SnaP2P.createOffer = function () {
     if (!_useHub()) return _orig.createOffer();
     return _sendCmd("createOffer", {}).then(function (r) {
       return { peerId: r.peerId, offer: r.offer, compact: r.compact };
     });
   };
 
-  WarpP2P.acceptAnswer = function (peerId, answer) {
+  SnaP2P.acceptAnswer = function (peerId, answer) {
     if (!_useHub()) return _orig.acceptAnswer(peerId, answer);
     return _sendCmd("acceptAnswer", { peerId: peerId, answer: answer }).then(function () {});
   };
 
-  WarpP2P.joinRoom = function (offer) {
+  SnaP2P.joinRoom = function (offer) {
     if (!_useHub()) return _orig.joinRoom(offer);
     return _sendCmd("joinRoom", { offer: offer }).then(function (r) { return r.answer; });
   };
 
-  WarpP2P.joinRoomCompact = function (compact) {
+  SnaP2P.joinRoomCompact = function (compact) {
     if (!_useHub()) return _orig.joinRoomCompact(compact);
     return _sendCmd("joinRoomCompact", { compact: compact }).then(function (r) { return r.answer; });
   };
 
-  WarpP2P.send = function (peerId, data) {
+  SnaP2P.send = function (peerId, data) {
     if (!_useHub()) return _orig.send(peerId, data);
     bc.postMessage({ type: "p2p-cmd", cmd: "send", peerId: peerId, data: data });
   };
 
-  WarpP2P.close = function () {
+  SnaP2P.close = function () {
     if (!_useHub()) return _orig.close();
     _sendCmd("close", {}).catch(function () {});
     _open = false;
@@ -144,23 +144,23 @@
     _hubWindow = null;
   };
 
-  WarpP2P.getRole = function () {
+  SnaP2P.getRole = function () {
     if (!_useHub()) return _orig.getRole();
     return _role || _orig.getRole();
   };
 
-  WarpP2P.isOpen = function () {
+  SnaP2P.isOpen = function () {
     if (!_useHub()) return _orig.isOpen();
     return _open || false;
   };
 
-  WarpP2P.on = function (name, fn) {
+  SnaP2P.on = function (name, fn) {
     if (!_useHub()) return _orig.on(name, fn);
     if (!_listeners[name]) _listeners[name] = [];
     _listeners[name].push(fn);
   };
 
-  WarpP2P.off = function (name, fn) {
+  SnaP2P.off = function (name, fn) {
     if (!_useHub()) _orig.off(name, fn);
     if (_listeners[name]) _listeners[name] = _listeners[name].filter(function (f) { return f !== fn; });
   };

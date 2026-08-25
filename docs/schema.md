@@ -1,6 +1,6 @@
 # Schema de Dados
 
-A engine WARP carrega dados de arquivos JSON externos. Para criar seu próprio tema ou catálogo, siga os schemas abaixo.
+A engine SnA carrega dados de arquivos JSON externos. Para criar seu próprio tema ou catálogo, siga os schemas abaixo.
 
 ---
 
@@ -266,7 +266,7 @@ Se a IA falha (todos os provedores exauridos), o gerador cai no sistema local pr
 
 ## Campanha & Sessão
 
-### Armazenamento: `localStorage` (chave `warp-campaigns`)
+### Armazenamento: `localStorage` (chave `sna-campaigns`)
 
 Campanhas são armazenadas exclusivamente no `localStorage` do navegador. Não há backend — o sistema opera 100% offline/local.
 
@@ -321,7 +321,7 @@ Campanhas são armazenadas exclusivamente no `localStorage` do navegador. Não h
 | `name` | string | Nome da campanha |
 | `archived` | boolean | `true` = oculta do seletor, visível em `arquivadas.html` |
 | `createdAt` | string | ISO 8601 |
-| `state` | object | Snapshot completo do `WarpStore.getAll()` |
+| `state` | object | Snapshot completo do `SnaStore.getAll()` |
 
 ### Página de Arquivadas
 
@@ -357,6 +357,88 @@ A geração tenta provedores em ordem até um responder:
 **Temperatura**: `1.2` em todas as chamadas.
 
 **Contexto de campanha**: quando `oneshot.html` é aberto com `?campaign=&code=`, o `buildCampaignContext()` injeta estado dos robôs e recursos da nave no prompt da IA.
+
+---
+
+## Biblioteca do Universo (`data/lore/`)
+
+O lore do universo SnA é **conteúdo como dados** (estilo Stellaris): prosa em Markdown, metadados em JSON. Organizado como uma **árvore hierárquica**, lido por `lore.html` hoje; planejado como fonte para injeção na IA de geração (roadmap).
+
+```
+data/lore/
+├── index.json          ← índice de metadados (id, parent, tipo, tags)
+├── system/*.md         ← sistemas estelares (topo da árvore)
+├── planet/*.md         ← planetas (parent = system)
+├── geography/*.md      ← geografia, flora e fauna (parent = planet)
+├── species/*.md        ← espécies e subespécies inteligentes (parent = planet|geography)
+├── culture/*.md        ← cultura e história (parent = species)
+└── tech/*.md           ← tecnologias: naves, equipamentos, instrumentos (parent = species)
+```
+
+### Hierarquia
+
+```
+Sistema Estelar
+└── Planeta
+    └── Geografia (flora/fauna, se houver)
+        └── Espécie + subespécies inteligentes (se houver)
+            ├── Cultura e História
+            └── Tecnologias (naves, equipamentos, instrumentos)
+```
+
+### `data/lore/index.json`
+
+Array de objetos, cada um descreve uma entrada:
+
+```json
+[
+  {
+    "id": "aegis-tiburon",
+    "file": "tech/aegis-tiburon.md",
+    "name": "Aegis Tiburon",
+    "type": "tech",
+    "parent": "humanidade",
+    "image": "img/tiburon-hero.webp",
+    "summary": "Canhoneira pesada reconvertida em nave-mãe.",
+    "tags": ["nave", "expedição", "protagonista"]
+  }
+]
+```
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `id` | string | Identificador único (slug). Referenciado por `parent` |
+| `file` | string | Path do `.md` relativo a `data/lore/` (`<type>/<id>.md`) |
+| `name` | string | Nome de exibição |
+| `type` | string | `system` \| `planet` \| `geography` \| `species` \| `culture` \| `tech` \| `general` \| `interdimensional` \| `organization` \| `history` |
+| `parent` | string (opcional) | `id` da entrada pai na árvore; omitido em entradas de topo (systems, `general`, `interdimensional`) |
+| `image` | string (opcional) | Path de imagem relativo à raiz do site (ex: `img/tiburon-hero.webp`) |
+| `summary` | string | Uma frase exibida na árvore |
+| `tags` | string[] | Usados na busca da página |
+
+Todas as **naves** e as **inteligências artificiais** (consolidadas em `tech/inteligencias-artificiais.md`) ficam em `tech` de Humanos (Sistema Sol) ou da espécie dona. `history`/`organization` aninham sob o nó **`general`**; entidades interdimensionais sob **`interdimensional`**. Irmãos na árvore são ordenados alfabeticamente (pt-BR).
+
+### Arquivos `.md`
+
+Prosa em Markdown puro, sem frontmatter (os metadados vivem no `index.json`). Título `# Nome`, seções `##`, 8-25 linhas. Exibidos via `marked.parse` em `lore.html`, que monta a árvore a partir de `parent` (nós `<details>` nativos).
+
+### Gerando novas entradas com IA
+
+O template [`prompts/lore.js`](../prompts/lore.js) (`LorePrompts`) converte texto-fonte do universo em uma entrada completa. Ele devolve JSON com `{ index: {...}, md: "..." }` — o `index` (com `id`/`parent`) vai para o `index.json`, o `md` é salvo em `data/lore/<type>/<id>.md`.
+
+O `LorePrompts.system(canon)` aceita um parâmetro opcional de cânone — o padrão (sem argumento) não injeta nenhum universo externo, evitando contaminação entre fontes.
+
+### População automática (`scripts/populate-lore.js`)
+
+Converte um corpus Markdown (ex: o universo "Mestre dos Planetas" em `mestredosplanetas-rag/`) em entradas via `LorePrompts` + Gemini, em etapas (`--stage species|worlds|factions|tech`, `--all`, `--plan`). Idempotente: pula entradas já geradas. Catálogo definido no topo do script. Requer `GEMINI_KEY` no `.env`.
+
+### Extração direta (`scripts/extract-sa.js`)
+
+Extrai conteúdo enciclopédico do sourcebook `data/lore/spaceships-and-aliens.md` (sistemas, planetas, naves, organizações, história, IAs) em entradas, sem IA. Descarta regras de jogo (custos XSATS, tabelas de stats) e resíduos de OCR. Etapas: `--stage systems|planets|ships|orgs|history|ai`, `--all`, `--force`.
+
+### Roadmap (não implementado)
+
+- `buildLoreContext()` em `oneshot.html`: selecionar entradas por tags/ancestralidade e injetar no prompt com delimitadores `[DATA]...[/DATA]`.
 
 ---
 

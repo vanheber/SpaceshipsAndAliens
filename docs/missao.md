@@ -8,13 +8,13 @@ Pelo menu de navegação de qualquer página ou diretamente pela URL `missioncon
 
 ## Campanhas (Armazenamento Local)
 
-Campanhas são armazenadas no `localStorage` sob a chave `warp-campaigns`. Cada campanha contém:
+Campanhas são armazenadas no `localStorage` sob a chave `sna-campaigns`. Cada campanha contém:
 
 | Campo | Descrição |
 |---|---|
 | `id` | Identificador único (`c` + timestamp base36) |
 | `name` | Nome da campanha |
-| `state` | Snapshot completo do `WarpStore` (robôs, PNJs, medo, naves) |
+| `state` | Snapshot completo do `SnaStore` (robôs, PNJs, medo, naves) |
 | `archived` | `true` se arquivada, `false` se ativa |
 | `createdAt` | Data de criação ISO |
 
@@ -32,7 +32,7 @@ Mantém-se no máximo **10 campanhas arquivadas**. Ao arquivar uma nova, as mais
 
 ### Leitura sobre persistência
 
-O `WarpStore` opera em modo `"local"` (apenas `localStorage`, sem servidor). Em sessões P2P, o `_saveLocal()` também persiste o estado, garantindo que reloads não percam dados.
+O `SnaStore` opera em modo `"local"` (apenas `localStorage`, sem servidor). Em sessões P2P, o `_saveLocal()` também persiste o estado, garantindo que reloads não percam dados.
 
 ## Seções
 
@@ -82,7 +82,7 @@ Painel esquerdo com duas seções expansíveis:
 - **Nave-Mãe Tiburon**: Suprimentos (20), Combustível (10), Munição (10), Blindagem/Escudo (20)
 - **Origin 400i**: Suprimentos (8), Combustível (6), Munição (4), Blindagem/Escudo (8)
 
-Os dados vêm do `WarpStore` (`mothership` / `ship400i`). As páginas individuais das naves (`mothership.html`, `400i.html`) são apenas consultivas — a edição é centralizada aqui.
+Os dados vêm do `SnaStore` (`mothership` / `ship400i`). As páginas individuais das naves (`mothership.html`, `400i.html`) são apenas consultivas — a edição é centralizada aqui.
 
 ## Sessões
 
@@ -106,9 +106,9 @@ Sistema peer-to-peer via WebRTC sem servidor intermediário.
 
 ### Hub de Persistência
 
-Para evitar desconexão ao recarregar a página, o sistema abre um popup dedicado (`p2p-hub.html`) que segura a conexão WebRTC. As páginas principais se comunicam com o hub via `BroadcastChannel("warp-p2p")`.
+Para evitar desconexão ao recarregar a página, o sistema abre um popup dedicado (`p2p-hub.html`) que segura a conexão WebRTC. As páginas principais se comunicam com o hub via `BroadcastChannel("sna-p2p")`.
 
-- `WarpP2P.hubConnect()` é chamado no clique do GM/jogador (gesto de usuário)
+- `SnaP2P.hubConnect()` é chamado no clique do GM/jogador (gesto de usuário)
 - Se o popup for bloqueado, o sistema cai no modo direto (sem hub)
 - O hub não tem UI — apenas um popup de 350×250px
 

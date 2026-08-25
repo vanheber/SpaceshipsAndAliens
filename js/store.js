@@ -1,4 +1,4 @@
-// WARP-Unit Shared State Store
+// Spaceships and Aliens Shared State Store
 // Single source of truth for all pages.
 // Phase 1: localStorage backend.
 // Phase 2: fetch() backend with polling.
@@ -6,7 +6,7 @@
 (function () {
   "use strict";
 
-  var KEY = "warp-unit-state";
+  var KEY = "sna-state";
 
   var DEFAULTS = {
     campaignName: "",
@@ -99,8 +99,8 @@
   }
 
   function _broadcast() {
-    if (typeof WarpP2P !== "undefined" && WarpP2P.getRole() === "gm") {
-      WarpP2P.send(null, {
+    if (typeof SnaP2P !== "undefined" && SnaP2P.getRole() === "gm") {
+      SnaP2P.send(null, {
         type: "sync",
         state: _state,
         sessions: _state.sessions,
@@ -115,7 +115,7 @@
     for (var i = 0; i < _subs.length; i++) {
       try { _subs[i](s); } catch (e) {}
     }
-    window.dispatchEvent(new CustomEvent("warp-state-changed", { detail: s }));
+    window.dispatchEvent(new CustomEvent("sna-state-changed", { detail: s }));
   }
 
   function _loadFromStorage() {
@@ -133,7 +133,7 @@
   }
 
   function _p2pSave(path) {
-    if (!_remoteOpts || typeof WarpP2P === "undefined") return;
+    if (!_remoteOpts || typeof SnaP2P === "undefined") return;
     if (_remoteOpts.role === "gm") return;
     // Player: detect energy delta, send request to GM
     var robotId = null;
@@ -145,12 +145,12 @@
     if (robotId && _prevState) {
       var delta = (_state.robots[robotId] || 0) - (_prevState.robots[robotId] || 0);
       if (delta !== 0) {
-        WarpP2P.send("gm", { type: "request", robotId: robotId, amount: delta });
+        SnaP2P.send("gm", { type: "request", robotId: robotId, amount: delta });
       }
     }
     // Notify GM when player picks/changes their android
     if (path === "activeRobot") {
-      WarpP2P.send("gm", { type: "hello", robotId: _state.activeRobot || null });
+      SnaP2P.send("gm", { type: "hello", robotId: _state.activeRobot || null });
     }
   }
 
@@ -225,13 +225,13 @@
     } catch (ex) {}
   });
 
-  window.WarpStore = {
+  window.SnaStore = {
     mode: _mode,
 
     init: function (opts) {
       opts = opts || {};
       _mode = opts.mode || "local";
-      window.WarpStore.mode = _mode;
+      window.SnaStore.mode = _mode;
 
       if (_mode === "local") {
         _migrate();
@@ -242,15 +242,15 @@
 
       if (_mode === "p2p") {
         _remoteOpts = opts;
-        WarpStore.setP2pSession(opts.role);
+        SnaStore.setP2pSession(opts.role);
         _state = deepClone(DEFAULTS);
         if (opts.role === "gm") {
           _migrate();
           _loadFromStorage();
           _notify(_state);
           _readyPromise = Promise.resolve();
-          if (typeof WarpP2P !== "undefined") {
-            WarpP2P.on("message", function (msg) {
+          if (typeof SnaP2P !== "undefined") {
+            SnaP2P.on("message", function (msg) {
               if (msg.type === "request") {
                 _state.pendingActions = _state.pendingActions || [];
                 _state.pendingActions.push({
@@ -277,7 +277,7 @@
                 _broadcast();
                 _notify(_state);
               } else if (msg.type === "hello") {
-                window.dispatchEvent(new CustomEvent("warp-p2p-hello", {
+                window.dispatchEvent(new CustomEvent("sna-p2p-hello", {
                   detail: { peerId: msg._peerId, robotId: msg.robotId }
                 }));
               } else if (msg.type === "chat") {
@@ -300,8 +300,8 @@
           var _p2pSynced = false;
           _readyPromise = new Promise(function (r) { _p2pSynced = r; });
           var synced = false;
-          if (typeof WarpP2P !== "undefined") {
-            WarpP2P.on("message", function (msg) {
+          if (typeof SnaP2P !== "undefined") {
+            SnaP2P.on("message", function (msg) {
               if (msg.type === "sync") {
                 if (msg.state) _state = deepMerge(_state, msg.state);
                 if (Array.isArray(msg.sessions)) _state.sessions = msg.sessions;
@@ -313,7 +313,7 @@
                   synced = true;
                   _p2pSynced();
                   // Announce presence to GM after first sync
-                  WarpP2P.send("gm", { type: "hello", robotId: _state.activeRobot || null });
+                  SnaP2P.send("gm", { type: "hello", robotId: _state.activeRobot || null });
                 }
               }
             });
@@ -380,7 +380,7 @@
     },
 
     sendMessage: function (fromId, toId, text) {
-      if (_mode === "local" && typeof WarpP2P !== "undefined" && WarpP2P.isOpen() && WarpP2P.getRole() === "gm") {
+      if (_mode === "local" && typeof SnaP2P !== "undefined" && SnaP2P.isOpen() && SnaP2P.getRole() === "gm") {
         _state.messages = _state.messages || [];
         _state.messages.push({ id: "msg-" + Date.now().toString(36), from: fromId, to: toId, text: text, sentAt: new Date().toISOString(), read: false });
         _saveLocal();
@@ -389,12 +389,12 @@
         return;
       }
       if (_mode === "p2p" && _remoteOpts.role !== "gm") {
-        if (typeof WarpP2P !== "undefined") WarpP2P.send("gm", { type: "chat", from: fromId, to: toId, text: text });
+        if (typeof SnaP2P !== "undefined") SnaP2P.send("gm", { type: "chat", from: fromId, to: toId, text: text });
       }
     },
 
     dismissMessage: function (messageId) {
-      if (_mode === "local" && typeof WarpP2P !== "undefined" && WarpP2P.isOpen() && WarpP2P.getRole() === "gm") {
+      if (_mode === "local" && typeof SnaP2P !== "undefined" && SnaP2P.isOpen() && SnaP2P.getRole() === "gm") {
         _state.messages = (_state.messages || []).filter(function (m) { return m.id !== messageId; });
         _saveLocal();
         _broadcast();
@@ -403,7 +403,7 @@
     },
 
     addLogEntry: function (sessionId, text) {
-      if (_mode === "local" && typeof WarpP2P !== "undefined" && WarpP2P.isOpen() && WarpP2P.getRole() === "gm") {
+      if (_mode === "local" && typeof SnaP2P !== "undefined" && SnaP2P.isOpen() && SnaP2P.getRole() === "gm") {
         var sessions = _state.sessions || [];
         for (var i = 0; i < sessions.length; i++) {
           if (sessions[i].id === sessionId && !sessions[i].endedAt) {
@@ -425,28 +425,28 @@
 
     setP2pSession: function (role) {
       try {
-        sessionStorage.setItem("warp-p2p-active", "true");
-        sessionStorage.setItem("warp-p2p-role", role);
+        sessionStorage.setItem("sna-p2p-active", "true");
+        sessionStorage.setItem("sna-p2p-role", role);
       } catch (e) {}
     },
 
     clearP2pSession: function () {
       try {
-        sessionStorage.removeItem("warp-p2p-active");
-        sessionStorage.removeItem("warp-p2p-role");
+        sessionStorage.removeItem("sna-p2p-active");
+        sessionStorage.removeItem("sna-p2p-role");
       } catch (e) {}
     },
 
     isP2pActive: function () {
-      try { return sessionStorage.getItem("warp-p2p-active") === "true"; } catch (e) { return false; }
+      try { return sessionStorage.getItem("sna-p2p-active") === "true"; } catch (e) { return false; }
     },
 
     getP2pRole: function () {
-      try { return sessionStorage.getItem("warp-p2p-role") || null; } catch (e) { return null; }
+      try { return sessionStorage.getItem("sna-p2p-role") || null; } catch (e) { return null; }
     },
 
     makeNavExternal: function () {
-      document.querySelectorAll('.warp-nav-overlay a, .warp-nav a').forEach(function (a) {
+      document.querySelectorAll('.sna-nav-overlay a, .sna-nav a').forEach(function (a) {
         if (a.getAttribute("href") && !a.getAttribute("target")) {
           a.setAttribute("target", "_blank");
           a.setAttribute("rel", "noopener");
@@ -457,7 +457,7 @@
     destroy: function () {
       _remoteOpts = null;
       _mode = "local";
-      window.WarpStore.mode = _mode;
+      window.SnaStore.mode = _mode;
     },
   };
 })();

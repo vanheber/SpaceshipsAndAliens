@@ -1,0 +1,1062 @@
+[
+  {
+    "id": "general",
+    "file": "general/general.md",
+    "name": "General",
+    "type": "general",
+    "summary": "Organizações, história e inteligências artificiais do universo."
+  },
+  {
+    "id": "a-primeira-federacao",
+    "file": "history/a-primeira-federacao.md",
+    "name": "A Primeira Federação",
+    "type": "history",
+    "tags": [
+      "história"
+    ],
+    "parent": "general"
+  },
+  {
+    "id": "eras",
+    "file": "history/eras.md",
+    "name": "Eras",
+    "type": "history",
+    "tags": [
+      "história"
+    ],
+    "parent": "general"
+  },
+  {
+    "id": "o-calendario-universal",
+    "file": "history/o-calendario-universal.md",
+    "name": "O Calendário Universal",
+    "type": "history",
+    "tags": [
+      "história"
+    ],
+    "parent": "general"
+  },
+  {
+    "id": "o-primeiro-contato-dos-tahlianos",
+    "file": "history/o-primeiro-contato-dos-tahlianos.md",
+    "name": "O Primeiro contato dos Tahlianos",
+    "type": "history",
+    "tags": [
+      "história"
+    ],
+    "parent": "general"
+  },
+  {
+    "id": "dnagon",
+    "file": "organization/dnagon.md",
+    "name": "DNAgon",
+    "type": "organization",
+    "tags": [
+      "organização"
+    ],
+    "parent": "general"
+  },
+  {
+    "id": "federacao",
+    "file": "organization/federacao.md",
+    "name": "Federação",
+    "type": "organization",
+    "tags": [
+      "organização"
+    ],
+    "parent": "general"
+  },
+  {
+    "id": "iluminados",
+    "file": "organization/iluminados.md",
+    "name": "Iluminados",
+    "type": "organization",
+    "tags": [
+      "organização"
+    ],
+    "parent": "general"
+  },
+  {
+    "id": "imperium",
+    "file": "organization/imperium.md",
+    "name": "Imperium",
+    "type": "organization",
+    "tags": [
+      "organização"
+    ],
+    "parent": "general"
+  },
+  {
+    "id": "independentes",
+    "file": "organization/independentes.md",
+    "name": "Independentes",
+    "type": "organization",
+    "tags": [
+      "organização"
+    ],
+    "parent": "general"
+  },
+  {
+    "id": "kimera",
+    "file": "organization/kimera.md",
+    "name": "Kimera",
+    "type": "organization",
+    "tags": [
+      "organização"
+    ],
+    "parent": "general"
+  },
+  {
+    "id": "konpasu",
+    "file": "organization/konpasu.md",
+    "name": "Konpasu",
+    "type": "organization",
+    "tags": [
+      "organização"
+    ],
+    "parent": "general"
+  },
+  {
+    "id": "mercenarios",
+    "file": "organization/mercenarios.md",
+    "name": "Mercenários",
+    "type": "organization",
+    "tags": [
+      "organização"
+    ],
+    "parent": "general"
+  },
+  {
+    "id": "piratas",
+    "file": "organization/piratas.md",
+    "name": "Piratas",
+    "type": "organization",
+    "tags": [
+      "organização"
+    ],
+    "parent": "general"
+  },
+  {
+    "id": "shini",
+    "file": "organization/shini.md",
+    "name": "Shini",
+    "type": "organization",
+    "tags": [
+      "organização"
+    ],
+    "parent": "general"
+  },
+  {
+    "id": "uniao-drak",
+    "file": "organization/uniao-drak.md",
+    "name": "União Drak",
+    "type": "organization",
+    "tags": [
+      "organização"
+    ],
+    "parent": "general"
+  },
+  {
+    "id": "interdimensional",
+    "file": "interdimensional/interdimensional.md",
+    "name": "Interdimensional",
+    "type": "interdimensional",
+    "summary": "Entidades que vivem entre dimensões e planos."
+  },
+  {
+    "id": "semeador",
+    "file": "species/semeador.md",
+    "name": "Semeador (Uno/Duo)",
+    "type": "species",
+    "summary": "Um ser enigmático e singular, conhecido como 'O Viajante', dotado de capacidades extraordinárias para manipular matéria e criar portais.",
+    "tags": [
+      "espécie",
+      "portais",
+      "viajante",
+      "singular"
+    ],
+    "parent": "interdimensional"
+  },
+  {
+    "id": "sonhos",
+    "file": "species/sonhos.md",
+    "name": "Sonhos",
+    "type": "species",
+    "summary": "Entidades interdimensionais compostas por táquions que operam como uma unidade coletiva através das distâncias espaciais.",
+    "tags": [
+      "espécie",
+      "táquions",
+      "interdimensional",
+      "viajantes"
+    ],
+    "parent": "interdimensional"
+  },
+  {
+    "id": "sistema-necton",
+    "file": "system/sistema-necton.md",
+    "name": "Sistema Nécton",
+    "type": "system",
+    "tags": [
+      "sistema"
+    ]
+  },
+  {
+    "id": "gemini-1-e-2",
+    "file": "planet/gemini-1-e-2.md",
+    "name": "Gemini 1 e 2",
+    "type": "planet",
+    "parent": "sistema-necton",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "harmonia",
+    "file": "planet/harmonia.md",
+    "name": "Harmonia",
+    "type": "planet",
+    "parent": "sistema-necton",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "oceania",
+    "file": "planet/oceania.md",
+    "name": "Oceânia",
+    "type": "planet",
+    "parent": "sistema-necton",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "leviathans",
+    "file": "species/leviathans.md",
+    "name": "Leviathans",
+    "type": "species",
+    "parent": "oceania",
+    "summary": "Criaturas aquáticas telepáticas nativas de Oceânia, conhecidas por sua capacidade de manipular correntes hídricas.",
+    "tags": [
+      "espécie",
+      "oceânia",
+      "telepatia",
+      "aquáticos"
+    ]
+  },
+  {
+    "id": "sistema-ninive",
+    "file": "system/sistema-ninive.md",
+    "name": "Sistema Nínive",
+    "type": "system",
+    "summary": "Um sistema planetário marcado por uma metrópole vertical densa e estratificada, onde a vigilância tecnológica rigorosa tenta controlar uma subcultura de contrabandistas e mercenários.",
+    "tags": [
+      "sistema",
+      "nínive",
+      "ninivithians",
+      "cidade"
+    ]
+  },
+  {
+    "id": "adissonia",
+    "file": "planet/adissonia.md",
+    "name": "Adissônia",
+    "type": "planet",
+    "parent": "sistema-ninive",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "kalmar",
+    "file": "planet/kalmar.md",
+    "name": "Kalmar",
+    "type": "planet",
+    "parent": "sistema-ninive",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "mongoro",
+    "file": "planet/mongoro.md",
+    "name": "Mongoro",
+    "type": "planet",
+    "parent": "sistema-ninive",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "ninive",
+    "file": "planet/ninive.md",
+    "name": "Nínive",
+    "type": "planet",
+    "parent": "sistema-ninive",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "ninivithians",
+    "file": "species/ninivithians.md",
+    "name": "Ninivithians",
+    "type": "species",
+    "parent": "ninive",
+    "summary": "Uma espécie de arquitetos e mecânicos de estatura elevada, conhecidos por sua habilidade manual e visão macroscópica.",
+    "tags": [
+      "espécie",
+      "construtores",
+      "arquitetura",
+      "mecânica"
+    ]
+  },
+  {
+    "id": "ciclopes",
+    "file": "tech/ciclopes.md",
+    "name": "Ciclopes",
+    "type": "tech",
+    "parent": "ninivithians",
+    "summary": "Robôs policiais de Nínive, reconhecíveis pelo sensor ótico único, responsáveis pela manutenção da ordem e patrulhamento urbano.",
+    "tags": [
+      "robôs",
+      "polícia",
+      "nínive",
+      "vigilância"
+    ]
+  },
+  {
+    "id": "holodisco",
+    "file": "tech/holodisco.md",
+    "name": "Holodisco",
+    "type": "tech",
+    "parent": "ninivithians",
+    "summary": "Uma mídia de armazenamento de dados em formato de cristal, utilizada para transportar grandes volumes de informações de forma discreta.",
+    "tags": [
+      "mídia",
+      "holográfico",
+      "armazenamento"
+    ]
+  },
+  {
+    "id": "spacenet",
+    "file": "tech/spacenet.md",
+    "name": "Spacenet",
+    "type": "tech",
+    "parent": "ninivithians",
+    "summary": "A rede interplanetária de informática que utiliza lasers invisíveis para a transmissão de dados entre sistemas estelares.",
+    "tags": [
+      "rede",
+      "comunicação",
+      "interplanetária",
+      "laser invisível"
+    ]
+  },
+  {
+    "id": "zigurate",
+    "file": "planet/zigurate.md",
+    "name": "Zigurate",
+    "type": "planet",
+    "parent": "sistema-ninive",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "sistema-nova-sirius",
+    "file": "system/sistema-nova-sirius.md",
+    "name": "Sistema Nova Sírius",
+    "type": "system",
+    "tags": [
+      "sistema"
+    ]
+  },
+  {
+    "id": "dosher",
+    "file": "planet/dosher.md",
+    "name": "Dosher",
+    "type": "planet",
+    "parent": "sistema-nova-sirius",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "emerida",
+    "file": "planet/emerida.md",
+    "name": "Emérida",
+    "type": "planet",
+    "parent": "sistema-nova-sirius",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "garmot",
+    "file": "planet/garmot.md",
+    "name": "Garmot",
+    "type": "planet",
+    "parent": "sistema-nova-sirius",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "terra-2",
+    "file": "planet/terra-2.md",
+    "name": "Terra 2",
+    "type": "planet",
+    "parent": "sistema-nova-sirius",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "vine",
+    "file": "planet/vine.md",
+    "name": "Vine",
+    "type": "planet",
+    "parent": "sistema-nova-sirius",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "sistema-reptilus",
+    "file": "system/sistema-reptilus.md",
+    "name": "Sistema Reptilus",
+    "type": "system",
+    "tags": [
+      "sistema"
+    ]
+  },
+  {
+    "id": "aligator",
+    "file": "planet/aligator.md",
+    "name": "Aligator",
+    "type": "planet",
+    "parent": "sistema-reptilus",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "ambar",
+    "file": "planet/ambar.md",
+    "name": "Âmbar",
+    "type": "planet",
+    "parent": "sistema-reptilus",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "fauna",
+    "file": "planet/fauna.md",
+    "name": "Fauna",
+    "type": "planet",
+    "parent": "sistema-reptilus",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "flora",
+    "file": "planet/flora.md",
+    "name": "Flora",
+    "type": "planet",
+    "parent": "sistema-reptilus",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "raptor",
+    "file": "planet/raptor.md",
+    "name": "Raptor",
+    "type": "planet",
+    "parent": "sistema-reptilus",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "reptilus-mundo",
+    "file": "planet/reptilus-mundo.md",
+    "name": "Reptilus",
+    "type": "planet",
+    "parent": "sistema-reptilus",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "reptilus",
+    "file": "species/reptilus.md",
+    "name": "Reptilus",
+    "type": "species",
+    "parent": "reptilus-mundo",
+    "summary": "Uma espécie reptiliana complexa e reclusa que governa uma vasta rede de clãs conhecida como o Domínio.",
+    "tags": [
+      "espécie",
+      "répteis",
+      "domínio",
+      "clãs"
+    ]
+  },
+  {
+    "id": "dominio-reptilus",
+    "file": "culture/dominio-reptilus.md",
+    "name": "O Domínio",
+    "type": "culture",
+    "parent": "reptilus",
+    "summary": "Uma vasta confederação de clãs reptilianos que governa uma região isolacionista e heterogênea.",
+    "tags": [
+      "domínio",
+      "reptilus",
+      "clãs",
+      "cultura"
+    ]
+  },
+  {
+    "id": "tiranus",
+    "file": "tech/tiranus.md",
+    "name": "Tiranus",
+    "type": "tech",
+    "parent": "reptilus"
+  },
+  {
+    "id": "sistema-roshini",
+    "file": "system/sistema-roshini.md",
+    "name": "Sistema Roshini",
+    "type": "system",
+    "tags": [
+      "sistema"
+    ]
+  },
+  {
+    "id": "bonrore",
+    "file": "planet/bonrore.md",
+    "name": "Bonrore",
+    "type": "planet",
+    "parent": "sistema-roshini",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "ontelia",
+    "file": "planet/ontelia.md",
+    "name": "Ontelia",
+    "type": "planet",
+    "parent": "sistema-roshini",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "tahlim",
+    "file": "planet/tahlim.md",
+    "name": "Tahlim",
+    "type": "planet",
+    "parent": "sistema-roshini",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "zagar-e-zaseru",
+    "file": "planet/zagar-e-zaseru.md",
+    "name": "Zagar e Zaseru",
+    "type": "planet",
+    "parent": "sistema-roshini",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "sistema-sol",
+    "file": "system/sistema-sol.md",
+    "name": "Sistema Sol",
+    "type": "system",
+    "summary": "O sistema solar, lar da Federação Terra, caracterizado por avanços tecnológicos em computação e uma geografia planetária em constante transformação.",
+    "tags": [
+      "sistema",
+      "federação",
+      "terra",
+      "netuno"
+    ]
+  },
+  {
+    "id": "humanos",
+    "file": "species/humanos.md",
+    "name": "Humanos",
+    "type": "species",
+    "parent": "sistema-sol",
+    "summary": "Espécie bípeda de origem carbonífera, reconhecida por sua criatividade e capacidade de reprodução.",
+    "tags": [
+      "espécie",
+      "humanos",
+      "federação"
+    ]
+  },
+  {
+    "id": "federacao-terra",
+    "file": "culture/federacao-terra.md",
+    "name": "Federação Terra",
+    "type": "culture",
+    "parent": "humanos",
+    "summary": "Uma organização humana autêntica e criativa, reconhecida por sua maestria em computação e design naval compacto.",
+    "tags": [
+      "federação",
+      "cultura",
+      "terra",
+      "espécie humana"
+    ]
+  },
+  {
+    "id": "atlantis",
+    "file": "tech/atlantis.md",
+    "name": "Atlantis",
+    "type": "tech",
+    "parent": "federacao-terra",
+    "summary": "Uma nave-mãe de design delta da Federação Terra, equipada com tecnologia computacional avançada e capacidade para operar caças de suporte.",
+    "tags": [
+      "nave",
+      "nave-mãe",
+      "federação",
+      "delta"
+    ]
+  },
+  {
+    "id": "14x",
+    "file": "tech/14x.md",
+    "name": "14X",
+    "type": "tech",
+    "parent": "humanos"
+  },
+  {
+    "id": "aguia-sorrateira",
+    "file": "tech/aguia-sorrateira.md",
+    "name": "Águia Sorrateira",
+    "type": "tech",
+    "parent": "humanos"
+  },
+  {
+    "id": "apolion",
+    "file": "tech/apolion.md",
+    "name": "Apolion",
+    "type": "tech",
+    "parent": "humanos"
+  },
+  {
+    "id": "arganon",
+    "file": "tech/arganon.md",
+    "name": "Arganon",
+    "type": "tech",
+    "parent": "humanos"
+  },
+  {
+    "id": "classe-cometa",
+    "file": "tech/classe-cometa.md",
+    "name": "Classe Cometa",
+    "type": "tech",
+    "parent": "humanos"
+  },
+  {
+    "id": "classe-constelacao",
+    "file": "tech/classe-constelacao.md",
+    "name": "Classe Constelação",
+    "type": "tech",
+    "parent": "humanos"
+  },
+  {
+    "id": "classe-estrela",
+    "file": "tech/classe-estrela.md",
+    "name": "Classe Estrela",
+    "type": "tech",
+    "parent": "humanos"
+  },
+  {
+    "id": "classe-galaxia",
+    "file": "tech/classe-galaxia.md",
+    "name": "Classe Galáxia",
+    "type": "tech",
+    "parent": "humanos"
+  },
+  {
+    "id": "estacao-espacial",
+    "file": "tech/estacao-espacial.md",
+    "name": "Estação espacial",
+    "type": "tech",
+    "parent": "humanos"
+  },
+  {
+    "id": "horizon",
+    "file": "tech/horizon.md",
+    "name": "Horizon",
+    "type": "tech",
+    "parent": "humanos"
+  },
+  {
+    "id": "inteligencias-artificiais",
+    "file": "tech/inteligencias-artificiais.md",
+    "name": "Inteligências Artificiais",
+    "type": "tech",
+    "parent": "humanos"
+  },
+  {
+    "id": "savepod",
+    "file": "tech/savepod.md",
+    "name": "SavePod",
+    "type": "tech",
+    "parent": "humanos"
+  },
+  {
+    "id": "sistema-stratus",
+    "file": "system/sistema-stratus.md",
+    "name": "Sistema Stratus",
+    "type": "system",
+    "tags": [
+      "sistema"
+    ]
+  },
+  {
+    "id": "celestia",
+    "file": "planet/celestia.md",
+    "name": "Celestia",
+    "type": "planet",
+    "parent": "sistema-stratus",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "alados",
+    "file": "species/alados.md",
+    "name": "Alados",
+    "type": "species",
+    "summary": "Espécie aviária nativa de um mundo gasoso, adaptada para a vida em zonas de gravidade nula entre as nuvens.",
+    "tags": [
+      "espécie",
+      "voadores",
+      "planeta gasoso",
+      "asas"
+    ],
+    "parent": "celestia"
+  },
+  {
+    "id": "ciclone",
+    "file": "planet/ciclone.md",
+    "name": "Ciclone",
+    "type": "planet",
+    "parent": "sistema-stratus",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "cirrus",
+    "file": "planet/cirrus.md",
+    "name": "Cirrus",
+    "type": "planet",
+    "parent": "sistema-stratus",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "cumulus",
+    "file": "planet/cumulus.md",
+    "name": "Cumulus",
+    "type": "planet",
+    "parent": "sistema-stratus",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "nimbus",
+    "file": "planet/nimbus.md",
+    "name": "Nimbus",
+    "type": "planet",
+    "parent": "sistema-stratus",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "sonho",
+    "file": "planet/sonho.md",
+    "name": "Sonho",
+    "type": "planet",
+    "parent": "sistema-stratus",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "sistema-taurus",
+    "file": "system/sistema-taurus.md",
+    "name": "Sistema Taurus",
+    "type": "system",
+    "tags": [
+      "sistema"
+    ]
+  },
+  {
+    "id": "titania",
+    "file": "planet/titania.md",
+    "name": "Titânia",
+    "type": "planet",
+    "parent": "sistema-taurus",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "titanicos",
+    "file": "species/titanicos.md",
+    "name": "Titânicos",
+    "type": "species",
+    "summary": "Seres carboníferos de proporções colossais conhecidos como 'Os Gigantes', adaptados a ambientes de alta gravidade.",
+    "tags": [
+      "espécie",
+      "gigantes",
+      "gravidade",
+      "tradições"
+    ],
+    "parent": "titania"
+  },
+  {
+    "id": "tridente",
+    "file": "planet/tridente.md",
+    "name": "Tridente",
+    "type": "planet",
+    "parent": "sistema-taurus",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "sistema-vulcan",
+    "file": "system/sistema-vulcan.md",
+    "name": "Sistema Vulcan (Inferno)",
+    "type": "system",
+    "tags": [
+      "sistema"
+    ]
+  },
+  {
+    "id": "acid",
+    "file": "planet/acid.md",
+    "name": "Acid",
+    "type": "planet",
+    "parent": "sistema-vulcan",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "golem",
+    "file": "planet/golem.md",
+    "name": "Golem",
+    "type": "planet",
+    "parent": "sistema-vulcan",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "draks",
+    "file": "species/draks.md",
+    "name": "Draks",
+    "type": "species",
+    "summary": "Uma espécie anfíbia de guerreiros robustos, conhecidos por sua resistência física excepcional e notável habilidade em combate.",
+    "tags": [
+      "espécie",
+      "guerreiros",
+      "anfíbios",
+      "soldados"
+    ],
+    "parent": "golem"
+  },
+  {
+    "id": "petros",
+    "file": "planet/petros.md",
+    "name": "Petros",
+    "type": "planet",
+    "parent": "sistema-vulcan",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "colossos",
+    "file": "species/colossos.md",
+    "name": "Colossos",
+    "type": "species",
+    "summary": "Uma espécie baseada em silício, conhecida por sua resistência extrema e aptidão para o trabalho em ambientes hostis.",
+    "tags": [
+      "espécie",
+      "silício",
+      "homens-pedra",
+      "minas"
+    ],
+    "parent": "petros"
+  },
+  {
+    "id": "sulfur",
+    "file": "planet/sulfur.md",
+    "name": "Sulfur",
+    "type": "planet",
+    "parent": "sistema-vulcan",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "sistema-zender",
+    "file": "system/sistema-zender.md",
+    "name": "Sistema Zender",
+    "type": "system",
+    "tags": [
+      "sistema"
+    ]
+  },
+  {
+    "id": "agonia",
+    "file": "planet/agonia.md",
+    "name": "Agonia",
+    "type": "planet",
+    "parent": "sistema-zender",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "tortura",
+    "file": "planet/tortura.md",
+    "name": "Tortura",
+    "type": "planet",
+    "parent": "sistema-zender",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "zenderia",
+    "file": "planet/zenderia.md",
+    "name": "Zenderia",
+    "type": "planet",
+    "parent": "sistema-zender",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "zenderianos",
+    "file": "species/zenderianos.md",
+    "name": "Zenderianos (Inseptors)",
+    "type": "species",
+    "parent": "zenderia",
+    "summary": "Raça carbonífera de natureza insetoide conhecida por sua capacidade adaptativa extrema e comportamento coletivo ou simbiótico.",
+    "tags": [
+      "espécie",
+      "insetoides",
+      "genética",
+      "simbiontes"
+    ]
+  },
+  {
+    "id": "cruzador-canhao",
+    "file": "tech/cruzador-canhao.md",
+    "name": "Cruzador Canhão",
+    "type": "tech",
+    "parent": "zenderianos",
+    "summary": "Uma imensa e letal nave de guerra zenderiana equipada com um armamento de destruição em massa.",
+    "tags": [
+      "nave",
+      "zenderianos",
+      "canhão",
+      "guerra"
+    ]
+  },
+  {
+    "id": "sistema-zeta3",
+    "file": "system/sistema-zeta3.md",
+    "name": "Sistema Zeta3",
+    "type": "system",
+    "tags": [
+      "sistema"
+    ]
+  },
+  {
+    "id": "berco",
+    "file": "planet/berco.md",
+    "name": "Berço",
+    "type": "planet",
+    "parent": "sistema-zeta3",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "ilumina",
+    "file": "planet/ilumina.md",
+    "name": "Ilúmina",
+    "type": "planet",
+    "parent": "sistema-zeta3",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "iluminus",
+    "file": "species/iluminus.md",
+    "name": "Iluminus",
+    "type": "species",
+    "summary": "Uma raça energética protofotônica em risco crítico de extinção, conhecida pela sua habilidade de manipular a luz.",
+    "tags": [
+      "espécie",
+      "energia",
+      "protofotônica",
+      "diplomatas"
+    ],
+    "parent": "ilumina"
+  },
+  {
+    "id": "mortalia",
+    "file": "planet/mortalia.md",
+    "name": "Mortália",
+    "type": "planet",
+    "parent": "sistema-zeta3",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "phantom",
+    "file": "planet/phantom.md",
+    "name": "Phantom",
+    "type": "planet",
+    "parent": "sistema-zeta3",
+    "tags": [
+      "planeta"
+    ]
+  },
+  {
+    "id": "invisiveis",
+    "file": "species/invisiveis.md",
+    "name": "Invisíveis",
+    "type": "species",
+    "parent": "phantom",
+    "summary": "Entidades colossais compostas por magnétons interdimensionais que habitam ambientes de alta radiação.",
+    "tags": [
+      "espécie",
+      "magnétons",
+      "observadores",
+      "fantom"
+    ]
+  }
+]

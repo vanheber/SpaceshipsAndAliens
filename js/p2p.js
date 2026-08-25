@@ -1,4 +1,4 @@
-// WARP-Unit P2P — WebRTC DataChannel
+// Spaceships and Aliens P2P — WebRTC DataChannel
 // GM is the host. Players connect via manual SDP exchange (QR/clipboard).
 // ponytail: STUN-only (no TURN), ceiling: symmetric NAT fails.
 //           Upgrade: add free TURN (metered.ca) for relay fallback.
@@ -164,7 +164,7 @@
     _role = "gm";
     var peerId = "p" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
     var pc = new RTCPeerConnection(ICE);
-    var dc = pc.createDataChannel("warp");
+    var dc = pc.createDataChannel("sna");
     _setupDC(pc, dc, peerId);
     _peers[peerId] = pc;
     _dcs[peerId] = dc;
@@ -261,7 +261,7 @@
 
   function isOpen() { return _dcs && Object.keys(_dcs).length > 0; }
 
-  window.WarpP2P = {
+  window.SnaP2P = {
     createOffer: createOffer,
     acceptAnswer: acceptAnswer,
     joinRoom: joinRoom,

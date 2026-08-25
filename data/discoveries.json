@@ -254,7 +254,7 @@
       "Transmissão Extragaláctica — um sinal de rádio vindo de fora da galáxia. Demorou dois milhões de anos para chegar aqui.",
       "Bioassinatura Anômala — DNA que não devia existir. 99.8% humano, mas os 0.2% não pertencem a nada conhecido.",
       "Eco Temporal — os sensores gravam um loop de 8 segundos em intervalos aleatórios. O evento já aconteceu e ainda vai acontecer.",
-      "Diário de Bordo de Nave Irmã — outra missão WARP esteve neste planeta. As anotações terminam abruptamente.",
+      "Diário de Bordo de Nave Irmã — outra missão SnA esteve neste planeta. As anotações terminam abruptamente.",
       "Semente — objeto biológico do tamanho de um punho, protegido por casca que resiste a qualquer scanner. A IA capitã recomenda não abrir.",
       "Frequência de Rádio Codificada — uma transmissão em loop que dura exatos 60 segundos. O conteúdo muda a cada repetição. Alguém está transmitindo ao vivo. De algum lugar.",
       "Padrão Geométrico Recorrente — o mesmo arranjo de pedras aparece em três locais diferentes do planeta. As distâncias entre eles formam um triângulo perfeito. Alguém os colocou lá.",
@@ -458,7 +458,7 @@
         "Dois androides reportam memórias conflitantes do mesmo evento. Ambos têm registros internos que se contradizem. Um lembra de uma lua azul. O outro, de uma lua vermelha. Ambos estavam na mesma expedição.",
         "Um androide começa a exibir comportamento não programado — curiosidade. Faz perguntas que não foram ordenadas. Quer saber o que há atrás da próxima estrela. A IA Capitã não sabe se isso é uma falha ou uma evolução.",
         "Os diários de bordo dos androides mostram que todos tiveram o mesmo sonho na mesma noite: uma figura parada no corredor de engenharia, olhando para o núcleo do drive quântico. Androides não deveriam ter sonhos.",
-        "Um tripulante encontrou uma mensagem escondida nos arquivos do sistema: 'Se você está lendo isso, a missão WARP não é o que parece. Confie no Capitão. Desconfie da nave.' A mensagem foi deixada pelo programador-chefe da A.L.M.A."
+        "Um tripulante encontrou uma mensagem escondida nos arquivos do sistema: 'Se você está lendo isso, a missão SnA não é o que parece. Confie no Capitão. Desconfie da nave.' A mensagem foi deixada pelo programador-chefe da A.L.M.A."
       ],
       "hidden_compartment": [
         "Um painel falso na parede dos alojamentos esconde um compartimento do tamanho de um armário. Dentro, há equipamento de comunicação de longo alcance — não listado no inventário da nave. Está sintonizado em uma frequência da frota militar. Transmitindo.",
@@ -515,7 +515,7 @@
         "A mensagem escondida no sistema foi deixada pelo programador-chefe. Ele sabia de algo sobre a missão. A IA Capitã processa a mensagem e faz uma revelação: 'o programador-chefe era eu'. DC 19."
       ],
       "hidden_compartment": [
-        "O transmissor militar está enviando relatórios sobre a missão WARP. Alguém na frota está monitorando cada movimento da Tiburon. Os relatórios incluem dados que só a IA Capitã deveria conhecer. DC 16.",
+        "O transmissor militar está enviando relatórios sobre a missão SnA. Alguém na frota está monitorando cada movimento da Tiburon. Os relatórios incluem dados que só a IA Capitã deveria conhecer. DC 16.",
         "A cápsula criogênica está ativa há 47 anos. O ocupante está vivo. Mas abrir a cápsula pode matá-lo — o sistema de suporte vital é frágil e qualquer oscilação pode ser fatal. DC 14.",
         "O terminal no alçapão aceita apenas um código. Os androides têm 3 tentativas antes que o sistema se sele permanentemente. As marcas de uso sugerem que alguém já errou o código antes. DC 17.",
         "O pequeno arsenal escondido no refeitório pertence a alguém a bordo. Mas todos os tripulantes são androides — eles não usam armas de pulso. A não ser que um deles não seja um androide. DC 18.",

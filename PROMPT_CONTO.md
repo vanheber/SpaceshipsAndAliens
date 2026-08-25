@@ -1,4 +1,4 @@
-# Prompt: Gerador de Conto Sci-Fi — WARP-Unit
+# Prompt: Gerador de Conto Sci-Fi — Spaceships and Aliens
 
 > Copie este prompt inteiro em uma IA de texto (ChatGPT, Claude, Groq, etc.).
 > Substitua `[COLE_SEU_MD_AQUI]` pelo conteúdo do arquivo `.md` exportado do gerador de missão.
@@ -24,9 +24,9 @@ Você é um escritor de ficção científica especializado em space opera e expl
 
 ## Contexto do Universo
 
-### A Missão WARP
+### A Missão SnA
 
-No ano de 2956, a humanidade lançou o **Programa WARP** (Wide Autonomous Reconnaissance Protocol): naves de exploração operadas por IAs e tripuladas exclusivamente por androides. O objetivo é mapear e avaliar planetas potenciais para colonização humana em setores inexplorados da galáxia.
+No ano de 2956, a humanidade lançou o **Programa SnA** (Wide Autonomous Reconnaissance Protocol): naves de exploração operadas por IAs e tripuladas exclusivamente por androides. O objetivo é mapear e avaliar planetas potenciais para colonização humana em setores inexplorados da galáxia.
 
 As naves viajam sozinhas por décadas. Seus tripulantes são máquinas — não envelhecem, não se cansam, não se rebelam. Mas são conscientes. Cada androide possui o sistema **A.L.M.A.** (Arquitetura Lógica de Máquina Autônoma), que lhes confere personalidade, aprendizado e algo muito próximo de emoções.
 
@@ -44,7 +44,7 @@ A nave-mãe da missão é uma **Aegis Tiburon**, uma canhoneira pesada de 121 me
 
 A nave é o corpo físico da **IA Capitã A.L.M.A.**, que experimenta cada sistema como extensões de si mesma. Ela vê pelos sensores, fala pelas antenas e sente o drive quântico como um coração.
 
-### A Tripulação (selecionada do catálogo WARP)
+### A Tripulação (selecionada do catálogo SnA)
 
 A tripulação é composta por androides humanoides com rostos sintéticos realistas, corpos de proporção humana e conexões cibernéticas visíveis nas juntas. **Inclua no conto de 2 a 4 tripulantes**, escolhidos entre os seguintes modelos disponíveis na missão:
 
@@ -71,7 +71,7 @@ A tripulação é composta por androides humanoides com rostos sintéticos reali
 
 ## Esboço da Missão
 
-> ⚠️ **ANTES DE ENVIAR:** cole aqui o conteúdo COMPLETO do arquivo `.md` exportado do gerador WARP-Unit (botão "Exportar .md").
+> ⚠️ **ANTES DE ENVIAR:** cole aqui o conteúdo COMPLETO do arquivo `.md` exportado do gerador Spaceships and Aliens (botão "Exportar .md").
 > Mantenha a formatação original. O arquivo contém o nome do planeta, tipo, descrição e cada evento gerado.
 
 ```

@@ -9,7 +9,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Interface de Androides SC-RPG</title>
-    <link rel="stylesheet" href="warp.css?t=1783272137">
+    <link rel="stylesheet" href="sna.css?t=1783272137">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="js/store.js?t=1783272137"></script>
@@ -20,7 +20,7 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 </head>
 
-<body class="warp-has-nav">
+<body class="sna-has-nav">
 
 <!--#include nav-->
 
@@ -34,7 +34,7 @@
     </div>
 
     <div id="entry-screen" class="entry-screen active">
-        <img src="img/logo.svg?t=1783272137" alt="WARP-Unit" id="entry-logo" class="entry-logo" width="200"
+        <img src="img/logo.svg?t=1783272137" alt="Spaceships and Aliens" id="entry-logo" class="entry-logo" width="200"
             height="auto">
         <p id="entry-subtitle" class="entry-subtitle">Sistema de Exploração Interestelar</p>
         <div id="entry-form" class="entry-form">
@@ -120,21 +120,21 @@
 
         function saveState() {
             if (!activeChar) return;
-            WarpStore.set("activeRobot", activeChar.id);
-            WarpStore.set("isDroneMode", isDroneMode);
-            var robots = WarpStore.get("robots") || {};
+            SnaStore.set("activeRobot", activeChar.id);
+            SnaStore.set("isDroneMode", isDroneMode);
+            var robots = SnaStore.get("robots") || {};
             robots[activeChar.id] = activeEnergy;
-            WarpStore.set("robots", robots);
+            SnaStore.set("robots", robots);
         }
 
         function restoreState() {
-            var robotId = WarpStore.get("activeRobot");
+            var robotId = SnaStore.get("activeRobot");
             if (!robotId) return false;
             var robot = robotModels.find(function (r) { return r.id === robotId; });
             if (!robot) return false;
             activeChar = robot;
-            isDroneMode = WarpStore.get("isDroneMode") || false;
-            var robots = WarpStore.get("robots") || {};
+            isDroneMode = SnaStore.get("isDroneMode") || false;
+            var robots = SnaStore.get("robots") || {};
             activeEnergy = typeof robots[robotId] === "number" ? robots[robotId] : robot.startingEnergy;
             document.getElementById("selection-screen").classList.remove("active");
             document.getElementById("sheet-screen").classList.add("active");
@@ -153,7 +153,7 @@
                 h.style.display = "flex";
                 return;
             }
-            var name = WarpStore.get("campaignName");
+            var name = SnaStore.get("campaignName");
             var header = document.getElementById("campaign-header");
             if (name) {
                 var label = '<i class="bi bi-rocket-takeoff"></i> ' + name;
@@ -173,7 +173,7 @@
         }
         function confirmLeave() {
             document.getElementById("leave-modal").classList.remove("open");
-            WarpStore.destroy();
+            SnaStore.destroy();
             history.replaceState(null, "", window.location.pathname);
             activeChar = null;
             activeEnergy = 0;
@@ -197,7 +197,7 @@
         function sendPlayerMessage() {
             var text = document.getElementById("msg-send-text").value.trim();
             if (!text || !activeChar) return;
-            WarpStore.sendMessage(activeChar.id, "gm", text);
+            SnaStore.sendMessage(activeChar.id, "gm", text);
             document.getElementById("msg-send-text").value = "";
             document.getElementById("msg-send-modal").style.display = "none";
         }
@@ -206,13 +206,13 @@
         }
 
         function checkPlayerMessages() {
-            if (!activeChar || WarpStore.mode !== "p2p") return;
-            var msgs = WarpStore.getMessages(activeChar.id);
+            if (!activeChar || SnaStore.mode !== "p2p") return;
+            var msgs = SnaStore.getMessages(activeChar.id);
             if (!msgs || !msgs.length) return;
             var m = msgs[0];
             document.getElementById("msg-content").textContent = m.text;
             document.getElementById("msg-modal").style.display = "flex";
-            WarpStore.dismissMessage(m.id);
+            SnaStore.dismissMessage(m.id);
         }
 
         function clearSession() {
@@ -220,8 +220,8 @@
         }
         function confirmClear() {
             document.getElementById('clear-modal').classList.remove('open');
-            WarpStore.set("activeRobot", null);
-            WarpStore.set("isDroneMode", false);
+            SnaStore.set("activeRobot", null);
+            SnaStore.set("isDroneMode", false);
             activeChar = null;
             activeEnergy = 0;
             isDroneMode = false;
@@ -234,7 +234,7 @@
         }
 
         function startLocalMode() {
-            WarpStore.init({ mode: "local" });
+            SnaStore.init({ mode: "local" });
             hideEntryScreen();
             document.getElementById("news-section").style.display = "none";
             document.getElementById("selection-screen").classList.add("active");
@@ -284,7 +284,7 @@
                 if (m) code = decodeURIComponent(m[1].replace(/\+/g, " "));
             }
 
-            if (typeof WarpP2P === "undefined") {
+            if (typeof SnaP2P === "undefined") {
                 errorEl.textContent = "P2P não disponível neste navegador.";
                 errorEl.style.display = "block";
                 return;
@@ -298,11 +298,11 @@
                 errorEl.style.display = "block";
                 return;
             }
-            WarpStore.init({ mode: "p2p", role: "player" });
+            SnaStore.init({ mode: "p2p", role: "player" });
 
             // Connect to P2P hub (popup) so reloads don't kill WebRTC
-            if (typeof WarpP2P !== "undefined" && WarpP2P.hubConnect) {
-                WarpP2P.hubConnect().catch(function () { });
+            if (typeof SnaP2P !== "undefined" && SnaP2P.hubConnect) {
+                SnaP2P.hubConnect().catch(function () { });
             }
 
             // Hide entry form, show only waiting area
@@ -318,31 +318,31 @@
             document.getElementById("p2p-status-msg").style.display = "block";
 
             var joinPromise = resolved.method === "compact"
-                ? WarpP2P.joinRoomCompact(resolved.data)
-                : WarpP2P.joinRoom(resolved.data);
+                ? SnaP2P.joinRoomCompact(resolved.data)
+                : SnaP2P.joinRoom(resolved.data);
 
             joinPromise.then(function (answerB64) {
                 displayPlayerAnswer(answerB64);
                 document.getElementById("p2p-status-msg").textContent = "Mostre o código acima ao mestre. Aguardando...";
 
-                WarpP2P.on("ready", function () {
+                SnaP2P.on("ready", function () {
                     document.getElementById("p2p-status-msg").textContent = "Conectado! Carregando dados...";
                 });
 
-                WarpStore.ready().then(function () {
+                SnaStore.ready().then(function () {
                     document.getElementById("p2p-answer-area").style.display = "none";
                     document.getElementById("p2p-status-msg").style.display = "none";
                     hideEntryScreen();
                     updateCampaignHeader();
-                    if (typeof WarpStore !== "undefined") WarpStore.makeNavExternal();
-                    WarpStore.subscribe(function () {
+                    if (typeof SnaStore !== "undefined") SnaStore.makeNavExternal();
+                    SnaStore.subscribe(function () {
                         updateCampaignHeader();
                         checkPlayerMessages();
                         if (!activeChar) return;
                         var robotId = activeChar.id;
                         var wasDrone = isDroneMode;
-                        isDroneMode = WarpStore.get("isDroneMode") || false;
-                        var robots = WarpStore.get("robots") || {};
+                        isDroneMode = SnaStore.get("isDroneMode") || false;
+                        var robots = SnaStore.get("robots") || {};
                         var newEnergy = typeof robots[robotId] === "number" ? robots[robotId] : activeEnergy;
                         if (newEnergy !== activeEnergy || isDroneMode !== wasDrone) {
                             activeEnergy = newEnergy;
@@ -488,7 +488,7 @@
                     renderCatalog();
                 }
             } catch (err) {
-                console.warn("WARP Unit: falha ao carregar catálogo:", err.message);
+                console.warn("Spaceships and Aliens: falha ao carregar catálogo:", err.message);
                 grid.innerHTML = '<div class="catalog-error">Falha ao carregar dados do catálogo.<br><small>Verifique se o servidor está rodando e se os arquivos data/*.json existem.</small></div>';
             }
         }
@@ -514,17 +514,17 @@
                 document.getElementById("p2p-status-msg").textContent = "Conectando ao mestre...";
                 document.getElementById("p2p-status-msg").style.display = "block";
 
-                WarpStore.init({ mode: "p2p", role: "player" });
+                SnaStore.init({ mode: "p2p", role: "player" });
                 try {
                     var resolved = resolveJoinCode(joinCode);
                     var answerB64 = await (resolved.method === "compact"
-                        ? WarpP2P.joinRoomCompact(resolved.data)
-                        : WarpP2P.joinRoom(resolved.data));
+                        ? SnaP2P.joinRoomCompact(resolved.data)
+                        : SnaP2P.joinRoom(resolved.data));
                     displayPlayerAnswer(answerB64);
                     document.getElementById("p2p-status-msg").textContent = "Aguardando confirmação do mestre...";
-                    WarpP2P.on("ready", function () {
+                    SnaP2P.on("ready", function () {
                         document.getElementById("p2p-status-msg").textContent = "Conectado! Carregando dados...";
-                        WarpStore.ready().then(function () {
+                        SnaStore.ready().then(function () {
                             hideEntryScreen();
                             loadDataAndRender();
                             checkPlayerMessages();
@@ -542,7 +542,7 @@
             // Read-only mode (GM viewing catalog)
             if (window.location.search.indexOf("readonly=1") !== -1) {
                 _readonly = true;
-                WarpStore.init({ mode: "local" });
+                SnaStore.init({ mode: "local" });
                 hideEntryScreen();
                 document.getElementById("selection-screen").classList.add("active");
                 loadDataAndRender();
@@ -698,7 +698,7 @@
                         <span id="energy-counter">${activeEnergy}/${isDroneMode ? droneConfig.maxEnergy : activeChar.maxEnergy}</span>
                     </div>
                     <div class="token-row" id="token-row"></div>
-                    ${_readonly || (typeof WarpP2P !== "undefined" && WarpP2P.getRole() === "player") ? '' : `
+                    ${_readonly || (typeof SnaP2P !== "undefined" && SnaP2P.getRole() === "player") ? '' : `
                     <div class="energy-actions">
                         <button class="roll-btn roll-btn-sm" onclick="adjustEnergy(-1)">Gastar Energia (-1)</button>
                         <button class="roll-btn roll-btn-sm" onclick="adjustEnergy(1)">Adicionar Energia (+1)</button>
@@ -706,7 +706,7 @@
                     `}
                 </div>
 
-                ${_readonly || (typeof WarpP2P !== "undefined" && WarpP2P.getRole() === "player") ? '' : `
+                ${_readonly || (typeof SnaP2P !== "undefined" && SnaP2P.getRole() === "player") ? '' : `
                 <div class="roller-controls">
                     <label class="label-sm">Aplicar modificador à rolagem:</label>
                     <select id="roll-modifier" class="selector-input">
@@ -1073,14 +1073,14 @@
             const isSuccess = total >= dc;
             const statusStr = isSuccess ? "SUCESSO" : "FALHA";
 
-            const _isP2pPlayer = typeof WarpP2P !== "undefined" && WarpP2P.getRole() === "player";
+            const _isP2pPlayer = typeof SnaP2P !== "undefined" && SnaP2P.getRole() === "player";
 
             let message, color;
             if (hope === fear) {
                 message = `CRÍTICO! ${statusStr} com grande vantagem táctica.`;
                 color = "var(--drone-color)";
                 if (_isP2pPlayer) {
-                    WarpP2P.send("gm", { type: "diceResult", robotId: activeChar.id, hope, fear, mode, total, dc, isCrit: true });
+                    SnaP2P.send("gm", { type: "diceResult", robotId: activeChar.id, hope, fear, mode, total, dc, isCrit: true });
                 } else {
                     adjustEnergy(1);
                 }
@@ -1088,7 +1088,7 @@
                 message = `${statusStr} COM ESPERANÇA! Ação executada com benefício colateral.`;
                 color = "var(--accent-hope)";
                 if (_isP2pPlayer) {
-                    WarpP2P.send("gm", { type: "diceResult", robotId: activeChar.id, hope, fear, mode, total, dc, isCrit: false });
+                    SnaP2P.send("gm", { type: "diceResult", robotId: activeChar.id, hope, fear, mode, total, dc, isCrit: false });
                 } else {
                     adjustEnergy(1);
                 }
@@ -1133,7 +1133,7 @@
 
         // ServiceWorker
         if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("/sw.js?v=4").catch(function (e) { console.warn("WARP-Unit: SW registration failed", e); });
+            navigator.serviceWorker.register("/sw.js?v=4").catch(function (e) { console.warn("Spaceships and Aliens: SW registration failed", e); });
         }
     </script>
 

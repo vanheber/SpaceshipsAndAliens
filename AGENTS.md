@@ -1,4 +1,4 @@
-# WARP-Unit: estilo lazydir
+# Spaceships and Aliens: estilo lazydir
 
 Antes de escrever código, pare no primeiro degrau que segurar:
 
@@ -24,7 +24,7 @@ Antes de escrever código, pare no primeiro degrau que segurar:
 
 **Não cortar:** validação em trust boundary, tratamento de erro que previne perda de dados, segurança, acessibilidade, o que foi explicitamente pedido.
 
-**WARP-Unit specífico:** os dados 3D com Three.js e os prompts de IA são o charme do projeto — não reduzir. Estilo visual (CSS, badges, banners) também não — o jogo precisa de atmosfera.
+**Spaceships and Aliens specífico:** os dados 3D com Three.js e os prompts de IA são o charme do projeto — não reduzir. Estilo visual (CSS, badges, banners) também não — o jogo precisa de atmosfera.
 
 # Regras de melhoria (improve)
 
@@ -38,7 +38,7 @@ Antes de escrever código, pare no primeiro degrau que segurar:
 
 | Padrão | Onde | Regra |
 |--------|------|-------|
-| Chave de API do usuário | `login.html`, `oneshot.html` | Keys em `localStorage` com prefixo `warp-*-key`; nunca no servidor |
+| Chave de API do usuário | `login.html`, `oneshot.html` | Keys em `localStorage` com prefixo `sna-*-key`; nunca no servidor |
 | Gemini direto (CORS) | `oneshot.html` | `?key=` na URL da Google AI API — sem proxy, Google suporta CORS |
 | NVIDIA key via header | `api/proxy-nvidia.php` | Cliente envia `X-API-Key`, proxy repassa como `Authorization: Bearer` |
 | DOM handlers pendurados | `oneshot.html` | `innerHTML = ""` no container pra matar listeners antes de esconder/seção |
@@ -52,6 +52,7 @@ Antes de escrever código, pare no primeiro degrau que segurar:
 | Service Worker cache | `sw.js` | Network-first pra navegações (HTML), cache-first pra assets estáticos; `?v=N` no registration URL |
 | SW version bust | `.htaccess` + `*.html` | `Cache-Control: no-cache` pra sw.js + `register("/sw.js?v=N")` em todas as páginas HTML |
 | SW on all pages | `*.html` | Registrar SW em TODAS as páginas HTML, não só na index — senão navegação direta pra oneshot/mothership/etc não é interceptada |
+| Lore como dados | `data/lore/` | Prosa em Markdown (`*.md`) + metadados em `index.json`; **árvore hierárquica** (`system→planet→geography→species→culture/tech`) via campos `id`/`parent`; naves e IAs em `tech` de Humanos; nó **`general`** agrupa `history`/`organization`; nó **`interdimensional`** para entidades entre planos; irmãos ordenados alfabeticamente; render com `marked` + `<details>`; template de geração em `prompts/lore.js` (`LorePrompts`) com `system(canon)` parametrizável; **população em lote** via `scripts/populate-lore.js` (catálogo + Gemini, idempotente, etapas `species/worlds/factions/tech`); **extração direta** via `scripts/extract-sa.js` (sourcebook S&A, descarta regras de jogo e resíduos OCR, `--force`) |
 
 **Padrões de prompts de IA:**
 - Prompts ficam em `prompts/`, um arquivo por domínio (`planet.js`, `discovery.js`)
@@ -64,7 +65,7 @@ Antes de escrever código, pare no primeiro degrau que segurar:
 - 12 páginas HTML usam `<!--#include nav-->` e `<!--#include footer-->` no source
 - `npm run build` → `node build.js` resolve includes e gera `public/` (gitignored)
 - `npm run deploy` → `bash deploy.sh` faz mirror de `public/`
-- Nav escondido no index.html via CSS: `body:has(.entry-screen.active) .warp-nav { display: none; }`
+- Nav escondido no index.html via CSS: `body:has(.entry-screen.active) .sna-nav { display: none; }`
 - `docs/index.html` tem sidebar própria e NÃO usa os includes
 
 **Rejeitados por decisão (não auditar de novo):**

@@ -2,7 +2,7 @@
 
 ## Por que existe
 
-O WARP-Unit usa inteligência artificial generativa (Gemini, NVIDIA, Pollinations, Hermes) para criar missões, planetas, descobertas e narrativas emergentes no Gerador de Missão (`oneshot.html`).
+O Spaceships and Aliens usa inteligência artificial generativa (Gemini, NVIDIA, Pollinations, Hermes) para criar missões, planetas, descobertas e narrativas emergentes no Gerador de Missão (`oneshot.html`).
 
 Cada usuário fornece **suas próprias chaves de API** para os provedores que desejar usar. As chaves ficam armazenadas no `localStorage` do navegador e são enviadas apenas aos servidores dos provedores.
 
@@ -10,8 +10,8 @@ Cada usuário fornece **suas próprias chaves de API** para os provedores que de
 
 | Provedor | Chave necessária? | Como é chamado |
 |---|---|---|
-| **Gemini** | Sim (`warp-gemini-key`) | Direto do browser via Google AI API (`?key=` na URL). Google suporta CORS. |
-| **NVIDIA** | Sim (`warp-nvidia-key`) | Via `api/proxy-nvidia.php` com header `X-API-Key` |
+| **Gemini** | Sim (`sna-gemini-key`) | Direto do browser via Google AI API (`?key=` na URL). Google suporta CORS. |
+| **NVIDIA** | Sim (`sna-nvidia-key`) | Via `api/proxy-nvidia.php` com header `X-API-Key` |
 | **Pollinations.ai** | Não | Direto do browser (público) |
 | **Hermes** | Não | Direto do browser (público) |
 
@@ -35,4 +35,4 @@ Se nenhuma chave for configurada, o gerador usa dados de fallback locais (sem IA
 
 ## Anteriormente
 
-O sistema usava autenticação por senha (bcrypt/TOTP) com cookie `warp_auth` HMAC-SHA256 para proteger proxies de IA. Esse sistema foi removido em favor do modelo BYOK (Bring Your Own Key) por simplicidade e segurança — elimina a superfície de ataque de senha, cookie e chave fixa no servidor.
+O sistema usava autenticação por senha (bcrypt/TOTP) com cookie `sna_auth` HMAC-SHA256 para proteger proxies de IA. Esse sistema foi removido em favor do modelo BYOK (Bring Your Own Key) por simplicidade e segurança — elimina a superfície de ataque de senha, cookie e chave fixa no servidor.

@@ -1,30 +1,30 @@
 # Sistema de Compartilhamento
 
-O WARP-Unit compartilha mini-mapas das descobertas do Gerador de Missão com jogadores em tempo real via três canais: BroadcastChannel, localStorage, e WarpP2P.
+O Spaceships and Aliens compartilha mini-mapas das descobertas do Gerador de Missão com jogadores em tempo real via três canais: BroadcastChannel, localStorage, e SnaP2P.
 
 ## Canais de Distribuição
 
 ### BroadcastChannel (mesmo navegador)
 ```js
-var ch = new BroadcastChannel("warp-unit");
+var ch = new BroadcastChannel("sna-unit");
 ch.postMessage({ type: "shared-map", data: { seed, roomCount, paletteKey, planetName, encounterType, timestamp } });
 ```
 
-- Canal `"warp-unit"` compartilhado com o sistema de sessão (`saveToSession`)
+- Canal `"sna-unit"` compartilhado com o sistema de sessão (`saveToSession`)
 - Mensagens de tipo `"shared-map"` são ignoradas pelo handler de sessão e vice-versa
 - Escutado em `shared-map.html` e em páginas P2P
 
 ### localStorage (persistência)
 ```js
-localStorage.setItem("warp-shared-map", JSON.stringify(data));
+localStorage.setItem("sna-shared-map", JSON.stringify(data));
 ```
 
 - Sobrescreve o mapa anterior (só um mapa compartilhado por vez)
 - Detectado via `window.addEventListener("storage", ...)` em outras abas
 
-### WarpP2P (jogadores remotos)
+### SnaP2P (jogadores remotos)
 ```js
-WarpP2P.send(null, { type: "shared-map", data: data });
+SnaP2P.send(null, { type: "shared-map", data: data });
 ```
 
 - Mensagem broadcast (destinatário `null`) → todos os jogadores recebem
@@ -41,9 +41,9 @@ function shareCurrentMap() {
     var roomCount = 3 + Math.abs(seed) % 6;
     var paletteKey = resolvePaletteKey(planet, disc);
     var data = { seed, roomCount, paletteKey, planetName, encounterType, timestamp };
-    localStorage.setItem("warp-shared-map", JSON.stringify(data));
+    localStorage.setItem("sna-shared-map", JSON.stringify(data));
     ch.postMessage({ type: "shared-map", data: data });
-    WarpP2P.send(null, { type: "shared-map", data: data });
+    SnaP2P.send(null, { type: "shared-map", data: data });
 }
 ```
 
@@ -52,8 +52,8 @@ O mapa é **determinístico**: seed derivada de `disc.index + 1 * 31 + hashCode(
 ## Página do Jogador (`shared-map.html`)
 
 - Carrega `store.js`, `p2p.js`, `p2p-hub.js`, `procgen-map.js`
-- Lê `localStorage("warp-shared-map")` no load
-- Escuta 3 canais em tempo real: BroadcastChannel, storage event, WarpP2P
+- Lê `localStorage("sna-shared-map")` no load
+- Escuta 3 canais em tempo real: BroadcastChannel, storage event, SnaP2P
 - Renderiza via `buildSharedMap(containerId, seed, roomCount, paletteKey)`
 - Responsivo: Desktop 1000×1000, tablet 600×600, mobile 320×320
 - Menu lateral com link "Mini-Mapa" em todas as páginas
@@ -72,9 +72,9 @@ O mapa é **determinístico**: seed derivada de `disc.index + 1 * 31 + hashCode(
 
 ```
 GM gera descoberta → clica "Compartilhar Mapa"
-  ├─ localStorage("warp-shared-map") ← persistência
-  ├─ BroadcastChannel("warp-unit")   ← outras abas do GM
-  └─ WarpP2P.send(null, ...)         ← jogadores remotos
+  ├─ localStorage("sna-shared-map") ← persistência
+  ├─ BroadcastChannel("sna-unit")   ← outras abas do GM
+  └─ SnaP2P.send(null, ...)         ← jogadores remotos
        └─ shared-map.html detecta → renderiza buildSharedMap()
 ```
 

@@ -2,7 +2,7 @@
 require_once __DIR__ . '/rate-limit.php';
 checkRateLimit();
 
-$allowedOrigins = ['http://localhost:3000', 'http://localhost:8000', 'http://localhost:8080', 'http://localhost', 'http://warp-unit.test', 'http://projetos-git.test'];
+$allowedOrigins = ['http://localhost:3000', 'http://localhost:8000', 'http://localhost:8080', 'http://localhost', 'http://spaceships-and-aliens.test', 'http://projetos-git.test'];
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 if (!in_array($origin, $allowedOrigins, true)) {
     http_response_code(403);

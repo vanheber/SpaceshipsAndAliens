@@ -1,11 +1,11 @@
-// WARP-Unit IndexedDB persistence
+// Spaceships and Aliens IndexedDB persistence
 // Replaces localStorage (5MB limit) for P2P/serverless mode.
 // ponytail: single object store, no versioning. Upgrade: migrations for schema changes.
 
 (function () {
   "use strict";
 
-  var DB_NAME = "warp-unit";
+  var DB_NAME = "sna-unit";
   var STORE_NAME = "state";
   var _db = null;
 
@@ -69,7 +69,7 @@
     if (_db) { _db.close(); _db = null; }
   }
 
-  window.WarpDB = {
+  window.SnaDB = {
     open: open,
     get: get,
     set: set,

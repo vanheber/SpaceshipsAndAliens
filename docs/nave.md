@@ -1,15 +1,15 @@
 # Nave-Mãe Tiburon
 
-A **Aegis Tiburon** é a nave-mãe da missão WARP — o corpo físico da IA Capitã A.L.M.A. e o lar da tripulação androide entre as missões.
+A **Aegis Tiburon** é a nave-mãe da missão SnA — o corpo físico da IA Capitã A.L.M.A. e o lar da tripulação androide entre as missões.
 
 ## Visão Geral
 
 | Atributo | Valor |
 |---|---|
 | Fabricante | Aegis Dynamics |
-| Modelo | Tiburon (variante WARP) |
+| Modelo | Tiburon (variante SnA) |
 | Função Original | Canhoneira Pesada Anticapital |
-| Função WARP | Nave-Mãe de Exploração |
+| Função SnA | Nave-Mãe de Exploração |
 | Comprimento | 121 m |
 | Tripulação | 1 IA Capitã + até 8 androides |
 
@@ -60,7 +60,7 @@ Veículo de exploração terrestre RSI. 7.6 m, tripulação 2 + 4 passageiros, t
 
 # Nave Auxiliar — Origin 400i
 
-A **Origin 400i** é uma pathfinder de luxo que serve como nave auxiliar da missão WARP. Projetada para reconhecimento de longo alcance, oferece agilidade e conforto para exploração planetária.
+A **Origin 400i** é uma pathfinder de luxo que serve como nave auxiliar da missão SnA. Projetada para reconhecimento de longo alcance, oferece agilidade e conforto para exploração planetária.
 
 ## Visão Geral
 

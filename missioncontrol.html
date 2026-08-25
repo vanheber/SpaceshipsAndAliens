@@ -8,8 +8,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>WARP-Unit | Controle da Missão</title>
-    <link rel="stylesheet" href="warp.css?t=1783272137">
+    <title>Spaceships and Aliens | Controle da Missão</title>
+    <link rel="stylesheet" href="sna.css?t=1783272137">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="js/store.js?t=1783272137"></script>
@@ -20,12 +20,12 @@
     <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 </head>
 
-<body class="warp-has-nav">
+<body class="sna-has-nav">
 
 <!--#include nav-->
 
 <header>
-        <h1>SISTEMA OPERACIONAL WARP</h1>
+        <h1>SISTEMA OPERACIONAL SnA</h1>
         <p>Controle da Missão &mdash; Painel do Mestre</p>
     </header>
 
@@ -260,9 +260,9 @@
         };
 
         function syncStateFromStore() {
-            state.fear = WarpStore.get("fear") || 0;
-            state.robots = WarpStore.get("robots") || {};
-            state.npcs = WarpStore.get("npcs") || [NPC_START, NPC_START, NPC_START];
+            state.fear = SnaStore.get("fear") || 0;
+            state.robots = SnaStore.get("robots") || {};
+            state.npcs = SnaStore.get("npcs") || [NPC_START, NPC_START, NPC_START];
         }
 
         function esc(s) { return String(s).replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; }); }
@@ -272,9 +272,9 @@
         }
 
         function saveState() {
-            WarpStore.set("fear", state.fear);
-            WarpStore.set("robots", state.robots);
-            WarpStore.set("npcs", state.npcs);
+            SnaStore.set("fear", state.fear);
+            SnaStore.set("robots", state.robots);
+            SnaStore.set("npcs", state.npcs);
         }
 
         // ===== FEAR POINTS =====
@@ -443,12 +443,12 @@
 
         // ===== SHIP RESOURCES =====
         function renderMothershipResources() {
-            var data = WarpStore.get("mothership") || {};
+            var data = SnaStore.get("mothership") || {};
             renderShipResources("mothership-resources", data);
         }
 
         function renderShip400iResources() {
-            var data = WarpStore.get("ship400i") || {};
+            var data = SnaStore.get("ship400i") || {};
             renderShipResources("ship400i-resources", data);
         }
 
@@ -488,16 +488,16 @@
 
         function setShipRes(containerId, key, val) {
             var dataKey = getShipDataKey(containerId);
-            var data = WarpStore.get(dataKey) || {};
+            var data = SnaStore.get(dataKey) || {};
             if (!data[key]) data[key] = { current: 0, max: key === "defense" ? 20 : key === "sup" ? 20 : key === "fuel" ? 10 : 4 };
             data[key].current = Math.max(0, Math.min(data[key].max, val));
-            WarpStore.set(dataKey, data);
-            renderShipResources(containerId, WarpStore.get(dataKey));
+            SnaStore.set(dataKey, data);
+            renderShipResources(containerId, SnaStore.get(dataKey));
         }
 
         function adjustShipRes(containerId, key, amount) {
             var dataKey = getShipDataKey(containerId);
-            var data = WarpStore.get(dataKey) || {};
+            var data = SnaStore.get(dataKey) || {};
             if (!data[key]) data[key] = { current: 0, max: key === "defense" ? 20 : key === "sup" ? 20 : key === "fuel" ? 10 : 4 };
             setShipRes(containerId, key, data[key].current + amount);
         }
@@ -507,11 +507,11 @@
             var defaults = dataKey === "mothership"
                 ? { sup: 10, fuel: 10, ammo: 10, defense: 20 }
                 : { sup: 4, fuel: 6, ammo: 4, defense: 8 };
-            var data = WarpStore.get(dataKey) || {};
+            var data = SnaStore.get(dataKey) || {};
             if (!data[key]) data[key] = { current: 0, max: defaults[key] };
             data[key].current = defaults[key];
-            WarpStore.set(dataKey, data);
-            renderShipResources(containerId, WarpStore.get(dataKey));
+            SnaStore.set(dataKey, data);
+            renderShipResources(containerId, SnaStore.get(dataKey));
         }
 
         // ===== RENDER ALL =====
@@ -552,26 +552,26 @@
         var currentCampaignId = null;
 
         async function init() {
-            WarpStore.init({ mode: "local" });
+            SnaStore.init({ mode: "local" });
             loadState();
             loadLocalCampaigns();
 
             var nameInput = document.getElementById("campaign-name-input");
-            nameInput.value = WarpStore.get("campaignName") || "";
+            nameInput.value = SnaStore.get("campaignName") || "";
             nameInput.addEventListener("input", function () {
                 if (currentCampaignId) {
                     saveLocalCampaign();
                 } else {
-                    WarpStore.set("campaignName", nameInput.value);
+                    SnaStore.set("campaignName", nameInput.value);
                 }
             });
 
-            WarpStore.subscribe(function () {
+            SnaStore.subscribe(function () {
                 syncStateFromStore();
                 renderAll();
-                var newName = WarpStore.get("campaignName") || "";
+                var newName = SnaStore.get("campaignName") || "";
                 if (nameInput.value !== newName) nameInput.value = newName;
-                var pending = WarpStore.getPendingActions();
+                var pending = SnaStore.getPendingActions();
                 renderPendingActions(pending);
                 renderSessionUI();
                 renderGMInbox();
@@ -589,7 +589,7 @@
 
             // Listen for planets from oneshot via BroadcastChannel
             if (typeof BroadcastChannel !== "undefined") {
-                var _planetChannel = new BroadcastChannel("warp-unit");
+                var _planetChannel = new BroadcastChannel("sna-unit");
                 _planetChannel.onmessage = function (e) {
                     if (e.data && e.data.type === "planet-saved") {
                         _pendingPlanet = e.data;
@@ -601,7 +601,7 @@
 
         // ===== CAMPAIGN MANAGEMENT =====
         function loadLocalCampaigns() {
-            var raw = localStorage.getItem("warp-campaigns");
+            var raw = localStorage.getItem("sna-campaigns");
             var list = raw ? JSON.parse(raw) : [];
             var select = document.getElementById("campaign-select");
             select.innerHTML = '<option value="">— Local —</option>';
@@ -617,13 +617,13 @@
         function createCampaign() {
             var name = document.getElementById("campaign-name-input").value.trim();
             if (!name) { name = "Nova Campanha"; }
-            var raw = localStorage.getItem("warp-campaigns");
+            var raw = localStorage.getItem("sna-campaigns");
             var list = raw ? JSON.parse(raw) : [];
-            var state = WarpStore.getAll();
+            var state = SnaStore.getAll();
             state.campaignName = name;
             var campaign = { id: "c" + Date.now().toString(36), name: name, state: state, archived: false, createdAt: new Date().toISOString() };
             list.push(campaign);
-            localStorage.setItem("warp-campaigns", JSON.stringify(list));
+            localStorage.setItem("sna-campaigns", JSON.stringify(list));
             loadLocalCampaigns();
             document.getElementById("campaign-select").value = campaign.id;
             switchToCampaign(campaign.id);
@@ -639,15 +639,15 @@
             }
             if (!val) {
                 currentCampaignId = null;
-                WarpStore.destroy();
-                WarpStore.init({ mode: "local" });
+                SnaStore.destroy();
+                SnaStore.init({ mode: "local" });
                 loadState();
                 document.getElementById("campaign-info").style.display = "none";
                 document.getElementById("campaign-actions").style.display = "none";
                 document.getElementById("pending-banner").style.display = "none";
                 document.getElementById("campaign-mode-badge").innerHTML = '<i class="bi bi-floppy"></i> Local';
                 document.getElementById("campaign-mode-badge").style.background = "var(--card-hover)";
-                document.getElementById("campaign-name-input").value = WarpStore.get("campaignName") || "";
+                document.getElementById("campaign-name-input").value = SnaStore.get("campaignName") || "";
                 renderAll();
                 return;
             }
@@ -656,23 +656,23 @@
 
         function switchToCampaign(id) {
             currentCampaignId = id;
-            var raw = localStorage.getItem("warp-campaigns");
+            var raw = localStorage.getItem("sna-campaigns");
             var list = raw ? JSON.parse(raw) : [];
             var campaign = null;
             for (var i = 0; i < list.length; i++) {
                 if (list[i].id === id) { campaign = list[i]; break; }
             }
-            WarpStore.destroy();
-            WarpStore.init({ mode: "local" });
+            SnaStore.destroy();
+            SnaStore.init({ mode: "local" });
             if (campaign && campaign.state) {
-                var currentState = WarpStore.getAll();
+                var currentState = SnaStore.getAll();
                 var merged = campaign.state;
                 for (var k in currentState) {
                     if (currentState.hasOwnProperty(k) && !merged.hasOwnProperty(k)) {
                         merged[k] = currentState[k];
                     }
                 }
-                WarpStore.set("campaignName", merged.campaignName || campaign.name);
+                SnaStore.set("campaignName", merged.campaignName || campaign.name);
             }
             loadState();
             document.getElementById("campaign-info").style.display = "block";
@@ -681,11 +681,11 @@
             document.getElementById("campaign-mode-badge").innerHTML = '<i class="bi bi-floppy"></i> Local';
             document.getElementById("campaign-mode-badge").style.background = "var(--card-hover)";
 
-            var name = WarpStore.get("campaignName") || (campaign ? campaign.name : "");
+            var name = SnaStore.get("campaignName") || (campaign ? campaign.name : "");
             document.getElementById("campaign-name-input").value = name;
             syncStateFromStore();
             renderAll();
-            var pending = WarpStore.getPendingActions();
+            var pending = SnaStore.getPendingActions();
             renderPendingActions(pending);
             renderSessionUI();
             renderGMInbox();
@@ -693,13 +693,13 @@
 
         function saveLocalCampaign() {
             if (!currentCampaignId) return;
-            var raw = localStorage.getItem("warp-campaigns");
+            var raw = localStorage.getItem("sna-campaigns");
             var list = raw ? JSON.parse(raw) : [];
             for (var i = 0; i < list.length; i++) {
                 if (list[i].id === currentCampaignId) {
                     list[i].name = document.getElementById("campaign-name-input").value.trim();
-                    list[i].state = WarpStore.getAll();
-                    localStorage.setItem("warp-campaigns", JSON.stringify(list));
+                    list[i].state = SnaStore.getAll();
+                    localStorage.setItem("sna-campaigns", JSON.stringify(list));
                     return;
                 }
             }
@@ -714,7 +714,7 @@
         function confirmArchive() {
             document.getElementById("archive-modal").style.display = "none";
             if (!currentCampaignId) return;
-            var raw = localStorage.getItem("warp-campaigns");
+            var raw = localStorage.getItem("sna-campaigns");
             var list = raw ? JSON.parse(raw) : [];
             for (var i = 0; i < list.length; i++) {
                 if (list[i].id === currentCampaignId) {
@@ -731,10 +731,10 @@
                 for (var j = start; j < archived.length; j++) keep[archived[j].id] = true;
                 list = list.filter(function (c) { return !c.archived || keep[c.id]; });
             }
-            localStorage.setItem("warp-campaigns", JSON.stringify(list));
+            localStorage.setItem("sna-campaigns", JSON.stringify(list));
             currentCampaignId = null;
-            WarpStore.destroy();
-            WarpStore.init({ mode: "local" });
+            SnaStore.destroy();
+            SnaStore.init({ mode: "local" });
             loadState();
             document.getElementById("campaign-select").value = "";
             document.getElementById("campaign-info").style.display = "none";
@@ -742,7 +742,7 @@
             document.getElementById("pending-banner").style.display = "none";
             document.getElementById("campaign-mode-badge").innerHTML = '<i class="bi bi-floppy"></i> Local';
             document.getElementById("campaign-mode-badge").style.background = "var(--card-hover)";
-            document.getElementById("campaign-name-input").value = WarpStore.get("campaignName") || "";
+            document.getElementById("campaign-name-input").value = SnaStore.get("campaignName") || "";
             loadLocalCampaigns();
             renderAll();
         }
@@ -750,14 +750,14 @@
         // ===== EXPORT / IMPORT =====
         function exportCampaign() {
             if (!currentCampaignId) return;
-            var raw = localStorage.getItem("warp-campaigns");
+            var raw = localStorage.getItem("sna-campaigns");
             var list = raw ? JSON.parse(raw) : [];
             var campaign = null;
             for (var i = 0; i < list.length; i++) {
                 if (list[i].id === currentCampaignId) { campaign = list[i]; break; }
             }
             if (!campaign) return;
-            campaign.state = WarpStore.getAll();
+            campaign.state = SnaStore.getAll();
             var blob = new Blob([JSON.stringify(campaign, null, 2)], { type: "application/json" });
             var url = URL.createObjectURL(blob);
             var a = document.createElement("a");
@@ -776,13 +776,13 @@
                 try {
                     var data = JSON.parse(reader.result);
                     if (!data.name || !data.state) { alert("Arquivo inválido: campanha sem name/state"); return; }
-                    var raw = localStorage.getItem("warp-campaigns");
+                    var raw = localStorage.getItem("sna-campaigns");
                     var list = raw ? JSON.parse(raw) : [];
                     data.id = "c" + Date.now().toString(36);
                     data.archived = false;
                     data.createdAt = new Date().toISOString();
                     list.push(data);
-                    localStorage.setItem("warp-campaigns", JSON.stringify(list));
+                    localStorage.setItem("sna-campaigns", JSON.stringify(list));
                     loadLocalCampaigns();
                     document.getElementById("campaign-select").value = data.id;
                     switchToCampaign(data.id);
@@ -795,7 +795,7 @@
 
         // ===== SESSION MANAGEMENT =====
         function getActiveSession() {
-            var sessions = WarpStore.getSessions();
+            var sessions = SnaStore.getSessions();
             for (var i = 0; i < sessions.length; i++) {
                 if (!sessions[i].endedAt) return sessions[i];
             }
@@ -867,7 +867,7 @@
                 document.getElementById("session-log").innerHTML = logHtml;
             }
 
-            var sessions = WarpStore.getSessions();
+            var sessions = SnaStore.getSessions();
             var historyHtml = "";
             for (var j = sessions.length - 1; j >= 0; j--) {
                 var s = sessions[j];
@@ -896,7 +896,7 @@
             if (!text || !currentCampaignId) return;
             var active = getActiveSession();
             if (!active) return;
-            WarpStore.addLogEntry(active.id, text);
+            SnaStore.addLogEntry(active.id, text);
             input.value = "";
             // Optimistic: show immediately (poll replaces with server data on next cycle)
             var now = new Date();
@@ -913,7 +913,7 @@
             if (!_pendingPlanet) return;
             var active = getActiveSession();
             if (!active) return;
-            var sessions = WarpStore.getSessions();
+            var sessions = SnaStore.getSessions();
             for (var i = 0; i < sessions.length; i++) {
                 if (sessions[i].id === active.id) {
                     sessions[i].planets = sessions[i].planets || [];
@@ -929,20 +929,20 @@
                     break;
                 }
             }
-            var state = WarpStore.getAll();
+            var state = SnaStore.getAll();
             state.sessions = sessions;
             for (var k in state) {
-                if (state.hasOwnProperty(k)) WarpStore.set(k, state[k]);
+                if (state.hasOwnProperty(k)) SnaStore.set(k, state[k]);
             }
             _pendingPlanet = null;
-            localStorage.removeItem("warp-pending-planet");
+            localStorage.removeItem("sna-pending-planet");
             renderSessionUI();
             saveLocalCampaign();
         }
 
         function startSession() {
             if (!currentCampaignId) return;
-            var sessions = WarpStore.getSessions();
+            var sessions = SnaStore.getSessions();
             sessions = sessions || [];
             var active = sessions.find(function (s) { return !s.endedAt; });
             if (active) return;
@@ -956,10 +956,10 @@
                 planets: [],
             };
             sessions.push(session);
-            var state = WarpStore.getAll();
+            var state = SnaStore.getAll();
             state.sessions = sessions;
             for (var k in state) {
-                if (state.hasOwnProperty(k)) WarpStore.set(k, state[k]);
+                if (state.hasOwnProperty(k)) SnaStore.set(k, state[k]);
             }
             renderSessionUI();
             saveLocalCampaign();
@@ -975,7 +975,7 @@
             var active = getActiveSession();
             if (!active || !currentCampaignId) return;
             var notes = document.getElementById("session-notes").value;
-            var sessions = WarpStore.getSessions();
+            var sessions = SnaStore.getSessions();
             for (var i = 0; i < sessions.length; i++) {
                 if (sessions[i].id === active.id) {
                     sessions[i].endedAt = new Date().toISOString();
@@ -983,10 +983,10 @@
                     break;
                 }
             }
-            var state = WarpStore.getAll();
+            var state = SnaStore.getAll();
             state.sessions = sessions;
             for (var k2 in state) {
-                if (state.hasOwnProperty(k2)) WarpStore.set(k2, state[k2]);
+                if (state.hasOwnProperty(k2)) SnaStore.set(k2, state[k2]);
             }
             renderSessionUI();
             saveLocalCampaign();
@@ -996,17 +996,17 @@
             var active = getActiveSession();
             if (!active || !currentCampaignId) return;
             var notes = document.getElementById("session-notes").value;
-            var sessions = WarpStore.getSessions();
+            var sessions = SnaStore.getSessions();
             for (var i = 0; i < sessions.length; i++) {
                 if (sessions[i].id === active.id) {
                     sessions[i].notes = notes;
                     break;
                 }
             }
-            var state = WarpStore.getAll();
+            var state = SnaStore.getAll();
             state.sessions = sessions;
             for (var j in state) {
-                if (state.hasOwnProperty(j)) WarpStore.set(j, state[j]);
+                if (state.hasOwnProperty(j)) SnaStore.set(j, state[j]);
             }
         }
 
@@ -1016,7 +1016,7 @@
 
         function restoreSession(sessionId) {
             if (!currentCampaignId) return;
-            var sessions = WarpStore.getSessions();
+            var sessions = SnaStore.getSessions();
             var target = null;
             for (var i = 0; i < sessions.length; i++) {
                 if (sessions[i].id === sessionId) {
@@ -1027,10 +1027,10 @@
                 }
             }
             if (!target) return;
-            var state = WarpStore.getAll();
+            var state = SnaStore.getAll();
             state.sessions = sessions;
             for (var k in state) {
-                if (state.hasOwnProperty(k)) WarpStore.set(k, state[k]);
+                if (state.hasOwnProperty(k)) SnaStore.set(k, state[k]);
             }
             renderSessionUI();
             saveLocalCampaign();
@@ -1053,12 +1053,12 @@
             var target = document.getElementById("msg-target").value;
             var text = document.getElementById("msg-text").value.trim();
             if (!target || !text) return;
-            WarpStore.sendMessage("gm", target, text);
+            SnaStore.sendMessage("gm", target, text);
             document.getElementById("msg-text").value = "";
         }
 
         function renderGMInbox() {
-            var msgs = WarpStore.getMessages("gm");
+            var msgs = SnaStore.getMessages("gm");
             if (!msgs || !msgs.length) {
                 document.getElementById("msg-inbox").innerHTML = "";
                 return;
@@ -1073,7 +1073,7 @@
                 }
                 html += '<div class="msg-item">' +
                     '<strong>' + esc(sender) + '</strong>: ' + esc(m.text) +
-                    ' <button class="btn btn-xs" onclick="WarpStore.dismissMessage(\'' + m.id + '\')" ' +
+                    ' <button class="btn btn-xs" onclick="SnaStore.dismissMessage(\'' + m.id + '\')" ' +
                     'style="padding:1px 6px;font-size:0.6rem"><i class="bi bi-x-lg"></i></button>' +
                     '</div>';
             }
@@ -1120,22 +1120,22 @@
 
         function confirmPending(requestId) {
             if (!currentCampaignId) return;
-            var actions = WarpStore.getPendingActions();
+            var actions = SnaStore.getPendingActions();
             var action = actions.find(function (a) { return a.id === requestId; });
             if (!action) return;
             if (action.type === "energyIncrement") {
-                var robots = WarpStore.get("robots") || {};
+                var robots = SnaStore.get("robots") || {};
                 robots[action.robotId] = (robots[action.robotId] || 0) + action.amount;
-                WarpStore.set("robots", robots);
+                SnaStore.set("robots", robots);
             }
-            WarpStore.set("pendingActions", actions.filter(function (a) { return a.id !== requestId; }));
+            SnaStore.set("pendingActions", actions.filter(function (a) { return a.id !== requestId; }));
             saveLocalCampaign();
         }
 
         function rejectPending(requestId) {
             if (!currentCampaignId) return;
-            var actions = WarpStore.getPendingActions();
-            WarpStore.set("pendingActions", actions.filter(function (a) { return a.id !== requestId; }));
+            var actions = SnaStore.getPendingActions();
+            SnaStore.set("pendingActions", actions.filter(function (a) { return a.id !== requestId; }));
             saveLocalCampaign();
         }
 
@@ -1358,11 +1358,11 @@
             document.getElementById("p2p-offer-area").style.display = "none";
             document.getElementById("p2p-status").textContent = "Gerando sala...";
             // Connect to P2P hub (popup) so reloads don't kill WebRTC
-            var hubPromise = typeof WarpP2P !== "undefined" && WarpP2P.hubConnect
-                ? WarpP2P.hubConnect().catch(function () {})
+            var hubPromise = typeof SnaP2P !== "undefined" && SnaP2P.hubConnect
+                ? SnaP2P.hubConnect().catch(function () {})
                 : Promise.resolve();
             hubPromise.then(function () {
-                return WarpP2P.createOffer();
+                return SnaP2P.createOffer();
             }).then(function (result) {
                 document.getElementById("p2p-offer-area").style.display = "block";
                 document.getElementById("btn-p2p-connect").style.display = "";
@@ -1390,8 +1390,8 @@
                     correctLevel: QRCode.CorrectLevel.L
                 });
                 // Init store in local mode with P2P broadcast
-                if (WarpStore.mode !== "local") {
-                    WarpStore.init({ mode: "local" });
+                if (SnaStore.mode !== "local") {
+                    SnaStore.init({ mode: "local" });
                 }
             }).catch(function (e) {
                 document.getElementById("p2p-status").textContent = "Erro: " + (e.message || e);
@@ -1452,7 +1452,7 @@
                 answerPromise = Promise.resolve(raw);
             }
             answerPromise.then(function (answer) {
-                return WarpP2P.acceptAnswer(peerId, answer);
+                return SnaP2P.acceptAnswer(peerId, answer);
             }).then(function () {
                 document.getElementById("p2p-answer").value = "";
                 document.getElementById("p2p-offer-area").style.display = "none";
@@ -1491,7 +1491,7 @@
             }
 
             if (_gmQrScanner) {
-                try { _gmQrScanner.stop().catch(function (err) { console.warn("WARP-Unit: stop failed", err); }); } catch (e) { console.warn("WARP-Unit:", e); }
+                try { _gmQrScanner.stop().catch(function (err) { console.warn("Spaceships and Aliens: stop failed", err); }); } catch (e) { console.warn("Spaceships and Aliens:", e); }
                 _gmQrScanner = null;
             }
 
@@ -1509,7 +1509,7 @@
                     experimentalFeatures: { useBarCodeDetectorIfSupported: true }
                 },
                 function (decodedText) {
-                    try { _gmQrScanner.stop(); } catch (e) { console.warn("WARP-Unit:", e); }
+                    try { _gmQrScanner.stop(); } catch (e) { console.warn("Spaceships and Aliens:", e); }
                     closeGmQrScanner();
                     document.getElementById("p2p-answer").value = decodedText;
                     p2pConnectPlayer();
@@ -1523,7 +1523,7 @@
 
         function closeGmQrScanner() {
             if (_gmQrScanner) {
-                try { _gmQrScanner.stop().catch(function (err) { console.warn("WARP-Unit: stop failed", err); }); } catch (e) { console.warn("WARP-Unit:", e); }
+                try { _gmQrScanner.stop().catch(function (err) { console.warn("Spaceships and Aliens: stop failed", err); }); } catch (e) { console.warn("Spaceships and Aliens:", e); }
                 _gmQrScanner = null;
             }
             document.getElementById("qr-scanner-modal").style.display = "none";
@@ -1544,16 +1544,16 @@
             el.innerHTML = html;
         }
 
-        if (typeof WarpP2P !== "undefined") {
-            WarpP2P.on("ready", function (peerId) {
+        if (typeof SnaP2P !== "undefined") {
+            SnaP2P.on("ready", function (peerId) {
                 document.getElementById("p2p-status").textContent = "Conectado!";
                 if (_p2pPlayers[peerId]) _p2pPlayers[peerId].online = true;
                 updateP2PPeers();
-                if (typeof WarpStore !== "undefined") WarpStore.makeNavExternal();
+                if (typeof SnaStore !== "undefined") SnaStore.makeNavExternal();
                 // Send full state sync to new peer
-                var state = WarpStore.getAll();
+                var state = SnaStore.getAll();
                 setTimeout(function () {
-                    WarpP2P.send(peerId, {
+                    SnaP2P.send(peerId, {
                         type: "sync",
                         state: state,
                         sessions: state.sessions,
@@ -1562,14 +1562,14 @@
                     });
                 }, 500);
             });
-            WarpP2P.on("close", function (peerId) {
+            SnaP2P.on("close", function (peerId) {
                 if (_p2pPlayers[peerId]) _p2pPlayers[peerId].online = false;
                 updateP2PPeers();
                 document.getElementById("p2p-status").textContent = "Jogador desconectado";
             });
         }
 
-        window.addEventListener("warp-p2p-hello", function (e) {
+        window.addEventListener("sna-p2p-hello", function (e) {
             var peerId = e.detail.peerId;
             var robotId = e.detail.robotId;
             if (!peerId || !_p2pPlayers[peerId]) return;
@@ -1579,7 +1579,7 @@
 
         // ServiceWorker
         if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("/sw.js?v=4").catch(function (e) { console.warn("WARP-Unit: SW registration failed", e); });
+            navigator.serviceWorker.register("/sw.js?v=4").catch(function (e) { console.warn("Spaceships and Aliens: SW registration failed", e); });
         }
     </script>
 

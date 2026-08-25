@@ -7,8 +7,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>WARP-Unit | API Keys</title>
-    <link rel="stylesheet" href="warp.css?t=1783272137">
+    <title>Spaceships and Aliens | API Keys</title>
+    <link rel="stylesheet" href="sna.css?t=1783272137">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         .auth-card {
@@ -84,12 +84,12 @@
         .field-hint { font-size: .75em; opacity: .5; margin-top: 2px; }
     </style>
 </head>
-<body class="warp-has-nav">
+<body class="sna-has-nav">
 
 <!--#include nav-->
 
 <header>
-    <h1>SISTEMA OPERACIONAL WARP</h1>
+    <h1>SISTEMA OPERACIONAL SnA</h1>
     <p>Configuração &mdash; Chaves de API para IA</p>
 </header>
 
@@ -97,7 +97,7 @@
 
 <div class="auth-info" style="max-width:480px;margin:0 auto 40px;font-size:.85em;opacity:.7;line-height:1.6;text-align:center">
     <p>
-        O <strong>WARP-Unit</strong> usa inteligência artificial generativa para criar
+        O <strong>Spaceships and Aliens</strong> usa inteligência artificial generativa para criar
         missões, planetas, descobertas e narrativas emergentes. Você fornece suas
         próprias chaves de API — nada fica no servidor.
     </p>
@@ -112,11 +112,11 @@
     </p>
     <p style="margin:2px 0">
         &#8226; A chave fica <strong>apenas no seu navegador</strong> (<code>localStorage</code>),
-        nunca é enviada ao servidor WARP-Unit.
+        nunca é enviada ao servidor Spaceships and Aliens.
     </p>
     <p style="margin:2px 0">
         &#8226; <strong>Gemini</strong>: seu navegador chama a Google AI diretamente
-        (<code>?key=</code> na URL, HTTPS). O servidor WARP-Unit não vê a chave.
+        (<code>?key=</code> na URL, HTTPS). O servidor Spaceships and Aliens não vê a chave.
     </p>
     <p style="margin:2px 0">
         &#8226; <strong>NVIDIA</strong>: a chave passa pelo proxy local apenas durante a
@@ -137,8 +137,8 @@
 (function () {
     var root = document.getElementById('auth-root');
 
-    function hasGemini() { return !!localStorage.getItem('warp-gemini-key'); }
-    function hasNvidia() { return !!localStorage.getItem('warp-nvidia-key'); }
+    function hasGemini() { return !!localStorage.getItem('sna-gemini-key'); }
+    function hasNvidia() { return !!localStorage.getItem('sna-nvidia-key'); }
 
     function getStatus() {
         var g = hasGemini(), n = hasNvidia();
@@ -149,8 +149,8 @@
 
     function render() {
         var status = getStatus();
-        var geminiVal = hasGemini() ? localStorage.getItem('warp-gemini-key') : '';
-        var nvidiaVal = hasNvidia() ? localStorage.getItem('warp-nvidia-key') : '';
+        var geminiVal = hasGemini() ? localStorage.getItem('sna-gemini-key') : '';
+        var nvidiaVal = hasNvidia() ? localStorage.getItem('sna-nvidia-key') : '';
 
         root.innerHTML =
             '<div class="auth-card">' +
@@ -189,11 +189,11 @@
             return;
         }
 
-        if (gemini) localStorage.setItem('warp-gemini-key', gemini);
-        else localStorage.removeItem('warp-gemini-key');
+        if (gemini) localStorage.setItem('sna-gemini-key', gemini);
+        else localStorage.removeItem('sna-gemini-key');
 
-        if (nvidia) localStorage.setItem('warp-nvidia-key', nvidia);
-        else localStorage.removeItem('warp-nvidia-key');
+        if (nvidia) localStorage.setItem('sna-nvidia-key', nvidia);
+        else localStorage.removeItem('sna-nvidia-key');
 
         msg.textContent = 'Chaves salvas!';
         msg.style.color = 'var(--green)';
@@ -201,8 +201,8 @@
     }
 
     function handleClear() {
-        localStorage.removeItem('warp-gemini-key');
-        localStorage.removeItem('warp-nvidia-key');
+        localStorage.removeItem('sna-gemini-key');
+        localStorage.removeItem('sna-nvidia-key');
         render();
     }
 
@@ -220,7 +220,7 @@
 
 <script>
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js?v=4").catch(function (e) { console.warn("WARP-Unit: SW registration failed", e); });
+    navigator.serviceWorker.register("/sw.js?v=4").catch(function (e) { console.warn("Spaceships and Aliens: SW registration failed", e); });
 }
 </script>
 

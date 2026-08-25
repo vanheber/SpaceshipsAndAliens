@@ -1,6 +1,6 @@
 # Build & Deploy
 
-O WARP-Unit é um projeto estático. Nav, footer e outros fragmentos de HTML ficam em `includes/` e são injetados no HTML final via script de build.
+O Spaceships and Aliens é um projeto estático. Nav, footer e outros fragmentos de HTML ficam em `includes/` e são injetados no HTML final via script de build.
 
 ## Estrutura
 
@@ -11,7 +11,8 @@ O WARP-Unit é um projeto estático. Nav, footer e outros fragmentos de HTML fic
 │   └── footer-index.html  # Footer do index.html (Docs · Diário)
 ├── prompts/           # Prompts de IA (um arquivo por domínio)
 │   ├── planet.js      # Geração de planetas (PlanetPrompts)
-│   └── discovery.js   # Geração de encontros (DiscoveryPrompts)
+│   ├── discovery.js   # Geração de encontros (DiscoveryPrompts)
+│   └── lore.js        # Geração de entradas de lore (LorePrompts)
 ├── *.html             # Páginas fonte com placeholders
 │                      # <!--#include nav-->
 │                      # <!--#include footer-->
@@ -48,7 +49,7 @@ O script `build.js`:
 1. Lê todos os `.html` da raiz do projeto
 2. Substitui `<!--#include nav-->` pelo conteúdo de `includes/nav.html`
 3. Substitui `<!--#include footer-->` pelo footer correspondente
-4. Copia assets (js/, img/, data/, api/, docs/, warp.css, sw.js, .htaccess, VERSION)
+4. Copia assets (js/, img/, data/, api/, docs/, sna.css, sw.js, .htaccess, VERSION)
 5. Escreve tudo em `public/`
 
 ## Deploy
@@ -75,7 +76,7 @@ No `index.html`, a barra de navegação fica visível apenas quando a tela de en
 
 ```css
 body:has(.entry-screen.active) { padding-top: 0; }
-body:has(.entry-screen.active) .warp-nav { display: none; }
+body:has(.entry-screen.active) .sna-nav { display: none; }
 ```
 
 Quando o jogador entra (P2P) ou o GM acessa o modo leitura (`?readonly=1`), a entry screen perde a classe `.active` e o nav aparece automaticamente.
@@ -86,6 +87,7 @@ Os prompts do Gerador de Missão ficam em `prompts/`, separados por domínio:
 
 - **`prompts/planet.js`** — `PlanetPrompts`: sistema + template para gerar planetas
 - **`prompts/discovery.js`** — `DiscoveryPrompts`: sistema + template para gerar eventos/encontros
+- **`prompts/lore.js`** — `LorePrompts`: converte texto-fonte em entradas da Biblioteca do Universo (index.json + .md)
 
 Cada arquivo expõe `window.NomePrompts = { system: fn, user: fn(params) }`. O `system()` retorna o system prompt fixo; o `user()` monta o user prompt com os parâmetros dinâmicos da cena.
 

@@ -4,7 +4,7 @@
 function checkRateLimit(): void {
     $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
     $hash = md5($ip);
-    $dir = sys_get_temp_dir() . '/warp_rate_limits';
+    $dir = sys_get_temp_dir() . '/sna_rate_limits';
     if (!is_dir($dir)) {
         @mkdir($dir, 0777, true);
     }

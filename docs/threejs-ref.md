@@ -138,7 +138,7 @@ function genStoneTex(size, rng) {
 - Aplicado como `map:` no material, repetido (wrapS/wrapT = RepeatWrapping)
 - Usado em todas as superfícies de pedra
 
-## Implementação no WARP-Unit (`js/procgen-map.js`)
+## Implementação no Spaceships and Aliens (`js/procgen-map.js`)
 
 O `procgen-map.js` adapta as técnicas da referência para gerar mini-mapas isométricos nos cards de descoberta do Gerador de Missão (`oneshot.html`).
 
@@ -172,7 +172,7 @@ Cópia exata do projeto referência (`chamferBox(w, h, d, ch)`), adaptada para `
 - Winding corrigido da face superior (top face `q(t0, t3, t2, t1)` em vez de `q(t3, t2, t1, t0)`)
 - `DoubleSide` nos materiais para evitar culling de faces chanfradas
 
-### Iluminação (WARP-Unit)
+### Iluminação (Spaceships and Aliens)
 ```js
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -206,7 +206,7 @@ var fill = new THREE.DirectionalLight(0x8899bb, 0.2);
 - Debris: dodecaedros irregulares, flatShading
 - Beacon: poste + luz emissiva + glow
 
-## Lições para o WARP-Unit
+## Lições para o Spaceships and Aliens
 
 1. **Ângulo 36.7°** é o sweet spot isométrico clássico (opcional, user prefere 55-80°)
 2. **ChamferBox** em vez de BoxGeometry dá aspecto polido de miniatura

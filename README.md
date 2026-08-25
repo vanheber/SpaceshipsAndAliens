@@ -1,16 +1,16 @@
-# WARP-Unit — Sistema Operacional de Exploração Interestelar
+# Spaceships and Aliens — Sistema Operacional de Exploração Interestelar
 
 O ano é 3142. A humanidade espalhou-se pelas estrelas, mas o universo continua tão hostil quanto belo. Entre colônias esquecidas e nebulosas não mapeadas, a **Aegis Tiburon** — uma canhoneira pesada reconvertida em nave-mãe de exploração — corta o vácuo com sua IA Capitã no comando. A bordo, até 10 androides, cada um com sua especialidade, personalidade e uma dívida de existência com a tripulação que os ativou.
 
 Missões são geradas conforme o pulso do cosmos: planetas desconhecidos, sinais de socorro, ruínas de civilizações extintas, e aquilo que espreita nos limites do sensor. Não há alinhamento fixo nem roteiro. Há o inesperado, o perigo, e a escolha de cada passo.
 
-O **WARP-Unit** é o terminal de bordo que documenta, calcula e dá suporte à expedição. O resto — coragem, improviso e cosplay de explorador espacial — é com vocês.
+O **Spaceships and Aliens** é o terminal de bordo que documenta, calcula e dá suporte à expedição. O resto — coragem, improviso e cosplay de explorador espacial — é com vocês.
 
 ---
 
-**WARP-Unit** é uma aplicação web *serverless* — HTML + CSS + JS vanilla — para mestres e jogadores de RPG de mesa sci-fi. Zero dependência de servidor: funciona em qualquer hospedagem estática (GitHub Pages, Cloudflare, FTP pelado) e maximiza o aproveitamento de HTML estático sem necessidade de PHP, banco ou configuração.
+**Spaceships and Aliens** é uma aplicação web *serverless* — HTML + CSS + JS vanilla — para mestres e jogadores de RPG de mesa sci-fi. Zero dependência de servidor: funciona em qualquer hospedagem estática (GitHub Pages, Cloudflare, FTP pelado) e maximiza o aproveitamento de HTML estático sem necessidade de PHP, banco ou configuração.
 
-O sistema é **intencionalmente enxuto**: personagens e equipamentos vêm pré-definidos para você sentar e jogar sem perder horas montando ficha. Não busca substituir D&D Beyond, Pathfinder ou mesas tradicionais de progressão — existem para quem quer customização e campanhas longas. O WARP-Unit é para sessões rápidas, prática de narração, e experimentação com regras leves. A estrutura do projeto — dados em JSON, fichas pré-definidas, gerador procedural — funciona como um template reutilizável: no futuro, pode ser adaptado para qualquer temática (fantasia, cyberpunk, horror) trocando dados e assets, sem mexer na arquitetura.
+O sistema é **intencionalmente enxuto**: personagens e equipamentos vêm pré-definidos para você sentar e jogar sem perder horas montando ficha. Não busca substituir D&D Beyond, Pathfinder ou mesas tradicionais de progressão — existem para quem quer customização e campanhas longas. O Spaceships and Aliens é para sessões rápidas, prática de narração, e experimentação com regras leves. A estrutura do projeto — dados em JSON, fichas pré-definidas, gerador procedural — funciona como um template reutilizável: no futuro, pode ser adaptado para qualquer temática (fantasia, cyberpunk, horror) trocando dados e assets, sem mexer na arquitetura.
 
 Usa uma **variante adaptada do Daggerheart** (sistema de dados Esperança vs Medo da Darrington Press) como motor de resolução, e **IA generativa como assistente de mesa** — o gerador de planetas e descobertas cria o escopo da história na hora, enquanto o GM entra com a criatividade e improvisação para adaptar e conectar os pontos.
 
@@ -30,13 +30,14 @@ Usa uma **variante adaptada do Daggerheart** (sistema de dados Esperança vs Med
 | **[mothership.html](mothership.html)** | Descrição detalhada da nave-mãe Tiburon, veículos auxiliares e galeria. Modo consultivo — recursos editáveis apenas no Controle da Missão. |
 | **[400i.html](400i.html)** | Descrição da nave auxiliar Origin 400i, veículo acoplado e galeria. Modo consultivo. |
 | **[arquivadas.html](arquivadas.html)** | Gerencia campanhas arquivadas: restaurar ou excluir permanentemente. |
+| **[lore.html](lore.html)** | Biblioteca do Universo: enciclopédia do lore (facções, mundos, espécies, história, tecnologia) em Markdown, com abas, busca e leitura. Fonte para a IA de geração. |
 
 ---
 
 ## Tecnologias
 
 - **HTML5** — Estrutura semântica, SPAs independentes
-- **CSS3** — Tema escuro futurista centralizado em [warp.css](warp.css), custom properties, responsivo
+- **CSS3** — Tema escuro futurista centralizado em [sna.css](sna.css), custom properties, responsivo
 - **JavaScript Vanilla** — Lógica de estado, renderização, persistência e chamadas à API de IA
 - **WebRTC** — P2P serverless entre GM e jogadores via `RTCPeerConnection` + `RTCDataChannel`
 - **BroadcastChannel** — Persistência de conexão P2P entre reloads (hub popup)
@@ -61,7 +62,7 @@ Usa uma **variante adaptada do Daggerheart** (sistema de dados Esperança vs Med
 - **Campaign header**: nome da campanha + robô selecionado + botão sair
 - **Rolagem remota**: resultados de dados enviados ao GM via P2P (diceResult)
 - **Mensagens**: modal para receber mensagens do mestre e enviar respostas via P2P
-- **Persistência**: estado do robô e energia salvos via `WarpStore` (localStorage)
+- **Persistência**: estado do robô e energia salvos via `SnaStore` (localStorage)
 
 ### Painel do Mestre (`missioncontrol.html`)
 
@@ -102,12 +103,12 @@ Usa uma **variante adaptada do Daggerheart** (sistema de dados Esperança vs Med
 
 ### Estado Compartilhado (`js/store.js`)
 
-`WarpStore` opera em modo **local** (`localStorage`) com suporte a sessão P2P via `js/p2p.js` + `js/p2p-hub.js`.
+`SnaStore` opera em modo **local** (`localStorage`) com suporte a sessão P2P via `js/p2p.js` + `js/p2p-hub.js`.
 
 ### Modelo de Dados
 
 ```
-localStorage["warp-campaigns"] = [
+localStorage["sna-campaigns"] = [
   { id, name, archived, createdAt, state: { robots, npcs, fear, mothership, ship400i,
     pendingActions[], messages[], sessions[] } }
 ]
@@ -126,7 +127,7 @@ O hub sobrevive a reloads via BroadcastChannel. Sem servidor intermediário — 
 ## Estrutura do Projeto
 
 ```
-WARP-Unit/
+Spaceships and Aliens/
 ├── index.html              Catálogo de unidades + ficha + entrada P2P
 ├── missioncontrol.html     Painel do mestre (campanhas, sessões, P2P, recursos)
 ├── oneshot.html            Gerador de missão one-shot (IA cascade + sessão)
@@ -134,12 +135,13 @@ WARP-Unit/
 ├── 400i.html               Nave auxiliar Origin 400i (consultivo)
 ├── equipamento.html        Catálogo de equipamentos
 ├── arquivadas.html         Gerencia campanhas arquivadas
+├── lore.html               Biblioteca do Universo (lore em Markdown)
 ├── p2p-hub.html            Popup hub que segura WebRTC entre reloads
-├── warp.css                CSS centralizado (tema + componentes)
+├── sna.css                CSS centralizado (tema + componentes)
 ├── sw.js                   Service Worker (network-first navegações)
 ├── .htaccess               Cache-Control + proteção de arquivos
 ├── js/
-│   ├── store.js            WarpStore — estado compartilhado (localStorage)
+│   ├── store.js            SnaStore — estado compartilhado (localStorage)
 │   ├── p2p.js              Núcleo WebRTC (RTCPeerConnection + DataChannel)
 │   └── p2p-hub.js          Proxy BroadcastChannel para o hub
 ├── api/
@@ -154,8 +156,11 @@ WARP-Unit/
 │   ├── discoveries.json    Pools de descoberta (fallback)
 │   ├── events-params.json  Parâmetros de eventos
 │   ├── events-categories.json Categorias de eventos
-│   └── enemies.json        Inimigos do universo
+│   ├── enemies.json        Inimigos do universo
+│   └── lore/               Biblioteca do Universo (index.json + .md por entrada)
 ├── img/                    Imagens dos androides, naves, logo, background
+├── prompts/                Prompts de IA (um arquivo por domínio)
+├── scripts/                Ferramentas de desenvolvimento (populate-lore.js)
 ├── docs/                   Documentação detalhada
 └── plans/                  Planos de implementação
 ```
@@ -185,10 +190,10 @@ WARP-Unit/
 
 | Chave | Tipo | Conteúdo |
 |---|---|---|
-| `warp-campaigns` | localStorage | Array de campanhas (nome, estado, sessões, arquivadas) |
-| `warp-unit-state` | localStorage | Estado unificado (robôs, recursos, medo) |
-| `warp-session` | sessionStorage | Âncora de reconexão (campaignId, mode, P2P role) |
-| `warp-unit-oneshot` | localStorage | Estado da missão one-shot (planeta, descobertas) |
+| `sna-campaigns` | localStorage | Array de campanhas (nome, estado, sessões, arquivadas) |
+| `sna-state` | localStorage | Estado unificado (robôs, recursos, medo) |
+| `sna-session` | sessionStorage | Âncora de reconexão (campaignId, mode, P2P role) |
+| `sna-oneshot` | localStorage | Estado da missão one-shot (planeta, descobertas) |
 
 ---
 
@@ -220,7 +225,59 @@ Todos os dados são carregados de arquivos JSON externos:
 - **Planetas**: edite `data/planet-types.json`, `data/planet-params.json`
 - **Descobertas**: edite `data/discoveries.json`, `data/events-params.json`, `data/events-categories.json`
 - **Inimigos**: edite `data/enemies.json`
-- **CSS**: edite variáveis em `:root` no `warp.css`
+- **CSS**: edite variáveis em `:root` no `sna.css`
+
+### Biblioteca do Universo
+
+O lore do universo SnA vive em `data/lore/` — Markdown para prosa, `index.json` para metadados, organizado em **árvore hierárquica**:
+
+```
+Sistema Estelar
+└── Planeta
+    └── Geografia (flora/fauna, se houver)
+        └── Espécie + subespécies inteligentes (se houver)
+            ├── Cultura e História
+            └── Tecnologias (naves, equipamentos, instrumentos)
+```
+
+Tipos de entrada: `system` → `planet` → `geography` → `species` → `culture`/`tech`. Todas as naves e as **inteligências artificiais** ficam em `tech` de Humanos (Sistema Sol). Conteúdo que não pertence a um mundo específico fica sob o nó **General** (topo da árvore): `history` (eras), `organization` (facções/governos). Entidades que vivem entre dimensões ficam sob o nó **Interdimensional** (`sonhos`, `semeador`).
+
+```
+data/lore/
+├── index.json          ← metadados (id, parent, type, image, summary, tags)
+├── system/*.md         ← sistemas estelares
+├── planet/*.md         ← planetas
+├── geography/*.md      ← geografia, flora e fauna
+├── species/*.md        ← espécies inteligentes
+├── culture/*.md        ← cultura e história de uma espécie
+├── tech/*.md           ← tecnologias, naves e IAs (sob Humanos/espécies)
+├── general/general.md  ← nó General: organizações e história
+├── interdimensional/   ← nó Interdimensional: entidades entre dimensões
+├── organization/*.md   ← facções, governos privados (sob General)
+└── history/*.md        ← eras e história (sob General)
+```
+
+**Para adicionar uma entrada**: crie o `.md` em `data/lore/<tipo>/`, adicione um objeto ao `index.json` com `id` (único) e `parent` (o `id` da entrada pai na árvore). Nenhuma mudança de código. Para gerar entradas a partir de texto-fonte com IA, use o template [`prompts/lore.js`](prompts/lore.js) (`LorePrompts`).
+
+**População automática**: `scripts/populate-lore.js` converte um corpus Markdown (ex: o universo "Mestre dos Planetas") em entradas via `LorePrompts` + Gemini, em etapas:
+
+```bash
+node scripts/populate-lore.js --stage species   # espécies
+node scripts/populate-lore.js --stage worlds    # sistemas/mundos
+node scripts/populate-lore.js --stage factions  # cultura/facções
+node scripts/populate-lore.js --stage tech      # tecnologia
+node scripts/populate-lore.js --all             # tudo (idempotente: pula já gerados)
+node scripts/populate-lore.js --plan            # lista o catálogo sem chamar IA
+```
+
+O catálogo fica no topo do script (`CATALOG`): cada entrada define `id`, `name`, `type`, `parent` e as fontes `.md` no corpus. Requer `GEMINI_KEY` no `.env`.
+
+**Extração direta**: `scripts/extract-sa.js` extrai conteúdo enciclopédico do sourcebook `data/lore/spaceships-and-aliens.md` (o mesmo universo, com sistemas, planetas, naves, organizações e história) em entradas, sem IA — descarta regras de jogo (custos XSATS, tabelas de stats) e resíduos de OCR:
+
+```bash
+node scripts/extract-sa.js --stage systems|planets|ships|orgs|history|ai
+node scripts/extract-sa.js --all --force      # regera tudo (--force sobrescreve)
+```
 
 ### Prompts de IA
 
@@ -230,6 +287,7 @@ Os prompts usados pelo Gerador de Missão (`oneshot.html`) ficam em `prompts/`, 
 |---------|----------|
 | `prompts/planet.js` | Geração de planetas (`PlanetPrompts`) |
 | `prompts/discovery.js` | Geração de encontros/eventos (`DiscoveryPrompts`) |
+| `prompts/lore.js` | Geração de entradas de lore a partir de fontes (`LorePrompts`) |
 
 Cada arquivo exporta `{ system, user }` via `window`. Para refinar um prompt, abra o arquivo isoladamente, envie o conteúdo para um modelo de IA e substitua pela versão melhorada — sem precisar tocar na página.
 
@@ -239,7 +297,7 @@ Schemas detalhados em [`docs/schema.md`](docs/schema.md).
 
 ## Build & Deploy
 
-O WARP-Unit é um projeto estático. Nav e footer ficam em `includes/` e são injetados via build.
+O Spaceships and Aliens é um projeto estático. Nav e footer ficam em `includes/` e são injetados via build.
 
 ### Desenvolvimento
 

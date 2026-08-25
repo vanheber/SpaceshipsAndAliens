@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/favicon.png">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Spaceships and Aliens — Biblioteca do Universo</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="sna.css?t=1783272137">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body class="sna-has-nav">
+
+<!--#include nav-->
+
+<header>
+    <h1>BIBLIOTECA DO UNIVERSO</h1>
+    <p>Hierarquia do universo SnA — sistemas, planetas, espécies, cultura e tecnologia</p>
+</header>
+
+<div class="lore-page">
+
+    <div class="lore-toolbar">
+        <input type="search" id="lore-search" class="lore-search" placeholder="Buscar na biblioteca…" aria-label="Buscar na biblioteca">
+    </div>
+
+    <div class="lore-layout">
+        <aside class="lore-sidebar" id="lore-sidebar" aria-label="Índice da biblioteca">
+            <div class="lore-placeholder">Carregando…</div>
+        </aside>
+        <main class="lore-content" id="lore-content">
+            <div class="lore-placeholder">Selecione uma entrada na árvore para ler.</div>
+        </main>
+    </div>
+
+</div>
+
+<!--#include footer-->
+
+<script>
+var LORE = [];
+var query = "";
+
+function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (m) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
+    });
+}
+
+async function loadLore() {
+    var sidebar = document.getElementById("lore-sidebar");
+    sidebar.innerHTML = '<div class="lore-placeholder">Carregando…</div>';
+    try {
+        var res = await fetch("data/lore/index.json?t=" + Date.now());
+        if (!res.ok) throw new Error("index.json");
+        LORE = await res.json();
+        render();
+    } catch (e) {
+        sidebar.innerHTML = '<div class="lore-error">Falha ao carregar a biblioteca. Verifique se o servidor está rodando.</div>';
+    }
+}
+
+function matchesQuery(e) {
+    if (!query) return true;
+    var hay = (e.name + " " + e.summary + " " + (e.tags || []).join(" ")).toLowerCase();
+    return hay.indexOf(query.toLowerCase()) !== -1;
+}
+
+function render() {
+    // Nós visíveis: os que batem a busca + todos os ancestrais deles (mostra o caminho na árvore)
+    var visible = new Set();
+    LORE.forEach(function (e) {
+        if (matchesQuery(e)) {
+            var cur = e.id;
+            while (cur && !visible.has(cur)) {
+                visible.add(cur);
+                var pe = null;
+                for (var i = 0; i < LORE.length; i++) if (LORE[i].id === cur) { pe = LORE[i]; break; }
+                cur = pe ? pe.parent : null;
+            }
+        }
+    });
+
+    var show = LORE.filter(function (e) { return visible.has(e.id); });
+    var byParent = {};
+    show.forEach(function (e) {
+        var k = e.parent || "__root__";
+        (byParent[k] = byParent[k] || []).push(e);
+    });
+
+    var root = byParent["__root__"] || [];
+    document.getElementById("lore-sidebar").innerHTML =
+        root.map(function (e) { return nodeHtml(e, byParent); }).join("") ||
+        '<div class="lore-empty">Nenhuma entrada encontrada.</div>';
+}
+
+function nodeHtml(e, byParent) {
+    var kids = (byParent[e.id] || []).map(function (k) { return nodeHtml(k, byParent); }).join("");
+    var img = e.image ? '<img src="' + esc(e.image) + '" alt="" loading="lazy" class="lore-node-img">' : "";
+    var row = '<div class="lore-row"><span class="lore-node-type">' + esc(e.type) + '</span>' + img + '<span class="lore-node-name">' + esc(e.name) + '</span></div>';
+    if (kids) {
+        // fechada por padrão; expande automaticamente durante a busca para revelar o caminho
+        var openAttr = query ? " open" : "";
+        return '<details class="lore-node" data-id="' + esc(e.id) + '"' + openAttr + '><summary>' + row + '</summary>' +
+            '<div class="lore-node-children">' + kids + '</div></details>';
+    }
+    return '<div class="lore-node lore-leaf" data-id="' + esc(e.id) + '">' + row + '</div>';
+}
+
+function setActive(id) {
+    var nodes = document.querySelectorAll(".lore-node.active");
+    for (var i = 0; i < nodes.length; i++) nodes[i].classList.remove("active");
+    var node = document.querySelector('.lore-node[data-id="' + id + '"]');
+    if (node) node.classList.add("active");
+}
+
+function openEntry(id) {
+    var entry = null;
+    for (var i = 0; i < LORE.length; i++) if (LORE[i].id === id) { entry = LORE[i]; break; }
+    if (!entry) return;
+    setActive(id);
+    fetch("data/lore/" + entry.file).then(function (r) {
+        if (!r.ok) throw new Error("arquivo");
+        return r.text();
+    }).then(function (md) {
+        document.getElementById("lore-content").innerHTML = marked.parse(md);
+    }).catch(function () {
+        document.getElementById("lore-content").innerHTML = '<div class="lore-error">Falha ao carregar a entrada.</div>';
+    });
+}
+
+document.getElementById("lore-sidebar").addEventListener("click", function (e) {
+    var node = e.target.closest(".lore-node");
+    if (node && node.getAttribute("data-id")) openEntry(node.getAttribute("data-id"));
+});
+
+document.getElementById("lore-search").addEventListener("input", function (e) {
+    query = e.target.value;
+    render();
+});
+
+loadLore();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js?v=4');
+}
+</script>
+
+</body>
+</html>

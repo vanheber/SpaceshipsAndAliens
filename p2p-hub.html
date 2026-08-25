@@ -10,9 +10,9 @@ body{background:#0a0a1e;color:#e0e0e0;font-family:monospace;font-size:12px;paddi
 </style>
 </head>
 <body>
-<div id="log">WARP-Unit P2P Hub — ativo</div>
+<div id="log">Spaceships and Aliens P2P Hub — ativo</div>
 <script>
-var bc = new BroadcastChannel("warp-p2p");
+var bc = new BroadcastChannel("sna-p2p");
 var log = document.getElementById("log");
 
 function addLog(t) {
@@ -25,7 +25,7 @@ bc.onmessage = function (e) {
 
     if (m.cmd === "createOffer") {
         addLog("createOffer");
-        WarpP2P.createOffer().then(function (r) {
+        SnaP2P.createOffer().then(function (r) {
             bc.postMessage({ type: "p2p-res", id: m.id, peerId: r.peerId, offer: r.offer, compact: r.compact });
             addLog("offer pronto");
         }).catch(function (e) {
@@ -34,20 +34,20 @@ bc.onmessage = function (e) {
         });
     } else if (m.cmd === "acceptAnswer") {
         addLog("acceptAnswer");
-        WarpP2P.acceptAnswer(m.peerId, m.answer).then(function () {
+        SnaP2P.acceptAnswer(m.peerId, m.answer).then(function () {
             bc.postMessage({ type: "p2p-res", id: m.id });
         }).catch(function (e) {
             bc.postMessage({ type: "p2p-res", id: m.id, error: e.message });
         });
     } else if (m.cmd === "joinRoom") {
-        WarpP2P.joinRoom(m.offer).then(function (answer) {
+        SnaP2P.joinRoom(m.offer).then(function (answer) {
             bc.postMessage({ type: "p2p-res", id: m.id, answer: answer });
         }).catch(function (e) {
             bc.postMessage({ type: "p2p-res", id: m.id, error: e.message });
         });
     } else if (m.cmd === "joinRoomCompact") {
         addLog("joinRoomCompact");
-        WarpP2P.joinRoomCompact(m.compact).then(function (answer) {
+        SnaP2P.joinRoomCompact(m.compact).then(function (answer) {
             bc.postMessage({ type: "p2p-res", id: m.id, answer: answer });
             addLog("answer pronto");
         }).catch(function (e) {
@@ -55,27 +55,27 @@ bc.onmessage = function (e) {
             addLog("erro: " + e.message);
         });
     } else if (m.cmd === "send") {
-        WarpP2P.send(m.peerId, m.data);
+        SnaP2P.send(m.peerId, m.data);
     } else if (m.cmd === "close") {
-        WarpP2P.close();
+        SnaP2P.close();
     } else if (m.cmd === "ping") {
-        bc.postMessage({ type: "p2p-event", event: "pong", role: WarpP2P.getRole(), open: WarpP2P.isOpen() });
+        bc.postMessage({ type: "p2p-event", event: "pong", role: SnaP2P.getRole(), open: SnaP2P.isOpen() });
     }
 };
 
-WarpP2P.on("ready", function (peerId) {
+SnaP2P.on("ready", function (peerId) {
     addLog("conectado: " + peerId);
     bc.postMessage({ type: "p2p-event", event: "ready", peerId: peerId });
 });
-WarpP2P.on("close", function (peerId) {
+SnaP2P.on("close", function (peerId) {
     addLog("desconectado: " + peerId);
     bc.postMessage({ type: "p2p-event", event: "close", peerId: peerId });
 });
-WarpP2P.on("message", function (msg) {
+SnaP2P.on("message", function (msg) {
     bc.postMessage({ type: "p2p-event", event: "message", data: msg });
 });
 
-window.addEventListener("beforeunload", function () { WarpP2P.close(); });
+window.addEventListener("beforeunload", function () { SnaP2P.close(); });
 </script>
 </body>
 </html>
