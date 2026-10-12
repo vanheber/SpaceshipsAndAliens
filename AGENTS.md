@@ -52,7 +52,14 @@ Antes de escrever código, pare no primeiro degrau que segurar:
 | Service Worker cache | `sw.js` | Network-first pra navegações (HTML), cache-first pra assets estáticos; `?v=N` no registration URL |
 | SW version bust | `.htaccess` + `*.html` | `Cache-Control: no-cache` pra sw.js + `register("/sw.js?v=N")` em todas as páginas HTML |
 | SW on all pages | `*.html` | Registrar SW em TODAS as páginas HTML, não só na index — senão navegação direta pra oneshot/mothership/etc não é interceptada |
-| Lore como dados | `data/lore/` | Prosa em Markdown (`*.md`) + metadados em `index.json`; **árvore hierárquica** (`system→planet→geography→species→culture/tech`) via campos `id`/`parent`; naves e IAs em `tech` de Humanos; nó **`general`** agrupa `history`/`organization`; nó **`interdimensional`** para entidades entre planos; irmãos ordenados alfabeticamente; render com `marked` + `<details>`; template de geração em `prompts/lore.js` (`LorePrompts`) com `system(canon)` parametrizável; **população em lote** via `scripts/populate-lore.js` (catálogo + Gemini, idempotente, etapas `species/worlds/factions/tech`); **extração direta** via `scripts/extract-sa.js` (sourcebook S&A, descarta regras de jogo e resíduos OCR, `--force`) |
+| SW bust por conteúdo | `sw.js` | cache-first de assets: CSS/HTML mudaram → `CACHE = "sna-vN+1"`; `?v=` em script não refresca asset já cacheado |
+| Sala wai (Fase E) | `play.html` | `<section id="wai-room">` via importmap → `js/vendor/{wai,table,sync}.js` copiados pelo `build.js` **pós** `cleanRemoved`; `queueMicrotask(() => table.grant(seat, ...))` (grant síncrono não cola); labels PT via `STATES`/`BANDS` |
+| Transporte híbrido | `play.html` | UM `connect()` só: `send` = fan-out BC+P2P, `onMessage` = fan-in (Set de wrappers); dois `connect()` ecoariam snapshot |
+| Fusão de seats | `play.html` | snapshot recebido funde `{...table.toJSON().seats, ...m.seats}` antes do `load` — sem isso re-grant por-lado briga; `ponytail:` revoke não cola (kick exige ack) |
+| SnaP2P single-slot | `js/p2p.js` | `on(name)` guarda UM handler (arrays só com hub ativo) — no máximo 1 `ready`, 1 `close`, 1 `message` por página; `store.js` ocupa o `message` em páginas legadas |
+| HELLO só do lado join | `play.html` | quem entrou (`?join=`) manda `{__wai:"hello"}` no `ready`; ambos anunciarem = snapshot vazio do GM apaga o log (last-wins) |
+| Self-check headless | `play.html` | `location.hash === "#selftest"` rola ações locais; dump com Chrome no path completo (`"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --dump-dom`) |
+| Lore como dados | `data/lore/` | Prosa em Markdown (`*.md`) + metadados em `index.json`; **árvore hierárquica** (`system→planet→geography→species→culture/tech`) via campos `id`/`parent`; personagens principais (`character`) aninham sob o `id` do planeta; naves e IAs em `tech` de Humanos; nó **`general`** agrupa `history`/`organization`; nó **`interdimensional`** para entidades entre planos; irmãos ordenados alfabeticamente; render com `marked` + `<details>`; template de geração em `prompts/lore.js` (`LorePrompts`) com `system(canon)` parametrizável; **população em lote** via `scripts/populate-lore.js` (catálogo + Gemini, idempotente, etapas `species/worlds/factions/tech`); **extração direta** via `scripts/extract-sa.js` (sourcebook S&A, descarta regras de jogo e resíduos OCR, `--force`); **imagens opcionais** em `data/lore/<tipo>/<id>.webp` (mesma pasta do `.md`, referenciadas por `image` no `index.json`; omitir o campo = sem thumbnail) |
 
 **Padrões de prompts de IA:**
 - Prompts ficam em `prompts/`, um arquivo por domínio (`planet.js`, `discovery.js`)
@@ -75,3 +82,4 @@ Antes de escrever código, pare no primeiro degrau que segurar:
 - Zero testes: reavaliar quando houver build tooling
 - Prompts EN/PT inconsistente: funcionam, só desperdiçam tokens — adiado
 - Validação de schema do output IA: fallback local cobre falhas
+- `entity.levels[]` (wai-core): zero dados/consumidores em S&A (só citado em `wai-core/docs/livro-regras-universal.md:444`) — não implementar até houver conteúdo multi-nível

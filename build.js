@@ -89,4 +89,18 @@ function cleanRemoved(dir) {
 
 processDir(SRC, DST);
 cleanRemoved(DST);
+
+// Motor WAI vem dos repos irmãos: copia pro build e resolve pelo import map
+// de play.html (js/vendor/*). Rodar depois de cleanRemoved, senão apaga.
+const VENDOR = [
+  ["../wai-core/src/wai.js", "js/vendor/wai.js"],
+  ["../wai-table/src/table.js", "js/vendor/table.js"],
+  ["../wai-table/src/sync.js", "js/vendor/sync.js"],
+];
+for (const [from, to] of VENDOR) {
+  const src = path.resolve(SRC, from);
+  if (!fs.existsSync(src)) throw new Error(`vendor ausente: ${src} — build na raiz do workspace?`);
+  copyIfChanged(src, path.join(DST, to));
+}
+
 console.log("Build concluído: public/");

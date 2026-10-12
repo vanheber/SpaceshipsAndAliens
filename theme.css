@@ -140,3 +140,40 @@ dialog#wai-dlg::backdrop { background: rgba(0, 0, 0, .72); }
 dialog#wai-dlg .dlg-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--border-color); }
 dialog#wai-dlg button { background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 7px; padding: 3px 9px; cursor: pointer; }
 dialog#wai-dlg .wai-card { width: 100%; border-radius: 0; }
+
+/* ---- sala viva (Fase E): mesa wai-table acima do catálogo ---- */
+.wai-room { width: 100%; background: rgba(20, 26, 34, .72); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box; }
+.wai-room[hidden] { display: none; }
+.wai-room-bar, .wai-roll { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: .85rem; }
+.wai-lab { display: inline-flex; align-items: center; gap: 5px; }
+.wai-room select, .wai-room input { background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 7px; padding: 5px 7px; font: inherit; }
+.wai-room input[type="checkbox"] { padding: 0; }
+.wai-dc { width: 4.2em; }
+.wai-room button { background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 7px; padding: 5px 10px; cursor: pointer; font: inherit; }
+.wai-room button:hover, .wai-room button:focus-visible { border-color: var(--accent-hope); outline: none; }
+.wai-role { font-size: .7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-hope); }
+.wai-fear b { color: var(--accent-fear); font-variant-numeric: tabular-nums; }
+.wai-msg { color: var(--accent-fear); }
+
+.wai-strip { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.wai-strip li { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 8px; font-size: .85rem; }
+.wai-strip .s-name { flex: 1 1 auto; font-weight: 600; }
+.wai-strip .s-state { font-size: .68rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-energy); }
+.wai-strip .s-state[data-state="down"] { color: var(--accent-fear); }
+.wai-pool { width: 90px; height: 8px; background: #0a0e13; border: 1px solid var(--border-color); border-radius: 5px; overflow: hidden; }
+.wai-pool i { display: block; height: 100%; background: var(--accent-energy); }
+.wai-pool-n { font-variant-numeric: tabular-nums; font-weight: 400; }
+.wai-strip .s-pool { padding: 2px 7px; font-size: .78rem; }
+
+.wai-log { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 3px; font-size: .78rem; color: #b9c2cc; }
+.wai-log .ok b { color: var(--accent-hope); }
+.wai-log .no b { color: var(--accent-fear); }
+
+/* conexão remota (Fase E2): oferta do GM, join do jogador, status */
+.wai-p2p summary { cursor: pointer; font-size: .8rem; color: var(--accent-hope); }
+.wai-p2p > div { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.wai-p2p > div[hidden] { display: none; }
+.wai-p2p label { display: flex; flex-direction: column; gap: 3px; font-size: .75rem; color: #b9c2cc; }
+.wai-p2p-btns { display: flex; gap: 8px; }
+.wai-p2p input, .wai-p2p textarea { width: 100%; box-sizing: border-box; background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 7px; padding: 5px 7px; font: .75rem/1.3 monospace; }
+.wai-p2p-status { font-size: .75rem; color: var(--accent-energy); }

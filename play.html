@@ -7,12 +7,63 @@
     <link rel="stylesheet" href="sna.css">
     <link rel="stylesheet" href="theme.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap" rel="stylesheet">
+    <script src="js/p2p.js?v=5"></script>
+    <script type="importmap">
+        { "imports": { "wai-core": "./js/vendor/wai.js", "wai-table": "./js/vendor/table.js", "wai-table/sync": "./js/vendor/sync.js" } }
+    </script>
 </head>
 <body class="sna-has-nav">
 
 <!--#include nav-->
 
 <main class="wai-play">
+    <section class="wai-room" id="wai-room" hidden>
+        <div class="wai-room-bar">
+            <label class="wai-lab">Sentar <select id="wai-seat"></select></label>
+            <span class="wai-role" id="wai-role"></span>
+            <span class="wai-fear">Medo <b id="wai-fear">0</b></span>
+            <button id="wai-fear-up" hidden>Medo +1</button>
+            <button id="wai-fear-dn" hidden>Medo −1</button>
+        </div>
+        <div class="wai-roll">
+            <select id="wai-actor" aria-label="Atuante"></select>
+            <select id="wai-trait" aria-label="Traço"></select>
+            <input id="wai-dc" class="wai-dc" type="number" value="12" min="0" max="99" aria-label="DC">
+            <select id="wai-mode" aria-label="Modo">
+                <option value="normal">Normal</option>
+                <option value="advantage">Vantagem</option>
+                <option value="disadvantage">Desvantagem</option>
+            </select>
+            <select id="wai-target" aria-label="Alvo"></select>
+            <select id="wai-item" aria-label="Item"></select>
+            <label class="wai-lab"><input type="checkbox" id="wai-power"> Poder</label>
+            <button id="wai-duel">Duelo</button>
+            <button id="wai-attack">Atacar</button>
+            <span class="wai-msg" id="wai-msg" role="status"></span>
+        </div>
+        <ul class="wai-strip" id="wai-strip"></ul>
+        <ol class="wai-log" id="wai-log"></ol>
+        <details class="wai-p2p" id="wai-p2p">
+            <summary>Conexão remota (outra máquina)</summary>
+            <div id="wai-p2p-gm">
+                <div class="wai-p2p-btns">
+                    <button id="wai-p2p-create">Criar código de sala</button>
+                    <button id="wai-p2p-copy">Copiar link</button>
+                </div>
+                <input id="wai-p2p-link" readonly placeholder="link do jogador aparece aqui">
+                <label>Resposta do jogador
+                    <textarea id="wai-p2p-answer" rows="2" placeholder="cole a resposta gerada no navegador do jogador"></textarea>
+                </label>
+                <button id="wai-p2p-accept">Conectar jogador</button>
+            </div>
+            <div id="wai-p2p-pl" hidden>
+                <label>Seu código — envie ao mestre
+                    <textarea id="wai-p2p-join" rows="2" readonly></textarea>
+                </label>
+            </div>
+            <span class="wai-p2p-status" id="wai-p2p-status" role="status"></span>
+        </details>
+    </section>
     <select id="wai-picker" class="wai-picker" aria-label="Escolher card"></select>
     <section class="wai-row" id="wai-row" aria-label="Cards"></section>
 </main>
@@ -29,7 +80,7 @@
 
 <script>
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js?v=4").catch(function () {});
+    navigator.serviceWorker.register("/sw.js?v=5").catch(function () {});
 }
 </script>
 <script type="module">
@@ -79,6 +130,195 @@ if ("serviceWorker" in navigator) {
         if (ref) openRef(ref.dataset.ref);
     });
     show(picker.value);
+
+    // ---- sala (Fase E): mesa viva do wai-table, transporte injetável ----
+    let T;
+    try {
+        T = { ...(await import("wai-table")), ...(await import("wai-table/sync")) };
+    } catch (e) {
+        console.error("wai-table indisponível (npm run build gera js/vendor?):", e);
+    }
+    if (T) {
+        const room = document.getElementById("wai-room");
+        const $ = (id) => document.getElementById(id);
+        const names = new Map(S.entities.map((e) => [e.id, e.name]));
+        const BANDS = { critical: "crítico", critical_failure: "falha crítica", triumph: "triunfo", opening: "abertura", cost: "custo", reversal: "revés" };
+        const STATES = { active: "de pé", down: "caído", replaced: "substituído" };
+        const table = T.createTable({ roster: S.entities });
+        const seat = () => $("wai-seat").value;
+        const isGm = () => table.role(seat()) === "gm";
+        const joinCode = new URLSearchParams(location.search).get("join");
+
+        // ponytail: snapshot remoto pode derrubar nosso sentado (load troca
+        // seats inteiro); re-grant no microtask — fora do applying do load o
+        // emit de volta é enviado e os dois lados convergem, sem handshake
+        // de autoridade (quem anuncia por último vence).
+        const ensureSeat = () => {
+            const key = seat();
+            if (table.role(key) == null) {
+                table.grant(key, key === "gm" ? "gm" : "player", key === "gm" ? null : key.slice(2));
+            }
+        };
+
+        const render = (snap) => {
+            const gm = isGm();
+            $("wai-fear").textContent = snap.fear;
+            $("wai-role").textContent = gm ? "GM" : "Jogador";
+            $("wai-fear-up").hidden = !gm;
+            $("wai-fear-dn").hidden = !gm;
+            $("wai-strip").innerHTML = snap.roster.map((e) => {
+                const pct = e.pool.max ? Math.round((e.pool.current / e.pool.max) * 100) : 0;
+                const pool = `<span class="wai-pool"><i style="width:${pct}%"></i></span><b class="wai-pool-n">${e.pool.current}/${e.pool.max}</b>`;
+                const gmBtns = gm
+                    ? `<button class="s-pool" data-pool="${e.id}" data-delta="-1" aria-label="pool -1">−1</button><button class="s-pool" data-pool="${e.id}" data-delta="1" aria-label="pool +1">+1</button>`
+                    : "";
+                return `<li data-ent="${e.id}"><span class="s-name">${names.get(e.id) ?? e.id}</span>${pool}<span class="s-state" data-state="${e.state}">${STATES[e.state] ?? e.state}</span>${gmBtns}</li>`;
+            }).join("");
+            $("wai-log").innerHTML = snap.log.slice(-5).reverse().map((l) => {
+                const dmg = l.damage ? ` · dano ${l.damage}` : "";
+                return `<li class="${l.success ? "ok" : "no"}">${l.kind === "attack" ? "Ataque" : "Duelo"} <b>${l.total}</b> vs DC ${l.dc} — ${l.success ? "sucesso" : "falha"} · ${BANDS[l.band] ?? l.band}${dmg}</li>`;
+            }).join("");
+        };
+
+        const fillTraits = () => {
+            $("wai-trait").innerHTML = Object.entries(S.skin.traits)
+                .map(([k, t]) => `<option value="${k}">${t.name}</option>`).join("");
+        };
+        const fillActors = () => {
+            const list = isGm() ? table.list() : table.list().filter((e) => table.controller(e.id) === seat());
+            const cur = $("wai-actor").value;
+            $("wai-actor").innerHTML = list.map((e) => `<option value="${e.id}">${names.get(e.id) ?? e.id}</option>`).join("");
+            if (list.some((e) => e.id === cur)) $("wai-actor").value = cur;
+        };
+        const fillItems = () => {
+            const e = table.get($("wai-actor").value);
+            $("wai-item").innerHTML = `<option value="">Sem item</option>` +
+                (e?.items ?? []).map((it, i) => `<option value="${i}">${it.name}</option>`).join("");
+        };
+        const fillTargets = () => {
+            const me = $("wai-actor").value;
+            $("wai-target").innerHTML = `<option value="">—</option>` +
+                table.list().filter((e) => e.id !== me).map((e) => `<option value="${e.id}">${names.get(e.id) ?? e.id}</option>`).join("");
+        };
+        const act = (fn) => {
+            try { ensureSeat(); fn(); $("wai-msg").textContent = ""; }
+            catch (e) { $("wai-msg").textContent = e.message; }
+        };
+
+        $("wai-seat").innerHTML = `<option value="gm">GM (mestre)</option>` +
+            S.entities.map((e) => `<option value="p:${e.id}">${e.name}</option>`).join("");
+        if (joinCode) $("wai-seat").value = "p:" + S.entities[0].id; // quem entra não senta como GM
+        fillTraits();
+        table.subscribe(() => { if (table.role(seat()) == null) queueMicrotask(ensureSeat); });
+        table.subscribe(render);
+
+        // Um só connect com transporte híbrido: BC (abas locais) + P2P (outra
+        // máquina). Dois connects ecoariam entre si (load de um dispara push
+        // no outro, para sempre). Assentos vêm por-rede (cada lado tem o seu
+        // grant local), então funde antes do load — sem isso o re-grant de
+        // cada lado briga eternamente. ponytail: revoke não cola (o merge
+        // mantém o assento local); kick de sentado exige autoridade com ack,
+        // subir quando a gestão de sentados do GM existir.
+        const bc = T.broadcastTransport("sna-wai-room");
+        const p2pMsgs = new Set();
+        if (typeof SnaP2P !== "undefined") SnaP2P.on("message", (m) => p2pMsgs.forEach((f) => f(m)));
+        const transport = {
+            send(msg) {
+                bc.send(msg);
+                if (typeof SnaP2P !== "undefined") SnaP2P.send(null, msg);
+            },
+            onMessage(fn) {
+                const wrap = (m) => {
+                    if (m && Array.isArray(m.roster)) m = { ...m, seats: { ...table.toJSON().seats, ...m.seats } };
+                    fn(m);
+                };
+                const off = bc.onMessage(wrap);
+                p2pMsgs.add(wrap);
+                return () => { off(); p2pMsgs.delete(wrap); };
+            },
+            close() { bc.close(); },
+        };
+        T.connect(table, transport);
+        ensureSeat();
+        fillActors(); fillItems(); fillTargets();
+        room.hidden = false;
+
+        $("wai-seat").addEventListener("change", () => { ensureSeat(); fillActors(); fillItems(); fillTargets(); });
+        $("wai-actor").addEventListener("change", () => { fillItems(); fillTargets(); });
+        const rollOpts = () => ({
+            id: $("wai-actor").value,
+            trait: $("wai-trait").value,
+            mode: $("wai-mode").value,
+            useAbility: $("wai-power").checked,
+        });
+        $("wai-duel").addEventListener("click", () =>
+            act(() => table.duel(seat(), { ...rollOpts(), dc: Number($("wai-dc").value) })));
+        $("wai-attack").addEventListener("click", () => {
+            const items = table.get($("wai-actor").value)?.items ?? [];
+            const item = $("wai-item").value === "" ? null : items[Number($("wai-item").value)];
+            act(() => table.attack(seat(), { ...rollOpts(), target: $("wai-target").value || null, item }));
+        });
+        $("wai-fear-up").addEventListener("click", () => act(() => table.addFear(seat(), 1)));
+        $("wai-fear-dn").addEventListener("click", () => act(() => table.addFear(seat(), -1)));
+        $("wai-strip").addEventListener("click", (e) => {
+            const b = e.target.closest("[data-pool]");
+            if (b) act(() => table.setPool(seat(), b.dataset.pool, Number(b.dataset.delta)));
+        });
+
+        // ---- sinalização P2P (outra máquina): oferta do GM, join do jogador ----
+        const p2pStatus = (t) => { $("wai-p2p-status").textContent = t; };
+        p2pStatus(typeof SnaP2P !== "undefined" ? "p2p ok" : "p2p.js ausente");
+        if (typeof SnaP2P !== "undefined") {
+            // p2p.js guarda UM handler por nome (sem o hub) — este é o único
+            // de ready/close. Só quem entrou pergunta no ready: se os dois
+            // anunciassem, o snapshot vazio do jogador apagaria o log do GM
+            // (quem anuncia por último vence). GM que recarrega fica sem
+            // estado até o primeiro roll do jogador. # ponytail
+            SnaP2P.on("ready", () => {
+                p2pStatus("conectado ✓");
+                if (joinCode) SnaP2P.send(null, { __wai: "hello" });
+            });
+            SnaP2P.on("close", () => p2pStatus("conexão caiu"));
+            let p2pPeer = null;
+            $("wai-p2p-create").addEventListener("click", async () => {
+                try {
+                    const r = await SnaP2P.createOffer();
+                    p2pPeer = r.peerId;
+                    $("wai-p2p-link").value = location.origin + location.pathname + "?join=" +
+                        btoa(r.compact).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+                    p2pStatus("link pronto — cole no navegador do jogador");
+                } catch (e) { p2pStatus("Erro: " + e.message); }
+            });
+            $("wai-p2p-copy").addEventListener("click", () => {
+                $("wai-p2p-link").select();
+                try { document.execCommand("copy"); p2pStatus("link copiado"); }
+                catch (e) { p2pStatus("selecione e copie à mão"); }
+            });
+            $("wai-p2p-accept").addEventListener("click", async () => {
+                try {
+                    if (!p2pPeer) throw new Error("crie o código da sala primeiro");
+                    await SnaP2P.acceptAnswer(p2pPeer, $("wai-p2p-answer").value.trim());
+                    p2pStatus("conectando…");
+                } catch (e) { p2pStatus("Erro: " + e.message); }
+            });
+            if (joinCode) {
+                $("wai-p2p").open = true;
+                $("wai-p2p-gm").hidden = true;
+                $("wai-p2p-pl").hidden = false;
+                try {
+                    let safe = joinCode.replace(/-/g, "+").replace(/_/g, "/");
+                    while (safe.length % 4) safe += "=";
+                    const answer = await SnaP2P.joinRoomCompact(atob(safe));
+                    $("wai-p2p-join").value = answer;
+                    p2pStatus("envie seu código ao mestre");
+                } catch (e) { p2pStatus("Erro: " + e.message); }
+            }
+        }
+
+        // self-check: #selftest rola duelo + ataque locais; o log prova a
+        // cadeia handler → table → emit → render (usado no dump headless).
+        if (location.hash === "#selftest") { $("wai-duel").click(); $("wai-attack").click(); }
+    }
 </script>
 </body>
 </html>
