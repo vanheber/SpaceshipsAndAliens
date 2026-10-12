@@ -1,7 +1,7 @@
 // Spaceships and Aliens ServiceWorker — network-first navigations, cache-first static
 // ponytail: no runtime cache invalidation. Upgrade: versioned URLs + max-age in cache headers.
 
-var CACHE = "sna-v4";
+var CACHE = "sna-v8";
 
 self.addEventListener("install", function () {
   self.skipWaiting();

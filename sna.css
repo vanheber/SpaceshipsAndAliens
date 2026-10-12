@@ -2495,13 +2495,17 @@ footer a:hover {
     background: rgba(4, 6, 15, 0.97);
     backdrop-filter: blur(16px);
     display: none;
+    /* safe: se o menu não couber, ancora no topo em vez de cortar os primeiros itens */
     align-items: center;
+    align-items: safe center;
     justify-content: flex-start;
     padding-left: max(32px, 12%);
+    overflow-y: auto;
 }
 .sna-nav-overlay.open { display: flex; }
 .sna-nav-close {
-    position: absolute;
+    /* fixed: o menu agora rola, o fechar tem que ficar sempre à mão */
+    position: fixed;
     top: 20px; right: 20px;
     background: none; border: none;
     color: var(--text-color);
@@ -2510,7 +2514,7 @@ footer a:hover {
     padding: 8px;
 }
 .sna-nav-close:hover { color: var(--accent-fear); }
-.sna-nav-overlay nav { text-align: left; }
+.sna-nav-overlay nav { text-align: left; padding: 48px 0; }
 .sna-nav-overlay nav a {
     display: block;
     color: var(--text-color);
@@ -2528,6 +2532,16 @@ footer a:hover {
     text-align: center;
     vertical-align: middle;
 }
+.sna-nav-group {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.sna-nav-group + a { padding-top: 10px; }
 
 body.sna-has-nav { padding-top: 50px; }
 
