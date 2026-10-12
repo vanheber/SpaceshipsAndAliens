@@ -1,0 +1,35 @@
+{
+  "id": "spaceships-and-aliens",
+  "name": "Spaceships and Aliens",
+  "version": "1.0.0",
+  "engine": "wai-core",
+  "table": "wai-table",
+  "traits": {
+    "attack": {
+      "name": "Ataque"
+    },
+    "intellect": {
+      "name": "Inteligência"
+    }
+  },
+  "headlineTraits": [
+    "attack",
+    "intellect"
+  ],
+  "resource": {
+    "id": "energy",
+    "name": "Células de Energia (Esperança)"
+  },
+  "currency": null,
+  "paths": {
+    "roster": "data/entities.json",
+    "items": "data/items.json",
+    "powers": "data/powers.json",
+    "adventures": "data/adventures.json",
+    "cards": "img/cards",
+    "brand": "img/brand",
+    "theme": "theme.css"
+  },
+  "mobileBreakpoint": 768,
+  "note": "entities.json atravessa refs (itemRefs/powerRef); expandir no roster antes de createTable."
+}

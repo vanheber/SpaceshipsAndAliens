@@ -1,0 +1,232 @@
+[
+  {
+    "id": "analyst",
+    "name": "Andrew X8",
+    "type": "Ciência e Análise",
+    "tagClass": "tag-science",
+    "image": "img/anvilanalyst.webp",
+    "desc": "Cientista forense capaz de mapear ecossistemas alienígenas e decifrar assinaturas energéticas. Sua [[Análise de Frequências]] revela informações ocultas em sinais encriptados e ruídos de fundo.",
+    "traits": {
+      "attack": 1,
+      "intellect": 4
+    },
+    "defense": 11,
+    "pool": {
+      "start": 5,
+      "max": 10
+    },
+    "powerRef": "power:analise-de-frequencias",
+    "itemRefs": [
+      "item:funt",
+      "item:ryt",
+      "item:paramed"
+    ]
+  },
+  {
+    "id": "nomad",
+    "name": "C.O. Nomad n1",
+    "type": "Exploração de Fronteira",
+    "tagClass": "",
+    "image": "img/conomad.webp",
+    "desc": "Explorador de fronteira construído para longas jornadas sem suporte. Sua habilidade [[Sobrevivência de Chassi]] o mantém operacional em desertos escaldantes e tundras congelantes sem perda de rendimento.",
+    "traits": {
+      "attack": 1,
+      "intellect": 3
+    },
+    "defense": 13,
+    "pool": {
+      "start": 7,
+      "max": 14
+    },
+    "powerRef": "power:sobrevivencia-de-chassi",
+    "itemRefs": [
+      "item:ryt",
+      "item:maxlift",
+      "item:pulse"
+    ]
+  },
+  {
+    "id": "spirit",
+    "name": "Crusader Spirit-E",
+    "type": "Infiltração e Espionagem",
+    "tagClass": "",
+    "image": "img/crusaderespirit.webp",
+    "desc": "Agente de infiltração com assinatura eletromagnética quase nula. Sua [[Camuflagem Quântica]] engana sensores de segurança e permite desativação silenciosa de alarmes em operações urbanas.",
+    "traits": {
+      "attack": 2,
+      "intellect": 3
+    },
+    "defense": 13,
+    "pool": {
+      "start": 5,
+      "max": 10
+    },
+    "powerRef": "power:camuflagem-quantica",
+    "itemRefs": [
+      "item:funt",
+      "item:coda",
+      "item:pulse"
+    ]
+  },
+  {
+    "id": "vulture",
+    "name": "Drake S2",
+    "type": "Logística e Reparos",
+    "tagClass": "",
+    "image": "img/drakevulture.webp",
+    "desc": "Mecânico de campo que converte destroços em recursos. Com garras de precisão e [[Reciclagem Expressa]], recupera tokens de energia de fuselagens destruídas e reconstrói estruturas danificadas.",
+    "traits": {
+      "attack": 2,
+      "intellect": 2
+    },
+    "defense": 13,
+    "pool": {
+      "start": 6,
+      "max": 12
+    },
+    "powerRef": "power:reciclagem-expressa",
+    "itemRefs": [
+      "item:industrial-cutting",
+      "item:maxlift",
+      "item:ryt"
+    ]
+  },
+  {
+    "id": "endeavor",
+    "name": "Misc i3",
+    "type": "Pesquisa Química",
+    "tagClass": "tag-science",
+    "image": "img/miscendeavour.webp",
+    "desc": "Laboratório químico ambulante. Sua [[Síntese de Reagentes]] processa amostras biológicas em tempo real para criar vacinas, neutralizar toxinas e purificar ambientes contaminados.",
+    "traits": {
+      "attack": 0,
+      "intellect": 4
+    },
+    "defense": 12,
+    "pool": {
+      "start": 5,
+      "max": 10
+    },
+    "powerRef": "power:sintese-de-reagentes",
+    "itemRefs": [
+      "item:paramed",
+      "item:ryt",
+      "item:funt"
+    ]
+  },
+  {
+    "id": "pathfinder",
+    "name": "Origin 85",
+    "type": "Reconhecimento Rápido",
+    "tagClass": "",
+    "image": "img/originpathfinder.webp",
+    "desc": "Batedor aéreo de baixa altitude. Seus [[Sensores de Vetores]] mapeiam rotas seguras em terrenos traiçoeiros e antecipam ameaças, permitindo manobras evasivas antes do contato inimigo.",
+    "traits": {
+      "attack": 2,
+      "intellect": 2
+    },
+    "defense": 14,
+    "pool": {
+      "start": 6,
+      "max": 12
+    },
+    "powerRef": "power:sensores-de-vetores",
+    "itemRefs": [
+      "item:arclight",
+      "item:pulse",
+      "item:pambada"
+    ]
+  },
+  {
+    "id": "sentinel",
+    "name": "Regis V4",
+    "type": "Defesa e Escolta",
+    "tagClass": "tag-combat",
+    "image": "img/aegissentinel.webp",
+    "desc": "Tanque de linha de frente. Seu [[Escudo Térmico Ativo]] gera uma barreira de plasma que absorve projéteis e explosivos, protegendo aliados em zonas de combate pesado.",
+    "traits": {
+      "attack": 3,
+      "intellect": 1
+    },
+    "defense": 15,
+    "pool": {
+      "start": 6,
+      "max": 12
+    },
+    "powerRef": "power:escudo-termico-ativo",
+    "itemRefs": [
+      "item:quikcade",
+      "item:arclight",
+      "item:pambada"
+    ]
+  },
+  {
+    "id": "constellation",
+    "name": "Robert C9",
+    "type": "Combate Tático",
+    "tagClass": "tag-combat",
+    "image": "img/rsiconstellation.webp",
+    "desc": "Plataforma de artilharia terrestre, a ponta de lança em invasões táticas. Sua [[Sobrecarga de Canhão]] dispara projéteis de longo alcance capazes de romper fortificações e barreiras físicas.",
+    "traits": {
+      "attack": 4,
+      "intellect": 0
+    },
+    "defense": 14,
+    "pool": {
+      "start": 6,
+      "max": 12
+    },
+    "powerRef": "power:sobrecarga-de-canhao",
+    "itemRefs": [
+      "item:zenith",
+      "item:coda",
+      "item:pambada"
+    ]
+  },
+  {
+    "id": "drone-d12",
+    "name": "Ursula AC-12",
+    "type": "Medicina de Campo",
+    "tagClass": "tag-science",
+    "image": "img/apoiodrone.webp",
+    "desc": "Unidade de suporte vital projetada para manter o esquadrão de pé. Seus injetores de [[Sutura de Nanites]] regeneram a energia de aliados e estabilizam tanto sistemas mecânicos quanto tecidos orgânicos.",
+    "traits": {
+      "attack": 0,
+      "intellect": 3
+    },
+    "defense": 12,
+    "pool": {
+      "start": 6,
+      "max": 12
+    },
+    "powerRef": "power:sutura-de-nanites",
+    "itemRefs": [
+      "item:paramed",
+      "item:ryt",
+      "item:pulse"
+    ]
+  },
+  {
+    "id": "eclipse",
+    "name": "Vangelis E-AI",
+    "type": "Segurança de Redes",
+    "tagClass": "tag-combat",
+    "image": "img/aegiseclipse.webp",
+    "desc": "Guerreiro cibernético especializado em guerra digital. Sua [[Invasão de Rede Local]] hackeia drones, câmeras e torretas inimigas, convertendo a tecnologia adversária em escudos e armas aliadas.",
+    "traits": {
+      "attack": 3,
+      "intellect": 2
+    },
+    "defense": 12,
+    "pool": {
+      "start": 5,
+      "max": 10
+    },
+    "powerRef": "power:invasao-de-rede-local",
+    "itemRefs": [
+      "item:funt",
+      "item:arclight",
+      "item:pambada"
+    ]
+  }
+]

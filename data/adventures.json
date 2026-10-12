@@ -1,0 +1,56 @@
+[
+  {
+    "id": "zp-882e",
+    "kind": "missao",
+    "title": "Missão ZP-882e",
+    "date": "3142-02-45",
+    "threat": "Extremamente Perigoso",
+    "summary": "Planeta com mecanismo de defesa nativo. Emboscada por líquen vivo e criaturas de rocha. Classificação: Extremamente Perigoso.",
+    "record": "diariodebordo/missao01.md"
+  },
+  {
+    "id": "piratas-espaciais",
+    "kind": "gancho",
+    "title": "Piratas Espaciais",
+    "date": null,
+    "threat": null,
+    "summary": "Saqueadores de rotas comerciais que operam em bandos de 3 a 5 naves leves. Na maioria humanos, mas com algumas outras espécies. Atacam rotas isoladas, saqueiam cargueiros e revendem mercadoria no mercado negro. Não são suicidas — fogem quando a resistência é maior que o lucro. Conhecem os becos do setor como ninguém.",
+    "record": null
+  },
+  {
+    "id": "mercenarios",
+    "kind": "gancho",
+    "title": "Mercenários",
+    "date": null,
+    "threat": null,
+    "summary": "Soldados de aluguel com equipamento militar de ponta. Trabalham para quem paga mais — corporações, governos ou senhores do crime. Disciplinados, metódicos e perigosamente competentes. Não têm causa, têm contrato. E contratos podem ser comprados. Crie o contrato atual dos mercenários.",
+    "record": null
+  },
+  {
+    "id": "reptilus",
+    "kind": "gancho",
+    "title": "Reptilus",
+    "date": null,
+    "threat": null,
+    "summary": "Raça reptiliana humanoide com tecnologia de salto interestelar própria. Cultura baseada em caça e combate — Desconfiados por natureza e com rígidos rituais sociais e clãs baseados em subespécies, como Serpentilus, Rexus, Anfibus e Pterilus. Reflexos sobre-humanos, metabolismo com cura rápida. Honram inimigos dignos em coragem e honra, e desprezam covardes.",
+    "record": null
+  },
+  {
+    "id": "entidade-interdimensional-zeeh",
+    "kind": "gancho",
+    "title": "Entidade Interdimensional Zeeh",
+    "date": null,
+    "threat": null,
+    "summary": "Uma presença que não obedece às leis da física conhecida. Manifesta-se como distorções no espaço — sombras que se movem contra a luz, ecos de vozes que ninguém emitiu, instrumentos que marcam leituras impossíveis. Não é necessariamente hostil, mas sua mera existência distorce a realidade ao redor. Comunicação é teórica; sobrevivência, improvisada. Propõe sempre um desafio moral.Quer saber se os androides são dignos de serem chamados de seres vivos. Crie o desafio moral.",
+    "record": null
+  },
+  {
+    "id": "entidade-puramente-maligna",
+    "kind": "gancho",
+    "title": "Entidade Puramente Malígna",
+    "date": null,
+    "threat": null,
+    "summary": "Algo que não negocia, não se distrai, não demonstra misericórdia. Não é animal, não é máquina, não é vida como a ciência define. Infernal. Odeia a existência de forma pura e gratuita. Corrompe, destrói e consome tudo que toca. Encontrá-la não é azar — é sentença. Pode ser destruída, mas com dificuldade.Talvez seja um coletivo do mal, pois sempre retorna. Fuga e distância é outra estratégia. Crie a condição de vitória ou fuga.",
+    "record": null
+  }
+]

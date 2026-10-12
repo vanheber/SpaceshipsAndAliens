@@ -1,0 +1,142 @@
+/* Skin Spaceships and Aliens — cards 9:16 (contrato §18, wai-core) */
+:root {
+    /* paleta da skin (mesma do sna.css para manter a atmosfera) */
+    --bg-color: #0b0f14;
+    --card-bg: #141a22;
+    --border-color: #263544;
+    --text-color: #e1e7ed;
+    --accent-hope: #a78bfa;
+    --accent-energy: #e6a23c;
+    --accent-fear: #f56c6c;
+    --card-w: min(92vw, 320px);
+    --font-title: "Cinzel", Georgia, serif;
+}
+/* ponytail: 768 = skin.json mobileBreakpoint; mudar nos dois lugares */
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    background-image: url(img/bg.webp);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: var(--text-color);
+    margin: 0;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.wai-play { width: 100%; max-width: 1100px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.wai-picker { background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 10px; font-size: .95rem; }
+
+.wai-row { display: flex; gap: 16px; overflow-x: auto; padding: 4px 4px 12px; scroll-snap-type: x mandatory; width: 100%; justify-content: safe center; }
+@media (min-width: 768px) { .wai-row { flex-wrap: wrap; justify-content: center; overflow-x: visible; } }
+
+/* ---- card 9:16 ---- */
+.wai-card {
+    position: relative;
+    flex: 0 0 auto;
+    width: var(--card-w);
+    aspect-ratio: 9 / 16;
+    scroll-snap-align: center;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .55);
+}
+.wai-card[data-kind="item"] { border-color: var(--accent-energy); }
+.wai-card[data-kind="power"] { border-color: var(--accent-hope); }
+.wai-card[data-kind="adventure"] { border-color: var(--accent-fear); }
+
+.card-sign-top, .card-sign-bot {
+    flex: 0 0 auto;
+    text-align: center;
+    font-family: var(--font-title);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-color);
+    padding: 6px 4px 5px;
+}
+.card-sign-top { font-size: .62rem; background: rgba(0, 0, 0, .72); border-bottom: 1px solid var(--border-color); }
+.card-sign-bot { font-size: .58rem; background: rgba(0, 0, 0, .82); border-top: 1px solid var(--border-color); color: var(--accent-hope); }
+.card-sign-top img, .card-sign-bot img { height: 14px; display: block; margin: 0 auto; }
+
+.card-art {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    background: linear-gradient(160deg, #1b2532 0%, #0e141c 70%);
+    background-size: cover;
+    background-position: center;
+}
+.card-art .corner {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: rgba(4, 8, 12, .78);
+    border: 1px solid var(--border-color);
+    border-radius: 7px;
+    padding: 4px 7px;
+    font-size: .72rem;
+    line-height: 1.15;
+}
+.card-art .corner b { font-size: .86rem; color: var(--accent-energy); }
+.card-art .corner.c-tl { top: 7px; left: 7px; }
+.card-art .corner.c-tr { top: 7px; right: 7px; text-align: right; }
+.card-art .corner.c-bl { bottom: 7px; left: 7px; }
+.card-art .corner.c-br { bottom: 7px; right: 7px; text-align: right; }
+.card-art .corner.c-tr b, .card-art .corner.c-br b { color: var(--accent-hope); }
+
+.card-box {
+    /* §18.1: caixa de texto = ⅓ fixo; sem isso o card sem prosa (item/poder) fica com layout diferente */
+    flex: 0 0 33%;
+    min-height: 0;
+    background: rgba(10, 14, 20, .96);
+    border-top: 1px solid var(--border-color);
+    padding: 8px 10px 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+.card-name { font-family: var(--font-title); font-size: .98rem; margin: 0; color: var(--text-color); letter-spacing: .5px; }
+.card-type { font-size: .66rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-hope); margin: 0; }
+.card-text { font-size: .74rem; line-height: 1.45; color: #b9c2cc; margin: 0; }
+.card-links { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
+
+button.wai-ref {
+    font: inherit;
+    font-size: .72rem;
+    background: rgba(167, 139, 250, .14);
+    color: var(--accent-hope);
+    border: 1px solid rgba(167, 139, 250, .45);
+    border-radius: 6px;
+    padding: 1px 6px;
+    cursor: pointer;
+    text-decoration: underline dotted;
+}
+button.wai-ref:hover, button.wai-ref:focus-visible { background: rgba(167, 139, 250, .3); outline: none; }
+
+dialog#wai-dlg {
+    /* width explícito: o UA deixa dialog em fit-content e o card encolhia pro tamanho do texto */
+    border: 0;
+    border-radius: 14px;
+    background: var(--card-bg);
+    color: var(--text-color);
+    padding: 0;
+    width: min(92vw, 320px);
+    overflow: hidden;
+}
+dialog#wai-dlg::backdrop { background: rgba(0, 0, 0, .72); }
+dialog#wai-dlg .dlg-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--border-color); }
+dialog#wai-dlg button { background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 7px; padding: 3px 9px; cursor: pointer; }
+dialog#wai-dlg .wai-card { width: 100%; border-radius: 0; }

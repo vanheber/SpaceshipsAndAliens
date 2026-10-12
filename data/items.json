@@ -1,0 +1,112 @@
+[
+  {
+    "id": "arclight",
+    "name": "Arclight Stormfall",
+    "image": "img/arclight-stormfall.webp",
+    "damage": 8,
+    "dice": "2d6",
+    "tags": [
+      "arma"
+    ]
+  },
+  {
+    "id": "coda",
+    "name": "Coda Ascension",
+    "image": "img/coda-ascension.webp",
+    "damage": 6,
+    "dice": "2d6",
+    "tags": [
+      "arma"
+    ]
+  },
+  {
+    "id": "industrial-cutting",
+    "name": "Cutting Tool",
+    "image": "img/industrial-cutting.webp",
+    "damage": null,
+    "dice": null,
+    "tags": [
+      "ferramenta"
+    ]
+  },
+  {
+    "id": "funt",
+    "name": "FUNT Cryptokey",
+    "image": "img/funt.webp",
+    "damage": null,
+    "dice": null,
+    "tags": [
+      "ferramenta"
+    ]
+  },
+  {
+    "id": "maxlift",
+    "name": "MaxLift Tractor",
+    "image": "img/maxlift-tractor.webp",
+    "damage": null,
+    "dice": null,
+    "tags": [
+      "ferramenta"
+    ]
+  },
+  {
+    "id": "pambada",
+    "name": "Pambada Knife",
+    "image": "img/pambada-knife.webp",
+    "damage": 3,
+    "dice": "1d6",
+    "tags": [
+      "arma"
+    ]
+  },
+  {
+    "id": "paramed",
+    "name": "ParaMed AA Support",
+    "image": "img/paramed-support.webp",
+    "damage": null,
+    "dice": "1d6",
+    "tags": [
+      "arma"
+    ]
+  },
+  {
+    "id": "pulse",
+    "name": "Pulse Laser",
+    "image": "img/pulse-laser.webp",
+    "damage": 3,
+    "dice": "1d12",
+    "tags": [
+      "arma"
+    ]
+  },
+  {
+    "id": "ryt",
+    "name": "Pyro RYT Multi-Tool",
+    "image": "img/ryt-microtech.webp",
+    "damage": null,
+    "dice": null,
+    "tags": [
+      "ferramenta"
+    ]
+  },
+  {
+    "id": "quikcade",
+    "name": "QDB-12 QuiKCade",
+    "image": "img/quikcade.webp",
+    "damage": null,
+    "dice": null,
+    "tags": [
+      "ferramenta"
+    ]
+  },
+  {
+    "id": "zenith",
+    "name": "Zenith Darkwave",
+    "image": "img/zenith-darkwave.webp",
+    "damage": 10,
+    "dice": "2d12",
+    "tags": [
+      "arma"
+    ]
+  }
+]

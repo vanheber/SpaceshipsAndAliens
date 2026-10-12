@@ -13,7 +13,7 @@ const includes = {
 const footerMap = { "index.html": "footer-index" };
 
 const SKIP_DIRS = new Set(["includes", "node_modules", "plans", ".git", "public", "scripts"]);
-const SKIP_FILES = new Set(["build.js", "deploy.sh", ".env", ".env.example", "package.json", ".gitignore", "AGENTS.md", "README.md", "PROMPT_CONTO.md", "PROMPTS_IMAGENS.md", "tiburion-planfloor.af"]);
+const SKIP_FILES = new Set(["build.js", "deploy.sh", "validate-skin.mjs", ".env", ".env.example", "package.json", ".gitignore", "AGENTS.md", "README.md", "PROMPT_CONTO.md", "PROMPTS_IMAGENS.md", "tiburion-planfloor.af"]);
 
 function writeIfChanged(dst, content) {
   try {

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spaceships and Aliens — WAI</title>
+    <link rel="stylesheet" href="sna.css">
+    <link rel="stylesheet" href="theme.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap" rel="stylesheet">
+</head>
+<body class="sna-has-nav">
+
+<!--#include nav-->
+
+<main class="wai-play">
+    <select id="wai-picker" class="wai-picker" aria-label="Escolher card"></select>
+    <section class="wai-row" id="wai-row" aria-label="Cards"></section>
+</main>
+
+<dialog id="wai-dlg" aria-label="Card vinculado">
+    <div class="dlg-bar">
+        <strong>Card vinculado</strong>
+        <form method="dialog"><button>Fechar</button></form>
+    </div>
+    <div id="wai-dlg-body"></div>
+</dialog>
+
+<!--#include footer-->
+
+<script>
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js?v=4").catch(function () {});
+}
+</script>
+<script type="module">
+    import { loadSkin } from "./js/skin.js";
+    import { cardHTML } from "./js/card.js";
+
+    const S = await loadSkin();
+    const row = document.getElementById("wai-row");
+    const dlg = document.getElementById("wai-dlg");
+    const dlgBody = document.getElementById("wai-dlg-body");
+    const picker = document.getElementById("wai-picker");
+    const mobile = () => matchMedia(`(max-width:${S.skin.mobileBreakpoint - 1}px)`).matches;
+
+    const groups = [
+        ["Personagens", "entity", S.entities, "name"],
+        ["Itens", "item", S.items, "name"],
+        ["Poderes", "power", S.powers, "name"],
+        ["Aventuras", "adventure", S.adventures, "title"],
+    ];
+    const catalog = { entity: S.entities, item: S.items, power: S.powers, adventure: S.adventures };
+    picker.innerHTML = groups
+        .map(([label, kind, list, key]) =>
+            `<optgroup label="${label}">${list.map((o) => `<option value="${kind}:${o.id}">${o[key]}</option>`).join("")}</optgroup>`)
+        .join("");
+
+    const inRow = (kind, id) => row.querySelector(`.wai-card[data-kind="${kind}"][data-id="${id}"]`);
+    const show = (value) => {
+        const [kind, id] = value.split(":");
+        const card = catalog[kind].find((o) => o.id === id);
+        if (card) row.innerHTML = cardHTML(kind, card, S);
+    };
+    const openRef = (ref) => {
+        const kind = S.kindFor(ref);
+        const card = S.resolve(ref);
+        if (!card || !kind) return;
+        if (mobile()) {
+            dlgBody.innerHTML = cardHTML(kind, card, S);
+            if (!dlg.open) dlg.showModal();
+        } else if (!inRow(kind, card.id)) {
+            row.insertAdjacentHTML("beforeend", cardHTML(kind, card, S));
+        }
+    };
+
+    picker.addEventListener("change", () => show(picker.value));
+    row.addEventListener("click", (e) => {
+        const ref = e.target.closest("[data-ref]");
+        if (ref) openRef(ref.dataset.ref);
+    });
+    show(picker.value);
+</script>
+</body>
+</html>

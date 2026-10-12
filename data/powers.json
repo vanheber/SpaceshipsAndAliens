@@ -1,0 +1,82 @@
+[
+  {
+    "id": "analise-de-frequencias",
+    "name": "Análise de Frequências",
+    "value": 3,
+    "trait": null,
+    "cost": 0,
+    "desc": "Modificador em testes para interpretar assinaturas energéticas e sinais encriptados."
+  },
+  {
+    "id": "camuflagem-quantica",
+    "name": "Camuflagem Quântica",
+    "value": 2,
+    "trait": null,
+    "cost": 0,
+    "desc": "Modificador em testes para passar despercebido por sensores de segurança orgânicos ou eletrônicos."
+  },
+  {
+    "id": "escudo-termico-ativo",
+    "name": "Escudo Térmico Ativo",
+    "value": 2,
+    "trait": null,
+    "cost": 0,
+    "desc": "Modificador para salvaguardar aliados ou mitigar danos de projéteis e explosivos."
+  },
+  {
+    "id": "invasao-de-rede-local",
+    "name": "Invasão de Rede Local",
+    "value": 2,
+    "trait": null,
+    "cost": 0,
+    "desc": "Modificador para sequestrar a visão de câmeras e torretas próximas."
+  },
+  {
+    "id": "reciclagem-expressa",
+    "name": "Reciclagem Expressa",
+    "value": 2,
+    "trait": null,
+    "cost": 0,
+    "desc": "Modificador para reconstruir estruturas simples ou recuperar tokens de energia em destroços."
+  },
+  {
+    "id": "sensores-de-vetores",
+    "name": "Sensores de Vetores",
+    "value": 2,
+    "trait": null,
+    "cost": 0,
+    "desc": "Modificador em testes de esquiva ou identificação de rotas seguras de voo."
+  },
+  {
+    "id": "sintese-de-reagentes",
+    "name": "Síntese de Reagentes",
+    "value": 3,
+    "trait": null,
+    "cost": 0,
+    "desc": "Modificador para criar substâncias purificadoras ou neutralizar ameaças patogênicas."
+  },
+  {
+    "id": "sobrecarga-de-canhao",
+    "name": "Sobrecarga de Canhão",
+    "value": 2,
+    "trait": null,
+    "cost": 0,
+    "desc": "Modificador para ataques de longo alcance que visam romper barreiras físicas."
+  },
+  {
+    "id": "sobrevivencia-de-chassi",
+    "name": "Sobrevivência de Chassi",
+    "value": 2,
+    "trait": null,
+    "cost": 0,
+    "desc": "Modificador para evitar desgaste em climas de frio absoluto ou calor escaldante."
+  },
+  {
+    "id": "sutura-de-nanites",
+    "name": "Sutura de Nanites",
+    "value": 3,
+    "trait": null,
+    "cost": 0,
+    "desc": "Modificador para regenerar energia de outros robôs ou dar suporte vital."
+  }
+]
