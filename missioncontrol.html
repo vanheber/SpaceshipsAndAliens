@@ -185,9 +185,7 @@
 
             <!-- PERSONAGENS -->
             <div class="mc-section">
-                <div class="mc-section-title">Unidades em Campo
-                    <button class="btn btn-xs" onclick="window.open('index.html?readonly=1','_blank')" style="margin-left:8px;background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.25);color:var(--accent-hope);font-size:0.68rem;padding:2px 8px">visualizar catálogo</button>
-                </div>
+                <div class="mc-section-title">Unidades em Campo</div>
                 <div id="characters-container"></div>
             </div>
 
@@ -1378,7 +1376,7 @@
 
                 // Compact SDP for QR-friendly link
                 var compactB64 = btoa(result.compact).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-                var link = window.location.origin + window.location.pathname.replace(/missioncontrol\.html.*$/, "") + "?join=" + compactB64;
+                var link = window.location.origin + window.location.pathname.replace(/missioncontrol\.html.*$/, "play.html") + "?join=" + compactB64;
                 document.getElementById("p2p-link").value = link;
                 _qrLink = link;
                 var qrDiv = document.getElementById("p2p-qrcode");
@@ -1581,6 +1579,20 @@
         if ("serviceWorker" in navigator) {
             navigator.serviceWorker.register("/sw.js?v=4").catch(function (e) { console.warn("Spaceships and Aliens: SW registration failed", e); });
         }
+    </script>
+
+    <!-- Fase E3: missioncontrol hospeda o CANAL da sala — relay puro
+         SnaP2P ↔ BroadcastChannel "sna-wai-room". Não há mesa local aqui:
+         quem joga é play.html (aba do GM na mesma máquina via BC; jogador
+         na outra máquina via P2P). HELLO/snapshot são respondidos pela
+         mesa do GM; o relay só repassa. # ponytail: ocupa o slot único
+         SnaP2P.on("message") — missioncontrol nunca teve handler nesse
+         slot (store roda em modo local aqui). -->
+    <script>
+        var waiBc = new BroadcastChannel("sna-wai-room");
+        if (typeof SnaP2P !== "undefined") SnaP2P.on("message", function (m) { waiBc.postMessage(m); });
+        waiBc.onmessage = function (e) { if (typeof SnaP2P !== "undefined") SnaP2P.send(null, e.data); };
+        document.body.dataset.wai = "relay";
     </script>
 
 </body>
