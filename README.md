@@ -234,19 +234,21 @@ O lore do universo SnA vive em `data/lore/` — Markdown para prosa, `index.json
 ```
 Sistema Estelar
 └── Planeta
+    ├── Personagem (personagens principais, se houver)
     └── Geografia (flora/fauna, se houver)
         └── Espécie + subespécies inteligentes (se houver)
             ├── Cultura e História
             └── Tecnologias (naves, equipamentos, instrumentos)
 ```
 
-Tipos de entrada: `system` → `planet` → `geography` → `species` → `culture`/`tech`. Todas as naves e as **inteligências artificiais** ficam em `tech` de Humanos (Sistema Sol). Conteúdo que não pertence a um mundo específico fica sob o nó **General** (topo da árvore): `history` (eras), `organization` (facções/governos). Entidades que vivem entre dimensões ficam sob o nó **Interdimensional** (`sonhos`, `semeador`).
+Tipos de entrada: `system` → `planet` → `character`/`geography` → `species` → `culture`/`tech`. Personagens principais (`character`) aninham sob o planeta de origem; naves e **inteligências artificiais** ficam em `tech` de Humanos (Sistema Sol). Conteúdo que não pertence a um mundo específico fica sob o nó **General** (topo da árvore): `history` (eras), `organization` (facções/governos). Entidades que vivem entre dimensões ficam sob o nó **Interdimensional** (`sonhos`, `semeador`).
 
 ```
 data/lore/
 ├── index.json          ← metadados (id, parent, type, image, summary, tags)
 ├── system/*.md         ← sistemas estelares
 ├── planet/*.md         ← planetas
+├── character/*.md      ← personagens principais (aninhados sob o planeta)
 ├── geography/*.md      ← geografia, flora e fauna
 ├── species/*.md        ← espécies inteligentes
 ├── culture/*.md        ← cultura e história de uma espécie
@@ -258,6 +260,8 @@ data/lore/
 ```
 
 **Para adicionar uma entrada**: crie o `.md` em `data/lore/<tipo>/`, adicione um objeto ao `index.json` com `id` (único) e `parent` (o `id` da entrada pai na árvore). Nenhuma mudança de código. Para gerar entradas a partir de texto-fonte com IA, use o template [`prompts/lore.js`](prompts/lore.js) (`LorePrompts`).
+
+**Imagens (opcionais)**: coloque `data/lore/<tipo>/<id>.webp` na mesma pasta do `.md` e referencie no `index.json` com `"image": "data/lore/<tipo>/<id>.webp"`. Sem o campo, a entrada aparece sem thumbnail — nada quebra.
 
 **População automática**: `scripts/populate-lore.js` converte um corpus Markdown (ex: o universo "Mestre dos Planetas") em entradas via `LorePrompts` + Gemini, em etapas:
 

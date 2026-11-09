@@ -370,7 +370,7 @@ data/lore/
 ├── system/*.md         ← sistemas estelares (topo da árvore)
 ├── planet/*.md         ← planetas (parent = system)
 ├── geography/*.md      ← geografia, flora e fauna (parent = planet)
-├── species/*.md        ← espécies e subespécies inteligentes (parent = planet|geography)
+├── species/*.md        ← espécies e subespécies inteligentes (parent = planet|geography|species)
 ├── culture/*.md        ← cultura e história (parent = species)
 └── tech/*.md           ← tecnologias: naves, equipamentos, instrumentos (parent = species)
 ```
@@ -380,8 +380,10 @@ data/lore/
 ```
 Sistema Estelar
 └── Planeta
+    ├── Personagem (personagens principais, se houver)
     └── Geografia (flora/fauna, se houver)
-        └── Espécie + subespécies inteligentes (se houver)
+        └── Espécie (se houver)
+            ├── Subespécie (se houver)
             ├── Cultura e História
             └── Tecnologias (naves, equipamentos, instrumentos)
 ```
@@ -398,7 +400,7 @@ Array de objetos, cada um descreve uma entrada:
     "name": "Aegis Tiburon",
     "type": "tech",
     "parent": "humanidade",
-    "image": "img/tiburon-hero.webp",
+    "image": "data/lore/tech/aegis-tiburon.webp",
     "summary": "Canhoneira pesada reconvertida em nave-mãe.",
     "tags": ["nave", "expedição", "protagonista"]
   }
@@ -410,17 +412,19 @@ Array de objetos, cada um descreve uma entrada:
 | `id` | string | Identificador único (slug). Referenciado por `parent` |
 | `file` | string | Path do `.md` relativo a `data/lore/` (`<type>/<id>.md`) |
 | `name` | string | Nome de exibição |
-| `type` | string | `system` \| `planet` \| `geography` \| `species` \| `culture` \| `tech` \| `general` \| `interdimensional` \| `organization` \| `history` |
+| `type` | string | `system` \| `planet` \| `character` \| `geography` \| `species` \| `culture` \| `tech` \| `general` \| `interdimensional` \| `organization` \| `history` |
 | `parent` | string (opcional) | `id` da entrada pai na árvore; omitido em entradas de topo (systems, `general`, `interdimensional`) |
-| `image` | string (opcional) | Path de imagem relativo à raiz do site (ex: `img/tiburon-hero.webp`) |
+| `image` | string (opcional) | Path de imagem relativo à raiz do site (ex: `data/lore/tech/aegis-tiburon.webp`). A imagem vive na mesma pasta do `.md`, com o mesmo nome base (`<type>/<id>.webp`). Sem o campo, a entrada renderiza sem thumbnail |
 | `summary` | string | Uma frase exibida na árvore |
 | `tags` | string[] | Usados na busca da página |
 
-Todas as **naves** e as **inteligências artificiais** (consolidadas em `tech/inteligencias-artificiais.md`) ficam em `tech` de Humanos (Sistema Sol) ou da espécie dona. `history`/`organization` aninham sob o nó **`general`**; entidades interdimensionais sob **`interdimensional`**. Irmãos na árvore são ordenados alfabeticamente (pt-BR).
+Todas as **naves** e as **inteligências artificiais** (consolidadas em `tech/inteligencias-artificiais.md`) ficam em `tech` de Humanos (Sistema Sol) ou da espécie dona. **Personagens principais** (`character`) aninham sob o `id` do planeta de origem. **Subespécies** são entradas `species` cujo `parent` é o `id` da espécie-mãe. `history`/`organization` aninham sob o nó **`general`**; entidades interdimensionais sob **`interdimensional`**. Irmãos na árvore são ordenados alfabeticamente (pt-BR).
 
 ### Arquivos `.md`
 
 Prosa em Markdown puro, sem frontmatter (os metadados vivem no `index.json`). Título `# Nome`, seções `##`, 8-25 linhas. Exibidos via `marked.parse` em `lore.html`, que monta a árvore a partir de `parent` (nós `<details>` nativos).
+
+**Imagens**: opcionais. Coloque `data/lore/<type>/<id>.webp` na mesma pasta do `.md` (mesmo nome base) e referencie no `index.json` via campo `image`. O build copia `data/` inteiro para `public/` automaticamente. Sem imagem, basta omitir o campo.
 
 ### Gerando novas entradas com IA
 

@@ -1,3 +1,14 @@
+
+## Projeto fatiado (WAI)
+
+Este repositório é **uma peça** do WAI, não o projeto inteiro. O motor
+(`wai-core`), a sala (`wai-table`), o portal que publica o domínio
+(`wai-aventuras`), a forja (`wai-forge`) e o outro título (`ControlAltDel`) são
+repos irmãos em `/Volumes/Arquivos/projetos-git/`, e o manuscrito da Peregrinação
+mora no CMS `runaris-ghost`. Antes de mover arquivo, renomear pasta ou publicar,
+leia o mapa: `wai-aventuras/docs/topologia.md`. Deploy de qualquer título é feito
+pelo `wai-aventuras` (`build:all` + `deploy.sh`).
+
 # Spaceships and Aliens: estilo lazydir
 
 Antes de escrever código, pare no primeiro degrau que segurar:

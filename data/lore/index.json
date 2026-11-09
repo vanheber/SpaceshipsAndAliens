@@ -505,6 +505,104 @@
     ]
   },
   {
+    "id": "bronkus",
+    "file": "species/bronkus.md",
+    "name": "Bronkus",
+    "type": "species",
+    "parent": "reptilus",
+    "summary": "Variante de Reptilus atarracada e coberta por carapaças impenetráveis.",
+    "tags": [
+      "espécie",
+      "subespécie",
+      "reptilus"
+    ],
+    "image": "data/lore/species/bronkus.webp"
+  },
+  {
+    "id": "hominus",
+    "file": "species/hominus.md",
+    "name": "Hominus",
+    "type": "species",
+    "parent": "reptilus",
+    "summary": "Variante de Reptilus de temperamento pacífico e intelecto elevado.",
+    "tags": [
+      "espécie",
+      "subespécie",
+      "reptilus"
+    ],
+    "image": "data/lore/species/hominus.webp"
+  },
+  {
+    "id": "pterus",
+    "file": "species/pterus.md",
+    "name": "Pterus",
+    "type": "species",
+    "parent": "reptilus",
+    "summary": "Variante de Reptilus leve e alada, mensageira aérea do Domínio.",
+    "tags": [
+      "espécie",
+      "subespécie",
+      "reptilus"
+    ],
+    "image": "data/lore/species/pterus.webp"
+  },
+  {
+    "id": "rexus",
+    "file": "species/rexus.md",
+    "name": "Rexus",
+    "type": "species",
+    "parent": "reptilus",
+    "summary": "Variante de Reptilus que combina força e astúcia, com aparência de dinossauro.",
+    "tags": [
+      "espécie",
+      "subespécie",
+      "reptilus"
+    ],
+    "image": "data/lore/species/rexus.webp"
+  },
+  {
+    "id": "serpentilus",
+    "file": "species/serpentilus.md",
+    "name": "Serpentilus",
+    "type": "species",
+    "parent": "reptilus",
+    "summary": "Variante de Reptilus ágil, com presas venenosas e corpo sinuoso.",
+    "tags": [
+      "espécie",
+      "subespécie",
+      "reptilus"
+    ],
+    "image": "data/lore/species/serpentilus.webp"
+  },
+  {
+    "id": "sinuous",
+    "file": "species/sinuous.md",
+    "name": "Sinuous",
+    "type": "species",
+    "parent": "reptilus",
+    "summary": "Variante de Reptilus com asas e fisiologia graciosa, moldada pela vitalidade.",
+    "tags": [
+      "espécie",
+      "subespécie",
+      "reptilus"
+    ],
+    "image": "data/lore/species/sinuous.webp"
+  },
+  {
+    "id": "staktus",
+    "file": "species/staktus.md",
+    "name": "Staktus",
+    "type": "species",
+    "parent": "reptilus",
+    "summary": "Variante de Reptilus de força bruta, com garras, escamas espessas e cauda poderosa.",
+    "tags": [
+      "espécie",
+      "subespécie",
+      "reptilus"
+    ],
+    "image": "data/lore/species/staktus.webp"
+  },
+  {
     "id": "dominio-reptilus",
     "file": "culture/dominio-reptilus.md",
     "name": "O Domínio",
@@ -585,6 +683,19 @@
       "federação",
       "terra",
       "netuno"
+    ]
+  },
+  {
+    "id": "robo",
+    "file": "species/robo.md",
+    "name": "Robô",
+    "type": "species",
+    "parent": "sistema-sol",
+    "summary": "Linhagem sintética de seres conscientes criados para servir, sem direitos civis.",
+    "tags": [
+      "espécie",
+      "sintéticos",
+      "androides"
     ]
   },
   {
@@ -966,6 +1077,137 @@
       "insetoides",
       "genética",
       "simbiontes"
+    ],
+    "image": "data/lore/species/inseptors.webp"
+  },
+  {
+    "id": "analos",
+    "file": "species/analos.md",
+    "name": "Analos",
+    "type": "species",
+    "parent": "zenderianos",
+    "summary": "Subespécie de Inseptor que percebe radiações e se ancora de forma quase indetectável.",
+    "tags": [
+      "espécie",
+      "subespécie",
+      "inseptor"
+    ]
+  },
+  {
+    "id": "araknos",
+    "file": "species/araknos.md",
+    "name": "Araknos",
+    "type": "species",
+    "parent": "zenderianos",
+    "summary": "Subespécie de Inseptor aracnídea com visão de longo alcance, que se fixa abaixo da cervical do hospedeiro.",
+    "tags": [
+      "espécie",
+      "subespécie",
+      "inseptor"
+    ]
+  },
+  {
+    "id": "belbie",
+    "file": "species/belbie.md",
+    "name": "Belbie",
+    "type": "species",
+    "parent": "zenderianos",
+    "summary": "Subespécie de Inseptor de aparência graciosa que capta ondas de rádio e altera a voz do hospedeiro.",
+    "tags": [
+      "espécie",
+      "subespécie",
+      "inseptor"
+    ]
+  },
+  {
+    "id": "helidus",
+    "file": "species/helidus.md",
+    "name": "Helidus",
+    "type": "species",
+    "parent": "zenderianos",
+    "summary": "Subespécie de Inseptor voadora capaz de enxergar seres interdimensionais.",
+    "tags": [
+      "espécie",
+      "subespécie",
+      "inseptor"
+    ]
+  },
+  {
+    "id": "kolonia",
+    "file": "species/kolonia.md",
+    "name": "Kolonia",
+    "type": "species",
+    "parent": "zenderianos",
+    "summary": "Subespécie de Inseptor formada por uma colônia de olhos que concede visão de 360°.",
+    "tags": [
+      "espécie",
+      "subespécie",
+      "inseptor"
+    ]
+  },
+  {
+    "id": "kravata",
+    "file": "species/kravata.md",
+    "name": "Kravata",
+    "type": "species",
+    "parent": "zenderianos",
+    "summary": "Subespécie de Inseptor que se fixa no pescoço e concede visão ultravioleta.",
+    "tags": [
+      "espécie",
+      "subespécie",
+      "inseptor"
+    ]
+  },
+  {
+    "id": "kript",
+    "file": "species/kript.md",
+    "name": "Kript",
+    "type": "species",
+    "parent": "zenderianos",
+    "summary": "Subespécie de Inseptor que intercepta transmissões e se ancora na coluna do hospedeiro.",
+    "tags": [
+      "espécie",
+      "subespécie",
+      "inseptor"
+    ]
+  },
+  {
+    "id": "maske",
+    "file": "species/maske.md",
+    "name": "Maske",
+    "type": "species",
+    "parent": "zenderianos",
+    "summary": "Subespécie de Inseptor que substitui os olhos do hospedeiro e enxerga no infravermelho.",
+    "tags": [
+      "espécie",
+      "subespécie",
+      "inseptor"
+    ]
+  },
+  {
+    "id": "olhocefalus",
+    "file": "species/olhocefalus.md",
+    "name": "Olhocéfalus",
+    "type": "species",
+    "parent": "zenderianos",
+    "summary": "Subespécie de Inseptor com visão periférica que se oculta sob a pele do hospedeiro.",
+    "tags": [
+      "espécie",
+      "subespécie",
+      "inseptor"
+    ]
+  },
+  {
+    "id": "sepulcrus",
+    "file": "species/sepulcrus.md",
+    "name": "Sepulcrus",
+    "type": "species",
+    "parent": "zenderianos",
+    "summary": "Subespécie de Inseptor que se fixa no cérebro e enxerga através de matéria sólida.",
+    "tags": [
+      "espécie",
+      "subespécie",
+      "inseptor"
     ]
   },
   {
