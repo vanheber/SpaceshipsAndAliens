@@ -1,9 +1,10 @@
 # O Calendário Universal
 
-Os estudos das propriedades quânticas da matéria resultaram num contador universal de tempo (Estamos falando algo que existe apenas no jogo para simplificar a medição do tempo no universo e não deixar ninguém muito louco). Mesmo uma nave em altas velocidades sob a influência da relatividade, você conseguirá medir o tempo universal  independentemente da influência do espaço tempo no local.
+## O problema
+Cada planeta tem seu dia e seu ano, e uma nave em velocidade relativística não concorda com o relógio do porto de origem. Contar o tempo por ciclo local seria admitir que existem tantas verdades quantos mundos habitados.
 
-Sendo assim, não importa a hora local de um planeta, o tempo será medido pelo ciclo universal.
+## A solução
+Baseado nas propriedades quânticas do táquion, o calendário universal divide cada unidade em **100 partes**: 100 segundos universais, 100 minutos, 100 horas, 100 dias, 100 meses, 100 anos, até 100 séculos universais. Ao fim do último século conta-se um **ÉON** — desde o Big Bang já foram calculados mais de um milhão deles.
 
-Baseado nas propriedades quânticas do táquion, cada conjunto das unidades de medida temporal são divididas em 100 partes. Partindo dos 100 segundos universais; 100 minutos universais; 100 horas universais; 100 dias universais; 100 meses universais;100 anos universais até 100 séculos universais.
-
-Ao final do último século é contado um ÉON. Desde o Big Bang, já foram calculados mais de um milhão de ÉONS.
+## O aparelho
+O contador é o **taquiômetro**, e ele não escapa da física: perto de um buraco negro, ou viajando próximo à velocidade da luz, o contador corre mais devagar ou mais rápido para o observador. O que ele resolve é outra coisa — dá a todos um ciclo comum, para que duas naves possam marcar encontro na terceira hora do dia 41 e chegar no mesmo dia.

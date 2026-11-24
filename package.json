@@ -1,5 +1,7 @@
 {
   "scripts": {
+    "sync:lore": "node scripts/sync-lore.js",
+    "prebuild": "node scripts/sync-lore.js",
     "build": "node build.js",
     "deploy": "bash deploy.sh"
   }

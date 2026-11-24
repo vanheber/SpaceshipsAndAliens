@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="sxh9hq9sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b0f14"/>
+      <stop offset="70%" stop-color="#0a0d10"/>
+      <stop offset="100%" stop-color="#07090b"/>
+    </linearGradient>
+    <radialGradient id="sxh9hq9hz" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#409eff" stop-opacity=".30"/>
+      <stop offset="55%" stop-color="#a78bfa" stop-opacity=".10"/>
+      <stop offset="100%" stop-color="#409eff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sxh9hq9vig" cx="50%" cy="50%" r="70%">
+      <stop offset="50%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity=".66"/>
+    </radialGradient>
+    <filter id="sxh9hq9grain">
+      <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="3"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".14"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#sxh9hq9sky)"/>
+  <g><circle cx="251" cy="47" r="0.6" fill="#e9e0cd" fill-opacity="0.48"/><circle cx="145" cy="102" r="0.8" fill="#e9e0cd" fill-opacity="0.53"/><circle cx="462" cy="471" r="0.9" fill="#e9e0cd" fill-opacity="0.58"/><circle cx="356" cy="526" r="1.1" fill="#e9e0cd" fill-opacity="0.14"/><circle cx="851" cy="268" r="1.5" fill="#e9e0cd" fill-opacity="0.28"/><circle cx="746" cy="323" r="1.7" fill="#e9e0cd" fill-opacity="0.33"/><circle cx="39" cy="157" r="1.9" fill="#e9e0cd" fill-opacity="0.38"/><circle cx="957" cy="212" r="2.0" fill="#e9e0cd" fill-opacity="0.43"/><circle cx="73" cy="489" r="0.9" fill="#e9e0cd" fill-opacity="0.39"/><circle cx="991" cy="9" r="1.0" fill="#e9e0cd" fill-opacity="0.45"/><circle cx="384" cy="468" r="1.7" fill="#e9e0cd" fill-opacity="0.52"/><circle cx="278" cy="413" r="1.5" fill="#e9e0cd" fill-opacity="0.57"/><circle cx="596" cy="358" r="1.4" fill="#e9e0cd" fill-opacity="0.29"/><circle cx="490" cy="302" r="1.2" fill="#e9e0cd" fill-opacity="0.23"/><circle cx="807" cy="154" r="1.0" fill="#e9e0cd" fill-opacity="0.39"/><circle cx="701" cy="99" r="0.9" fill="#e9e0cd" fill-opacity="0.34"/><circle cx="1019" cy="44" r="0.7" fill="#e9e0cd" fill-opacity="0.49"/><circle cx="913" cy="523" r="0.5" fill="#e9e0cd" fill-opacity="0.44"/><circle cx="206" cy="26" r="1.4" fill="#e9e0cd" fill-opacity="0.59"/><circle cx="101" cy="506" r="1.3" fill="#e9e0cd" fill-opacity="0.54"/><circle cx="15" cy="439" r="2.0" fill="#e9e0cd" fill-opacity="0.31"/><circle cx="934" cy="383" r="0.5" fill="#e9e0cd" fill-opacity="0.26"/><circle cx="828" cy="14" r="1.6" fill="#e9e0cd" fill-opacity="0.21"/><circle cx="722" cy="494" r="1.8" fill="#e9e0cd" fill-opacity="0.16"/><circle cx="616" cy="218" r="1.0" fill="#e9e0cd" fill-opacity="0.52"/><circle cx="510" cy="163" r="1.2" fill="#e9e0cd" fill-opacity="0.47"/><circle cx="405" cy="328" r="0.7" fill="#e9e0cd" fill-opacity="0.42"/><circle cx="299" cy="273" r="0.9" fill="#e9e0cd" fill-opacity="0.36"/><circle cx="862" cy="532" r="0.6" fill="#e9e0cd" fill-opacity="0.40"/><circle cx="756" cy="476" r="0.8" fill="#e9e0cd" fill-opacity="0.35"/><circle cx="375" cy="300" r="0.6" fill="#e9e0cd" fill-opacity="0.23"/><circle cx="269" cy="245" r="2.0" fill="#e9e0cd" fill-opacity="0.29"/><circle cx="163" cy="410" r="0.9" fill="#e9e0cd" fill-opacity="0.34"/><circle cx="58" cy="355" r="0.8" fill="#e9e0cd" fill-opacity="0.39"/><circle cx="798" cy="79" r="1.5" fill="#e9e0cd" fill-opacity="0.44"/><circle cx="692" cy="24" r="1.4" fill="#e9e0cd" fill-opacity="0.49"/><circle cx="586" cy="189" r="1.9" fill="#e9e0cd" fill-opacity="0.54"/><circle cx="481" cy="134" r="1.7" fill="#e9e0cd" fill-opacity="0.59"/><circle cx="553" cy="207" r="0.9" fill="#e9e0cd" fill-opacity="0.32"/><circle cx="447" cy="152" r="0.7" fill="#e9e0cd" fill-opacity="0.37"/><circle cx="919" cy="376" r="1.8" fill="#e9e0cd" fill-opacity="0.37"/><circle cx="813" cy="321" r="1.9" fill="#e9e0cd" fill-opacity="0.32"/><circle cx="107" cy="265" r="0.5" fill="#e9e0cd" fill-opacity="0.21"/><circle cx="1" cy="210" r="0.7" fill="#e9e0cd" fill-opacity="0.42"/></g>
+  <ellipse cx="512" cy="563" rx="563" ry="205" fill="url(#sxh9hq9hz)"/>
+  <polygon points="0,1024 0,515 73,526 146,494 219,504 293,557 366,568 439,536 512,547 585,533 658,543 731,575 805,483 878,494 951,504 1024,533 1024,1024" fill="#409eff" fill-opacity=".10"/>
+  <polygon points="0,1024 0,613 73,621 146,628 219,636 293,656 366,663 439,599 512,606 585,626 658,633 731,660 805,596 878,604 951,611 1024,618 1024,1024" fill="#0a1016"/>
+  <rect x="687" y="215" width="14" height="348" fill="#05070a"/>
+     <rect x="680" y="210" width="28" height="5" fill="#409eff" fill-opacity=".45"/><circle cx="694" cy="194" r="4" fill="#409eff"/>
+  <polygon points="0,1024 0,677 73,672 146,667 219,661 293,656 366,702 439,697 512,691 585,686 658,681 731,697 805,702 878,686 951,692 1024,667 1024,1024" fill="#05070a"/>
+  <rect width="1024" height="1024" fill="url(#sxh9hq9vig)"/>
+  <rect width="1024" height="1024" filter="url(#sxh9hq9grain)" opacity=".4"/>
+  <text x="41" y="143" font-family="ui-monospace,monospace"
+        font-size="18.432" letter-spacing="1.0"
+        fill="#e9e0cd" fill-opacity=".38">PLACEHOLDER · inteligencias-artificiais · 1:1</text>
+</svg>

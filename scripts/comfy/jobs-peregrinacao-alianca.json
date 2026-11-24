@@ -1,0 +1,53 @@
+{
+  "style": "realistic, octane render, hyperrealistic, ultra detailed, cinematic lighting, volumetric haze, medieval fantasy world, 8k, sharp focus, clean frame",
+  "jobs": [
+    {
+      "id": "perg-alianca-1",
+      "batch": 1,
+      "category": "location",
+      "title": "A borda do deserto",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        531,
+        532
+      ],
+      "prompt": "the edge of an endless pale desert where dunes run into a dark wall of shadow, a dawn that never breaks, dim blue-grey light, a caravan trail of footprints half erased by wind, a low black ridge on the horizon that is not a mountain, cold haze, cinematic wide shot"
+    },
+    {
+      "id": "perg-alianca-2",
+      "batch": 1,
+      "category": "location",
+      "title": "A rota de Rashid",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        533,
+        534
+      ],
+      "prompt": "a hidden caravan route winding between weathered red sandstone outcrops, faded cairns of stacked stones marking the way, dry scrub and bleached animal bones, heat shimmer, amber late light, dust in the air, cinematic wide shot"
+    },
+    {
+      "id": "perg-alianca-3",
+      "batch": 1,
+      "category": "location",
+      "title": "O Mar Circundante",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        535,
+        536
+      ],
+      "prompt": "a vast ocean of sand with razor straight dune crests like waves, a small stone harbour with wooden docks standing in the sand, moored boats half buried, the last outpost before the crossing, pale gold light, cinematic wide shot"
+    }
+  ]
+}

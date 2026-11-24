@@ -1,0 +1,56 @@
+{
+  "style": "realistic, octane render, hyperrealistic, ultra detailed, cinematic lighting, volumetric haze, medieval fantasy world, 8k, sharp focus, clean frame",
+  "jobs": [
+    {
+      "id": "perg-vale-1",
+      "batch": 1,
+      "category": "location",
+      "title": "Os degraus de vidro",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        601,
+        602,
+        603
+      ],
+      "prompt": "a vast desert plain where the sand has been fused into solid cracked dark glass by an asteroid impact, a mirror sheet of glassified dunes stretching to the horizon, the low rim of an ancient crater in the distance, heat shimmer, blinding sun overhead, emptiness, cinematic wide shot"
+    },
+    {
+      "id": "perg-sol-1",
+      "batch": 1,
+      "category": "location",
+      "title": "O ombro do colosso",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        604,
+        605,
+        606
+      ],
+      "prompt": "a vast terrace of ancient cracked grey stone rising high above an endless desert, the sheer edge of a colossal stone monument, coarse weathered rock and dust, nothing to hold on to, deep drop below, harsh sunlight, vertigo, cinematic wide shot"
+    },
+    {
+      "id": "perg-agua-1",
+      "batch": 1,
+      "category": "location",
+      "title": "A fonte da vila",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        607,
+        608,
+        609
+      ],
+      "prompt": "a dry desert canyon of dark rock with a carved stone pipe spouting black foul water into a cracked stone basin on the canyon floor, stained rock, dead brush, no buildings, flies in the air, sickly overcast light, cinematic wide shot"
+    }
+  ]
+}

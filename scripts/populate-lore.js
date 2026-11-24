@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Popula a Biblioteca do Universo (data/lore/) a partir do corpus "Mestre dos Planetas".
+// Popula a Biblioteca do Universo (wai-aventuras · data/lore/) a partir do corpus "Mestre dos Planetas".
 // Etapas: species | worlds | factions | tech  (use --stage <etapa> ou --all)
 // Uso:
 //   node scripts/populate-lore.js --stage species    # gera só as espécies
@@ -12,7 +12,11 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT = path.join(__dirname, "..");
-const LORE_DIR = path.join(ROOT, "data", "lore");
+// O lore vive em wai-aventuras (fonte da verdade). Aqui em data/lore é cópia:
+// depois de gerar, rode `node scripts/sync-lore.js --force` para o site receber.
+const LORE_DIR = process.env.LORE_DIR || path.join(
+  ROOT, "..", "wai-aventuras", "aventuras", "spaceships-and-aliens", "data", "lore"
+);
 const INDEX_PATH = path.join(LORE_DIR, "index.json");
 const CORPUS = "/Users/vanheber/Library/CloudStorage/GoogleDrive-vanheber@gmail.com/My Drive/MestreDosPlanetas/mestredosplanetas-rag/Mestre dos Planetas";
 

@@ -88,6 +88,15 @@ Antes de escrever código, pare no primeiro degrau que segurar:
 - Nav escondido no index.html via CSS: `body:has(.entry-screen.active) .sna-nav { display: none; }`
 - `docs/index.html` tem sidebar própria e NÃO usa os includes
 
+**Fonte da verdade do lore (2026-11-12):** a Biblioteca do Universo mora em
+`../wai-aventuras/aventuras/spaceships-and-aliens/data/lore/` — é lá que se escreve.
+`data/lore/` aqui é **cópia de publicação**, espelhada por `scripts/sync-lore.js`
+(`npm run sync:lore`, que já roda no `prebuild`). O sync **recusa** sobrescrever arquivo
+editado aqui (`--force` descarta o local) e mantém arte órfã com `--prune` desligado.
+Arte sem ficha não entra no lore: vai em `data/elenco/`, fora do que é publicado.
+`scripts/extract-sa.js` foi **aposentado** (a fonte que ele lia, `data/lore/spaceships-and-aliens.md`,
+não existe mais); fica só como registro do catálogo de títulos.
+
 **Rejeitados por decisão (não auditar de novo):**
 - Three.js dispose: reinit raro (só page reload), impacto baixo
 - Euler angles drifting: irrelevante pra sessão típica

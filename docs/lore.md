@@ -85,6 +85,11 @@ Cada entrada pode ter **uma imagem** (ou nenhuma):
 - O caminho é relativo à raiz do site (`lore.html` fica na raiz).
 - Para embutir no texto da entrada, use markdown: `![alt](data/lore/planet/ninive.webp)`.
 
+**Arte fora do lore.** `data/lore/` é árvore **publicável**: o que está lá sobe no site do
+jogo e é espelhado na Biblioteca do Universo do portal. Arte sem ficha (elenco de
+personagens, estudos, arte de terceiros) fica em **`data/elenco/`**, fora do lore e fora
+do espelho.
+
 ## Geração com IA
 
 | Ferramenta | Uso |

@@ -1,0 +1,22 @@
+{
+  "style": "realistic, octane render, hyperrealistic, ultra detailed, cinematic lighting, volumetric haze, medieval fantasy world, 8k, sharp focus, clean frame",
+  "jobs": [
+    {
+      "id": "perg-vale-3",
+      "batch": 1,
+      "category": "location",
+      "title": "A sombra do colosso",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        561,
+        562,
+        563
+      ],
+      "prompt": "aerial view looking down at the enormous elongated shadow of a giant walking creature falling across a valley of cracked black glass, the shadow alone on the mirror surface, blinding low sun behind the viewpoint, drifting dust, emptiness, cinematic wide shot"
+    }
+  ]
+}

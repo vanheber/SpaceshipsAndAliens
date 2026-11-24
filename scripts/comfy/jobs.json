@@ -1,0 +1,679 @@
+{
+  "style": "octane render, hyperrealistic, ultra detailed, cinematic lighting, volumetric haze, dark sci-fi, 8k, sharp focus, clean frame",
+  "jobs": [
+    {
+      "id": "loc-anel-de-gelo",
+      "batch": 1,
+      "category": "location",
+      "title": "O anel de gelo",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        101,
+        102,
+        103,
+        104
+      ],
+      "prompt": "a vast orbital graveyard of frozen starships, shattered hulls and broken spines locked in a ring of crushed ice, cables frozen mid-drift, pale gas giant light cutting through the ice in bands, distant wreck beacons, cold blue and teal palette, immense scale, cinematic wide shot, atmospheric depth"
+    },
+    {
+      "id": "ciclopes",
+      "batch": 1,
+      "category": "creature",
+      "title": "Ciclopes",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        111,
+        112,
+        113,
+        114
+      ],
+      "prompt": "a single-eyed police robot standing in a clean rain-slick transit plaza at night, one large circular optical sensor glowing pale blue, matte black and worn white armor, exposed hydraulic joints, compact heavy chassis, plain concrete and metal surfaces with no signage, cinematic low angle"
+    },
+    {
+      "id": "cripter",
+      "batch": 1,
+      "category": "ship",
+      "title": "Cripter",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        121,
+        122,
+        123,
+        124
+      ],
+      "prompt": "a small boxy utilitarian light freighter, compact nine-meter hull, patched industrial plating in worn yellow and grey, exposed pipes and cables along the spine, one light laser turret on the roof, cockpit canopy for four, landing gear down on a clean hangar deck, unmarked hull with no lettering, practical used-future design, cinematic three-quarter view",
+      "ref": "/Users/vanheber/Library/CloudStorage/GoogleDrive-vanheber@gmail.com/My Drive/SpaceshipsAndAliens/aprovados/naves/caça-pirata.webp",
+      "denoise": 0.7
+    },
+    {
+      "id": "holodisco",
+      "batch": 1,
+      "category": "object",
+      "title": "Holodisco",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        131,
+        132,
+        133,
+        134
+      ],
+      "prompt": "an elongated hexagonal crystal data shard standing upright, sharp faceted edges, translucent blue-violet glass with layered holographic interference patterns suspended inside, resting on a dark brushed-metal surface, macro product shot, caustic rainbow dispersion, cinematic rim light"
+    },
+    {
+      "id": "ciclone",
+      "batch": 1,
+      "category": "planet",
+      "title": "Ciclone",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        141,
+        142,
+        143,
+        144
+      ],
+      "prompt": "a solid rogue planet covered in giant luminous crystals, impossibly fast rotation, swirling storm bands and broken crystal fields, violet and cyan glow, strange gravitational lensing, cinematic space shot, immense scale"
+    },
+    {
+      "id": "robo",
+      "batch": 2,
+      "category": "species",
+      "title": "Robô",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        151,
+        152,
+        153,
+        154
+      ],
+      "prompt": "a synthetic humanoid machine standing in a dark maintenance bay, faceless sensor head, exposed pistons and cable bundles, worn industrial plating, faint amber status lights, no human features, cinematic full-body portrait, dark sci-fi"
+    },
+    {
+      "id": "scorpion",
+      "batch": 2,
+      "category": "ship",
+      "title": "Scorpion",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        161,
+        162,
+        163,
+        164
+      ],
+      "prompt": "a compact private-security light spacecraft with a rotating laser turret on top, angular terran hull, dark grey plating with orange accents, landing lights on, hangar bay background, cinematic three-quarter view"
+    },
+    {
+      "id": "x-sintese",
+      "batch": 2,
+      "category": "object",
+      "title": "X-Síntese",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        171,
+        172,
+        173,
+        174
+      ],
+      "prompt": "a row of futuristic synthetic capsules on a dark laboratory tray, semi-transparent shells revealing glowing filaments and nano particles inside, clinical rim light, macro product shot, caustics, high detail"
+    },
+    {
+      "id": "loc-m1-1",
+      "batch": 3,
+      "category": "location",
+      "title": "O anel de gelo",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        301,
+        302
+      ],
+      "prompt": "a vast orbital graveyard of frozen starships, shattered hulls and broken spines locked in a ring of crushed ice, cables frozen mid-drift, pale gas giant light cutting through the ice in bands, distant wreck beacons, cold blue and teal palette, immense scale, cinematic wide shot, atmospheric depth"
+    },
+    {
+      "id": "loc-m1-2",
+      "batch": 3,
+      "category": "location",
+      "title": "A Semente Íris",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        303,
+        304
+      ],
+      "prompt": "a colossal two-kilometer generation ship crashed on a frozen moon, hull half-buried in ice, only emergency lights and the core still glowing, seed vault visible through a torn opening, icy fog, cinematic wide shot, immense scale"
+    },
+    {
+      "id": "loc-m1-3",
+      "batch": 3,
+      "category": "location",
+      "title": "A ponte",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        305,
+        306
+      ],
+      "prompt": "the deserted bridge of a derelict generation ship, empty seats, clothing still strapped in, floating dust catching a thin beam of light, navigation console glowing faintly, cold blue palette, cinematic interior, no people"
+    },
+    {
+      "id": "loc-m1-4",
+      "batch": 3,
+      "category": "location",
+      "title": "O núcleo de navegação",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        307,
+        308
+      ],
+      "prompt": "a spherical navigation core chamber deep inside a derelict ship, three bulkheads, a cold data sphere hovering at the center, dead consoles, icy condensation, dramatic volumetric light"
+    },
+    {
+      "id": "loc-m1-5",
+      "batch": 3,
+      "category": "location",
+      "title": "O shuttle",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        309,
+        310
+      ],
+      "prompt": "the crew shuttle docked in a frozen hangar bay, bad seal patched with tape and frost, boarding ramp down, emergency light, frost-covered tools, claustrophobic cinematic interior"
+    },
+    {
+      "id": "loc-m2-1",
+      "batch": 3,
+      "category": "location",
+      "title": "O Pulmão",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        311,
+        312
+      ],
+      "prompt": "the interior of a colossal cylindrical generation-ship atrium, terraced rings of soil spiraling up the curved hull, huge trees growing from each terrace toward a small plasma star suspended on the central axis, industrial ship ribs and pipes visible beneath the vegetation, humid haze, warm light, cinematic wide interior"
+    },
+    {
+      "id": "loc-m2-2",
+      "batch": 3,
+      "category": "location",
+      "title": "A estrela falsa",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        313,
+        314
+      ],
+      "prompt": "a house-sized artificial plasma sun held by three metal arms in the center of a ship garden, pulsing slowly like breathing, warm orange light on dark metal, cinematic"
+    },
+    {
+      "id": "loc-m2-3",
+      "batch": 3,
+      "category": "location",
+      "title": "A torre de vidro",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        315,
+        316
+      ],
+      "prompt": "a tall glass and steel archive tower inside a starship garden, industrial shelving holding rows of ceramic data discs, eight engraved symbols around its base, cold blue light from the tower against a warm garden, scaffolding and cables, cinematic"
+    },
+    {
+      "id": "loc-m2-4",
+      "batch": 3,
+      "category": "location",
+      "title": "O tapete de liquens",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        317,
+        318
+      ],
+      "prompt": "a thick carpet of pale green lichen covering the floor and roots of a ship garden, soft mounds, no people, glistening surface, dim bioluminescent veins, eerie cinematic"
+    },
+    {
+      "id": "loc-m2-5",
+      "batch": 3,
+      "category": "location",
+      "title": "A escotilha",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        319,
+        320
+      ],
+      "prompt": "a ship interior hatch half-covered by creeping roots and lichen, warm bioluminescent light marking a path, frost and condensation, claustrophobic cinematic"
+    },
+    {
+      "id": "loc-m3-1",
+      "batch": 3,
+      "category": "location",
+      "title": "A planície de liquens",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        321,
+        322
+      ],
+      "prompt": "a vast plain of lichen crust over black rock, deep cracks running to the horizon, frozen moon surface, pale distant signal light, thin mist, cinematic wide shot, alien silence"
+    },
+    {
+      "id": "loc-m3-2",
+      "batch": 3,
+      "category": "location",
+      "title": "A torre de gelo negro",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        323,
+        324
+      ],
+      "prompt": "a forty-meter spiral tower of black ice grown around an old escape capsule, layered rings like tree growth, frozen transmissions inside, pale light, cinematic"
+    },
+    {
+      "id": "loc-m3-3",
+      "batch": 3,
+      "category": "location",
+      "title": "A cápsula de escape",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        325,
+        326
+      ],
+      "prompt": "a half-buried escape capsule from a generation ship, frost-covered hull, a small cryogenic unit visible through the porthole with a faint green pulse, no visible person, cinematic close shot"
+    },
+    {
+      "id": "loc-m3-4",
+      "batch": 3,
+      "category": "location",
+      "title": "O nó de comunicação",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        327,
+        328
+      ],
+      "prompt": "an alien communication node, a black tower with filaments spreading under the ice, radio waves implied by glowing rings, frozen surface, cinematic"
+    },
+    {
+      "id": "loc-m3-5",
+      "batch": 3,
+      "category": "location",
+      "title": "A Horizon",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        329,
+        330
+      ],
+      "prompt": "a large gunship descending low over a cracked ice plain, landing platform glowing, thrusters kicking up snow, dramatic scale, cinematic wide shot"
+    },
+    {
+      "id": "loc-zp-1",
+      "batch": 3,
+      "category": "location",
+      "title": "A estação Reptilus",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        331,
+        332
+      ],
+      "prompt": "an ancient orbital station split in half, hull torn outward, emergency lights blinking in one corridor, dark space, debris ring, cinematic"
+    },
+    {
+      "id": "loc-zp-2",
+      "batch": 3,
+      "category": "location",
+      "title": "A planície de liquens (ZP-882e)",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        333,
+        334
+      ],
+      "prompt": "a plain of thick wet lichen over alien soil, viscous surface reacting underfoot, low vegetation, strange organic texture, cinematic wide shot"
+    },
+    {
+      "id": "loc-zp-3",
+      "batch": 3,
+      "category": "location",
+      "title": "A estrutura enterrada",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        335,
+        336
+      ],
+      "prompt": "a rectangular stone block half-buried in alien ground, ramp and a door with no lock or inscription, dry ancient interior beyond, cinematic"
+    },
+    {
+      "id": "loc-zp-4",
+      "batch": 3,
+      "category": "location",
+      "title": "O salão das alcovas",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        337,
+        338
+      ],
+      "prompt": "a vast underground hall lined with vertical alcoves holding quadruped stone creatures, a central stalagmite with carved channels, dim amber light, cinematic"
+    },
+    {
+      "id": "loc-zp-5",
+      "batch": 3,
+      "category": "location",
+      "title": "O Tatu",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        339,
+        340
+      ],
+      "prompt": "a futuristic six-wheeled armored reconnaissance rover with a pressurized angular cabin, no windshield, sensor mast and antenna array, matte grey armor panels, oversized knobby tires, floodlights on, parked at the entrance of an ancient alien stone ruin, cinematic three-quarter view, sci-fi concept art"
+    },
+    {
+      "id": "card-scorpion",
+      "batch": 4,
+      "category": "card",
+      "title": "Scorpion",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        401,
+        402
+      ],
+      "prompt": "a compact private-security spacecraft with a rotating laser cannon turret on top, no eye, angular terran hull, dark grey and orange, in deep space, black starfield, no water, spacecraft only",
+      "ref": "/Users/vanheber/Library/CloudStorage/GoogleDrive-vanheber@gmail.com/My Drive/SpaceshipsAndAliens/aprovados/naves/caça-pirata.webp",
+      "denoise": 0.6
+    },
+    {
+      "id": "card-stinger",
+      "batch": 4,
+      "category": "card",
+      "title": "Stinger",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        403,
+        404
+      ],
+      "prompt": "a small two-seat scientific exploration spacecraft, sensor dish and antenna arrays, white and grey hull, in deep space with a black starfield, no water, no ocean, spacecraft only, cinematic three-quarter view",
+      "ref": "/Users/vanheber/Library/CloudStorage/GoogleDrive-vanheber@gmail.com/My Drive/SpaceshipsAndAliens/aprovados/naves/caça-pirata.webp",
+      "denoise": 0.6
+    },
+    {
+      "id": "card-aguia",
+      "batch": 4,
+      "category": "card",
+      "title": "Águia Sorrateira",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        405,
+        406
+      ],
+      "prompt": "a diminutive light fighter with a dagger-like silhouette, high-speed interceptor, grey and blue hull, dark space background, cinematic three-quarter view"
+    },
+    {
+      "id": "card-arganon",
+      "batch": 4,
+      "category": "card",
+      "title": "Arganon",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        407,
+        408
+      ],
+      "prompt": "a colossal imperial super cruiser with two huge solar sail collector panels, grey armor, tiny running lights, in deep space, black starfield, no water, no ocean, spacecraft only",
+      "ref": "/Users/vanheber/Library/CloudStorage/GoogleDrive-vanheber@gmail.com/My Drive/SpaceshipsAndAliens/aprovados/naves/magnific_cruzador-classe-horizon-11_w4mr58l7EI.webp",
+      "denoise": 0.65
+    },
+    {
+      "id": "card-cruzador-canhao",
+      "batch": 4,
+      "category": "card",
+      "title": "Cruzador Canhão",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        409,
+        410
+      ],
+      "prompt": "a massive zenderian gun cruiser with one colossal spinal cannon, segmented serpentine hull, dark red and bone armor, in deep space, black starfield, no water, spacecraft only",
+      "ref": "/Users/vanheber/Library/CloudStorage/GoogleDrive-vanheber@gmail.com/My Drive/SpaceshipsAndAliens/aprovados/naves/cruzador-reptilus.webp",
+      "denoise": 0.65
+    },
+    {
+      "id": "card-estacao",
+      "batch": 4,
+      "category": "card",
+      "title": "Estação Espacial",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        411,
+        412
+      ],
+      "prompt": "a large orbital station with docking arms and a central ring, cargo lights and tiny ships, dark space background, cinematic wide shot"
+    },
+    {
+      "id": "card-classe-cometa",
+      "batch": 4,
+      "category": "card",
+      "title": "Classe Cometa",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        413,
+        414
+      ],
+      "prompt": "a versatile three-hundred-meter light spacecraft, clean military-civilian hull, hangar and turret hardpoints, in deep space, black starfield, no water, spacecraft only",
+      "ref": "/Users/vanheber/Library/CloudStorage/GoogleDrive-vanheber@gmail.com/My Drive/SpaceshipsAndAliens/aprovados/naves/nave-vanguarda-terreste.webp",
+      "denoise": 0.6
+    },
+    {
+      "id": "card-classe-constelacao",
+      "batch": 4,
+      "category": "card",
+      "title": "Classe Constelação",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        415,
+        416
+      ],
+      "prompt": "a kilometer-long deep-space ship, enormous industrial hull with layered decks and antenna spires, in deep space, black starfield, no water, spacecraft only",
+      "ref": "/Users/vanheber/Library/CloudStorage/GoogleDrive-vanheber@gmail.com/My Drive/SpaceshipsAndAliens/aprovados/naves/magnific_cruzador-classe-horizon-11_w4mr58l7EI.webp",
+      "denoise": 0.6
+    },
+    {
+      "id": "card-classe-estrela",
+      "batch": 4,
+      "category": "card",
+      "title": "Classe Estrela",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        417,
+        418
+      ],
+      "prompt": "a five-hundred-meter capital ship, flagship silhouette with heavy armor and command tower, in deep space, black starfield, no water, spacecraft only",
+      "ref": "/Users/vanheber/Library/CloudStorage/GoogleDrive-vanheber@gmail.com/My Drive/SpaceshipsAndAliens/aprovados/naves/atlantis.webp",
+      "denoise": 0.6
+    },
+    {
+      "id": "card-classe-galaxia",
+      "batch": 4,
+      "category": "card",
+      "title": "Classe Galáxia",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        419,
+        420
+      ],
+      "prompt": "an immense artificial world ship over a kilometer long, ringed habitat and Dyson-like structures, tiny lights, dark space, cinematic wide shot"
+    },
+    {
+      "id": "card-ovelha",
+      "batch": 4,
+      "category": "card",
+      "title": "Ovelha",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        421,
+        422
+      ],
+      "prompt": "a compact ship-mounted weapon inhibitor device, emitter dish and antenna array, matte dark metal, mounted on a hull hardpoint, macro cinematic product shot"
+    },
+    {
+      "id": "tex-desert",
+      "batch": 5,
+      "category": "texture",
+      "title": "Textura deserto",
+      "size": [
+        1024,
+        1024
+      ],
+      "steps": 10,
+      "seeds": [
+        501,
+        502,
+        503,
+        504
+      ],
+      "prompt": "seamless tileable texture of a rocky desert surface seen from directly above, flat even lighting, no shadows, no horizon, fine sand, gravel, stones and cracks, photorealistic, high detail, orthographic"
+    }
+  ]
+}

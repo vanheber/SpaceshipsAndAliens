@@ -1,0 +1,107 @@
+{
+  "style": "realistic, octane render, hyperrealistic, ultra detailed, cinematic lighting, volumetric haze, medieval fantasy world, 8k, sharp focus, clean frame",
+  "jobs": [
+    {
+      "id": "perg-ananica-1",
+      "batch": 1,
+      "category": "location",
+      "title": "O portão da vila",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        471,
+        472,
+        473
+      ],
+      "prompt": "the entrance of a mountain dwarf village between two enormous standing stones, a weathered stone lintel resting across them, deep carved runes, snow-dusted flagstone path, stone lanterns burning, low stone huts behind, cold overcast light, cinematic wide shot"
+    },
+    {
+      "id": "perg-boca-3",
+      "batch": 1,
+      "category": "location",
+      "title": "A boca da muralha",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        474,
+        475,
+        476
+      ],
+      "prompt": "a tall narrow cleft splitting an immense smooth stone wall, a fissure opening into darkness, polished glassy rock worn by ages of water, faded handprints near the entrance, monumental scale, dust floating in a shaft of light, cinematic wide shot"
+    },
+    {
+      "id": "perg-muralha-2",
+      "batch": 1,
+      "category": "location",
+      "title": "A torre de vigia",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        477,
+        478,
+        479
+      ],
+      "prompt": "a weathered watchtower rising out of shallow sea, narrow spiral stone stair visible through an open arch, dry stone platform on top, coils of old rope and faded banners, water lapping at its base, cold grey light, cinematic shot"
+    },
+    {
+      "id": "perg-vale-3",
+      "batch": 1,
+      "category": "location",
+      "title": "A sombra do colosso",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        480,
+        481,
+        482
+      ],
+      "prompt": "a vast dark shadow of a giant walking colossus cast across a floor of cracked black glass, only the shadow, empty glass valley reflecting the sky, low blinding sun, drifting dust, stillness, cinematic wide shot"
+    },
+    {
+      "id": "perg-sol-1",
+      "batch": 1,
+      "category": "location",
+      "title": "O ombro do colosso",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        483,
+        484,
+        485
+      ],
+      "prompt": "standing on the immense stone-and-fur shoulder of a colossal walking lion colossus, broad plateau of ancient cracked grey stone and coarse tawny fur, nothing to hold on to, the desert far below, harsh sunlight, vertigo, cinematic wide shot"
+    },
+    {
+      "id": "perg-agua-3",
+      "batch": 1,
+      "category": "location",
+      "title": "A nascente",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        486,
+        487,
+        488
+      ],
+      "prompt": "a mountain spring emerging between wet black rocks, clear water pooling in a stone basin, moss and ferns, three deep claw-like slashes cut into the rock face above as a warning, cold mist, cinematic shot"
+    }
+  ]
+}

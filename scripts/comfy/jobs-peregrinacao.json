@@ -1,0 +1,485 @@
+{
+  "style": "realistic, octane render, hyperrealistic, ultra detailed, cinematic lighting, volumetric haze, medieval fantasy world, 8k, sharp focus, clean frame",
+  "jobs": [
+    {
+      "id": "perg-boca-1",
+      "batch": 1,
+      "category": "location",
+      "title": "A aldeia",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        401,
+        402
+      ],
+      "prompt": "a small desert village of low stone tents and mud-brick houses, carved stone pedestals with fires burning along the lane, smoke rising straight in the still air, empty dawn street, warm firelight against cold blue morning, cinematic wide shot, atmospheric depth"
+    },
+    {
+      "id": "perg-boca-2",
+      "batch": 1,
+      "category": "location",
+      "title": "A estrada da agulha",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        403,
+        404
+      ],
+      "prompt": "a shattered rocky plateau under a merciless noon sun, cracked stone slabs, no trail and no shadow, heat waves distorting the horizon, rust-coloured rock, distant sheer cliff face, cinematic wide shot, atmospheric depth"
+    },
+    {
+      "id": "perg-boca-3",
+      "batch": 1,
+      "category": "location",
+      "title": "A boca da muralha",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        405,
+        406
+      ],
+      "prompt": "a towering smooth cleft in an immense ancient stone wall, polished glassy surfaces carved by ages of water, a narrow opening into darkness, faded handprints pressed into the rock at the entrance, monumental scale, dust motes in a shaft of light, cinematic wide shot"
+    },
+    {
+      "id": "perg-ananica-1",
+      "batch": 1,
+      "category": "location",
+      "title": "O portão da vila",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        407,
+        408
+      ],
+      "prompt": "a mountain dwarf village gate of two enormous standing stones with a weathered wooden crossbar, runic carvings, snow-dusted ground, stone lanterns, low stone huts behind, cold overcast light, cinematic wide shot, atmospheric depth"
+    },
+    {
+      "id": "perg-ananica-2",
+      "batch": 1,
+      "category": "location",
+      "title": "Os pedestais",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        409,
+        410
+      ],
+      "prompt": "a ring of carved standing stones around a mountain village, small braziers of burning incense at each stone, thin smoke drifting in cold air, runes glowing faintly, dusk, blue mountain shadow, cinematic wide shot"
+    },
+    {
+      "id": "perg-ananica-3",
+      "batch": 1,
+      "category": "location",
+      "title": "A Casa Anânica",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        411,
+        412
+      ],
+      "prompt": "a great dwarven hall carved into a mountainside, massive timber doors and stone columns rooted in living rock, warm forge light spilling from deep windows, snow on the ledge, chimney smoke, cold twilight, cinematic wide shot"
+    },
+    {
+      "id": "perg-caverna-1",
+      "batch": 1,
+      "category": "location",
+      "title": "A boca da caverna",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        413,
+        414
+      ],
+      "prompt": "the mouth of a great cave in a cliff face, wide jagged opening breathing warm mist into cold air, wet dark stone, scattered bones and old rope at the entrance, dim daylight fading inward, cinematic wide shot"
+    },
+    {
+      "id": "perg-caverna-2",
+      "batch": 1,
+      "category": "location",
+      "title": "O corredor baixo",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        415,
+        416
+      ],
+      "prompt": "a narrow low cave passage forcing a crawl, rough wet limestone pressing close on both sides, a frayed rope snagged on rock, faint torch glow far behind, dust and condensation, claustrophobic darkness, cinematic shot"
+    },
+    {
+      "id": "perg-caverna-3",
+      "batch": 1,
+      "category": "location",
+      "title": "A saída",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        417,
+        418
+      ],
+      "prompt": "a long natural stone corridor with a thin blade of pale daylight at its far end, rough rock walls in silhouette, dust suspended in the beam, wet floor reflecting the light, deep perspective, cinematic shot"
+    },
+    {
+      "id": "perg-muralha-1",
+      "batch": 1,
+      "category": "location",
+      "title": "A muralha submersa",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        419,
+        420
+      ],
+      "prompt": "a colossal ancient wall running dead straight into the sea, knee-deep water covering its top, sunken towers and drowned city rooftops visible along the north side, still water reflecting an overcast sky, immense scale, cinematic wide shot"
+    },
+    {
+      "id": "perg-muralha-2",
+      "batch": 1,
+      "category": "location",
+      "title": "A torre de vigia",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        421,
+        422
+      ],
+      "prompt": "a weathered watchtower rising out of shallow sea, narrow spiral stone stair visible through an open arch, dry stone platform on top, coils of old rope and faded banners, water lapping at its base, cold grey light, cinematic shot"
+    },
+    {
+      "id": "perg-muralha-3",
+      "batch": 1,
+      "category": "location",
+      "title": "O desabamento",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        423,
+        424
+      ],
+      "prompt": "a collapsed section of an ancient sea wall, broken masonry sliding into deep dark water, a gap of churning foam, crumbling stone blocks, the wall resurfacing far beyond, dramatic storm light, cinematic wide shot"
+    },
+    {
+      "id": "perg-viboras-1",
+      "batch": 1,
+      "category": "location",
+      "title": "O Templo da Lua",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        425,
+        426
+      ],
+      "prompt": "a cold ancient temple interior of black stone, green flames in bronze torches, carved serpent heads on every column capital, moonlight falling through a circular opening onto a polished floor, drifting mist, cinematic wide shot"
+    },
+    {
+      "id": "perg-viboras-2",
+      "batch": 1,
+      "category": "location",
+      "title": "A sala de Setephra",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        427,
+        428
+      ],
+      "prompt": "a low vaulted stone chamber almost bare, a single simple throne of dark wood and bronze on a raised dais, green torchlight from a doorway, deep shadows, cold air, cinematic wide shot"
+    },
+    {
+      "id": "perg-viboras-3",
+      "batch": 1,
+      "category": "location",
+      "title": "O corredor de víboras",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        429,
+        430
+      ],
+      "prompt": "a long temple corridor lined with carved stone vipers on both walls, green stone eyes, moonlight and torch glow competing on the floor, dust, an open doorway at the end, cinematic wide shot"
+    },
+    {
+      "id": "perg-agua-1",
+      "batch": 1,
+      "category": "location",
+      "title": "A fonte da vila",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        431,
+        432
+      ],
+      "prompt": "a village stone fountain with a carved pipe pouring black foul water into a cracked basin, stained stonework, dead grass around it, flies in the air, sickly overcast light, cinematic wide shot"
+    },
+    {
+      "id": "perg-agua-2",
+      "batch": 1,
+      "category": "location",
+      "title": "O aqueduto",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        433,
+        434
+      ],
+      "prompt": "a modest stone aqueduct climbing a rocky slope in a tight curve, arches overgrown with dry vines, an inspection hatch torn open from the inside, splintered wood, harsh midday light, cinematic wide shot"
+    },
+    {
+      "id": "perg-agua-3",
+      "batch": 1,
+      "category": "location",
+      "title": "A nascente",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        435,
+        436
+      ],
+      "prompt": "a mountain spring emerging between wet black rocks, clear water pooling in a stone basin, moss and ferns, a crude scratched warning symbol cut into the rock above, cold mist, cinematic shot"
+    },
+    {
+      "id": "perg-rio-1",
+      "batch": 1,
+      "category": "location",
+      "title": "O acampamento de pedra",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        437,
+        438
+      ],
+      "prompt": "a camp between three tall standing stones breaking the wind on a dark plain, a low campfire with pale flames that cast no warmth, bedrolls and saddles on the ground, night sky, cold blue light, cinematic wide shot"
+    },
+    {
+      "id": "perg-rio-2",
+      "batch": 1,
+      "category": "location",
+      "title": "O rio sem destino",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        439,
+        440
+      ],
+      "prompt": "a wide black river flowing silently through a barren plain, not a ripple nor foam, moonlight on an unnaturally flat surface, skeletal trees on the far bank, low mist, unsettling stillness, cinematic wide shot"
+    },
+    {
+      "id": "perg-rio-3",
+      "batch": 1,
+      "category": "location",
+      "title": "O perímetro",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        441,
+        442
+      ],
+      "prompt": "a perimeter line of small stones on damp dark ground at night, enormous bare footprints circling the camp, a torch stuck in the earth, fog, moonlight, tense atmosphere, cinematic shot"
+    },
+    {
+      "id": "perg-sol-1",
+      "batch": 1,
+      "category": "location",
+      "title": "O ombro do colosso",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        443,
+        444
+      ],
+      "prompt": "a vast terrace of grey stone and coarse tawny fur stretching like a plateau, cracks and ancient dust, nothing to hold on to, the desert far below, harsh sunlight, vertigo, cinematic wide shot"
+    },
+    {
+      "id": "perg-sol-2",
+      "batch": 1,
+      "category": "location",
+      "title": "As umbrais",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        445,
+        446
+      ],
+      "prompt": "colossal open stone doorways taller than a city wall, worn carved inscriptions across the lintel, a giant man-lion statue lying across the threshold in shadow, sand drifted at the base, harsh sun outside, cinematic wide shot"
+    },
+    {
+      "id": "perg-sol-3",
+      "batch": 1,
+      "category": "location",
+      "title": "A cisterna seca",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        447,
+        448
+      ],
+      "prompt": "a vast dry cistern chamber of sandstone, an empty sarcophagus carved in the shape of a man-lion at its centre, a stone channel still carrying a thin thread of water, shafts of sunlight through holes in the ceiling, dust, cinematic wide shot"
+    },
+    {
+      "id": "perg-vale-1",
+      "batch": 1,
+      "category": "location",
+      "title": "Os degraus de vidro",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        449,
+        450
+      ],
+      "prompt": "a colossal staircase of dark glass rising into blinding sunlight, mirror-smooth steps without shadow, reflections showing the valley from below, heat distortion, emptiness, cinematic wide shot"
+    },
+    {
+      "id": "perg-vale-2",
+      "batch": 1,
+      "category": "location",
+      "title": "A ravina",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        451,
+        452
+      ],
+      "prompt": "a narrow ravine of black glass walls with a shallow stream of clear water running along the floor, smooth wet stones, a strip of sky above, cold shadow, cinematic shot"
+    },
+    {
+      "id": "perg-vale-3",
+      "batch": 1,
+      "category": "location",
+      "title": "A sombra do colosso",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        453,
+        454
+      ],
+      "prompt": "an enormous shadow of a walking colossus cast across a glass valley, the shadow moving against the sun, cracked glass ground reflecting a sliver of sky, drifting dust, cinematic wide shot"
+    },
+    {
+      "id": "perg-ladroes-1",
+      "batch": 1,
+      "category": "location",
+      "title": "O acampamento",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        455,
+        456
+      ],
+      "prompt": "a desert camp of four dark tents around a low fire, dromedaries lying in a protective circle, saddles and water skins, dunes rising behind with no cover, dusk, warm firelight against cold blue, cinematic wide shot"
+    },
+    {
+      "id": "perg-ladroes-2",
+      "batch": 1,
+      "category": "location",
+      "title": "A duna do vigia",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        457,
+        458
+      ],
+      "prompt": "the sharp crest of a tall dune at dusk, wind-carved ripples, a single pair of boot prints and a flattened patch where someone knelt, a camp tiny far below, long shadows, cinematic wide shot"
+    },
+    {
+      "id": "perg-ladroes-3",
+      "batch": 1,
+      "category": "location",
+      "title": "A marca de água",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        459,
+        460
+      ],
+      "prompt": "an old desert well covered with weathered wooden boards, rope and bucket, a stone trough, cracked earth around it, midday sun, distant empty dunes, cinematic wide shot"
+    }
+  ]
+}

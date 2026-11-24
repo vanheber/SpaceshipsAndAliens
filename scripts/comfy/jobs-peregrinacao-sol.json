@@ -1,0 +1,22 @@
+{
+  "style": "realistic, octane render, hyperrealistic, ultra detailed, cinematic lighting, volumetric haze, medieval fantasy world, 8k, sharp focus, clean frame",
+  "jobs": [
+    {
+      "id": "perg-sol-1b",
+      "batch": 1,
+      "category": "location",
+      "title": "O ombro do colosso",
+      "size": [
+        1344,
+        768
+      ],
+      "steps": 12,
+      "seeds": [
+        571,
+        572,
+        573
+      ],
+      "prompt": "a colossal walking stone lion colossus seen from above, standing on its enormous fur covered shoulder, ancient cracked stone slabs underfoot, nothing to hold on to, a tiny desert city far below, haze, harsh sunlight, vertigo, cinematic wide shot"
+    }
+  ]
+}

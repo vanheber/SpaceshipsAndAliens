@@ -4,7 +4,8 @@
     "file": "general/general.md",
     "name": "General",
     "type": "general",
-    "summary": "Organizações, história e inteligências artificiais do universo."
+    "summary": "Organizações, história e inteligências artificiais do universo.",
+    "image": "data/lore/general/general.svg"
   },
   {
     "id": "a-primeira-federacao",
@@ -14,7 +15,8 @@
     "tags": [
       "história"
     ],
-    "parent": "general"
+    "parent": "general",
+    "image": "data/lore/history/a-primeira-federacao.svg"
   },
   {
     "id": "eras",
@@ -24,7 +26,8 @@
     "tags": [
       "história"
     ],
-    "parent": "general"
+    "parent": "general",
+    "image": "data/lore/history/eras.svg"
   },
   {
     "id": "o-calendario-universal",
@@ -34,7 +37,8 @@
     "tags": [
       "história"
     ],
-    "parent": "general"
+    "parent": "general",
+    "image": "data/lore/history/o-calendario-universal.svg"
   },
   {
     "id": "o-primeiro-contato-dos-tahlianos",
@@ -44,7 +48,8 @@
     "tags": [
       "história"
     ],
-    "parent": "general"
+    "parent": "general",
+    "image": "data/lore/history/o-primeiro-contato-dos-tahlianos.svg"
   },
   {
     "id": "dnagon",
@@ -54,7 +59,8 @@
     "tags": [
       "organização"
     ],
-    "parent": "general"
+    "parent": "general",
+    "image": "data/lore/organization/dnagon.svg"
   },
   {
     "id": "federacao",
@@ -64,7 +70,8 @@
     "tags": [
       "organização"
     ],
-    "parent": "general"
+    "parent": "general",
+    "image": "data/lore/organization/federacao.svg"
   },
   {
     "id": "iluminados",
@@ -74,7 +81,8 @@
     "tags": [
       "organização"
     ],
-    "parent": "general"
+    "parent": "general",
+    "image": "data/lore/organization/iluminados.svg"
   },
   {
     "id": "imperium",
@@ -84,7 +92,8 @@
     "tags": [
       "organização"
     ],
-    "parent": "general"
+    "parent": "general",
+    "image": "data/lore/organization/imperium.svg"
   },
   {
     "id": "independentes",
@@ -94,7 +103,8 @@
     "tags": [
       "organização"
     ],
-    "parent": "general"
+    "parent": "general",
+    "image": "data/lore/organization/independentes.svg"
   },
   {
     "id": "kimera",
@@ -104,7 +114,8 @@
     "tags": [
       "organização"
     ],
-    "parent": "general"
+    "parent": "general",
+    "image": "data/lore/organization/kimera.svg"
   },
   {
     "id": "konpasu",
@@ -114,7 +125,8 @@
     "tags": [
       "organização"
     ],
-    "parent": "general"
+    "parent": "general",
+    "image": "data/lore/organization/konpasu.svg"
   },
   {
     "id": "mercenarios",
@@ -124,7 +136,8 @@
     "tags": [
       "organização"
     ],
-    "parent": "general"
+    "parent": "general",
+    "image": "data/lore/organization/mercenarios.svg"
   },
   {
     "id": "piratas",
@@ -134,7 +147,8 @@
     "tags": [
       "organização"
     ],
-    "parent": "general"
+    "parent": "general",
+    "image": "data/lore/organization/piratas.svg"
   },
   {
     "id": "shini",
@@ -144,7 +158,8 @@
     "tags": [
       "organização"
     ],
-    "parent": "general"
+    "parent": "general",
+    "image": "data/lore/organization/shini.svg"
   },
   {
     "id": "uniao-drak",
@@ -154,14 +169,16 @@
     "tags": [
       "organização"
     ],
-    "parent": "general"
+    "parent": "general",
+    "image": "data/lore/organization/uniao-drak.svg"
   },
   {
     "id": "interdimensional",
     "file": "interdimensional/interdimensional.md",
     "name": "Interdimensional",
     "type": "interdimensional",
-    "summary": "Entidades que vivem entre dimensões e planos."
+    "summary": "Entidades que vivem entre dimensões e planos.",
+    "image": "data/lore/interdimensional/interdimensional.svg"
   },
   {
     "id": "semeador",
@@ -175,7 +192,8 @@
       "viajante",
       "singular"
     ],
-    "parent": "interdimensional"
+    "parent": "interdimensional",
+    "image": "data/lore/species/semeador.svg"
   },
   {
     "id": "sonhos",
@@ -189,7 +207,8 @@
       "interdimensional",
       "viajantes"
     ],
-    "parent": "interdimensional"
+    "parent": "interdimensional",
+    "image": "data/lore/species/sonhos.webp"
   },
   {
     "id": "sistema-necton",
@@ -198,7 +217,8 @@
     "type": "system",
     "tags": [
       "sistema"
-    ]
+    ],
+    "image": "data/lore/system/sistema-necton.svg"
   },
   {
     "id": "gemini-1-e-2",
@@ -208,7 +228,8 @@
     "parent": "sistema-necton",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/gemini-1-e-2.svg"
   },
   {
     "id": "harmonia",
@@ -218,7 +239,8 @@
     "parent": "sistema-necton",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/harmonia.svg"
   },
   {
     "id": "oceania",
@@ -228,7 +250,8 @@
     "parent": "sistema-necton",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/oceania.svg"
   },
   {
     "id": "leviathans",
@@ -242,7 +265,8 @@
       "oceânia",
       "telepatia",
       "aquáticos"
-    ]
+    ],
+    "image": "data/lore/species/leviathans.svg"
   },
   {
     "id": "sistema-ninive",
@@ -255,7 +279,8 @@
       "nínive",
       "ninivithians",
       "cidade"
-    ]
+    ],
+    "image": "data/lore/system/sistema-ninive.svg"
   },
   {
     "id": "adissonia",
@@ -265,7 +290,8 @@
     "parent": "sistema-ninive",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/adissonia.webp"
   },
   {
     "id": "kalmar",
@@ -275,7 +301,8 @@
     "parent": "sistema-ninive",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/kalmar.webp"
   },
   {
     "id": "mongoro",
@@ -285,7 +312,8 @@
     "parent": "sistema-ninive",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/mongoro.webp"
   },
   {
     "id": "ninive",
@@ -295,7 +323,8 @@
     "parent": "sistema-ninive",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/ninive.webp"
   },
   {
     "id": "ninivithians",
@@ -309,7 +338,23 @@
       "construtores",
       "arquitetura",
       "mecânica"
-    ]
+    ],
+    "image": "data/lore/species/ninivithians.webp"
+  },
+  {
+    "id": "scorpion",
+    "file": "tech/scorpion.md",
+    "name": "Scorpion",
+    "type": "tech",
+    "summary": "Nave leve ninivithian-terrana de segurança privada, com torre laser de 360 graus.",
+    "tags": [
+      "tecnologia",
+      "nave",
+      "nave leve",
+      "segurança"
+    ],
+    "image": "data/lore/tech/scorpion.svg",
+    "parent": "ninive"
   },
   {
     "id": "ciclopes",
@@ -323,7 +368,8 @@
       "polícia",
       "nínive",
       "vigilância"
-    ]
+    ],
+    "image": "data/lore/tech/ciclopes.svg"
   },
   {
     "id": "holodisco",
@@ -336,7 +382,8 @@
       "mídia",
       "holográfico",
       "armazenamento"
-    ]
+    ],
+    "image": "data/lore/tech/holodisco.svg"
   },
   {
     "id": "spacenet",
@@ -350,7 +397,8 @@
       "comunicação",
       "interplanetária",
       "laser invisível"
-    ]
+    ],
+    "image": "data/lore/tech/spacenet.svg"
   },
   {
     "id": "zigurate",
@@ -360,7 +408,8 @@
     "parent": "sistema-ninive",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/zigurate.svg"
   },
   {
     "id": "sistema-nova-sirius",
@@ -369,7 +418,8 @@
     "type": "system",
     "tags": [
       "sistema"
-    ]
+    ],
+    "image": "data/lore/system/sistema-nova-sirius.svg"
   },
   {
     "id": "dosher",
@@ -379,7 +429,8 @@
     "parent": "sistema-nova-sirius",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/dosher.svg"
   },
   {
     "id": "emerida",
@@ -389,7 +440,8 @@
     "parent": "sistema-nova-sirius",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/emerida.svg"
   },
   {
     "id": "garmot",
@@ -399,7 +451,8 @@
     "parent": "sistema-nova-sirius",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/garmot.svg"
   },
   {
     "id": "terra-2",
@@ -409,7 +462,23 @@
     "parent": "sistema-nova-sirius",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/terra-2.svg"
+  },
+  {
+    "id": "stinger",
+    "file": "tech/stinger.md",
+    "name": "Stinger",
+    "type": "tech",
+    "summary": "Explorador de dois tripulantes: sensores e computadores em vez de armas.",
+    "tags": [
+      "tecnologia",
+      "nave",
+      "nave leve",
+      "reconhecimento"
+    ],
+    "image": "data/lore/tech/stinger.svg",
+    "parent": "terra-2"
   },
   {
     "id": "vine",
@@ -419,7 +488,8 @@
     "parent": "sistema-nova-sirius",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/vine.svg"
   },
   {
     "id": "sistema-reptilus",
@@ -428,7 +498,8 @@
     "type": "system",
     "tags": [
       "sistema"
-    ]
+    ],
+    "image": "data/lore/system/sistema-reptilus.svg"
   },
   {
     "id": "aligator",
@@ -438,7 +509,8 @@
     "parent": "sistema-reptilus",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/aligator.svg"
   },
   {
     "id": "ambar",
@@ -448,7 +520,8 @@
     "parent": "sistema-reptilus",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/ambar.svg"
   },
   {
     "id": "fauna",
@@ -458,7 +531,8 @@
     "parent": "sistema-reptilus",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/fauna.svg"
   },
   {
     "id": "flora",
@@ -468,7 +542,8 @@
     "parent": "sistema-reptilus",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/flora.webp"
   },
   {
     "id": "raptor",
@@ -478,7 +553,8 @@
     "parent": "sistema-reptilus",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/raptor.svg"
   },
   {
     "id": "reptilus-mundo",
@@ -488,7 +564,8 @@
     "parent": "sistema-reptilus",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/reptilus-mundo.svg"
   },
   {
     "id": "reptilus",
@@ -502,7 +579,8 @@
       "répteis",
       "domínio",
       "clãs"
-    ]
+    ],
+    "image": "data/lore/species/reptilus.svg"
   },
   {
     "id": "bronkus",
@@ -614,13 +692,46 @@
       "reptilus",
       "clãs",
       "cultura"
-    ]
+    ],
+    "image": "data/lore/culture/dominio-reptilus.svg"
   },
   {
     "id": "tiranus",
     "file": "tech/tiranus.md",
     "name": "Tiranus",
     "type": "tech",
+    "parent": "reptilus",
+    "image": "data/lore/tech/tiranus.svg"
+  },
+  {
+    "id": "sphenodus",
+    "file": "species/sphenodus.md",
+    "name": "Sphenodus",
+    "type": "species",
+    "summary": "Reptilus de couro sensorial e terceiro olho: mergulha, lê mentes e toca objetos para conhecê-los.",
+    "tags": [
+      "espécie",
+      "reptilus",
+      "subespécie",
+      "telepatia",
+      "psicometria"
+    ],
+    "image": "data/lore/species/sphenodus.svg",
+    "parent": "reptilus"
+  },
+  {
+    "id": "kamaleon",
+    "file": "species/kamaleon.md",
+    "name": "Kamaleon",
+    "type": "species",
+    "summary": "Reptilus camaleônico que imita outros humanoides; a forma real só cai em análise de vida.",
+    "tags": [
+      "espécie",
+      "reptilus",
+      "subespécie",
+      "camuflagem"
+    ],
+    "image": "data/lore/species/kamaleon.svg",
     "parent": "reptilus"
   },
   {
@@ -630,7 +741,8 @@
     "type": "system",
     "tags": [
       "sistema"
-    ]
+    ],
+    "image": "data/lore/system/sistema-roshini.svg"
   },
   {
     "id": "bonrore",
@@ -640,7 +752,8 @@
     "parent": "sistema-roshini",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/bonrore.svg"
   },
   {
     "id": "ontelia",
@@ -650,7 +763,8 @@
     "parent": "sistema-roshini",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/ontelia.svg"
   },
   {
     "id": "tahlim",
@@ -660,7 +774,23 @@
     "parent": "sistema-roshini",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/tahlim.svg"
+  },
+  {
+    "id": "cripter",
+    "file": "tech/cripter.md",
+    "name": "Cripter",
+    "type": "tech",
+    "summary": "Nave leve terrana de Tahlim, simples de manter e comum entre milícias e piratas.",
+    "tags": [
+      "tecnologia",
+      "nave",
+      "nave leve",
+      "Tahlim"
+    ],
+    "image": "data/lore/tech/cripter.svg",
+    "parent": "tahlim"
   },
   {
     "id": "zagar-e-zaseru",
@@ -670,7 +800,8 @@
     "parent": "sistema-roshini",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/zagar-e-zaseru.svg"
   },
   {
     "id": "sistema-sol",
@@ -683,7 +814,8 @@
       "federação",
       "terra",
       "netuno"
-    ]
+    ],
+    "image": "data/lore/system/sistema-sol.svg"
   },
   {
     "id": "robo",
@@ -696,7 +828,8 @@
       "espécie",
       "sintéticos",
       "androides"
-    ]
+    ],
+    "image": "data/lore/species/robo.svg"
   },
   {
     "id": "humanos",
@@ -709,7 +842,8 @@
       "espécie",
       "humanos",
       "federação"
-    ]
+    ],
+    "image": "data/lore/species/humanos.svg"
   },
   {
     "id": "federacao-terra",
@@ -723,7 +857,8 @@
       "cultura",
       "terra",
       "espécie humana"
-    ]
+    ],
+    "image": "data/lore/culture/federacao-terra.svg"
   },
   {
     "id": "atlantis",
@@ -737,91 +872,104 @@
       "nave-mãe",
       "federação",
       "delta"
-    ]
+    ],
+    "image": "data/lore/tech/atlantis.webp"
   },
   {
     "id": "14x",
     "file": "tech/14x.md",
     "name": "14X",
     "type": "tech",
-    "parent": "humanos"
+    "parent": "humanos",
+    "image": "data/lore/tech/14x.webp"
   },
   {
     "id": "aguia-sorrateira",
     "file": "tech/aguia-sorrateira.md",
     "name": "Águia Sorrateira",
     "type": "tech",
-    "parent": "humanos"
+    "parent": "humanos",
+    "image": "data/lore/tech/aguia-sorrateira.svg"
   },
   {
     "id": "apolion",
     "file": "tech/apolion.md",
     "name": "Apolion",
     "type": "tech",
-    "parent": "humanos"
+    "parent": "humanos",
+    "image": "data/lore/tech/apolion.svg"
   },
   {
     "id": "arganon",
     "file": "tech/arganon.md",
     "name": "Arganon",
     "type": "tech",
-    "parent": "humanos"
+    "parent": "humanos",
+    "image": "data/lore/tech/arganon.svg"
   },
   {
     "id": "classe-cometa",
     "file": "tech/classe-cometa.md",
     "name": "Classe Cometa",
     "type": "tech",
-    "parent": "humanos"
+    "parent": "humanos",
+    "image": "data/lore/tech/classe-cometa.svg"
   },
   {
     "id": "classe-constelacao",
     "file": "tech/classe-constelacao.md",
     "name": "Classe Constelação",
     "type": "tech",
-    "parent": "humanos"
+    "parent": "humanos",
+    "image": "data/lore/tech/classe-constelacao.svg"
   },
   {
     "id": "classe-estrela",
     "file": "tech/classe-estrela.md",
     "name": "Classe Estrela",
     "type": "tech",
-    "parent": "humanos"
+    "parent": "humanos",
+    "image": "data/lore/tech/classe-estrela.svg"
   },
   {
     "id": "classe-galaxia",
     "file": "tech/classe-galaxia.md",
     "name": "Classe Galáxia",
     "type": "tech",
-    "parent": "humanos"
+    "parent": "humanos",
+    "image": "data/lore/tech/classe-galaxia.svg"
   },
   {
     "id": "estacao-espacial",
     "file": "tech/estacao-espacial.md",
     "name": "Estação espacial",
     "type": "tech",
-    "parent": "humanos"
+    "parent": "humanos",
+    "image": "data/lore/tech/estacao-espacial.svg"
   },
   {
     "id": "horizon",
     "file": "tech/horizon.md",
     "name": "Horizon",
     "type": "tech",
-    "parent": "humanos"
+    "parent": "humanos",
+    "image": "data/lore/tech/horizon.webp"
   },
   {
     "id": "inteligencias-artificiais",
     "file": "tech/inteligencias-artificiais.md",
     "name": "Inteligências Artificiais",
     "type": "tech",
-    "parent": "humanos"
+    "parent": "humanos",
+    "image": "data/lore/tech/inteligencias-artificiais.svg"
   },
   {
     "id": "savepod",
     "file": "tech/savepod.md",
     "name": "SavePod",
     "type": "tech",
-    "parent": "humanos"
+    "parent": "humanos",
+    "image": "data/lore/tech/savepod.webp"
   },
   {
     "id": "sistema-stratus",
@@ -830,7 +978,8 @@
     "type": "system",
     "tags": [
       "sistema"
-    ]
+    ],
+    "image": "data/lore/system/sistema-stratus.svg"
   },
   {
     "id": "celestia",
@@ -840,7 +989,8 @@
     "parent": "sistema-stratus",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/celestia.svg"
   },
   {
     "id": "alados",
@@ -854,7 +1004,118 @@
       "planeta gasoso",
       "asas"
     ],
-    "parent": "celestia"
+    "parent": "celestia",
+    "image": "data/lore/species/alados.webp"
+  },
+  {
+    "id": "albatren",
+    "file": "species/albatren.md",
+    "name": "Albatren",
+    "type": "species",
+    "summary": "Alado de pescoço e bico longos, esguio e leve — o melhor voador e o mais furtivo da linhagem.",
+    "tags": [
+      "espécie",
+      "alado",
+      "subespécie",
+      "voo",
+      "furtividade"
+    ],
+    "image": "data/lore/species/albatren.svg",
+    "parent": "alados"
+  },
+  {
+    "id": "stringen",
+    "file": "species/stringen.md",
+    "name": "Stringen",
+    "type": "species",
+    "summary": "Alado que não voa: bico mínimo e olhos enormes, com visão em todas as direções.",
+    "tags": [
+      "espécie",
+      "alado",
+      "subespécie",
+      "vigia"
+    ],
+    "image": "data/lore/species/stringen.svg",
+    "parent": "alados"
+  },
+  {
+    "id": "sphenen",
+    "file": "species/sphenen.md",
+    "name": "Sphenen",
+    "type": "species",
+    "summary": "Alado sem asas, de pernas compridas — o corredor das planícies de Celestia.",
+    "tags": [
+      "espécie",
+      "alado",
+      "subespécie",
+      "corrida"
+    ],
+    "image": "data/lore/species/sphenen.svg",
+    "parent": "alados"
+  },
+  {
+    "id": "rapinem",
+    "file": "species/rapinem.md",
+    "name": "Rapinem",
+    "type": "species",
+    "summary": "Alado de envergadura imensa e olhar fixo; asas grandes demais para espaços humanos.",
+    "tags": [
+      "espécie",
+      "alado",
+      "subespécie",
+      "carga",
+      "intimidação"
+    ],
+    "image": "data/lore/species/rapinem.svg",
+    "parent": "alados"
+  },
+  {
+    "id": "phistaten",
+    "file": "species/phistaten.md",
+    "name": "Phistaten",
+    "type": "species",
+    "summary": "Alado sem asas que esmaga com o bico e imita a fala de outras espécies.",
+    "tags": [
+      "espécie",
+      "alado",
+      "subespécie",
+      "voz",
+      "persuasão"
+    ],
+    "image": "data/lore/species/phistaten.svg",
+    "parent": "alados"
+  },
+  {
+    "id": "caprimen",
+    "file": "species/caprimen.md",
+    "name": "Caprimen",
+    "type": "species",
+    "summary": "Alado aerodinâmico de asas estreitas e bicos perfurantes que servem de mãos.",
+    "tags": [
+      "espécie",
+      "alado",
+      "subespécie",
+      "voo",
+      "artesão"
+    ],
+    "image": "data/lore/species/caprimen.svg",
+    "parent": "alados"
+  },
+  {
+    "id": "falconen",
+    "file": "species/falconen.md",
+    "name": "Falconen",
+    "type": "species",
+    "summary": "Alado guerreiro, o mais rápido em voo, com garras e visão ultravioleta.",
+    "tags": [
+      "espécie",
+      "alado",
+      "subespécie",
+      "combate",
+      "voo"
+    ],
+    "image": "data/lore/species/falconen.svg",
+    "parent": "alados"
   },
   {
     "id": "ciclone",
@@ -864,7 +1125,8 @@
     "parent": "sistema-stratus",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/ciclone.svg"
   },
   {
     "id": "cirrus",
@@ -874,7 +1136,8 @@
     "parent": "sistema-stratus",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/cirrus.svg"
   },
   {
     "id": "cumulus",
@@ -884,7 +1147,8 @@
     "parent": "sistema-stratus",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/cumulus.svg"
   },
   {
     "id": "nimbus",
@@ -894,7 +1158,8 @@
     "parent": "sistema-stratus",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/nimbus.svg"
   },
   {
     "id": "sonho",
@@ -904,7 +1169,8 @@
     "parent": "sistema-stratus",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/sonho.svg"
   },
   {
     "id": "sistema-taurus",
@@ -913,7 +1179,8 @@
     "type": "system",
     "tags": [
       "sistema"
-    ]
+    ],
+    "image": "data/lore/system/sistema-taurus.svg"
   },
   {
     "id": "titania",
@@ -923,7 +1190,8 @@
     "parent": "sistema-taurus",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/titania.svg"
   },
   {
     "id": "titanicos",
@@ -937,7 +1205,8 @@
       "gravidade",
       "tradições"
     ],
-    "parent": "titania"
+    "parent": "titania",
+    "image": "data/lore/species/titanicos.webp"
   },
   {
     "id": "tridente",
@@ -947,7 +1216,8 @@
     "parent": "sistema-taurus",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/tridente.svg"
   },
   {
     "id": "sistema-vulcan",
@@ -956,7 +1226,8 @@
     "type": "system",
     "tags": [
       "sistema"
-    ]
+    ],
+    "image": "data/lore/system/sistema-vulcan.svg"
   },
   {
     "id": "acid",
@@ -966,7 +1237,8 @@
     "parent": "sistema-vulcan",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/acid.svg"
   },
   {
     "id": "golem",
@@ -976,7 +1248,8 @@
     "parent": "sistema-vulcan",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/golem.svg"
   },
   {
     "id": "draks",
@@ -990,7 +1263,8 @@
       "anfíbios",
       "soldados"
     ],
-    "parent": "golem"
+    "parent": "golem",
+    "image": "data/lore/species/draks.svg"
   },
   {
     "id": "petros",
@@ -1000,7 +1274,8 @@
     "parent": "sistema-vulcan",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/petros.svg"
   },
   {
     "id": "colossos",
@@ -1014,7 +1289,8 @@
       "homens-pedra",
       "minas"
     ],
-    "parent": "petros"
+    "parent": "petros",
+    "image": "data/lore/species/colossos.svg"
   },
   {
     "id": "sulfur",
@@ -1024,7 +1300,8 @@
     "parent": "sistema-vulcan",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/sulfur.svg"
   },
   {
     "id": "sistema-zender",
@@ -1033,7 +1310,8 @@
     "type": "system",
     "tags": [
       "sistema"
-    ]
+    ],
+    "image": "data/lore/system/sistema-zender.svg"
   },
   {
     "id": "agonia",
@@ -1043,7 +1321,8 @@
     "parent": "sistema-zender",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/agonia.svg"
   },
   {
     "id": "tortura",
@@ -1053,7 +1332,8 @@
     "parent": "sistema-zender",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/tortura.svg"
   },
   {
     "id": "zenderia",
@@ -1063,7 +1343,8 @@
     "parent": "sistema-zender",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/zenderia.svg"
   },
   {
     "id": "zenderianos",
@@ -1091,7 +1372,8 @@
       "espécie",
       "subespécie",
       "inseptor"
-    ]
+    ],
+    "image": "data/lore/species/analos.svg"
   },
   {
     "id": "araknos",
@@ -1104,7 +1386,8 @@
       "espécie",
       "subespécie",
       "inseptor"
-    ]
+    ],
+    "image": "data/lore/species/araknos.svg"
   },
   {
     "id": "belbie",
@@ -1117,7 +1400,8 @@
       "espécie",
       "subespécie",
       "inseptor"
-    ]
+    ],
+    "image": "data/lore/species/belbie.svg"
   },
   {
     "id": "helidus",
@@ -1130,7 +1414,8 @@
       "espécie",
       "subespécie",
       "inseptor"
-    ]
+    ],
+    "image": "data/lore/species/helidus.svg"
   },
   {
     "id": "kolonia",
@@ -1143,7 +1428,8 @@
       "espécie",
       "subespécie",
       "inseptor"
-    ]
+    ],
+    "image": "data/lore/species/kolonia.svg"
   },
   {
     "id": "kravata",
@@ -1156,7 +1442,8 @@
       "espécie",
       "subespécie",
       "inseptor"
-    ]
+    ],
+    "image": "data/lore/species/kravata.svg"
   },
   {
     "id": "kript",
@@ -1169,7 +1456,8 @@
       "espécie",
       "subespécie",
       "inseptor"
-    ]
+    ],
+    "image": "data/lore/species/kript.svg"
   },
   {
     "id": "maske",
@@ -1182,7 +1470,8 @@
       "espécie",
       "subespécie",
       "inseptor"
-    ]
+    ],
+    "image": "data/lore/species/maske.svg"
   },
   {
     "id": "olhocefalus",
@@ -1195,7 +1484,8 @@
       "espécie",
       "subespécie",
       "inseptor"
-    ]
+    ],
+    "image": "data/lore/species/olhocefalus.svg"
   },
   {
     "id": "sepulcrus",
@@ -1208,7 +1498,8 @@
       "espécie",
       "subespécie",
       "inseptor"
-    ]
+    ],
+    "image": "data/lore/species/sepulcrus.svg"
   },
   {
     "id": "cruzador-canhao",
@@ -1222,7 +1513,8 @@
       "zenderianos",
       "canhão",
       "guerra"
-    ]
+    ],
+    "image": "data/lore/tech/cruzador-canhao.svg"
   },
   {
     "id": "sistema-zeta3",
@@ -1231,7 +1523,8 @@
     "type": "system",
     "tags": [
       "sistema"
-    ]
+    ],
+    "image": "data/lore/system/sistema-zeta3.svg"
   },
   {
     "id": "berco",
@@ -1241,7 +1534,8 @@
     "parent": "sistema-zeta3",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/berco.svg"
   },
   {
     "id": "ilumina",
@@ -1251,7 +1545,8 @@
     "parent": "sistema-zeta3",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/ilumina.svg"
   },
   {
     "id": "iluminus",
@@ -1265,7 +1560,8 @@
       "protofotônica",
       "diplomatas"
     ],
-    "parent": "ilumina"
+    "parent": "ilumina",
+    "image": "data/lore/species/iluminus.webp"
   },
   {
     "id": "mortalia",
@@ -1275,7 +1571,8 @@
     "parent": "sistema-zeta3",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/mortalia.svg"
   },
   {
     "id": "phantom",
@@ -1285,7 +1582,8 @@
     "parent": "sistema-zeta3",
     "tags": [
       "planeta"
-    ]
+    ],
+    "image": "data/lore/planet/phantom.svg"
   },
   {
     "id": "invisiveis",
@@ -1299,6 +1597,62 @@
       "magnétons",
       "observadores",
       "fantom"
-    ]
+    ],
+    "image": "data/lore/species/invisiveis.svg"
+  },
+  {
+    "id": "x-sintese",
+    "file": "tech/x-sintese.md",
+    "name": "X-Síntese",
+    "type": "tech",
+    "summary": "Seis substâncias sintéticas que ampliam uma capacidade de seres orgânicos — e nada fazem em robôs.",
+    "tags": [
+      "tecnologia",
+      "substância",
+      "mercadoria",
+      "DNAGON"
+    ],
+    "image": "data/lore/tech/x-sintese.svg"
+  },
+  {
+    "id": "implantes",
+    "file": "tech/implantes.md",
+    "name": "Implantes",
+    "type": "tech",
+    "summary": "Peças cibernéticas e orgânicas que ampliam sentidos ou instalam ofício no cérebro.",
+    "tags": [
+      "tecnologia",
+      "implante",
+      "ciberspaço",
+      "sentidos"
+    ],
+    "image": "data/lore/tech/implantes.svg"
+  },
+  {
+    "id": "viagem-interestelar",
+    "file": "tech/viagem-interestelar.md",
+    "name": "Viagem interestelar",
+    "type": "tech",
+    "summary": "Buracos de minhoca e portais artificiais: as duas formas conhecidas de cruzar sistemas.",
+    "tags": [
+      "tecnologia",
+      "portais",
+      "rotas",
+      "navegação"
+    ],
+    "image": "data/lore/tech/viagem-interestelar.svg"
+  },
+  {
+    "id": "ovelha",
+    "file": "tech/ovelha.md",
+    "name": "Ovelha",
+    "type": "tech",
+    "summary": "Dispositivo de nave que desliga as armas de um alvo leve a curto alcance.",
+    "tags": [
+      "tecnologia",
+      "equipamento de nave",
+      "inibidor"
+    ],
+    "image": "data/lore/tech/ovelha.svg"
   }
 ]

@@ -1,4 +1,11 @@
 #!/usr/bin/env node
+// APOSENTADO (2026-11-12). O lore agora tem uma fonte só:
+//   wai-aventuras/aventuras/spaceships-and-aliens/data/lore
+// Este script procedia de data/lore/spaceships-and-aliens.md, que não existe mais na
+// árvore — a extração do sourcebook já foi feita (121 entradas). Novas fichas se
+// escrevem à mão na fonte ou saem de populate-lore.js; este arquivo fica só como
+// registro do catálogo de títulos usado na extração.
+//
 // Extrai conteúdo de lore do sourcebook "Spaceships & Aliens" (data/lore/spaceships-and-aliens.md)
 // em entradas da Biblioteca do Universo — extração DIRETA (sem IA), o texto já é enciclopédico.
 // Ignora regras de jogo (tarifas, stats de personagem, "como jogar"). Mantém prosa de lore.

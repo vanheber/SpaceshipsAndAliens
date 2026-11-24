@@ -1,17 +1,11 @@
 # Horizon
 
-Um pouco menor que a classe Atlantis, a classe Horizon é uma resposta de construção rápida de naves. Ela foi feita para substituir a classe Atlantis, mantendo o que há de mais inovador
+Um pouco menor que a classe Atlantis, a classe Horizon é uma resposta de construção rápida de naves. Foi feita para substituir a Atlantis mantendo o que há de mais inovador numa nave mais econômica, que não deve nada à antecessora no quesito de armas.
 
-O hangar que fica na parte inferior da nave pode abrir para decolagem no
+O hangar fica na parte inferior da nave: pode abrir para decolagem no espaço ou servir como elevador quando a nave está pousada num planeta. A bordo há um carro blindado leve — o Tatu — e três motos flutuantes.
 
-espaço, e servir como elevador quando a naves está pousada num planeta. Possui um carro blindado leve e três motos flutuantes.
+Apesar de menor, a classe Horizon possui equipamentos mais eficientes. Todas contam com uma unidade robótica Monólito no hangar, empregada em missões de exploração, ciência, espionagem e infiltração. Assim como a classe Atlantis, é um projeto exclusivamente terrano, construído em estaleiros em órbita da Terra.
 
-numa nave mais econômica e que não deve nada a sua antecessora no quesito de armas.
+Outras naves comissionadas: Alvorada, Maré, Travessia, Farol e Vigília.
 
-Apesar de menor, a classe Horizon possui equipamentos mais eficientes e Com grande diferencial apresenta todas contam com uma nova tecnologia no seu hangar uma unidade da nave rode robôs de última geração, que podem bótica Monólito. ser utilizados para missões de exploração, ciência, espionagem e infiltração. Assim como a classe Atlantis é um proOutras naves comissionadas: jeto exclusivamente terrano. São construídas em estaleiros em órbita de Terra Zenith, Aurora, Andromeda,  Odys2. sey e Valkyria.
-
-Com grande diferencial apresenta no seu hangar uma unidade da nave robótica Monólito.
-
-Intrepid e Valiant.
-
-Naves imperiais:
+Naves imperiais: Intrépido e Valente.
